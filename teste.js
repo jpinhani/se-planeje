@@ -1,3 +1,5 @@
 const teste = () => {
-    return true
+    console.log('testando trabalhar em projeto')
 }
+
+teste()
