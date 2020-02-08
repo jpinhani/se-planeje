@@ -9,3 +9,5 @@ const teste2 = () => {
    return false    
 }
 
+const teste3 = 'teste'
+
