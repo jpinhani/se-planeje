@@ -3,7 +3,7 @@ import React from 'react'
 
 function Field(props){
   
-      return <input type={props.tipocampo || 'text'}/>
+      return <input name={props.name} type={props.tipocampo || 'text'}/>
 
 }
 

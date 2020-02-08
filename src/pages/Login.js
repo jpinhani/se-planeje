@@ -19,17 +19,18 @@ function Login(){
 
 
     function handleSubmit(event) {
-       console.log(event.target)
+        event.preventDefault()
+       console.log(event)
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form method='post' onSubmit={handleSubmit}>
             <div style={styleLogin}>
                 <Title/>
                 <div style={styleContainerButton}>
-                    <Field/>
+                    <Field name='txtusu'/>
                 </div>
-                <Field tipocampo='password' />
+                <Field tipocampo='password' name='txtsenha' />
                 <div style={styleContainerButton}>
                     <Button />
                 </div>
