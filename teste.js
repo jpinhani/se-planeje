@@ -3,3 +3,8 @@ const teste = () => {
 }
 
 teste()
+
+const teste2 = () => {
+   return false    
+}
+
