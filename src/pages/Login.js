@@ -2,18 +2,8 @@ import React from 'react'
 import Title from '../components/Title'
 import Field from '../components/Field'
 import Button from '../components/Button'
+import './style1.css'
 
-const styleLogin = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'red'
-}
-
-const styleContainerButton = {
-    margin: '10px 0'
-}
 
 function Login(){
 
@@ -25,13 +15,13 @@ function Login(){
 
     return (
         <form method='post' onSubmit={handleSubmit}>
-            <div style={styleLogin}>
-                <Title/>
-                <div style={styleContainerButton}>
+            <div> 
+                <Title text='Se Planeje - Acessar'/>
+                <div> 
                     <Field name='txtusu'/>
                 </div>
                 <Field tipocampo='password' name='txtsenha' />
-                <div style={styleContainerButton}>
+                <div> 
                     <Button />
                 </div>
             </div>
