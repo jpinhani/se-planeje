@@ -1,23 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+import React from "react"
+import './style.css'
 
-<head>
-    <meta charset="utf-8" />
-    <title>React App</title>
-</head>
 
-<body>
-    <!-- <header>
-        <h1><span>Se</span>Planeje</h1><br />
-        <ul>
-            <li>Quem Somos</li>
-            <li>Contato</li>
-            <li>Login</li>
-        </ul>
-    </header>
-    <div>
+function Menu() {
+    return (
         <nav>
-            <ul class="menu">
+            <ul class="menubar">
                 <li>
                     <input class="input01" id="check01" type="checkbox" name="menu" />
                     <label for="check01">Cadastros</label>
@@ -57,8 +45,7 @@
                 </li>
             </ul>
         </nav>
- -->
-    <div id="root"></div>
-</body>
+    )
+}
 
-</html>
+export default Menu

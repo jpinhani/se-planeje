@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Login from './pages/Login'
+import CadNatureza from './pages/CadNatureza';
+import './style/normalize.css'
 
-ReactDOM.render(<Login /> , document.getElementById('root'));
+ReactDOM.render(<CadNatureza />, document.getElementById('root'));
 

@@ -1,0 +1,137 @@
+
+/* Zerando Margin e Padding */
+*{
+    margin: 0;
+    padding: 0;  
+}
+
+/* Inserindo com no Body e colocando paddign para não ficar colado no visor */
+body
+{   
+     background: radial-gradient(rgb(211, 217, 219), rgb(134, 168, 182));
+     padding: 15px;
+}
+
+/* Pintando SE do SEPLANEJE de vermelho */
+body > header> h1 > span {
+    color: red;
+    font-size: 50px;
+}
+
+/* Colocando o PLANEJE do SEPLANEJE de Branco*/
+body > header> h1  {
+    color:white;
+}
+
+
+/*Header do Site*/
+header{
+    background: linear-gradient(rgb(129, 214, 243), rgb(41, 125, 158));
+    border-radius: 25px 5px 25px 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 5px 5px rgb(143, 143, 187), -5px -5px rgb(110, 110, 150), -7px -7px white, 7px 7px white;
+}
+
+header >  ul > li {
+    display:inline-block;
+    padding: 20px;
+}
+
+/* Classe Menu para comandar o sandbar do Site*/
+.menu{
+    list-style:none; 
+    display: block;
+    width: 190px;
+    background-color: white;
+    box-shadow: 5px 5px rgb(143, 143, 187), -5px -5px rgb(110, 110, 150), -7px -7px white, 7px 7px white;
+    border-radius: 0px 25px 5px 25px;
+    }
+
+
+.menu li{
+    position:relative; 
+    }
+
+.menu li a:hover{
+        background:#333; 
+        color:#fff; 
+        -moz-box-shadow:0 3px 10px 0 #CCC; 
+        -webkit-box-shadow:0 3px 10px 0 #ccc; 
+        text-shadow:0px 0px 5px #fff; 
+        }
+    
+.menu li a{color:#333; text-decoration:none; padding:5px 10px; display:block;}
+        
+
+.menu li  ul{
+top:25px; 
+left:0;
+background: rgb(228, 224, 224);
+display:none;
+
+}   
+
+.menu li ul li{
+    border:2px solid #c0c0c0; 
+    display:block; 
+    }
+
+/* Tratar margem do Menu */
+.menu > li{
+    margin: 10px 0 10px 0; 
+}
+
+/* Tratar a Label de Cabeçalho do Menu */
+.menu > li > label{
+    display: block; /*Faz com que o cabeçalho do menu ocupe todo menu*/
+    background: linear-gradient(rgb(129, 214, 243), rgb(41, 125, 158));
+    padding: 10px;
+    color:white;
+    border-radius: 0px 28px 5px 28px;
+} 
+
+/*Retirar caixa de marcação da checkbox*/
+input, ul.submenu {
+    display: none;
+  }
+
+/*Exibir Submenu quando clicado em um item do Menu*/
+ input:checked~ul.submenu {
+    display: block;
+    /* border: 3px solid red; */
+    padding: 5px 0 5px 0;
+    /* background: rgb(228, 224, 224); */
+    
+  } 
+
+body > div{
+      display: flex;
+      justify-content: space-between;
+      /* background-color: coral; */
+      flex-wrap: wrap;
+}
+
+body > div > form{
+    align-content: center;
+    width: 80%;
+    display: block;
+    margin:20px;
+}
+
+  @media (max-width:600px) {
+    .menu{
+        list-style:none; 
+        display: flex;
+        width: 100%;
+        background-color: coral;
+        background-color: white;
+        box-shadow: 5px 5px rgb(143, 143, 187), -5px -5px rgb(110, 110, 150), -7px -7px white, 7px 7px white;
+        border-radius: 0px 25px 5px 25px;
+        }
+    
+}
+
