@@ -1,12 +1,12 @@
 import React from "react"
 
 
-function Button(props){
+function Button(props) {
     return (
         <button>
-            {props.textoDoBotao || 'Gravar'}
+            {props.children || 'Gravar'}
         </button>
     )
-} 
+}
 
 export default Button

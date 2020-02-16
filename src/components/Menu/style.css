@@ -65,12 +65,11 @@ display:none;
   } 
 
 
-  @media (max-width:600px) {
+  @media (max-width:600px ) {
     .menubar{
         list-style:none; 
         display: flex;
         width: 100%;
-        background-color: coral;
         background-color: white;
         box-shadow: 5px 5px rgb(143, 143, 187), -5px -5px rgb(110, 110, 150), -7px -7px white, 7px 7px white;
         border-radius: 0px 25px 5px 25px;
