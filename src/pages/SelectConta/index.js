@@ -4,33 +4,38 @@ import axios from 'axios'
 
 const columns = [
   {
-    title: 'Descrição Natureza',
-    dataIndex: 'DESCR_NATUREZA',
-    key: 'DESCR_NATUREZA'
+    title: 'Descrição do Cartão',
+    dataIndex: 'cartao',
+    key: 'cartao'
   },
   {
-    title: 'Status',
-    dataIndex: 'STATUS',
-    key: 'STATUS'
+    title: 'Dia de Vencimento',
+    dataIndex: 'dtVencimento',
+    key: 'dtVencimento'
+  },
+  {
+    title: 'Melhor dia de Compra',
+    dataIndex: 'dtCompra',
+    key: 'dtCompra'
   }
 ]
 
 export default () => {
-  const [ contas, setContas ] = useState([])
+  const [cartao, setCartao] = useState([])
 
-  async function getContas() {
-    const endpointAPI = 'http://localhost:8082/api/naturezas' 
+  async function getCartao() {
+    const endpointAPI = 'http://localhost:8082/api/cartao'
 
     const result = await axios.get(endpointAPI)
 
-    const contas = result.data
+    const cartao = result.data
 
-    setContas(contas)
+    setContas(cartao)
   }
 
   useEffect(() => {
-    getContas()
+    getCartao()
   }, [])
 
-  return <Table columns={columns} dataSource={contas} />
+  return <Table columns={columns} dataSource={cartao} />
 }

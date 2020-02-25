@@ -16,6 +16,7 @@ import Conta from '../pages/Conta'
 import Cartao from '../pages/Cartao'
 import Visao from '../pages/Visoes'
 import SelectConta from '../pages/SelectConta'
+import SelectCartao from '../pages/SelectCartao'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 
@@ -46,6 +47,7 @@ export default () =>
               <PublicRoute exact path='/login' component={Login} />
               <PublicRoute exact path='/categoria' component={Categoria} />
               <PublicRoute exact path='/selectconta' component={SelectConta} />
+              <PublicRoute exact path='/selectcartao' component={SelectCartao} />
               <PublicRoute exact path='/conta' component={Conta} />
               <PublicRoute exact path='/cartao' component={Cartao} />
               <PublicRoute exact path='/visao' component={Visao} />
