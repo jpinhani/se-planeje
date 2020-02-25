@@ -1,36 +1,53 @@
 import React, { useState, useEffect } from 'react'
+import AddCartao from '../../components/Modal/Cartao/index'
 import { Table } from 'antd'
 import axios from 'axios'
 
+import 'antd/dist/antd.css';
+import './styles.scss'
+
+
+
 const columns = [
   {
-    title: 'Descrição Natureza',
-    dataIndex: 'DESCR_NATUREZA',
-    key: 'DESCR_NATUREZA'
+    title: 'Descrição do Cartão',
+    dataIndex: 'CARTAO',
+    key: 'CARTAO'
   },
   {
-    title: 'Status',
-    dataIndex: 'STATUS',
-    key: 'STATUS'
+    title: 'Dia de Vencimento',
+    dataIndex: 'DT_VENCIMENTO',
+    key: 'DT_VENCIMENTO'
+  },
+  {
+    title: 'Melhor dia de Compra',
+    dataIndex: 'DIA_COMPRA',
+    key: 'DIA_COMPRA'
   }
 ]
 
 export default () => {
-  const [ contas, setContas ] = useState([])
+  const [cartao, setCartao] = useState([])
 
-  async function getContas() {
-    const endpointAPI = 'http://localhost:8082/api/naturezas' 
+  async function getCartao() {
+    const endpointAPI = 'http://localhost:8082/api/cartoes'
 
     const result = await axios.get(endpointAPI)
 
-    const contas = result.data
+    const cartao = result.data
 
-    setContas(contas)
+    setCartao(cartao)
   }
 
+
   useEffect(() => {
-    getContas()
+    getCartao()
   }, [])
 
-  return <Table columns={columns} dataSource={contas} />
+
+  return <div>
+    <AddCartao />
+    <Table columns={columns} dataSource={cartao} />
+  </div >
 }
+
