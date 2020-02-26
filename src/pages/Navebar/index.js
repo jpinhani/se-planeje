@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import 'antd/dist/antd.css';
+import './style.scss'
 
 import { Layout, Menu, Icon } from 'antd'
 
@@ -21,13 +22,14 @@ class SiderDemo extends React.Component {
         return (
             // <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-                <div className="logo" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                {/* <div className="logo" /> */}
+                <div />
+                {/* <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"> */}
+                <Menu defaultSelectedKeys={['1']} mode="inline">
                     <SubMenu
                         key="sub1"
                         title={
                             <span>
-                                {/* <Icon type="cadastros" /> */}
                                 <Icon type="tool" theme="twoTone" />
                                 <span>Cadastros</span>
                             </span>
@@ -42,7 +44,6 @@ class SiderDemo extends React.Component {
                         key="sub2"
                         title={
                             <span>
-                                {/* <Icon type="team" /> */}
                                 <Icon type="schedule" theme="twoTone" />
                                 <span>Previsto</span>
                             </span>
@@ -55,7 +56,6 @@ class SiderDemo extends React.Component {
                         key="sub3"
                         title={
                             <span>
-                                {/* <Icon type="team" /> */}
                                 <Icon type="check-square" theme="twoTone" />
                                 <span>Real</span>
                             </span>
@@ -70,7 +70,6 @@ class SiderDemo extends React.Component {
                         key="sub4"
                         title={
                             <span>
-                                {/* <Icon type="team" /> */}
                                 <Icon type="pie-chart" theme="twoTone" />
                                 <span>Resumo</span>
                             </span>
@@ -80,10 +79,20 @@ class SiderDemo extends React.Component {
                         <Menu.Item key="14">Real x Previsto</Menu.Item>
                         <Menu.Item key="15">Forecast</Menu.Item>
                     </SubMenu>
-                    <Menu.Item key="16">
+                    <SubMenu
+                        key="sub5"
+                        title={
+                            <span>
+                                <Icon type="file" />
+                                <span>Manual (Ajuda)</span>
+                            </span>
+                        }
+                    >
+                    </SubMenu>
+                    {/* <Menu.Item key="16">
                         <Icon type="file" />
                         <span>Manual (Ajuda)</span>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </Menu>
             </Sider>
             // </Layout>

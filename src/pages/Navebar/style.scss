@@ -1,0 +1,35 @@
+.ant-layout-sider-children{
+    background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+    margin: 2px;
+    
+}
+
+div.ant-menu-submenu-title{
+    // background: linear-gradient(rgb(129, 214, 243), rgb(41, 125, 158));
+    background: radial-gradientrgb((129, 214, 243), rgb(146, 159, 196));
+    border-radius:15px 15px 15px 15px;
+    border: 2px white solid;
+    color: black;
+    span{
+        color:black;
+        font-weight: bold;
+        font-size: 16px;
+    }
+}
+
+.ant-menu-submenu{
+    background: radial-gradient(rgb(129, 214, 243), rgb(146, 159, 196));
+
+}
+
+li.ant-menu-item{
+    background: radial-gradient(rgb(234, 238, 240), rgb(96, 158, 180));
+    color: black;
+    border:1px solid white;
+    
+}
+
+
+Link{
+    color:red;
+}

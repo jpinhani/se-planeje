@@ -1,5 +1,18 @@
 .cabecalho{
-    background: yellow;
-    border: 1px solid red;
-    border-radius: 5px 10px 2px 5px;
+    background: radial-gradient(rgb(129, 214, 243), rgb(146, 159, 196));
+    height: 15%;
+    display: flex;
+    align-items: center;
+    
+    h1{
+        color:white ;
+        font-weight: 600 ;
+        font-size: 40px !important;
+    }
+}
+
+
+.logoheader2{
+    color:red;
+    font-size: 70px !important;
 }

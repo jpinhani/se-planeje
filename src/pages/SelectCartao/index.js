@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AddCartao from '../../components/Modal/Cartao/index'
 import EditCartao from '../../components/Modal/CartaoEdit/index'
-import { Table, Divider, Icon } from 'antd'
+import { Table, Divider, Icon, Input } from 'antd'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -68,9 +68,11 @@ export default () => {
   }
 
   return <div>
-    {editCartao ? <EditCartao /> : []}
+    {editCartao ? <EditCartao /> : null}
     {/* <EditCartao /> */}
     <AddCartao />
+    <Divider type="horizontal" />
+    <Input name='cartao' placeholder="Procure aqui o cartão especifico" />
     <Table columns={columns} dataSource={cartao} />
   </div >
 }
