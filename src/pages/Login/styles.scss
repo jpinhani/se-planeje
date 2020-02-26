@@ -1,0 +1,30 @@
+.login {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-height: 100vh;
+  min-width: 100%;
+  z-index: 1;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    padding: 20px;
+    width: 500px;
+
+    h1 {
+      padding-bottom: 50px;
+      text-align: center;
+    }
+
+    div {
+      text-align: right;
+
+      input {
+        margin-bottom: 5px !important;
+      }
+    }
+  }
+}

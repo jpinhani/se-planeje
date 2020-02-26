@@ -31,16 +31,6 @@ export default () =>
         <Header />
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-
-            {/* <Switch name='http://localhost:3000'>
-              <PublicRoute exact path='/login' component={Login} />
-              <PublicRoute exact path='/categoria' component={Categoria} />
-              <PublicRoute exact path='/conta' component={Conta} />
-              <PublicRoute exact path='/cartao' component={Cartao} />
-              <PublicRoute exact path='/visao' component={Visao} />
-              <PrivateRoute component={Home} />
-            </Switch> */}
-
           </Breadcrumb>
           <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
             <Switch name='http://localhost:3000'>
