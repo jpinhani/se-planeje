@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Icon, Modal, Input } from 'antd'
+import { Modal, Input } from 'antd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -8,16 +8,16 @@ import './styles.scss'
 export default () => {
 
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(true)
 
-    function showModal() {
-        setVisible(true)
-    };
+    // function showModal() {
+    //     setVisible(true)
+    // };
 
 
     function handleCancel() {
-        setVisible(false)
-    };
+        setVisible(false);
+    }
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
     const [cartao, InsertCartao] = useState(null)
@@ -59,18 +59,16 @@ export default () => {
         }).catch(function (err) {
             console.log(err)
         })
-        alert("Cadastro Efetuado com Sucesso")
+        alert("Cadastro Alterado com Sucesso")
         setVisible(false)
-        // <Link to='/selectcartao'>Cartões</Link>
     }
 
 
     return <div className='ajustaModal'>
-        <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar novo Cartão' theme="twoTone" onClick={showModal} />
-
+        {/* <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} onClick={showModal}/> */}
         <form onSubmit={handleSubmit}>
             <Modal
-                title="Cadastrar Novo Cartão de Crédito"
+                title="Editar  Cartão de Crédito"
                 visible={visible}
                 onOk={handleSubmit}
                 onCancel={handleCancel}
@@ -79,9 +77,8 @@ export default () => {
                 <Input name='cartao' onChange={handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
                 <Input type='number' onChange={handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
                 <Input type='number' onChange={handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
-
             </Modal>
-        </form>
+        </form >
     </div >
 
 

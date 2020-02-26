@@ -1,6 +1,19 @@
 
 .ant-modal-wrap{
     display: flex;
-    text-align: center !important;
+    text-align: center;
     justify-content: center;
+}
+
+.ModeloBotoesGrid{
+    display:flex;
+    align-content: center;
+    justify-content: center;
+    margin: 10px;
+    // background-color: green;
+}
+
+
+.ModeloBotoesGridDetalhes{
+   padding: 0 15px 0 15px;
 }

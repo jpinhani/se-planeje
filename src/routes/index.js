@@ -35,12 +35,12 @@ export default () =>
           <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
             <Switch name='http://localhost:3000'>
               <PublicRoute exact path='/login' component={Login} />
-              <PublicRoute exact path='/categoria' component={Categoria} />
-              <PublicRoute exact path='/selectconta' component={SelectConta} />
-              <PublicRoute exact path='/selectcartao' component={SelectCartao} />
-              <PublicRoute exact path='/conta' component={Conta} />
-              <PublicRoute exact path='/cartao' component={Cartao} />
-              <PublicRoute exact path='/visao' component={Visao} />
+              <PrivateRoute exact path='/categoria' component={Categoria} />
+              <PrivateRoute exact path='/selectconta' component={SelectConta} />
+              <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
+              <PrivateRoute exact path='/conta' component={Conta} />
+              <PrivateRoute exact path='/cartao' component={Cartao} />
+              <PrivateRoute exact path='/visao' component={Visao} />
               <PrivateRoute component={Home} />
             </Switch>
           </div>

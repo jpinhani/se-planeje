@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AddCartao from '../../components/Modal/Cartao/index'
-import { Table } from 'antd'
+import EditCartao from '../../components/Modal/CartaoEdit/index'
+import { Table, Divider, Icon } from 'antd'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -8,26 +9,44 @@ import './styles.scss'
 
 
 
-const columns = [
-  {
-    title: 'Descrição do Cartão',
-    dataIndex: 'CARTAO',
-    key: 'CARTAO'
-  },
-  {
-    title: 'Dia de Vencimento',
-    dataIndex: 'DT_VENCIMENTO',
-    key: 'DT_VENCIMENTO'
-  },
-  {
-    title: 'Melhor dia de Compra',
-    dataIndex: 'DIA_COMPRA',
-    key: 'DIA_COMPRA'
-  }
-]
-
 export default () => {
+  const columns = [
+    {
+      title: 'Descrição do Cartão',
+      dataIndex: 'CARTAO',
+      key: 'CARTAO'
+    },
+    {
+      title: 'Dia de Vencimento',
+      dataIndex: 'DT_VENCIMENTO',
+      key: 'DT_VENCIMENTO'
+    },
+    {
+      title: 'Melhor dia de Compra',
+      dataIndex: 'DIA_COMPRA',
+      key: 'DIA_COMPRA'
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      // width: '40%',
+      render: () => (
+        <div className='ModeloBotoesGrid'>
+          < span className='ModeloBotoesGridDetalhes' >
+            <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} onClick={showEditCartaoModal} />
+            {/* <Link to='/selectconta'><Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} /></Link> */}
+          </span>
+          <Divider type="vertical" />
+          < span className='ModeloBotoesGridDetalhes' >
+            <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
+          </span >
+        </div>
+      ),
+    }
+  ]
+
   const [cartao, setCartao] = useState([])
+  const [editCartao, setEditCartao] = useState(false)
 
   async function getCartao() {
     const endpointAPI = 'http://localhost:8082/api/cartoes'
@@ -44,8 +63,13 @@ export default () => {
     getCartao()
   }, [])
 
+  function showEditCartaoModal() {
+    setEditCartao(true)
+  }
 
   return <div>
+    {editCartao ? <EditCartao /> : []}
+    {/* <EditCartao /> */}
     <AddCartao />
     <Table columns={columns} dataSource={cartao} />
   </div >
