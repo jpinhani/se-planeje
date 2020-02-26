@@ -5,7 +5,7 @@ import { Table, Divider, Icon, Input } from 'antd'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
-import './styles.scss'
+import './style.scss'
 
 
 
@@ -67,12 +67,26 @@ export default () => {
     setEditCartao(true)
   }
 
+  async function SearchCartao(event) {
+
+
+
+    const endpointAPI = 'http://localhost:8082/api/cartoes/'
+    const result = await axios.get(endpointAPI + event.target.value)
+    const cartao = result.data
+    console.log(cartao)
+    setCartao(cartao)
+  }
+
   return <div>
     {editCartao ? <EditCartao /> : null}
     {/* <EditCartao /> */}
-    <AddCartao />
+    <div className='ViewCartao'>
+      <AddCartao />
+
+      <Input onChange={SearchCartao} name='cartao' placeholder="Procure aqui o cartão especifico" />
+    </div>
     <Divider type="horizontal" />
-    <Input name='cartao' placeholder="Procure aqui o cartão especifico" />
     <Table columns={columns} dataSource={cartao} />
   </div >
 }

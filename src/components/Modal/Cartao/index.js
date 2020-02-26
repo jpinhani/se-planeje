@@ -65,7 +65,7 @@ export default () => {
     }
 
 
-    return <div className='ajustaModal'>
+    return <div>
         <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar novo Cartão' theme="twoTone" onClick={showModal} />
 
         <form onSubmit={handleSubmit}>

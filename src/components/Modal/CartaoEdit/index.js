@@ -3,12 +3,13 @@ import axios from 'axios'
 import { Modal, Input } from 'antd'
 import 'antd/dist/antd.css';
 import './styles.scss'
+// import SelectCartao from '../../../pages/SelectCartao';
 
 
 export default () => {
 
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
-    const [visible, setVisible] = useState(true)
+    const [visible, setVisible] = useState(false)
 
     // function showModal() {
     //     setVisible(true)
@@ -64,8 +65,7 @@ export default () => {
     }
 
 
-    return <div className='ajustaModal'>
-        {/* <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} onClick={showModal}/> */}
+    return <div>
         <form onSubmit={handleSubmit}>
             <Modal
                 title="Editar  Cartão de Crédito"
