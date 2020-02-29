@@ -7,7 +7,7 @@ const { Header } = Layout;
 function PrincipalHeader() {
     return (
         <Header className='cabecalho'>
-            <h1 ClassName='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
+            <h1 className='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
         </Header>
 
     );

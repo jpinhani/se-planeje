@@ -1,88 +1,105 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input } from 'antd'
+import { listCards } from '../../../store/actions/generalCardAction.js'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+class ModalCard extends React.Component {
+    constructor(props) {
+        super(props)
 
-export default () => {
+        this.state = {
+            visible: false,
+            cartao: '',
+            dtVencimento: '',
+            diacompra: ''
+        }
+
+        this.showModal = this.showModal.bind(this)
+        this.handleCancel = this.handleCancel.bind(this)
+        this.handleCartao = this.handleCartao.bind(this)
+        this.handleDtVencimento = this.handleDtVencimento.bind(this)
+        this.handleDiaCompra = this.handleDiaCompra.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
 
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
-    const [visible, setVisible] = useState(false)
-
-    function showModal() {
-        setVisible(true)
+    showModal() {
+        this.setState({...this.state, visible: true })
     };
 
-
-    function handleCancel() {
-        setVisible(false)
+    handleCancel() {
+        this.setState({...this.state, visible: false })
     };
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
-    const [cartao, InsertCartao] = useState(null)
-    const [dtvencimento, InsertDtVencimento] = useState(null)
-    const [diacompra, InsertDiaCompra] = useState(null)
-
-    // const [status, InsertStatus] = useState(null)
-
-    function handleCartao(event) {
-        InsertCartao(event.target.value)
+    handleCartao(event) {
+        this.setState({...this.state, cartao: event.target.value })
     }
 
-    function handleDtVencimento(event) {
-        // console.log(event.target)
-        InsertDtVencimento(event.target.value)
+    handleDtVencimento(event) {
+        this.setState({...this.state, dtVencimento: event.target.value })
     }
 
-    function handleDiaCompra(event) {
-        // console.log(event.target)
-        InsertDiaCompra(event.target.value)
+    handleDiaCompra(event) {
+        this.setState({...this.state, diacompra: event.target.value })
     }
-    function handleSubmit(event) {
+
+    async handleSubmit(event) {
         event.preventDefault()
 
         const endpointAPI = 'http://localhost:8082/api/cartoes'
 
         const body = {
             idUser: 2,
-            cartao: cartao,
-            dtVencimento: dtvencimento,
-            diaCompra: diacompra,
+            cartao: this.state.cartao,
+            dtVencimento: this.state.dtvencimento,
+            diaCompra: this.state.diacompra,
             status: "Ativo"
         }
 
-        console.log(body)
+        await axios.post(endpointAPI, body)
 
-        axios.post(endpointAPI, body).then(function (result) {
-            console.log(result)
-        }).catch(function (err) {
-            console.log(err)
-        })
-        alert("Cadastro Efetuado com Sucesso")
-        setVisible(false)
-        // <Link to='/selectcartao'>Cartões</Link>
+        const result = await axios.get(endpointAPI)
+        const cards = result.data
+
+        this.props.listCards(cards)
+
+        this.setState({...this.state, visible: false })
     }
 
-
-    return <div>
-        <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar novo Cartão' theme="twoTone" onClick={showModal} />
-
-        <form onSubmit={handleSubmit}>
-            <Modal
-                title="Cadastrar Novo Cartão de Crédito"
-                visible={visible}
-                onOk={handleSubmit}
-                onCancel={handleCancel}
-            >
-
-                <Input name='cartao' onChange={handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
-                <Input type='number' onChange={handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
-                <Input type='number' onChange={handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
-
-            </Modal>
-        </form>
-    </div >
-
-
+    render() {
+        return (
+            <div>
+                <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar novo Cartão' theme="twoTone" onClick={this.showModal} />
+                <form onSubmit={this.handleSubmit}>
+                    <Modal
+                        title="Cadastrar Novo Cartão de Crédito"
+                        visible={this.state.visible}
+                        onOk={this.handleSubmit}
+                        onCancel={this.handleCancel}
+                    >
+                        <Input name='cartao' onChange={this.handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
+                        <Input type='number' onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
+                        <Input type='number' onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
+                    </Modal>
+                </form>
+            </div >
+        )
+    }
 }
+
+const mapStateToProps = (state /*, ownProps*/) => {
+    return {
+        card: state.card
+    }
+}
+
+const mapDispatchToProps = { listCards }
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ModalCard)
