@@ -27,24 +27,27 @@ class ModalCard extends React.Component {
 
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
     showModal() {
-        this.setState({...this.state, visible: true })
+        this.setState({ ...this.state, visible: true })
+        // this.setState({ ...this.state, cartao: '' })
+        // this.setState({ ...this.state, dtVencimento: '' })
+        // this.setState({ ...this.state, diacompra: '' })
     };
 
     handleCancel() {
-        this.setState({...this.state, visible: false })
+        this.setState({ ...this.state, visible: false })
     };
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
     handleCartao(event) {
-        this.setState({...this.state, cartao: event.target.value })
+        this.setState({ ...this.state, cartao: event.target.value })
     }
 
     handleDtVencimento(event) {
-        this.setState({...this.state, dtVencimento: event.target.value })
+        this.setState({ ...this.state, dtVencimento: event.target.value })
     }
 
     handleDiaCompra(event) {
-        this.setState({...this.state, diacompra: event.target.value })
+        this.setState({ ...this.state, diacompra: event.target.value })
     }
 
     async handleSubmit(event) {
@@ -53,21 +56,27 @@ class ModalCard extends React.Component {
         const endpointAPI = 'http://localhost:8082/api/cartoes'
 
         const body = {
-            idUser: 2,
+            idUser: localStorage.getItem('userId'),
             cartao: this.state.cartao,
-            dtVencimento: this.state.dtvencimento,
+            dtVencimento: this.state.dtVencimento,
             diaCompra: this.state.diacompra,
             status: "Ativo"
         }
 
         await axios.post(endpointAPI, body)
 
-        const result = await axios.get(endpointAPI)
+        const userID = localStorage.getItem('userId')
+        const endpoint = `http://localhost:8082/api/cartoes/${userID}`
+
+        const result = await axios.get(endpoint)
         const cards = result.data
 
         this.props.listCards(cards)
 
-        this.setState({...this.state, visible: false })
+        this.setState({ ...this.state, cartao: '' })
+        this.setState({ ...this.state, dtVencimento: '' })
+        this.setState({ ...this.state, diacompra: '' })
+        this.setState({ ...this.state, visible: false })
     }
 
     render() {
@@ -81,9 +90,9 @@ class ModalCard extends React.Component {
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
-                        <Input name='cartao' onChange={this.handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
-                        <Input type='number' onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
-                        <Input type='number' onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
+                        <Input name='cartao' value={this.state.cartao} onChange={this.handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
+                        <Input type='number' value={this.state.dtVencimento} onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
+                        <Input type='number' value={this.state.diacompra} onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
                     </Modal>
                 </form>
             </div >

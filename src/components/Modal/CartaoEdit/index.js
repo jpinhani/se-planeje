@@ -27,24 +27,24 @@ class ModalCard extends React.Component {
 
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
     showModal() {
-        this.setState({...this.state, visible: true })
+        this.setState({ ...this.state, visible: true })
     };
 
     handleCancel() {
-        this.setState({...this.state, visible: false })
+        this.setState({ ...this.state, visible: false })
     };
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
     handleCartao(event) {
-        this.setState({...this.state, cartao: event.target.value })
+        this.setState({ ...this.state, cartao: event.target.value })
     }
 
     handleDtVencimento(event) {
-        this.setState({...this.state, dtVencimento: event.target.value })
+        this.setState({ ...this.state, dtVencimento: event.target.value })
     }
 
     handleDiaCompra(event) {
-        this.setState({...this.state, diacompra: event.target.value })
+        this.setState({ ...this.state, diacompra: event.target.value })
     }
 
     async handleSubmit(event) {
@@ -55,7 +55,7 @@ class ModalCard extends React.Component {
         console.log(endpointAPI)
 
         const body = {
-            idUser: 2,
+            idUser: localStorage.getItem('userId'),
             cartao: this.state.cartao,
             dtVencimento: this.state.dtVencimento,
             diaCompra: this.state.diacompra,
@@ -63,14 +63,15 @@ class ModalCard extends React.Component {
         }
 
         await axios.put(endpointAPI, body)
-        const endpoint = `http://localhost:8082/api/cartoes/`
+        const userID = localStorage.getItem('userId')
+        const endpoint = `http://localhost:8082/api/cartoes/${userID}`
         const result = await axios.get(endpoint)
         const cards = result.data
         console.log('cards', cards)
 
         this.props.listCards(cards)
 
-        this.setState({...this.state, visible: false })
+        this.setState({ ...this.state, visible: false })
     }
 
     render() {
