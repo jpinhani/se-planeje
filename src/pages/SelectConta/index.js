@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import AddAcount from '../../components/Modal/Conta/index'
-import EditCartao from '../../components/Modal/CartaoEdit/index'
+import EditaAcount from '../../components/Modal/ContaEdit/index'
 import { listAcounts } from '../../store/actions/generalAcountAction'
-// import { Table, Divider, Icon, Input, Popconfirm } from 'antd'
 import { Table, Icon, Input, Popconfirm } from 'antd'
 import axios from 'axios'
 
@@ -48,7 +47,7 @@ class SelectConta extends React.Component {
         render: acount => (
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
-              <EditCartao data={acount} />
+              <EditaAcount data={acount} />
               <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteAcount(acount.ID)}>
                 <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
               </Popconfirm>
