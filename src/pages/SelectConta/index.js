@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import AddCartao from '../../components/Modal/Cartao/index'
+import AddAcount from '../../components/Modal/Conta/index'
 import EditCartao from '../../components/Modal/CartaoEdit/index'
 import { listAcounts } from '../../store/actions/generalAcountAction'
 // import { Table, Divider, Icon, Input, Popconfirm } from 'antd'
-import { Table, Icon, Input } from 'antd'
+import { Table, Icon, Input, Popconfirm } from 'antd'
 import axios from 'axios'
 
 
@@ -20,6 +20,13 @@ class SelectConta extends React.Component {
     }
 
     this.searchAcount = this.searchAcount.bind(this)
+  }
+
+  async deleteAcount(acountId) {
+    const endpoint = `http://localhost:8082/api/contas/${acountId}`
+    await axios.delete(endpoint)
+    this.requestAPI()
+
   }
 
   columns() {
@@ -42,9 +49,9 @@ class SelectConta extends React.Component {
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
               <EditCartao data={acount} />
-              {/* <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteCard(card.ID)}> */}
-              <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
-              {/* </Popconfirm> */}
+              <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteAcount(acount.ID)}>
+                <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
+              </Popconfirm>
             </span>
           </div>
         ),
@@ -86,6 +93,7 @@ class SelectConta extends React.Component {
   render() {
     return (
       <div>
+        <AddAcount />
         <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
         <Table columns={this.columns()} dataSource={this.props.acount} />
       </div>
