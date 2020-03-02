@@ -94,7 +94,7 @@ class SelectConta extends React.Component {
       <div>
         <AddAcount />
         <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
-        <Table columns={this.columns()} dataSource={this.props.acount} />
+        <Table columns={this.columns()} dataSource={this.props.acount} rowKey='ID' />
       </div>
     )
   }

@@ -1,0 +1,27 @@
+
+.ant-modal-wrap{
+    display: flex;
+    text-align: center !important;
+    justify-content: center;
+}
+
+.ant-select-selection__rendered{
+    display: flex ;
+    justify-content: flex-start; 
+    padding:  0 11px;
+    // margin: 3px;
+    align-items: flex-start;
+}
+
+.ant-select-selection__placeholder{
+    position:static;
+    display: flex;
+    height: 100%;
+    padding:  4px 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.ant-select-selection ,.ant-input{
+              margin:3px !important;      
+}

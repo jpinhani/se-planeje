@@ -14,7 +14,7 @@ class ModalAcount extends React.Component {
             visible: false,
             descrConta: this.props.data.DESCR_CONTA
         }
-        console.log('teste', this.props.data)
+        // console.log('teste', this.props.data)
 
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)

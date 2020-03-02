@@ -5,7 +5,7 @@ const addCard = card => ({
 
 const listCards = cards => {
 
-  console.log('action', cards)
+  // console.log('action', cards)
 
   return ({
     type: 'LIST_CARD',

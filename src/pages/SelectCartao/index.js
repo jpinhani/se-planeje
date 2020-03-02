@@ -99,7 +99,7 @@ class SelectCartao extends React.Component {
           <Input name='cartao' value={this.state.search} onChange={this.searchCard} placeholder="Procure aqui o cartão especifico" />
         </div>
         <Divider type="horizontal" />
-        <Table columns={this.columns()} dataSource={this.props.card} />
+        <Table columns={this.columns()} dataSource={this.props.card} rowKey='ID' />
       </div >
     )
   }

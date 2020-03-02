@@ -6,9 +6,10 @@ export default function (state = INITIAL_STATE, action) {
             state = action.payload
             return state
         case 'LIST_CATEGORY':
-            console.log('reducer', action.payload)
+            // console.log('reducer', action.payload)
             state = action.payload
             return state
+
         default:
             return state
     }
