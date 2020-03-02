@@ -17,6 +17,7 @@ import Cartao from '../pages/Cartao'
 import Visao from '../pages/Visoes'
 import SelectConta from '../pages/SelectConta'
 import SelectCartao from '../pages/SelectCartao'
+import SelectCategory from '../pages/SelectCategoria'
 import Teste from '../pages/Teste'
 
 import Navebar from '../pages/Navebar/index.js'
@@ -41,6 +42,7 @@ export default () =>
               <PrivateRoute exact path='/categoria' component={Categoria} />
               <PrivateRoute exact path='/selectconta' component={SelectConta} />
               <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
+              <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
               <PrivateRoute exact path='/conta' component={Conta} />
               <PrivateRoute exact path='/cartao' component={Cartao} />
               <PrivateRoute exact path='/visao' component={Visao} />
