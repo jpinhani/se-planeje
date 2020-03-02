@@ -1,0 +1,28 @@
+.alert {
+  min-width: 15rem;
+  padding-bottom: .5rem;
+
+  div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: black;
+    background-color: #CEF6EC;
+    border: 1px solid #81F7BE;
+    border-radius: 3px;
+    padding: .5rem;
+
+    i {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      font-size: .8rem;
+    }
+  }
+}
