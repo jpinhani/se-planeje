@@ -6,6 +6,7 @@ import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+
 const { Option } = Select;
 // const teste = []
 class ModalCategory extends React.Component {
@@ -14,6 +15,7 @@ class ModalCategory extends React.Component {
 
         this.state = {
             visible: false,
+            options: null,
             dependencia: '',
             descrCategoria: '',
             nivel: '',
@@ -54,8 +56,15 @@ class ModalCategory extends React.Component {
     handleNivel(event) {
         this.setState({ ...this.state, nivel: event.target.value })
     }
-    handleTipo(event) {
-        this.setState({ ...this.state, tipo: event.target.value })
+    handleTipo() {
+       
+        // this.setState({ ...this.state, tipo: event.target})
+        this.setState({...this.state, options: '' })
+        this.setState({ ...this.state, dependencia:''})
+        this.setState({ ...this.state, entrada:""})
+        this.setState({ ...this.state, descrCategoria:null})
+
+        console.log('event',this.state.options)
     }
     handleAgregacao(event) {
         this.setState({ ...this.state, agregacao: event.target.value })
@@ -105,14 +114,17 @@ class ModalCategory extends React.Component {
         const endpoint = `http://localhost:8082/api/categorias/${userID}`
 
         const result = await axios.get(endpoint)
-        // console.log('teste novo:', result.data.length)
-        // const categorys = result.data
-        let teste = [];
-        for (var i = 0; i < result.data.length; i++) {
-            // <Option value={result.data[i].PAI}> {result.data[i].PAI} </Option>
-            teste[i] = result.data[i].PAI
-        }
-        console.log('teste:', teste)
+
+
+        const options = result.data.map((desc, i) =>
+            <Option key={i} value={desc.DESCR_CATEGORIA}>
+                {desc.DESCR_CATEGORIA}
+            </Option>
+        )
+
+        this.setState({...this.state, options: options })
+
+        console.log('teste:', options)
     }
 
 
@@ -121,9 +133,10 @@ class ModalCategory extends React.Component {
         console.log(`selected Tipo ${value}`);
     }
 
-    onChangeTipo(value) {
-        console.log(`selected Tipo ${value}`);
-    }
+    // onChangeTipo() {
+    //     this.setState({...this.state, entrada: ''})
+    //     this.setState({...this.state, dependencia:''})
+    // }
 
     onChange(value) {
         console.log(`selected ${value}`);
@@ -143,12 +156,12 @@ class ModalCategory extends React.Component {
                         onCancel={this.handleCancel}
                     >
                         <Input name='categoria' value={this.state.descrCategoria} onChange={this.handleDescrCategoria} placeholder="Informe o nome da Categoria" />
-                        <Select
+                        <Select 
                             // showSearch
                             style={{ width: '80%' }}
                             placeholder="Informe o Tipo de Categoria"
                             optionFilterProp="children"
-                            onChange={this.onChangeTipo}
+                            onSelect={this.handleTipo}
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
@@ -175,20 +188,20 @@ class ModalCategory extends React.Component {
 
                         </Select>
 
-                        <Select
+                        <Select Value={this.state.options}
                             // showSearch
                             style={{ width: '80%' }}
                             placeholder="Esta Categoria devera agregar em qual?"
                             optionFilterProp="children"
                             onChange={this.onChange}
+                            allowClear={true}
                             // defaultOpen={this.joao}
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
-                        >
-
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="tom">Tom</Option>
+>
+                            {this.state.options}
+                            {/* {this.state.dependencia} */}
                         </Select>
 
                         <Select
@@ -215,6 +228,7 @@ class ModalCategory extends React.Component {
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                         >
+                            <Option value="">Escolha uma Opção</Option>
                             <Option value="consolidacao">Conta Consolidacao</Option>
                             <Option value="input">Conta Input</Option>
                         </Select>
