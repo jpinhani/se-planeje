@@ -96,6 +96,27 @@ class ModalCategory extends React.Component {
         this.setState({ ...this.state, visible: false })
     }
 
+    componentDidMount() {
+        this.teste()
+    }
+
+    async teste() {
+        const userID = localStorage.getItem('userId')
+        const endpoint = `http://localhost:8082/api/categorias/${userID}`
+
+        const result = await axios.get(endpoint)
+        // console.log('teste novo:', result.data.length)
+        // const categorys = result.data
+        let teste = [];
+        for (var i = 0; i < result.data.length; i++) {
+            // <Option value={result.data[i].PAI}> {result.data[i].PAI} </Option>
+            teste[i] = result.data[i].PAI
+        }
+        console.log('teste:', teste)
+    }
+
+
+
     onChangeNivel(value) {
         console.log(`selected Tipo ${value}`);
     }
@@ -160,6 +181,7 @@ class ModalCategory extends React.Component {
                             placeholder="Esta Categoria devera agregar em qual?"
                             optionFilterProp="children"
                             onChange={this.onChange}
+                            // defaultOpen={this.joao}
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
