@@ -14,13 +14,14 @@ class ModalCategory extends React.Component {
 
         this.state = {
             visible: false,
-            options: false,
+            options: [],
             dependencia: [],
             descrCategoria: '',
             nivel: '',
             tipo: '',
             agregacao: '',
             entrada: [],
+            entradaInput: [],
         }
 
         this.showModal = this.showModal.bind(this)
@@ -50,11 +51,13 @@ class ModalCategory extends React.Component {
     }
     handleNivel(evento) {
         this.setState({ ...this.state, nivel: evento })
+        // this.setState({ ...this.state, dependencia: [] })
     }
     handleTipo() {
-        const options = () => <Option>Teste</Option>
-        this.setState({ ...this.state, dependencia: options })
-        this.setState({ ...this.state, entrada: [] })
+        // this.setState({ ...this.state, dependencia: [] })
+
+
+        this.setState({ ...this.state, entrada: [], /* dependencia: [], */ options: [] })
     }
     handleAgregacao(event) {
         this.setState({ ...this.state, agregacao: event.target.value })
@@ -78,10 +81,11 @@ class ModalCategory extends React.Component {
                 {desc.DESCR_CATEGORIA}
             </Option>
         )
-
         this.setState({ ...this.state, dependencia: options })
         this.setState({ ...this.state, entrada: [] })
     }
+
+
 
     async handleSubmit(event) {
         event.preventDefault()
@@ -136,7 +140,7 @@ class ModalCategory extends React.Component {
                             <Option value="5">5</Option>
                         </Select>
 
-                        <Select style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?">
+                        <Select style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.options} onSelect={this.handleDependencia}>
                             {this.state.dependencia}
                         </Select>
 
