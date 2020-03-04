@@ -1,14 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import AddCategory from '../../components/Modal/Categoria/index'
-// import AddAcount from '../../components/Modal/Conta/index'
-// import EditaAcount from '../../components/Modal/ContaEdit/index'
 import { listCategorys } from '../../store/actions/generalCategoryAction'
-import {
-    Table, /* Icon, */ Input,/* , Popconfirm */
-} from 'antd'
+import { Table, Input } from 'antd'
 import axios from 'axios'
-
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -48,24 +43,17 @@ class SelectCategoria extends React.Component {
                 key: '4'
             },
             {
-                title: 'Agregação',
-                dataIndex: 'AGREGACAO',
-                key: '5'
-            },
-            {
                 title: 'Entrada',
                 dataIndex: 'ENTRADA',
-                key: '6'
+                key: '5'
             }
         ]
     }
-
 
     async requestAPI() {
         const userID = localStorage.getItem('userId')
         const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
         const result = await axios.get(endpointAPI)
-
 
         const novosDados = result.data.map((objetoAtual) => {
             if (objetoAtual.ENTRADA === 0) {
@@ -86,7 +74,6 @@ class SelectCategoria extends React.Component {
             }
 
             return objetoAtual
-
         })
 
         const categoria = novosDados
@@ -98,7 +85,6 @@ class SelectCategoria extends React.Component {
         this.requestAPI()
     }
 
-
     searchCategory(event) {
         this.setState({ ...this.state, search: event.target.value })
         this.updateList(event.target.value)
@@ -106,15 +92,14 @@ class SelectCategoria extends React.Component {
 
     async updateList(evento) {
         const userID = localStorage.getItem('userId')
-        console.log('Evento valor:', evento)
         switch (evento) {
             case '':
-                console.log('Entrou aquii')
-                const x = 1
-                const endpointall = `http://localhost:8082/api/categorias/search/${x}/${userID}`
-                const resultall = await axios.get(endpointall)
-                const categoriaall = resultall.data
-                this.props.listCategorys(categoriaall)
+                // const x = 1
+                // const endpointall = `http://localhost:8082/api/categorias/search/${x}/${userID}`
+                // const resultall = await axios.get(endpointall)
+                // const categoriaall = resultall.data
+                // this.props.listCategorys(categoriaall)
+                this.requestAPI()
                 break;
 
             default:
@@ -124,11 +109,6 @@ class SelectCategoria extends React.Component {
                 this.props.listCategorys(categoria)
                 break;
         }
-        // const userID = localStorage.getItem('userId')
-        // const endpoint = `http://localhost:8082/api/categorias/search/${evento}/${userID}`
-        // const result = await axios.get(endpoint)
-        // const categoria = result.data
-        // this.props.listCategorys(categoria)
     }
 
 
@@ -137,17 +117,15 @@ class SelectCategoria extends React.Component {
             <AddCategory />
             <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
             <Table columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
-
         </div>
         )
     }
 }
 
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         category: state.category
-
     }
 }
 

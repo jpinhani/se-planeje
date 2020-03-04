@@ -7,7 +7,7 @@ import 'antd/dist/antd.css';
 import './styles.scss'
 
 const { Option } = Select;
-// const teste = []
+
 class ModalCategory extends React.Component {
     constructor(props) {
         super(props)
@@ -20,7 +20,6 @@ class ModalCategory extends React.Component {
             nivelInput: [],
             nivel: [],
             tipo: [],
-            agregacao: '',
             entrada: [],
             entradaInput: [],
         }
@@ -32,18 +31,13 @@ class ModalCategory extends React.Component {
         this.handleDescrCategoria = this.handleDescrCategoria.bind(this)
         this.handleNivel = this.handleNivel.bind(this)
         this.handleTipo = this.handleTipo.bind(this)
-        this.handleAgregacao = this.handleAgregacao.bind(this)
         this.handleEntrada = this.handleEntrada.bind(this)
     }
 
-    /* -------------------------------------  Comandos para Funcionamento do Modal*/
     showModal() { this.setState({ ...this.state, visible: true }) };
 
     handleCancel() { this.setState({ ...this.state, visible: false }) };
-    /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
-
-    /* -------------------------------------  Comandos para alteração de estado dos campos do Formulário*/
     handleDependencia(eventos) {
         this.setState({ ...this.state, dependenciaInput: eventos })
     }
@@ -60,7 +54,6 @@ class ModalCategory extends React.Component {
         }
     }
     handleTipo(evento) {
-        // this.setState({ ...this.state, dependencia: [] })
         this.setState({ ...this.state, entrada: [], dependenciaInput: [], tipo: evento })
         const tipoSelecionado = evento
         const nivelSelecionado = this.state.nivelInput
@@ -69,24 +62,15 @@ class ModalCategory extends React.Component {
             this.ComboDependencia(tipoSelecionado, nivelSelecionado)
         }
     }
-    handleAgregacao(event) {
-        this.setState({ ...this.state, agregacao: event.target.value })
-    }
     handleEntrada(evento) {
         this.setState({ ...this.state, entrada: evento })
     }
-    /* -------------------------------------  Comandos para alteração de estado dos campos do Formulário*/
-
-    // componentDidMount() { this.teste() }
 
     async ComboDependencia(tipo, nivel) {
-        console.log('valores recebido por Tipo', tipo)
-        console.log('valores recebido por nivel', nivel)
         const userID = localStorage.getItem('userId')
         const endpoint = `http://localhost:8082/api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
-
 
         const options = result.data.map((desc, i) =>
             <Option key={i} value={desc.DESCR_CATEGORIA}>
@@ -95,8 +79,6 @@ class ModalCategory extends React.Component {
         )
         this.setState({ ...this.state, dependencia: options })
     }
-
-
 
     async handleSubmit(event) {
         event.preventDefault()
@@ -145,20 +127,14 @@ class ModalCategory extends React.Component {
                         </Select>
 
                         <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onSelect={this.handleNivel} value={this.state.nivelInput}>
-                            <Option value="3">3</Option>
-                            <Option value="4">4</Option>
-                            <Option value="5">5</Option>
-                            <Option value="6">5</Option>
+                            <Option value="3">1</Option>
+                            <Option value="4">2</Option>
+                            <Option value="5">3</Option>
+                            <Option value="6">4</Option>
                         </Select>
 
-                        <Select style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
+                        <Select style={{ width: '100%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
                             {this.state.dependencia}
-                        </Select>
-
-
-                        <Select style={{ width: '20%' }} placeholder="Qual o Tipo de Agregação?" onChange={this.onChange}>
-                            <Option value="mais">+</Option>
-                            <Option value="menos">-</Option>
                         </Select>
 
                         <Select value={this.state.entrada} style={{ width: '100%' }} placeholder="Esta conta deverá ser de consolidação ou Input?" onSelect={this.handleEntrada}>
@@ -180,11 +156,8 @@ const mapStateToProps = (state/*, ownProps*/) => {
 
 const mapDispatchToProps = { listCategorys }
 
-const VisibleTodoList = connect(
+
+export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(ModalCategory)
-
-
-
-export default VisibleTodoList 
