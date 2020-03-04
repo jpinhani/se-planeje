@@ -14,11 +14,12 @@ class ModalCategory extends React.Component {
 
         this.state = {
             visible: false,
-            options: [],
+            dependenciaInput: [],
             dependencia: [],
             descrCategoria: '',
-            nivel: '',
-            tipo: '',
+            nivelInput: [],
+            nivel: [],
+            tipo: [],
             agregacao: '',
             entrada: [],
             entradaInput: [],
@@ -44,20 +45,29 @@ class ModalCategory extends React.Component {
 
     /* -------------------------------------  Comandos para alteração de estado dos campos do Formulário*/
     handleDependencia(eventos) {
-        this.setState({ ...this.state, options: eventos })
+        this.setState({ ...this.state, dependenciaInput: eventos })
     }
     handleDescrCategoria(event) {
         this.setState({ ...this.state, descrCategoria: event.target.value })
     }
     handleNivel(evento) {
-        this.setState({ ...this.state, nivel: evento })
-        // this.setState({ ...this.state, dependencia: [] })
+        this.setState({ ...this.state, nivelInput: evento, entrada: [], dependenciaInput: [] })
+        const tipoSelecionado = this.state.tipo
+        const nivelSelecionado = evento
+
+        if ((tipoSelecionado === "1") | (tipoSelecionado === "2")) {
+            this.ComboDependencia(tipoSelecionado, nivelSelecionado)
+        }
     }
-    handleTipo() {
+    handleTipo(evento) {
         // this.setState({ ...this.state, dependencia: [] })
+        this.setState({ ...this.state, entrada: [], dependenciaInput: [], tipo: evento })
+        const tipoSelecionado = evento
+        const nivelSelecionado = this.state.nivelInput
 
-
-        this.setState({ ...this.state, entrada: [], /* dependencia: [], */ options: [] })
+        if (nivelSelecionado != null) {
+            this.ComboDependencia(tipoSelecionado, nivelSelecionado)
+        }
     }
     handleAgregacao(event) {
         this.setState({ ...this.state, agregacao: event.target.value })
@@ -67,11 +77,13 @@ class ModalCategory extends React.Component {
     }
     /* -------------------------------------  Comandos para alteração de estado dos campos do Formulário*/
 
-    componentDidMount() { this.teste() }
+    // componentDidMount() { this.teste() }
 
-    async teste() {
+    async ComboDependencia(tipo, nivel) {
+        console.log('valores recebido por Tipo', tipo)
+        console.log('valores recebido por nivel', nivel)
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/categorias/${userID}`
+        const endpoint = `http://localhost:8082/api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
 
@@ -82,7 +94,6 @@ class ModalCategory extends React.Component {
             </Option>
         )
         this.setState({ ...this.state, dependencia: options })
-        this.setState({ ...this.state, entrada: [] })
     }
 
 
@@ -128,19 +139,19 @@ class ModalCategory extends React.Component {
                         onCancel={this.handleCancel}
                     >
                         <Input name='categoria' value={this.state.descrCategoria} onChange={this.handleDescrCategoria} placeholder="Informe o nome da Categoria" />
-                        <Select style={{ width: '80%' }} placeholder="Informe o Tipo de Categoria" onSelect={this.handleTipo}>
-                            <Option value="despesa">Despesa</Option>
-                            <Option value="receita">Receita</Option>
+                        <Select style={{ width: '80%' }} placeholder="Informe o Tipo de Categoria" onSelect={this.handleTipo} value={this.state.tipo}>
+                            <Option value="1">Despesa</Option>
+                            <Option value="2">Receita</Option>
                         </Select>
 
-                        <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onChange={this.onChangeNivel}>
-                            <Option value="2">2</Option>
+                        <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onSelect={this.handleNivel} value={this.state.nivelInput}>
                             <Option value="3">3</Option>
                             <Option value="4">4</Option>
                             <Option value="5">5</Option>
+                            <Option value="6">5</Option>
                         </Select>
 
-                        <Select style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.options} onSelect={this.handleDependencia}>
+                        <Select style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
                             {this.state.dependencia}
                         </Select>
 
