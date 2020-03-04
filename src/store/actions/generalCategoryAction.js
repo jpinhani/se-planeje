@@ -5,7 +5,7 @@ const addCategory = category => ({
 
 const listCategorys = categorys => {
 
-    // console.log('action', categorys)
+    console.log('action', categorys)
 
     return ({
         type: 'LIST_CATEGORY',

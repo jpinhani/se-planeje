@@ -6,7 +6,6 @@ import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-
 const { Option } = Select;
 // const teste = []
 class ModalCategory extends React.Component {
@@ -15,13 +14,13 @@ class ModalCategory extends React.Component {
 
         this.state = {
             visible: false,
-            options: null,
-            dependencia: '',
+            options: false,
+            dependencia: [],
             descrCategoria: '',
             nivel: '',
             tipo: '',
             agregacao: '',
-            entrada: '',
+            entrada: [],
         }
 
         this.showModal = this.showModal.bind(this)
@@ -36,43 +35,53 @@ class ModalCategory extends React.Component {
     }
 
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
-    showModal() {
-        this.setState({ ...this.state, visible: true })
-    };
+    showModal() { this.setState({ ...this.state, visible: true }) };
 
-    handleCancel() {
-        this.setState({ ...this.state, visible: false })
-    };
+    handleCancel() { this.setState({ ...this.state, visible: false }) };
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
 
     /* -------------------------------------  Comandos para alteração de estado dos campos do Formulário*/
-    handleDependencia(event) {
-        this.setState({ ...this.state, dependencia: event.target.value })
+    handleDependencia(eventos) {
+        this.setState({ ...this.state, options: eventos })
     }
     handleDescrCategoria(event) {
         this.setState({ ...this.state, descrCategoria: event.target.value })
     }
-    handleNivel(event) {
-        this.setState({ ...this.state, nivel: event.target.value })
+    handleNivel(evento) {
+        this.setState({ ...this.state, nivel: evento })
     }
     handleTipo() {
-       
-        // this.setState({ ...this.state, tipo: event.target})
-        this.setState({...this.state, options: '' })
-        this.setState({ ...this.state, dependencia:''})
-        this.setState({ ...this.state, entrada:""})
-        this.setState({ ...this.state, descrCategoria:null})
-
-        console.log('event',this.state.options)
+        const options = () => <Option>Teste</Option>
+        this.setState({ ...this.state, dependencia: options })
+        this.setState({ ...this.state, entrada: [] })
     }
     handleAgregacao(event) {
         this.setState({ ...this.state, agregacao: event.target.value })
     }
-    handleEntrada(event) {
-        this.setState({ ...this.state, entrada: event.target.value })
+    handleEntrada(evento) {
+        this.setState({ ...this.state, entrada: evento })
     }
     /* -------------------------------------  Comandos para alteração de estado dos campos do Formulário*/
+
+    componentDidMount() { this.teste() }
+
+    async teste() {
+        const userID = localStorage.getItem('userId')
+        const endpoint = `http://localhost:8082/api/categorias/${userID}`
+
+        const result = await axios.get(endpoint)
+
+
+        const options = result.data.map((desc, i) =>
+            <Option key={i} value={desc.DESCR_CATEGORIA}>
+                {desc.DESCR_CATEGORIA}
+            </Option>
+        )
+
+        this.setState({ ...this.state, dependencia: options })
+        this.setState({ ...this.state, entrada: [] })
+    }
 
     async handleSubmit(event) {
         event.preventDefault()
@@ -98,51 +107,10 @@ class ModalCategory extends React.Component {
         const result = await axios.get(endpoint)
         const categorys = result.data
 
-        this.props.listAcounts(categorys)
+        this.props.listCategorys(categorys)
 
-
-        // this.setState({ ...this.state, descrConta: '' })
         this.setState({ ...this.state, visible: false })
     }
-
-    componentDidMount() {
-        this.teste()
-    }
-
-    async teste() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/categorias/${userID}`
-
-        const result = await axios.get(endpoint)
-
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.DESCR_CATEGORIA}>
-                {desc.DESCR_CATEGORIA}
-            </Option>
-        )
-
-        this.setState({...this.state, options: options })
-
-        console.log('teste:', options)
-    }
-
-
-
-    onChangeNivel(value) {
-        console.log(`selected Tipo ${value}`);
-    }
-
-    // onChangeTipo() {
-    //     this.setState({...this.state, entrada: ''})
-    //     this.setState({...this.state, dependencia:''})
-    // }
-
-    onChange(value) {
-        console.log(`selected ${value}`);
-    }
-
-
 
     render() {
         return (
@@ -156,79 +124,29 @@ class ModalCategory extends React.Component {
                         onCancel={this.handleCancel}
                     >
                         <Input name='categoria' value={this.state.descrCategoria} onChange={this.handleDescrCategoria} placeholder="Informe o nome da Categoria" />
-                        <Select 
-                            // showSearch
-                            style={{ width: '80%' }}
-                            placeholder="Informe o Tipo de Categoria"
-                            optionFilterProp="children"
-                            onSelect={this.handleTipo}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                        >
-
+                        <Select style={{ width: '80%' }} placeholder="Informe o Tipo de Categoria" onSelect={this.handleTipo}>
                             <Option value="despesa">Despesa</Option>
                             <Option value="receita">Receita</Option>
                         </Select>
 
-                        <Select
-                            // showSearch
-                            style={{ width: '20%' }}
-                            placeholder="Informe o Nivel de Categoria"
-                            optionFilterProp="children"
-                            onChange={this.onChangeNivel}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                        >
+                        <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onChange={this.onChangeNivel}>
                             <Option value="2">2</Option>
                             <Option value="3">3</Option>
                             <Option value="4">4</Option>
                             <Option value="5">5</Option>
-
                         </Select>
 
-                        <Select Value={this.state.options}
-                            // showSearch
-                            style={{ width: '80%' }}
-                            placeholder="Esta Categoria devera agregar em qual?"
-                            optionFilterProp="children"
-                            onChange={this.onChange}
-                            allowClear={true}
-                            // defaultOpen={this.joao}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
->
-                            {this.state.options}
-                            {/* {this.state.dependencia} */}
+                        <Select style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?">
+                            {this.state.dependencia}
                         </Select>
 
-                        <Select
-                            // showSearch
-                            style={{ width: '20%' }}
-                            placeholder="Qual o Tipo de Agregação?"
-                            optionFilterProp="children"
-                            onChange={this.onChange}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                        >
+
+                        <Select style={{ width: '20%' }} placeholder="Qual o Tipo de Agregação?" onChange={this.onChange}>
                             <Option value="mais">+</Option>
                             <Option value="menos">-</Option>
                         </Select>
 
-                        <Select
-                            // showSearch
-                            style={{ width: '100%' }}
-                            placeholder="Esta conta deverá ser de consolidação ou Input?"
-                            optionFilterProp="children"
-                            onChange={this.onChange}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                        >
-                            <Option value="">Escolha uma Opção</Option>
+                        <Select value={this.state.entrada} style={{ width: '100%' }} placeholder="Esta conta deverá ser de consolidação ou Input?" onSelect={this.handleEntrada}>
                             <Option value="consolidacao">Conta Consolidacao</Option>
                             <Option value="input">Conta Input</Option>
                         </Select>
@@ -239,15 +157,19 @@ class ModalCategory extends React.Component {
     }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state/*, ownProps*/) => {
     return {
-        category: state.category
+        category: state.category,
     }
 }
 
 const mapDispatchToProps = { listCategorys }
 
-export default connect(
+const VisibleTodoList = connect(
     mapStateToProps,
     mapDispatchToProps
 )(ModalCategory)
+
+
+
+export default VisibleTodoList 

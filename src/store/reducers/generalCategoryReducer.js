@@ -9,7 +9,6 @@ export default function (state = INITIAL_STATE, action) {
             // console.log('reducer', action.payload)
             state = action.payload
             return state
-
         default:
             return state
     }
