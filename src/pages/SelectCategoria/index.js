@@ -4,7 +4,9 @@ import AddCategory from '../../components/Modal/Categoria/index'
 // import AddAcount from '../../components/Modal/Conta/index'
 // import EditaAcount from '../../components/Modal/ContaEdit/index'
 import { listCategorys } from '../../store/actions/generalCategoryAction'
-import { Table, /* Icon, */ Input/* , Popconfirm */ } from 'antd'
+import {
+    Table, /* Icon, */ Input,/* , Popconfirm */
+} from 'antd'
 import axios from 'axios'
 
 
@@ -99,15 +101,34 @@ class SelectCategoria extends React.Component {
 
     searchCategory(event) {
         this.setState({ ...this.state, search: event.target.value })
-        this.updateList()
+        this.updateList(event.target.value)
     }
 
-    async updateList() {
+    async updateList(evento) {
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/categorias/search/${this.state.search}/${userID}`
-        const result = await axios.get(endpoint)
-        const categoria = result.data
-        this.props.listCategorys(categoria)
+        console.log('Evento valor:', evento)
+        switch (evento) {
+            case '':
+                console.log('Entrou aquii')
+                const x = 1
+                const endpointall = `http://localhost:8082/api/categorias/search/${x}/${userID}`
+                const resultall = await axios.get(endpointall)
+                const categoriaall = resultall.data
+                this.props.listCategorys(categoriaall)
+                break;
+
+            default:
+                const endpoint = `http://localhost:8082/api/categorias/search/${evento}/${userID}`
+                const result = await axios.get(endpoint)
+                const categoria = result.data
+                this.props.listCategorys(categoria)
+                break;
+        }
+        // const userID = localStorage.getItem('userId')
+        // const endpoint = `http://localhost:8082/api/categorias/search/${evento}/${userID}`
+        // const result = await axios.get(endpoint)
+        // const categoria = result.data
+        // this.props.listCategorys(categoria)
     }
 
 
