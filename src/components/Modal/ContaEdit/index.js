@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 import './styles.scss'
 
 class ModalAcount extends React.Component {
+
     constructor(props) {
         super(props)
 

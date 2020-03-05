@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import AddCategory from '../../components/Modal/Categoria/index'
+import EditCategory from '../../components/Modal/CategoriaEdit/index'
 import { listCategorys } from '../../store/actions/generalCategoryAction'
-import { Table, Input } from 'antd'
+import { Table, Input, Popconfirm, Icon } from 'antd'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -18,6 +19,11 @@ class SelectCategoria extends React.Component {
         }
 
         this.searchCategory = this.searchCategory.bind(this)
+    }
+    async deleteAcount(categoriaId) {
+        const endpoint = `http://localhost:8082/api/categorias/${categoriaId}`
+        await axios.delete(endpoint)
+        this.requestAPI()
     }
 
     columns() {
@@ -39,13 +45,27 @@ class SelectCategoria extends React.Component {
             },
             {
                 title: 'Tipo',
-                dataIndex: 'TIPO',
+                dataIndex: 'TIPODESCR',
                 key: '4'
             },
             {
                 title: 'Entrada',
-                dataIndex: 'ENTRADA',
+                dataIndex: 'ENTRADADESCR',
                 key: '5'
+            },
+            {
+                title: 'Action',
+                key: 'action',
+                render: category => (
+                    <div className='ModeloBotoesGrid'>
+                        <span className='ModeloBotoesGridDetalhes' >
+                            <EditCategory data={category} />
+                            <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteAcount(category.ID)}>
+                                <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
+                            </Popconfirm>
+                        </span>
+                    </div>
+                ),
             }
         ]
     }
@@ -53,30 +73,30 @@ class SelectCategoria extends React.Component {
     async requestAPI() {
         const userID = localStorage.getItem('userId')
         const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
-        const result = await axios.get(endpointAPI)
+        const novosDados = await axios.get(endpointAPI)
 
-        const novosDados = result.data.map((objetoAtual) => {
-            if (objetoAtual.ENTRADA === 0) {
-                objetoAtual.ENTRADA = 'Conta de Input'
+        // const novosDados = result.data.map((objetoAtual) => {
+        //     if (objetoAtual.ENTRADA === 0) {
+        //         objetoAtual.ENTRADA = 'Conta de Input'
 
-            } else {
-                objetoAtual.ENTRADA = 'Conta de Consolidação'
-            }
+        //     } else {
+        //         objetoAtual.ENTRADA = 'Conta de Consolidação'
+        //     }
 
-            if (objetoAtual.TIPO === 1) {
-                objetoAtual.TIPO = 'Despesa'
+        //     if (objetoAtual.TIPO === 1) {
+        //         objetoAtual.TIPO = 'Despesa'
 
-            } else if (objetoAtual.TIPO === null) {
+        //     } else if (objetoAtual.TIPO === null) {
 
-                objetoAtual.TIPO = null
-            } else {
-                objetoAtual.TIPO = 'Receita'
-            }
+        //         objetoAtual.TIPO = null
+        //     } else {
+        //         objetoAtual.TIPO = 'Receita'
+        //     }
 
-            return objetoAtual
-        })
+        //     return objetoAtual
+        // })
 
-        const categoria = novosDados
+        const categoria = novosDados.data
         this.props.listCategorys(categoria)
 
     }
@@ -94,11 +114,7 @@ class SelectCategoria extends React.Component {
         const userID = localStorage.getItem('userId')
         switch (evento) {
             case '':
-                // const x = 1
-                // const endpointall = `http://localhost:8082/api/categorias/search/${x}/${userID}`
-                // const resultall = await axios.get(endpointall)
-                // const categoriaall = resultall.data
-                // this.props.listCategorys(categoriaall)
+
                 this.requestAPI()
                 break;
 

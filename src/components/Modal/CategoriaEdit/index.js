@@ -9,21 +9,33 @@ import './styles.scss'
 const { Option } = Select;
 
 class ModalCategory extends React.Component {
+
+
     constructor(props) {
         super(props)
 
         this.state = {
-            visible: false,
-            dependenciaInput: [],
-            dependencia: [],
-            descrCategoria: '',
-            nivelInput: [],
-            nivel: [],
-            tipo: [],
-            entrada: [],
-            entradaInput: [],
-        }
+            visible: false, //Controla a Visibilidade do Formulário
 
+            dependenciaInput: this.props.data.PAI,// Controla o Input da Combo quando Seleciona manualmente pelo usuário
+            dependencia: [],//Controla o estado de carregamento da combo => recebe <Option>,
+
+            descrCategoria: this.props.data.DESCR_CATEGORIA, //Controla o Estado de Descrição ou nome da Categoria a ser enviada
+
+            nivelInput: this.props.data.NIVEL, //Controla o Input de Nivel
+            nivel: this.props.data.NIVEL,
+
+            tipo: this.props.data.TIPODESCR,
+
+            entrada: this.props.data.ENTRADADESCR,// this.props.data.ENTRADADESCR,
+            entradaInput: this.props.data.ENTRADADESCR,// this.props.data.ENTRADADESCR,
+
+            alterTipo: this.props.data.TIPO,
+            alterEntrada: this.props.data.ENTRADA,
+            alterDependencia: this.props.data.IDPAI,
+            alterId: this.props.data.ID
+        }
+        console.log('vERIFICAÇÃO', this.props.data)
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -38,8 +50,7 @@ class ModalCategory extends React.Component {
 
     handleCancel() {
         this.setState({
-            ...this.state, dependenciaInput: [], descrCategoria: '', nivelInput: [],
-            nivel: [], tipo: [], entrada: [], entradaInput: [], visible: false
+            ...this.state, visible: false
         })
 
     };
@@ -52,11 +63,12 @@ class ModalCategory extends React.Component {
     }
     handleNivel(evento) {
         this.setState({ ...this.state, nivelInput: evento, entradaInput: [], dependenciaInput: [] })
-        const tipoSelecionado = this.state.tipo
+        const tipoSelecionado = () => this.state.tipo === 'DESPESA' ? 1 : 2
         const nivelSelecionado = evento
 
-        if ((tipoSelecionado === "1") | (tipoSelecionado === "2")) {
-            this.ComboDependencia(tipoSelecionado, nivelSelecionado)
+
+        if ((tipoSelecionado() === 1) | (tipoSelecionado() === 2)) {
+            this.ComboDependencia(tipoSelecionado(), nivelSelecionado)
         }
     }
     handleTipo(evento) {
@@ -65,6 +77,7 @@ class ModalCategory extends React.Component {
         const nivelSelecionado = this.state.nivelInput
 
         if ((nivelSelecionado.length > 0)) {
+            console.log('Arrombou o Tipo', nivelSelecionado)
             this.ComboDependencia(tipoSelecionado, nivelSelecionado)
         }
     }
@@ -91,17 +104,23 @@ class ModalCategory extends React.Component {
 
         const endpointAPI = 'http://localhost:8082/api/categorias/'
 
+
+        const updateTipoValue = () => this.state.tipo === 'DESPESA' | this.state.tipo === 'RECEITA' ? this.state.alterTipo : this.state.tipo
+        const updateEntradaValue = () => this.state.entradaInput.length > 2 ? this.state.alterEntrada : this.state.entradaInput
+        const updateDepenciaValue = () => this.state.dependenciaInput.length > 2 ? this.state.alterDependencia : this.state.dependenciaInput
+        console.log('BODYYYYY:', this.state.alterDependencia)
         const body = {
+            id: this.state.alterId,
             idUser: localStorage.getItem('userId'),
-            dependencia: this.state.dependenciaInput,
+            dependencia: updateDepenciaValue(),
             descrCategoria: this.state.descrCategoria,
             nivel: this.state.nivelInput,
-            tipo: this.state.tipo,
+            tipo: updateTipoValue(),
             agregacao: "+",
-            entrada: this.state.entradaInput,
+            entrada: updateEntradaValue(),
             status: "Ativo"
         }
-
+        console.log('BODYYYYY:', body)
         if (body.dependencia.length === 0 | body.descrCategoria.length === 0 | body.nivel.length === 0 | body.tipo.length === 0 | body.entrada.length === 0) {
 
             const args = {
@@ -112,35 +131,14 @@ class ModalCategory extends React.Component {
             };
             notification.open(args);
         } else {
-            await axios.post(endpointAPI, body)
+            await axios.put(endpointAPI, body)
 
             const userID = localStorage.getItem('userId')
             const endpoint = `http://localhost:8082/api/categorias/${userID}`
 
             const result = await axios.get(endpoint)
 
-            const categorys = result.data.map((objetoAtual) => {
-                if (objetoAtual.ENTRADA === 0) {
-                    objetoAtual.ENTRADA = 'Conta de Input'
-
-                } else {
-                    objetoAtual.ENTRADA = 'Conta de Consolidação'
-                }
-
-                if (objetoAtual.TIPO === 1) {
-                    objetoAtual.TIPO = 'Despesa'
-
-                } else if (objetoAtual.TIPO === null) {
-
-                    objetoAtual.TIPO = null
-                } else {
-                    objetoAtual.TIPO = 'Receita'
-                }
-
-                return objetoAtual
-            })
-
-            this.props.listCategorys(categorys)
+            this.props.listCategorys(result.data)
 
             this.handleCancel()
         }
@@ -149,7 +147,7 @@ class ModalCategory extends React.Component {
     render() {
         return (
             <div>
-                <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Categoria' theme="twoTone" onClick={this.showModal} />
+                <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Adicionar nova Categoria' theme="twoTone" onClick={this.showModal} />
                 <form onSubmit={this.handleSubmit}>
                     <Modal
                         title="Cadastrar Nova Categoria"
@@ -158,16 +156,17 @@ class ModalCategory extends React.Component {
                         onCancel={this.handleCancel}
                     >
                         <Input name='categoria' value={this.state.descrCategoria} onChange={this.handleDescrCategoria} placeholder="Informe o nome da Categoria" />
+
                         <Select style={{ width: '80%' }} placeholder="Informe o Tipo de Categoria" onSelect={this.handleTipo} value={this.state.tipo}>
                             <Option value="1">Despesa</Option>
                             <Option value="2">Receita</Option>
                         </Select>
 
                         <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onSelect={this.handleNivel} value={this.state.nivelInput}>
-                            <Option value="3">1</Option>
-                            <Option value="4">2</Option>
-                            <Option value="5">3</Option>
-                            <Option value="6">4</Option>
+                            <Option value="3">3</Option>
+                            <Option value="4">4</Option>
+                            <Option value="5">5</Option>
+                            <Option value="6">6</Option>
                         </Select>
 
                         <Select style={{ width: '100%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
