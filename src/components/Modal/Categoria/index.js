@@ -112,8 +112,9 @@ class ModalCategory extends React.Component {
             };
             notification.open(args);
         } else {
-            await axios.post(endpointAPI, body)
-
+            // await axios.post(endpointAPI, body)
+            const teste = await axios.post(endpointAPI, body)
+            console.log('xxxxxxxxxxxxxxxxxx', teste)
             const userID = localStorage.getItem('userId')
             const endpoint = `http://localhost:8082/api/categorias/${userID}`
 
@@ -164,10 +165,10 @@ class ModalCategory extends React.Component {
                         </Select>
 
                         <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onSelect={this.handleNivel} value={this.state.nivelInput}>
-                            <Option value="3">1</Option>
-                            <Option value="4">2</Option>
-                            <Option value="5">3</Option>
-                            <Option value="6">4</Option>
+                            <Option value="3">3</Option>
+                            <Option value="4">4</Option>
+                            <Option value="5">5</Option>
+                            <Option value="6">6</Option>
                         </Select>
 
                         <Select style={{ width: '100%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
