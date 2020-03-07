@@ -22,7 +22,8 @@ class SelectCategoria extends React.Component {
     }
     async deleteAcount(categoriaId) {
         const endpoint = `http://localhost:8082/api/categorias/${categoriaId}`
-        await axios.delete(endpoint)
+        const verify = await axios.delete(endpoint)
+        console.log('verifyyyyyyyyyyy', verify)
         this.requestAPI()
     }
 
