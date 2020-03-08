@@ -11,9 +11,6 @@ import PrivateRoute from './PrivateRoutes'
 
 import Home from '../pages/Home/'
 import Login from '../pages/Login/'
-import Categoria from '../pages/Categoria'
-import Conta from '../pages/Conta'
-import Cartao from '../pages/Cartao'
 import Visao from '../pages/Visoes'
 import SelectConta from '../pages/SelectConta'
 import SelectCartao from '../pages/SelectCartao'
@@ -39,12 +36,9 @@ export default () =>
             <Switch name='http://localhost:3000'>
               <PrivateRoute exact path='/teste' component={Teste} />
               <PublicRoute exact path='/login' component={Login} />
-              <PrivateRoute exact path='/categoria' component={Categoria} />
               <PrivateRoute exact path='/selectconta' component={SelectConta} />
               <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
               <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
-              <PrivateRoute exact path='/conta' component={Conta} />
-              <PrivateRoute exact path='/cartao' component={Cartao} />
               <PrivateRoute exact path='/visao' component={Visao} />
               <PrivateRoute component={Home} />
             </Switch>
