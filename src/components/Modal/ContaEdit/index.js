@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input } from 'antd'
+import { Icon, Modal, Input, message, notification } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -41,26 +41,40 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `http://localhost:8082/api/contas'${this.props.data.ID}`
+        const endpointAPI = `http://localhost:8082/api/contas/${this.props.data.ID}`
 
         const body = {
             idUser: localStorage.getItem('userId'),
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
+        if (body.descrConta !== '') {
+            const resultStatus = await axios.put(endpointAPI, body)
 
-        await axios.put(endpointAPI, body)
+            if (resultStatus.status === 200) {
+                message.success(' Conta Editada Com Sucesso ', 5)
+                const userID = localStorage.getItem('userId')
+                const endpoint = `http://localhost:8082/api/contas/${userID}`
 
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/contas/${userID}`
+                const result = await axios.get(endpoint)
+                const acounts = result.data
 
-        const result = await axios.get(endpoint)
-        const acounts = result.data
+                this.props.listAcounts(acounts)
 
-        this.props.listAcounts(acounts)
-
-        // this.setState({ ...this.state, descrConta: '' })
-        this.setState({ ...this.state, visible: false })
+                // this.setState({ ...this.state, descrConta: '' })
+                this.setState({ ...this.state, visible: false })
+            } else {
+                message.error(' Conta não pode ser modificada, error ' + resultStatus.status, 5)
+            }
+        } else {
+            const args = {
+                message: 'Preencha todo os dados do Formulário',
+                description:
+                    'Para editar contas é necessário que seja informado todos os campos',
+                duration: 5,
+            };
+            notification.open(args);
+        }
     }
 
     render() {

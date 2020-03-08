@@ -15,7 +15,6 @@ import Visao from '../pages/Visoes'
 import SelectConta from '../pages/SelectConta'
 import SelectCartao from '../pages/SelectCartao'
 import SelectCategory from '../pages/SelectCategoria'
-import Teste from '../pages/Teste'
 
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
@@ -34,7 +33,6 @@ export default () =>
           </Breadcrumb>
           <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
             <Switch name='http://localhost:3000'>
-              <PrivateRoute exact path='/teste' component={Teste} />
               <PublicRoute exact path='/login' component={Login} />
               <PrivateRoute exact path='/selectconta' component={SelectConta} />
               <PrivateRoute exact path='/selectcartao' component={SelectCartao} />

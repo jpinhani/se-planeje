@@ -66,7 +66,7 @@ class SelectCategoria extends React.Component {
                         <span className='ModeloBotoesGridDetalhes' >
                             <EditCategory data={category} />
                             <Popconfirm title="Deseja Realmente Excluir esse Registro?" onConfirm={() => this.deleteAcount(category.ID)}>
-                                <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
+                                <Icon type="delete" title='Excluir Categoria' style={{ fontSize: '18px', color: '#08c' }} />
                             </Popconfirm>
                         </span>
                     </div>
