@@ -105,8 +105,10 @@ class SelectConta extends React.Component {
   render() {
     return (
       <div>
-        <AddAcount />
-        <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
+        <div className='headerConta'>
+          <AddAcount />
+          <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
+        </div>
         <Table columns={this.columns()} dataSource={this.props.acount} rowKey='ID' />
       </div>
     )
