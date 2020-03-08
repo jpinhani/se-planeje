@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input, Select, notification } from 'antd'
+import { Icon, Modal, Input, Select, notification, message } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -113,44 +113,51 @@ class ModalCategory extends React.Component {
             notification.open(args);
         } else {
             // await axios.post(endpointAPI, body)
-            const teste = await axios.post(endpointAPI, body)
-            console.log('xxxxxxxxxxxxxxxxxx', teste)
+            await axios.post(endpointAPI, body)
             const userID = localStorage.getItem('userId')
             const endpoint = `http://localhost:8082/api/categorias/${userID}`
 
             const result = await axios.get(endpoint)
+            if (result.status === 200) {
+                message.success("   Cadastro Efetuado Com Sucesso", 5);
 
-            const categorys = result.data.map((objetoAtual) => {
-                if (objetoAtual.ENTRADA === 0) {
-                    objetoAtual.ENTRADA = 'Conta de Input'
+                const categorys = result.data.map((objetoAtual) => {
+                    if (objetoAtual.ENTRADA === 0) {
+                        objetoAtual.ENTRADA = 'Conta de Input'
 
-                } else {
-                    objetoAtual.ENTRADA = 'Conta de Consolidação'
-                }
+                    } else {
+                        objetoAtual.ENTRADA = 'Conta de Consolidação'
+                    }
 
-                if (objetoAtual.TIPO === 1) {
-                    objetoAtual.TIPO = 'Despesa'
+                    if (objetoAtual.TIPO === 1) {
+                        objetoAtual.TIPO = 'Despesa'
 
-                } else if (objetoAtual.TIPO === null) {
+                    } else if (objetoAtual.TIPO === null) {
 
-                    objetoAtual.TIPO = null
-                } else {
-                    objetoAtual.TIPO = 'Receita'
-                }
+                        objetoAtual.TIPO = null
+                    } else {
+                        objetoAtual.TIPO = 'Receita'
+                    }
 
-                return objetoAtual
-            })
+                    return objetoAtual
+                })
 
-            this.props.listCategorys(categorys)
+                this.props.listCategorys(categorys)
 
-            this.handleCancel()
+                this.handleCancel()
+            } else {
+                message.error(" Erro ao tentar efetuar cadastro" + result.status, 5);
+            }
         }
     }
+
 
     render() {
         return (
             <div>
                 <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Categoria' theme="twoTone" onClick={this.showModal} />
+
+
                 <form onSubmit={this.handleSubmit}>
                     <Modal
                         title="Cadastrar Nova Categoria"

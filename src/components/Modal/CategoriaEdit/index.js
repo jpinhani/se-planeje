@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input, Select, notification } from 'antd'
+import { Icon, Modal, Input, Select, notification, message } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -9,7 +9,6 @@ import './styles.scss'
 const { Option } = Select;
 
 class ModalCategory extends React.Component {
-
 
     constructor(props) {
         super(props)
@@ -35,7 +34,7 @@ class ModalCategory extends React.Component {
             alterDependencia: this.props.data.IDPAI,
             alterId: this.props.data.ID
         }
-        console.log('vERIFICAÇÃO', this.props.data)
+
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -77,7 +76,6 @@ class ModalCategory extends React.Component {
         const nivelSelecionado = this.state.nivelInput
 
         if ((nivelSelecionado.length > 0)) {
-            console.log('Arrombou o Tipo', nivelSelecionado)
             this.ComboDependencia(tipoSelecionado, nivelSelecionado)
         }
     }
@@ -108,7 +106,7 @@ class ModalCategory extends React.Component {
         const updateTipoValue = () => this.state.tipo === 'DESPESA' | this.state.tipo === 'RECEITA' ? this.state.alterTipo : this.state.tipo
         const updateEntradaValue = () => this.state.entradaInput.length > 2 ? this.state.alterEntrada : this.state.entradaInput
         const updateDepenciaValue = () => this.state.dependenciaInput.length > 2 ? this.state.alterDependencia : this.state.dependenciaInput
-        console.log('BODYYYYY:', this.state.alterDependencia)
+
         const body = {
             id: this.state.alterId,
             idUser: localStorage.getItem('userId'),
@@ -120,7 +118,7 @@ class ModalCategory extends React.Component {
             entrada: updateEntradaValue(),
             status: "Ativo"
         }
-        console.log('BODYYYYY:', body)
+
         if (body.dependencia.length === 0 | body.descrCategoria.length === 0 | body.nivel.length === 0 | body.tipo.length === 0 | body.entrada.length === 0) {
 
             const args = {
@@ -138,9 +136,14 @@ class ModalCategory extends React.Component {
 
             const result = await axios.get(endpoint)
 
-            this.props.listCategorys(result.data)
+            if (result.status === 200) {
+                message.success(" Categoria Editada Com Sucesso", 5);
+                this.props.listCategorys(result.data)
 
-            this.handleCancel()
+                this.handleCancel()
+            } else {
+                message.error(" Erro ao Editar Registo" + result.status, 5);
+            }
         }
     }
 
