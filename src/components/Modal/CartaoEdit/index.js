@@ -77,14 +77,14 @@ class ModalCard extends React.Component {
 
                 this.setState({ ...this.state, visible: false })
             } else {
-                message.error('  Não foi possivel Editar o Cartão, error' + resultStatus.status, 5)
+                message.error('  Não foi possivel Editar o Cartão, error ' + resultStatus.status, 5)
             }
         } else {
 
             const args = {
-                message: 'Preencha todo os dados do Formulário',
+                message: 'Preencha todos os dados do Formulário',
                 description:
-                    'Para editar cartões é necessário que seja informado todos os campos',
+                    'Para editar o cartão é necessário que seja informado todos os campos',
                 duration: 5,
             };
             notification.open(args);

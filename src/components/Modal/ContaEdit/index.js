@@ -68,9 +68,9 @@ class ModalAcount extends React.Component {
             }
         } else {
             const args = {
-                message: 'Preencha todo os dados do Formulário',
+                message: 'Preencha todos os dados do Formulário',
                 description:
-                    'Para editar contas é necessário que seja informado todos os campos',
+                    'Para editar a conta é necessário que seja informado todos os campos',
                 duration: 5,
             };
             notification.open(args);

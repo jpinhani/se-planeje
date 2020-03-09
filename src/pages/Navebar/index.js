@@ -89,13 +89,8 @@ class SiderDemo extends React.Component {
                         }
                     >
                     </SubMenu>
-                    {/* <Menu.Item key="16">
-                        <Icon type="file" />
-                        <span>Manual (Ajuda)</span>
-                    </Menu.Item> */}
                 </Menu>
             </Sider>
-            // </Layout>
         );
     }
 }

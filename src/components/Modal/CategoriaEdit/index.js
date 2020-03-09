@@ -122,9 +122,9 @@ class ModalCategory extends React.Component {
         if (body.dependencia.length === 0 | body.descrCategoria.length === 0 | body.nivel.length === 0 | body.tipo.length === 0 | body.entrada.length === 0) {
 
             const args = {
-                message: 'Preencha todo os dados do Formulário',
+                message: 'Preencha todos os dados do Formulário',
                 description:
-                    'Para cadastrar novas categorias é necessário que seja informado todos os campos',
+                    'Para editar a categoria é necessário que seja informado todos os campos',
                 duration: 5,
             };
             notification.open(args);
@@ -142,7 +142,7 @@ class ModalCategory extends React.Component {
 
                 this.handleCancel()
             } else {
-                message.error(" Erro ao Editar Registo" + result.status, 5);
+                message.error(" Erro ao Editar Registo, Erro " + result.status, 5);
             }
         }
     }

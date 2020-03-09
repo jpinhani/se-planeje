@@ -104,8 +104,13 @@ class SelectCategoria extends React.Component {
                 idUser: userID
             }
             const endpointAPIDefault = `http://localhost:8082/api/categorias/default/`
-            await axios.post(endpointAPIDefault, body)
-            this.requestAPI()
+            const resultStatus = await axios.post(endpointAPIDefault, body)
+            if (resultStatus.status === 200) {
+                message.success(' O Plano de categorias Padrão do SePlaneje foi importado com Sucesso', 10)
+                this.requestAPI()
+            } else {
+                message.success(' O Plano de categorias Padrão do SePlaneje não pode ser importado, Error ' + resultStatus.status, 10)
+            }
         }
     }
 
@@ -145,7 +150,9 @@ class SelectCategoria extends React.Component {
                 </Popconfirm>
                 <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
             </div>
-            <Table columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
+            <div className='headerTable'>
+                <Table columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
+            </div>
         </div >
         )
     }
