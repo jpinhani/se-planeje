@@ -34,38 +34,38 @@ class SelectCategoria extends React.Component {
     columns() {
         return [
             {
-                title: 'Dependencia',
+                title: 'DEPENDENCIA',
                 dataIndex: 'PAI',
                 key: '1'
             },
             {
-                title: 'Categoria',
+                title: 'CATEGORIA',
                 dataIndex: 'DESCR_CATEGORIA',
                 key: '2'
             },
             {
-                title: 'Nivel',
+                title: 'NIVEL',
                 dataIndex: 'NIVEL',
                 key: '3'
             },
             {
-                title: 'Tipo',
+                title: 'TIPO',
                 dataIndex: 'TIPODESCR',
                 key: '4'
             },
             {
-                title: 'Entrada',
+                title: 'ENTRADA',
                 dataIndex: 'ENTRADADESCR',
                 key: '5'
             },
             {
-                title: 'Action',
+                title: 'AÇÃO',
                 key: 'action',
                 render: category => (
                     <div className='ModeloBotoesGrid'>
                         <span className='ModeloBotoesGridDetalhes' >
                             <EditCategory data={category} />
-                            <Popconfirm title="Deseja Realmente Excluir esse Registro?" onConfirm={() => this.deleteAcount(category.ID)}>
+                            <Popconfirm title="Deseja Realmente Excluir essa Categoria?" onConfirm={() => this.deleteAcount(category.ID)}>
                                 <Icon type="delete" title='Excluir Categoria' style={{ fontSize: '18px', color: '#08c' }} />
                             </Popconfirm>
                         </span>

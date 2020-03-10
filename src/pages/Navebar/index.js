@@ -49,7 +49,7 @@ class SiderDemo extends React.Component {
                             </span>
                         }
                     >
-                        <Menu.Item key="7">Planejar Despesas</Menu.Item>
+                        <Menu.Item key="7"><Link to='/selectdespesaprevista'>Planejar Despesas</Link></Menu.Item>
                         <Menu.Item key="8">Planejar Receitas</Menu.Item>
                     </SubMenu>
                     <SubMenu

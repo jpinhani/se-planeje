@@ -34,29 +34,29 @@ class SelectCartao extends React.Component {
   columns() {
     return [
       {
-        title: 'Descrição do Cartão',
+        title: 'CARTÃO',
         dataIndex: 'CARTAO',
         key: 'CARTAO'
       },
       {
-        title: 'Dia de Vencimento',
+        title: 'DIA VENCIMENTO',
         dataIndex: 'DT_VENCIMENTO',
         key: 'DT_VENCIMENTO'
       },
       {
-        title: 'Melhor dia de Compra',
+        title: 'MELHOR DIA COMPRA',
         dataIndex: 'DIA_COMPRA',
         key: 'DIA_COMPRA'
       },
       {
-        title: 'Action',
+        title: 'AÇÃO',
         key: 'action',
 
         render: card => (
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
               <EditCartao data={card} />
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteCard(card.ID)}>
+              <Popconfirm title="Deletar o Cartão?" onConfirm={() => this.deleteCard(card.ID)}>
                 <Icon type="delete" title='Excluir Cartão' style={{ fontSize: '18px', color: '#08c' }} />
               </Popconfirm>
             </span>

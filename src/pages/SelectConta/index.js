@@ -37,24 +37,24 @@ class SelectConta extends React.Component {
   columns() {
     return [
       {
-        title: 'Descrição Conta',
+        title: 'CONTA',
         dataIndex: 'DESCR_CONTA',
         key: 'DESCR_CONTA'
       },
       {
-        title: 'Status',
+        title: 'STATUS',
         dataIndex: 'STATUS',
         key: 'STATUS'
       },
       {
-        title: 'Action',
-        key: 'action',
+        title: 'AÇÃO',
+        key: 'AÇÃO',
 
         render: acount => (
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
               <EditaAcount data={acount} />
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteAcount(acount.ID)}>
+              <Popconfirm title="Excluir Conta?" onConfirm={() => this.deleteAcount(acount.ID)}>
                 <Icon type="delete" title='Excluir Conta' style={{ fontSize: '18px', color: '#08c' }} />
               </Popconfirm>
             </span>
