@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import AddCategory from '../../components/Modal/Categoria/index'
 import EditCategory from '../../components/Modal/CategoriaEdit/index'
 import { listCategorys } from '../../store/actions/generalCategoryAction'
-import { Table, Input, Popconfirm, Icon } from 'antd'
+import { Table, Input, Popconfirm, Icon, message, notification } from 'antd'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -23,46 +23,50 @@ class SelectCategoria extends React.Component {
     async deleteAcount(categoriaId) {
         const endpoint = `http://localhost:8082/api/categorias/${categoriaId}`
         const verify = await axios.delete(endpoint)
-        console.log('verifyyyyyyyyyyy', verify)
-        this.requestAPI()
+        if (verify.data.error === true) {
+            message.error('   ' + verify.data.message, 5);
+        } else {
+            message.success(" Categoria Excluida Com Sucesso", 5);
+            this.requestAPI()
+        }
     }
 
     columns() {
         return [
             {
-                title: 'Dependencia',
+                title: 'DEPENDENCIA',
                 dataIndex: 'PAI',
                 key: '1'
             },
             {
-                title: 'Categoria',
+                title: 'CATEGORIA',
                 dataIndex: 'DESCR_CATEGORIA',
                 key: '2'
             },
             {
-                title: 'Nivel',
+                title: 'NIVEL',
                 dataIndex: 'NIVEL',
                 key: '3'
             },
             {
-                title: 'Tipo',
+                title: 'TIPO',
                 dataIndex: 'TIPODESCR',
                 key: '4'
             },
             {
-                title: 'Entrada',
+                title: 'ENTRADA',
                 dataIndex: 'ENTRADADESCR',
                 key: '5'
             },
             {
-                title: 'Action',
+                title: 'AÇÃO',
                 key: 'action',
                 render: category => (
                     <div className='ModeloBotoesGrid'>
                         <span className='ModeloBotoesGridDetalhes' >
                             <EditCategory data={category} />
-                            <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteAcount(category.ID)}>
-                                <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
+                            <Popconfirm title="Deseja Realmente Excluir essa Categoria?" onConfirm={() => this.deleteAcount(category.ID)}>
+                                <Icon type="delete" title='Excluir Categoria' style={{ fontSize: '18px', color: '#08c' }} />
                             </Popconfirm>
                         </span>
                     </div>
@@ -76,30 +80,38 @@ class SelectCategoria extends React.Component {
         const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
         const novosDados = await axios.get(endpointAPI)
 
-        // const novosDados = result.data.map((objetoAtual) => {
-        //     if (objetoAtual.ENTRADA === 0) {
-        //         objetoAtual.ENTRADA = 'Conta de Input'
-
-        //     } else {
-        //         objetoAtual.ENTRADA = 'Conta de Consolidação'
-        //     }
-
-        //     if (objetoAtual.TIPO === 1) {
-        //         objetoAtual.TIPO = 'Despesa'
-
-        //     } else if (objetoAtual.TIPO === null) {
-
-        //         objetoAtual.TIPO = null
-        //     } else {
-        //         objetoAtual.TIPO = 'Receita'
-        //     }
-
-        //     return objetoAtual
-        // })
-
         const categoria = novosDados.data
         this.props.listCategorys(categoria)
 
+    }
+
+    async ImportCategoryDefault() {
+        const userID = localStorage.getItem('userId')
+        const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
+        const novosDados = await axios.get(endpointAPI)
+
+        if (novosDados.data.length > 3) {
+            const args = {
+                message: 'Não é possivel importar o Plano de Categorias do SePlaneje',
+                description:
+                    `Não é possivel importar o Plano de Categorias do SePlaneje após ter criado categorias personalizadas ou ter categorias ja com valores lançados.`,
+                duration: 6,
+            };
+            notification.open(args);
+        } else {
+
+            const body = {
+                idUser: userID
+            }
+            const endpointAPIDefault = `http://localhost:8082/api/categorias/default/`
+            const resultStatus = await axios.post(endpointAPIDefault, body)
+            if (resultStatus.status === 200) {
+                message.success(' O Plano de categorias Padrão do SePlaneje foi importado com Sucesso', 10)
+                this.requestAPI()
+            } else {
+                message.success(' O Plano de categorias Padrão do SePlaneje não pode ser importado, Error ' + resultStatus.status, 10)
+            }
+        }
     }
 
     componentDidMount() {
@@ -131,10 +143,17 @@ class SelectCategoria extends React.Component {
 
     render() {
         return (<div>
-            <AddCategory />
-            <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
-            <Table columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
-        </div>
+            <div className='headerCategory'>
+                <AddCategory />
+                <Popconfirm title="Deseja Importar o Plano de Categorias do SePlaneje?" onConfirm={() => this.ImportCategoryDefault()}>
+                    <Icon type="copy" style={{ fontSize: '36px', color: '#08c' }} title='Importar Plano de Categorias Default do SePlaneje' theme="twoTone" />
+                </Popconfirm>
+                <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
+            </div>
+            <div className='headerTable'>
+                <Table columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
+            </div>
+        </div >
         )
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input } from 'antd'
+import { Icon, Modal, Input, message, notification } from 'antd'
 import { listCards } from '../../../store/actions/generalCardAction.js'
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -28,9 +28,6 @@ class ModalCard extends React.Component {
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
     showModal() {
         this.setState({ ...this.state, visible: true })
-        // this.setState({ ...this.state, cartao: '' })
-        // this.setState({ ...this.state, dtVencimento: '' })
-        // this.setState({ ...this.state, diacompra: '' })
     };
 
     handleCancel() {
@@ -62,21 +59,39 @@ class ModalCard extends React.Component {
             diaCompra: this.state.diacompra,
             status: "Ativo"
         }
+        if (body.cartao.length > '' && body.dtVencimento.length > '' && body.diaCompra.length > '') {
 
-        await axios.post(endpointAPI, body)
+            const ResultStatus = await axios.post(endpointAPI, body)
 
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/cartoes/${userID}`
+            if (ResultStatus.status === 200) {
+                message.success('  Cartão Cadastrado com Sucesso', 5)
+                const userID = localStorage.getItem('userId')
+                const endpoint = `http://localhost:8082/api/cartoes/${userID}`
 
-        const result = await axios.get(endpoint)
-        const cards = result.data
+                const result = await axios.get(endpoint)
 
-        this.props.listCards(cards)
 
-        this.setState({ ...this.state, cartao: '' })
-        this.setState({ ...this.state, dtVencimento: '' })
-        this.setState({ ...this.state, diacompra: '' })
-        this.setState({ ...this.state, visible: false })
+
+                const cards = result.data
+
+                this.props.listCards(cards)
+
+                this.setState({ ...this.state, cartao: '' })
+                this.setState({ ...this.state, dtVencimento: '' })
+                this.setState({ ...this.state, diacompra: '' })
+                this.setState({ ...this.state, visible: false })
+            } else {
+                message.error('  Não foi possivel efetuar o Cadastro do Cartão ' + ResultStatus.status, 5)
+            }
+        } else {
+            const args = {
+                message: '        Preencha todo os dados do Formulário',
+                description:
+                    'Para cadastrar um novo cartão é necessário que seja informado todos os campos',
+                duration: 5,
+            };
+            notification.open(args);
+        }
     }
 
     render() {

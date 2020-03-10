@@ -11,15 +11,11 @@ import PrivateRoute from './PrivateRoutes'
 
 import Home from '../pages/Home/'
 import Login from '../pages/Login/'
-import Categoria from '../pages/Categoria'
-import Conta from '../pages/Conta'
-import Cartao from '../pages/Cartao'
 import Visao from '../pages/Visoes'
 import SelectConta from '../pages/SelectConta'
 import SelectCartao from '../pages/SelectCartao'
 import SelectCategory from '../pages/SelectCategoria'
-import Teste from '../pages/Teste'
-
+import SelectDespesaPrevista from '../pages/SelectDespesaPrevista'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 
@@ -37,14 +33,11 @@ export default () =>
           </Breadcrumb>
           <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
             <Switch name='http://localhost:3000'>
-              <PrivateRoute exact path='/teste' component={Teste} />
               <PublicRoute exact path='/login' component={Login} />
-              <PrivateRoute exact path='/categoria' component={Categoria} />
               <PrivateRoute exact path='/selectconta' component={SelectConta} />
               <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
               <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
-              <PrivateRoute exact path='/conta' component={Conta} />
-              <PrivateRoute exact path='/cartao' component={Cartao} />
+              <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
               <PrivateRoute exact path='/visao' component={Visao} />
               <PrivateRoute component={Home} />
             </Switch>

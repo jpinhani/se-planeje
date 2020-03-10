@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import AddAcount from '../../components/Modal/Conta/index'
 import EditaAcount from '../../components/Modal/ContaEdit/index'
 import { listAcounts } from '../../store/actions/generalAcountAction'
-import { Table, Icon, Input, Popconfirm } from 'antd'
+import { Table, Icon, Input, Popconfirm, message } from 'antd'
 import axios from 'axios'
 
 
@@ -15,7 +15,7 @@ class SelectConta extends React.Component {
     super(props)
 
     this.state = {
-      search: ' '
+      search: ''
     }
 
     this.searchAcount = this.searchAcount.bind(this)
@@ -23,33 +23,39 @@ class SelectConta extends React.Component {
 
   async deleteAcount(acountId) {
     const endpoint = `http://localhost:8082/api/contas/${acountId}`
-    await axios.delete(endpoint)
-    this.requestAPI()
+    const resultStatus = await axios.delete(endpoint)
+    if (resultStatus.status === 200) {
+      message.success('   Conta Excluida com Sucesso', 5)
+      this.requestAPI()
+    } else {
+      message.erro('   A Conta não pode ser Excluida, Error ' + resultStatus.status, 5)
+    }
+
 
   }
 
   columns() {
     return [
       {
-        title: 'Descrição Conta',
+        title: 'CONTA',
         dataIndex: 'DESCR_CONTA',
         key: 'DESCR_CONTA'
       },
       {
-        title: 'Status',
+        title: 'STATUS',
         dataIndex: 'STATUS',
         key: 'STATUS'
       },
       {
-        title: 'Action',
-        key: 'action',
+        title: 'AÇÃO',
+        key: 'AÇÃO',
 
         render: acount => (
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
               <EditaAcount data={acount} />
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.deleteAcount(acount.ID)}>
-                <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
+              <Popconfirm title="Excluir Conta?" onConfirm={() => this.deleteAcount(acount.ID)}>
+                <Icon type="delete" title='Excluir Conta' style={{ fontSize: '18px', color: '#08c' }} />
               </Popconfirm>
             </span>
           </div>
@@ -74,17 +80,24 @@ class SelectConta extends React.Component {
 
   searchAcount(event) {
     this.setState({ ...this.state, search: event.target.value })
-    this.updateList()
+    this.updateList(event.target.value)
     // console.log(this.state.search)
   }
 
-  async updateList() {
+  async updateList(evento) {
     // console.log('Valor:', this.state.search)
     const userID = localStorage.getItem('userId')
-    const endpoint = `http://localhost:8082/api/contas/search/${this.state.search}/${userID}`
-    const result = await axios.get(endpoint)
-    const conta = result.data
-    this.props.listAcounts(conta)
+    if (evento !== '' && evento.length > 1) {
+      const endpoint = `http://localhost:8082/api/contas/search/${evento}/${userID}`
+      const result = await axios.get(endpoint)
+      const conta = result.data
+      this.props.listAcounts(conta)
+    } else {
+      const endpoint = `http://localhost:8082/api/contas/${userID}`
+      const result = await axios.get(endpoint)
+      const conta = result.data
+      this.props.listAcounts(conta)
+    }
   }
 
 
@@ -92,9 +105,14 @@ class SelectConta extends React.Component {
   render() {
     return (
       <div>
-        <AddAcount />
-        <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
-        <Table columns={this.columns()} dataSource={this.props.acount} rowKey='ID' />
+        <div className='headerConta'>
+          <AddAcount />
+          <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
+        </div>
+        <div className='headerTable'>
+          <Table columns={this.columns()} dataSource={this.props.acount} rowKey='ID' />
+        </div>
+
       </div>
     )
   }
