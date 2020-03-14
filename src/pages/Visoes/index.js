@@ -22,12 +22,12 @@ function Vision(props) {
     {
       title: 'Inicio',
       dataIndex: 'DT_INICIO',
-      key: 'STATUS'
+      key: 'DT_INICIO'
     },
     {
       title: 'Final',
       dataIndex: 'DT_FIM',
-      key: 'STATUS'
+      key: 'DT_FIM'
     },
     {
       title: 'Action',
@@ -59,9 +59,9 @@ function Vision(props) {
     })
   }
 
-  // useEffect(() => {
-  getVisions()
-  // }, [])
+  useEffect(() => {
+    getVisions()
+  }, [])
 
   return (
     <>
