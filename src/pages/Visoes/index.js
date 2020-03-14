@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Table, Icon, Input, Popconfirm } from 'antd'
+import axios from 'axios'
 
 import AddAcount from '../../components/Modal/Vision/index'
 import EditaAcount from '../../components/Modal/ContaEdit/index'
 
 import 'antd/dist/antd.css'
 import './styles.scss'
-import axios from 'axios'
 
 function Vision(props) {
   const visions = useSelector(state => state.vision)
@@ -46,22 +46,22 @@ function Vision(props) {
     }
   ]
 
-  async function getVisions() {
-    const endpoint = `http://localhost:8082/api/visions/`
-
-    const result = await axios.get(endpoint)
-
-    const visions = result.data
-
-    dispatch({
-      type: 'LIST_VISION',
-      payload: visions
-    })
-  }
-
   useEffect(() => {
+    async function getVisions() {
+      const endpoint = `http://localhost:8082/api/visions/`
+  
+      const result = await axios.get(endpoint)
+  
+      const visions = result.data
+  
+      dispatch({
+        type: 'LIST_VISION',
+        payload: visions
+      })
+    }
+
     getVisions()
-  }, [])
+  }, [dispatch])
 
   return (
     <>
