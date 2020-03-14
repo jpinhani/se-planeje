@@ -128,21 +128,84 @@ class ModalCategory extends React.Component {
                 duration: 5,
             };
             notification.open(args);
+        } else if (body.entrada === '1' && body.nivel === '6') {
+            const args = {
+                message: 'Erro de Entrada de Dados',
+                description:
+                    'Ao escolher o nivel 6 o campo entrada passa a ser obrigatório ser de Input',
+                duration: 10,
+            };
+            notification.open(args);
         } else {
             await axios.put(endpointAPI, body)
 
             const userID = localStorage.getItem('userId')
             const endpoint = `http://localhost:8082/api/categorias/${userID}`
 
-            const result = await axios.get(endpoint)
+            const novosDados = await axios.get(endpoint)
 
-            if (result.status === 200) {
+            if (novosDados.status === 200) {
                 message.success(" Categoria Editada Com Sucesso", 5);
-                this.props.listCategorys(result.data)
+
+                let nivel = []
+                let n3 = 0
+                for (let x = 0; x < novosDados.data.length; x++) {
+                    if (novosDados.data[x].NIVEL === 3) {
+                        nivel[n3] = novosDados.data[x]
+
+                        let col = []
+                        for (let y = 0; y < novosDados.data.length; y++) {
+                            if (novosDados.data[y].IDPAI === nivel[n3].ID
+                                && novosDados.data[y].NIVEL === 4) {
+                                col.push(novosDados.data[y])
+
+                                // let n4 = 0
+
+                                for (let n4 = 0; n4 < col.length; n4++) {
+                                    let col2 = []
+                                    for (let z = 0; z < novosDados.data.length; z++) {
+
+                                        if (novosDados.data[z].IDPAI === col[n4].ID
+                                            && novosDados.data[z].NIVEL === 5) {
+                                            col2.push(novosDados.data[z])
+
+
+                                            // let n5 = 0
+
+                                            for (let n5 = 0; n5 < col2.length; n5++) {
+                                                let col3 = []
+                                                for (let u = 0; u < novosDados.data.length; u++) {
+
+                                                    if (novosDados.data[u].IDPAI === col2[n5].ID
+                                                        && novosDados.data[u].NIVEL === 6) {
+
+                                                        col3.push(novosDados.data[u])
+                                                        col2[n5].children = col3
+                                                    }
+                                                }
+                                            }
+
+                                            col[n4].children = col2
+                                        }
+
+                                    }
+                                }
+
+                                nivel[n3].children = col
+                            }
+
+                        }
+                        n3 = n3 + 1
+                    }
+                }
+
+
+
+                this.props.listCategorys(nivel)
 
                 this.handleCancel()
             } else {
-                message.error(" Erro ao Editar Registo, Erro " + result.status, 5);
+                message.error(" Erro ao Editar Registo, Erro " + novosDados.status, 5);
             }
         }
     }
