@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Table, Icon, Input, Popconfirm } from 'antd'
 import axios from 'axios'
 
-import AddAcount from '../../components/Modal/Vision/index'
-import EditaAcount from '../../components/Modal/ContaEdit/index'
+import AddVision from '../../components/Modal/Vision/index'
+import EditVision from '../../components/Modal/ContaEdit/index'
 
 import 'antd/dist/antd.css'
 import './styles.scss'
@@ -36,11 +36,11 @@ function Vision() {
       title: 'Action',
       key: 'action',
 
-      render: acount => (
+      render: vision => (
         <div className='ModeloBotoesGrid'>
           <span className='ModeloBotoesGridDetalhes' >
-            <EditaAcount data={acount} />
-            <Popconfirm title="Sure to delete?" onConfirm={() => removeVision(acount.ID)}>
+            <EditVision data={vision} />
+            <Popconfirm title="Sure to delete?" onConfirm={() => removeVision(vision.ID)}>
               <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
             </Popconfirm>
           </span>
@@ -70,7 +70,7 @@ function Vision() {
   }, [dispatch, endpoint, userId])
 
   return <>
-    <AddAcount />
+    <AddVision />
     <Input name='conta' placeholder="Procure aqui a conta especifica" />
     <Table columns={columns} dataSource={visions} rowKey='ID' />
   </>
