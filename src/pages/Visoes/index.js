@@ -9,9 +9,12 @@ import EditaAcount from '../../components/Modal/ContaEdit/index'
 import 'antd/dist/antd.css'
 import './styles.scss'
 
-function Vision(props) {
-  const visions = useSelector(state => state.vision)
+function Vision() {
+  const userId = window.localStorage.getItem('userId')
+  const endpoint = `http://localhost:8082/api/visions`
+  
   const dispatch = useDispatch()
+  const visions = useSelector(state => state.vision)
 
   const columns = [
     {
@@ -37,7 +40,7 @@ function Vision(props) {
         <div className='ModeloBotoesGrid'>
           <span className='ModeloBotoesGridDetalhes' >
             <EditaAcount data={acount} />
-            <Popconfirm title="Sure to delete?" onConfirm={() => alert('a')}>
+            <Popconfirm title="Sure to delete?" onConfirm={() => removeVision(acount.ID)}>
               <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
             </Popconfirm>
           </span>
@@ -46,30 +49,31 @@ function Vision(props) {
     }
   ]
 
+  const removeVision = async visionID => {
+    await axios.delete(`${endpoint}/${visionID}`)
+
+    dispatch({
+      type: 'LIST_VISION',
+      payload: (await axios.get(`${endpoint}/${userId}`)).data
+    })
+  }
+    
   useEffect(() => {
-    async function getVisions() {
-      const endpoint = `http://localhost:8082/api/visions/`
-  
-      const result = await axios.get(endpoint)
-  
-      const visions = result.data
-  
+    async function getVisions() {  
       dispatch({
         type: 'LIST_VISION',
-        payload: visions
+        payload: (await axios.get(`${endpoint}/${userId}`)).data
       })
     }
 
     getVisions()
-  }, [dispatch])
+  }, [dispatch, endpoint, userId])
 
-  return (
-    <>
-      <AddAcount />
-      <Input name='conta' placeholder="Procure aqui a conta especifica" />
-      <Table columns={columns} dataSource={visions} rowKey='ID' />
-    </>
-  )
+  return <>
+    <AddAcount />
+    <Input name='conta' placeholder="Procure aqui a conta especifica" />
+    <Table columns={columns} dataSource={visions} rowKey='ID' />
+  </>
 }
 
 export default Vision
