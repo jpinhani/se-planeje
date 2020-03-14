@@ -11,10 +11,12 @@ class ModalAcount extends React.Component {
         super(props)
 
         this.state = {
+            id: this.props.data.ID,
             visible: false,
-            vision: '',
-            startDate: '',
-            finalDate: ''
+            vision: this.props.data.VISAO,
+            startDate: this.props.data.DT_INICIO,
+            finalDate: this.props.data.DT_FIM,
+            status: this.props.data.STATUS
         }
 
         this.showModal = this.showModal.bind(this)
@@ -44,6 +46,7 @@ class ModalAcount extends React.Component {
         const endpointAPI = 'http://localhost:8082/api/visions'
 
         const body = {
+            ID: this.state.id,
             ID_USER: localStorage.getItem('userId'),
             VISAO: this.state.vision,
             STATUS: "Ativo",
@@ -51,7 +54,9 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        await axios.post(endpointAPI, body)
+        console.log('body', body)
+
+        await axios.put(endpointAPI, body)
 
         const userID = localStorage.getItem('userId')
         const endpoint = `http://localhost:8082/api/visions/${userID}`
@@ -68,10 +73,10 @@ class ModalAcount extends React.Component {
     render() {
         return (
             <div>
-                <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Conta / Fonte de Entrada e Saída' theme="twoTone" onClick={this.showModal} />
+                <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Conta/ Fonte de Entrada e Saída' theme="twoTone" onClick={this.showModal} />
                 <form onSubmit={this.handleSubmit}>
                     <Modal
-                        title="Cadastrar Nova Visao"
+                        title="Editar Visao"
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}

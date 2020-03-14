@@ -4,7 +4,7 @@ import { Table, Icon, Input, Popconfirm } from 'antd'
 import axios from 'axios'
 
 import AddVision from '../../components/Modal/Vision/index'
-import EditVision from '../../components/Modal/ContaEdit/index'
+import EditVision from '../../components/Modal/VisionEdit'
 
 import 'antd/dist/antd.css'
 import './styles.scss'
