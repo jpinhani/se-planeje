@@ -49,13 +49,6 @@ function Vision() {
     }
   ]
 
-  const getVisionsWithSimilarNames = async name => {
-    dispatch({
-      type: 'LIST_VISION',
-      payload: (await axios.get(`${endpoint}/${userId}/${name}`)).data
-    })
-  }
-
   const removeVision = async visionID => {
     await axios.delete(`${endpoint}/${visionID}`)
 
@@ -79,8 +72,17 @@ function Vision() {
   return <>
     <AddVision />
     <Input 
-      onChange={e => getVisionsWithSimilarNames(e.target.value)} 
-      name='conta' placeholder="Procure aqui a visao especifica" 
+      onChange={
+        async e => (
+          dispatch({
+            type: 'LIST_VISION',
+            payload: (
+              await axios.get(`${endpoint}/${userId}/${e.target.value}`)
+            ).data
+          })
+        )
+      } 
+      name='conta' placeholder="Procureeee aqui a visao especifica" 
     />
     <Table columns={columns} dataSource={visions} rowKey='ID' />
   </>
