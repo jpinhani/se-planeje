@@ -33,11 +33,11 @@ class SelectCategoria extends React.Component {
 
     columns() {
         return [
-            {
-                title: 'DEPENDENCIA',
-                dataIndex: 'PAI',
-                key: '1'
-            },
+            // {
+            //     title: 'DEPENDENCIA',
+            //     dataIndex: 'PAI',
+            //     key: '1'
+            // },
             {
                 title: 'CATEGORIA',
                 dataIndex: 'DESCR_CATEGORIA',
@@ -79,10 +79,62 @@ class SelectCategoria extends React.Component {
         const userID = localStorage.getItem('userId')
         const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
         const novosDados = await axios.get(endpointAPI)
+        console.log('novosDados', novosDados)
 
-        const categoria = novosDados.data
-        this.props.listCategorys(categoria)
+        let nivel = []
+        let n3 = 0
+        for (let x = 0; x < novosDados.data.length; x++) {
+            if (novosDados.data[x].NIVEL === 3) {
+                nivel[n3] = novosDados.data[x]
 
+                let col = []
+                for (let y = 0; y < novosDados.data.length; y++) {
+                    if (novosDados.data[y].IDPAI === nivel[n3].ID
+                        && novosDados.data[y].NIVEL === 4) {
+                        col.push(novosDados.data[y])
+
+                        // let n4 = 0
+
+                        for (let n4 = 0; n4 < col.length; n4++) {
+                            let col2 = []
+                            for (let z = 0; z < novosDados.data.length; z++) {
+
+                                if (novosDados.data[z].IDPAI === col[n4].ID
+                                    && novosDados.data[z].NIVEL === 5) {
+                                    col2.push(novosDados.data[z])
+
+
+                                    // let n5 = 0
+
+                                    for (let n5 = 0; n5 < col2.length; n5++) {
+                                        let col3 = []
+                                        for (let u = 0; u < novosDados.data.length; u++) {
+
+                                            if (novosDados.data[u].IDPAI === col2[n5].ID
+                                                && novosDados.data[u].NIVEL === 6) {
+
+                                                col3.push(novosDados.data[u])
+                                                col2[n5].children = col3
+                                            }
+                                        }
+                                    }
+
+                                    col[n4].children = col2
+                                }
+
+                            }
+                        }
+
+                        nivel[n3].children = col
+                    }
+
+                }
+                n3 = n3 + 1
+            }
+        }
+
+        console.log('Forma Como os Dados estão vindo', nivel)
+        this.props.listCategorys(nivel)
     }
 
     async ImportCategoryDefault() {
@@ -150,7 +202,7 @@ class SelectCategoria extends React.Component {
                 </Popconfirm>
                 <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
             </div>
-            <div className='headerTable'>
+            <div>
                 <Table columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
             </div>
         </div >

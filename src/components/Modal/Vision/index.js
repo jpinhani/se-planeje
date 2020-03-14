@@ -74,9 +74,9 @@ class ModalAcount extends React.Component {
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
-                      <Input name='vision' value={this.state.vision} onChange={this.vision} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
-                      <Input name='startDate' value={this.state.startDate} onChange={this.startDate} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
-                      <Input name='finalDate' value={this.state.finalDate} onChange={this.finalDate} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
+                        <Input name='vision' value={this.state.vision} onChange={this.vision} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
+                        <Input name='startDate' value={this.state.startDate} onChange={this.startDate} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
+                        <Input name='finalDate' value={this.state.finalDate} onChange={this.finalDate} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
                     </Modal>
                 </form>
             </div >

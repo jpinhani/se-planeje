@@ -59,9 +59,9 @@ function Vision(props) {
     })
   }
 
-  useEffect(() => {
-    getVisions()
-  }, [])
+  // useEffect(() => {
+  getVisions()
+  // }, [])
 
   return (
     <>

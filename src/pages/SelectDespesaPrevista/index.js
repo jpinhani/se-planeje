@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { listExpenses } from '../../store/actions/generalExpenseAction'
+import DespesaPrevista from '../../components/Modal/DespesaPrevista'
 import { Table, Icon, Popconfirm } from 'antd'
 import axios from 'axios'
 
@@ -79,7 +80,7 @@ class SelectDespesaPrevista extends React.Component {
         return (
             <div>
                 <div>
-
+                    <DespesaPrevista />
                 </div>
                 <div>
                     <Table columns={this.columns()} dataSource={this.props.expense} rowKey='ID' />
