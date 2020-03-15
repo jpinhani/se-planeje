@@ -112,7 +112,7 @@ class ModalCategory extends React.Component {
                 duration: 5,
             };
             notification.open(args);
-        } else if (body.entrada === '1') {
+        } else if (body.entrada === '1' && body.NIVEL === '6') {
             const args = {
                 message: 'Erro de Entrada de Dados',
                 description:
