@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Table, Icon, Input, Popconfirm } from 'antd'
+import axios from 'axios'
 
-import AddAcount from '../../components/Modal/Vision/index'
-import EditaAcount from '../../components/Modal/ContaEdit/index'
+import AddVision from '../../components/Modal/Vision/index'
+import EditVision from '../../components/Modal/VisionEdit'
 
 import 'antd/dist/antd.css'
 import './styles.scss'
-import axios from 'axios'
 
-function Vision(props) {
-  const visions = useSelector(state => state.vision)
+function Vision() {
+  const userId = window.localStorage.getItem('userId')
+  const endpoint = `http://localhost:8082/api/visions`
+  
   const dispatch = useDispatch()
+  const visions = useSelector(state => state.vision)
 
   const columns = [
     {
@@ -22,22 +25,22 @@ function Vision(props) {
     {
       title: 'Inicio',
       dataIndex: 'DT_INICIO',
-      key: 'STATUS'
+      key: 'DT_INICIO'
     },
     {
       title: 'Final',
       dataIndex: 'DT_FIM',
-      key: 'STATUS'
+      key: 'DT_FIM'
     },
     {
       title: 'Action',
       key: 'action',
 
-      render: acount => (
+      render: vision => (
         <div className='ModeloBotoesGrid'>
           <span className='ModeloBotoesGridDetalhes' >
-            <EditaAcount data={acount} />
-            <Popconfirm title="Sure to delete?" onConfirm={() => alert('a')}>
+            <EditVision data={vision} />
+            <Popconfirm title="Sure to delete?" onConfirm={() => removeVision(vision.ID)}>
               <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
             </Popconfirm>
           </span>
@@ -46,30 +49,43 @@ function Vision(props) {
     }
   ]
 
-  async function getVisions() {
-    const endpoint = `http://localhost:8082/api/visions/`
-
-    const result = await axios.get(endpoint)
-
-    const visions = result.data
+  const removeVision = async visionID => {
+    await axios.delete(`${endpoint}/${visionID}`)
 
     dispatch({
       type: 'LIST_VISION',
-      payload: visions
+      payload: (await axios.get(`${endpoint}/${userId}`)).data
     })
   }
+    
+  useEffect(() => {
+    async function getVisions() {  
+      dispatch({
+        type: 'LIST_VISION',
+        payload: (await axios.get(`${endpoint}/${userId}`)).data
+      })
+    }
 
-  // useEffect(() => {
-  getVisions()
-  // }, [])
+    getVisions()
+  }, [dispatch, endpoint, userId])
 
-  return (
-    <>
-      <AddAcount />
-      <Input name='conta' placeholder="Procure aqui a conta especifica" />
-      <Table columns={columns} dataSource={visions} rowKey='ID' />
-    </>
-  )
+  return <>
+    <AddVision />
+    <Input 
+      onChange={
+        async e => (
+          dispatch({
+            type: 'LIST_VISION',
+            payload: (
+              await axios.get(`${endpoint}/${userId}/${e.target.value}`)
+            ).data
+          })
+        )
+      } 
+      name='conta' placeholder="Procureeee aqui a visao especifica" 
+    />
+    <Table columns={columns} dataSource={visions} rowKey='ID' />
+  </>
 }
 
 export default Vision

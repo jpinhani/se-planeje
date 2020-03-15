@@ -13,8 +13,7 @@ const reducers = combineReducers({
   acount: acountReducer,
   category: categoryReducer,
   vision: visionReducer,
-  expense: expenseReducer,
-
+  expense: expenseReducer
 })
 
 export default createStore(reducers)
