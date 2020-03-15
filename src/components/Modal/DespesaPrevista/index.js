@@ -113,7 +113,7 @@ class ModalExpense extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://localhost:8082/api/despesas/'
+        const endpointAPI = 'http://localhost:8082/api/despesas'
 
         const body = {
             idUser: localStorage.getItem('userId'),
@@ -125,18 +125,29 @@ class ModalExpense extends React.Component {
             descrDespesa: this.state.descrDespesaInput,
             status: "Ativo",
         }
+        if (body.cartao === 'DÉBITO OU DINHEIRO') {
+            body.cartao = null
+            body.status = 'Esperando Pagamento'
+        } else {
+            body.status = 'Fatura Pendente'
+        }
 
         if (body.dataPrevista === undefined) {
             let Hoje = new Date();
             const mm = Hoje.getMonth() + 1;
             const dd = Hoje.getDate();
             const yyyy = Hoje.getFullYear();
-            const dataNova = dd + '/' + mm + '/' + yyyy
-            body.dataPrevista = dataNova
-            this.setState({ ...this.state, dataPrevistaInput: dataNova })
+            const dataNova = yyyy + '/' + mm + '/' + dd;
+            const dataAtual = dd + '/' + mm + '/' + yyyy;
+            this.setState({ ...this.state, dataPrevistaInput: dataAtual })
+            body.dataPrevista = dataNova;
+        } else {
+            const data = moment(body.dataPrevista, "DD/MM/YYYY");
+            body.dataPrevista = data.format("YYYY-MM-DD")
+            console.log('body.dataPrevista', body.dataPrevista)
         }
 
-        if (body.dataPrevista === null | body.valorPrevisto === null | body.cartao.length === 0 |
+        if (body.dataPrevista === null | body.valorPrevisto === null |
             body.categoria.length === 0 | body.parcela.length === 0 | body.descrDespesa.length === 0) {
 
             const args = {
@@ -150,8 +161,13 @@ class ModalExpense extends React.Component {
 
             await axios.post(endpointAPI, body)
 
-            console.log('Passou pelas principais validações', body)
-            // this.props.listExpenses(listExpenses)
+            const userID = localStorage.getItem('userId')
+            const endpointAPIAll = `http://localhost:8082/api/despesas/${userID}`
+            const result = await axios.get(endpointAPIAll)
+
+            const despesa = result.data
+
+            this.props.listExpenses(despesa)
             this.handleCancel()
         }
     }
