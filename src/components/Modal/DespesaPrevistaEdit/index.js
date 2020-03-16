@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch, Radio } from 'antd'
 import moment from 'moment';
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import 'antd/dist/antd.css';
@@ -21,15 +21,19 @@ class ModalExpense extends React.Component {
             visible: false,
             value: 1,
             dayVisible: true,
+            tipoParcela: true,
             dayValue: null,
-            categoria: [],
-            cartao: [],
-            valorPrevistoInput: null,
-            dataPrevistaInput: new Date().dateString,
-            cartaoInput: 'DÉBITO OU DINHEIRO',
-            parcelasInput: 1,
-            categoriaInput: [],
-            descrDespesaInput: '',
+            visibleEdit: 'Apenas essa parcela será alterada',
+            categoria: this.props.data.ID_CATEGORIA,
+            cartao: this.props.data.ID_CARTAO,
+            valorPrevistoInput: this.props.data.VL_PREVISTO2,
+            dataPrevistaInput: this.props.data.DATANOVA,
+            // cartaoInput: this.props.data.CARTAO,
+            cartaoInput: this.props.data.ID_CARTAO,
+            parcelasInput: this.props.data.NUM_PARCELA,
+            // categoriaInput: this.props.data.DESCR_CATEGORIA,
+            categoriaInput: this.props.data.ID_CATEGORIA,
+            descrDespesaInput: this.props.data.DESCR_DESPESA,
         }
 
         this.showModal = this.showModal.bind(this)
@@ -41,6 +45,7 @@ class ModalExpense extends React.Component {
         this.handleParcelas = this.handleParcelas.bind(this)
         this.handleCategoria = this.handleCategoria.bind(this)
         this.handledescricaoDespesa = this.handledescricaoDespesa.bind(this)
+        this.handleEdit = this.handleEdit.bind(this)
         this.handleValue = this.handleValue.bind(this)
         this.handleDayValue = this.handleDayValue.bind(this)
     }
@@ -48,13 +53,20 @@ class ModalExpense extends React.Component {
     showModal() { this.setState({ ...this.state, visible: true }) };
 
 
-
     handleCancel() {
         this.setState({
-            ...this.state, parcelasInput: 1, value: 1, dayVisible: true, dayValue: null, valorPrevistoInput: null, dataPrevistaInput: null,
-            categoriaInput: [], descrDespesaInput: '', cartaoInput: 'DÉBITO OU DINHEIRO', visible: false
+            ...this.state,/*  valorPrevistoInput: null, dataPrevistaInput: null,
+            categoriaInput: [], descrDespesaInput: '', cartaoInput: 'DÉBITO OU DINHEIRO', */ visible: false
         })
     };
+
+    handleEdit(valor) {
+        if (valor === true) {
+            this.setState({ ...this.state, tipoParcela: false, visibleEdit: `Todas as despesas a partir da ${this.state.parcelasInput}º parcela serão alteradas` })
+        } else {
+            this.setState({ ...this.state, dayValue: null, dayVisible: true, tipoParcela: true, visibleEdit: 'Apenas essa parcela será alterada' })
+        }
+    }
 
     handleValorPrevisto(valor) {
         this.setState({ ...this.state, valorPrevistoInput: valor })
@@ -95,9 +107,13 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, dayValue: dias })
     }
 
+
+
     componentDidMount() {
         this.loadCategoria()
         this.loadCartao()
+        if (this.props.data.ID_CARTAO === 0)
+            this.setState({ ...this.state, cartaoInput: 'DÉBITO OU DINHEIRO' })
     }
 
     async loadCategoria() {
@@ -132,11 +148,9 @@ class ModalExpense extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
+        const endpointAPI = `http://localhost:8082/api/despesas/${this.props.data.ID}`
 
-        const endpointAPI = 'http://localhost:8082/api/despesas'
-        const ID = () => '_' + Math.random().toString(36).substr(2, 9);
         const body = {
-            idGrupo: ID(),
             idUser: localStorage.getItem('userId'),
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
@@ -144,6 +158,8 @@ class ModalExpense extends React.Component {
             categoria: this.state.categoriaInput,
             parcela: this.state.parcelasInput,
             descrDespesa: this.state.descrDespesaInput,
+            valueEdit: this.state.visibleEdit,
+            idGrupo: this.props.data.ID_GRUPO,
             tipoParcela: this.state.value,
             dayValue: this.state.dayValue,
             status: "Ativo",
@@ -177,19 +193,21 @@ class ModalExpense extends React.Component {
             const args = {
                 message: 'Preencha todos os dados do Formulário',
                 description:
-                    'Para cadastrar uma nova despesa é necessário que seja informado todos os campos',
+                    'Para editar uma despesa é necessário que seja informado todos os campos',
                 duration: 5,
             };
             notification.open(args);
         } else {
 
-            const resulStatus = await axios.post(endpointAPI, body)
+            const resulStatus = await axios.put(endpointAPI, body)
+            console.log(resulStatus.status)
             if (resulStatus.status === 200) {
-                message.success('Despesa inserida com Sucesso', 7)
+                message.success('Despesa Editada com Sucesso', 7)
                 const userID = localStorage.getItem('userId')
                 const endpointAPIAll = `http://localhost:8082/api/despesas/${userID}`
                 const result = await axios.get(endpointAPIAll)
 
+                // console.log('Despesa', result.status)
                 const despesa = result.data
 
                 this.props.listExpenses(despesa)
@@ -197,27 +215,39 @@ class ModalExpense extends React.Component {
             } else {
                 message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
             }
+
         }
+
     }
 
     render() {
 
         return (
             <div>
-                <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Despesa Prevista' theme="twoTone" onClick={this.showModal} />
+                <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Despesa Prevista' theme="twoTone" onClick={this.showModal} />
+
 
                 <form onSubmit={this.handleSubmit}>
                     <Modal
-                        title="Cadastrar Despesa Prevista"
+                        title="Editar Despesa Prevista"
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
+                        <div className='SwitchAjust'>
+                            <Switch
+                                style={{ width: '10%' }}
+                                title='Habilite para Editar Todas as Despesas'
+                                onChange={this.handleEdit} />
+
+                            <label>{this.state.visibleEdit}</label>
+                        </div>
 
                         <Radio.Group
                             style={{ width: '73%' }}
                             onChange={this.handleValue}
-                            value={this.state.value}>
+                            value={this.state.value}
+                            disabled={this.state.tipoParcela}>
                             <Radio value={1}>Mensalmente</Radio>
                             <Radio value={2}>Quinzenalmente</Radio>
                             <Radio value={3}>Outro</Radio>
@@ -238,7 +268,6 @@ class ModalExpense extends React.Component {
                             decimalSeparator=','
                             precision={2}
                             min={0}
-                            autoFocus
                             onChange={this.handleValorPrevisto}
                             value={this.state.valorPrevistoInput}
                         />
@@ -246,7 +275,7 @@ class ModalExpense extends React.Component {
                         <DatePicker style={{ width: '49%' }}
                             onChange={this.handleDataPrevisto}
                             placeholder="Data Prevista"
-                            defaultValue={moment(new Date(), dateFormat)}
+                            defaultValue={moment(this.state.dataPrevistaInput, dateFormat)}
                             format={dateFormat}
                         />
 
@@ -272,6 +301,7 @@ class ModalExpense extends React.Component {
                             min={1}
                             onChange={this.handleParcelas}
                             value={this.state.parcelasInput}
+                            disabled
                         />
                         <Select
                             showSearch

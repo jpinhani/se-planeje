@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { listExpenses } from '../../store/actions/generalExpenseAction'
 import DespesaPrevista from '../../components/Modal/DespesaPrevista'
+import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
 import { Table, Icon, Popconfirm } from 'antd'
 import axios from 'axios'
 
@@ -53,6 +54,7 @@ class SelectDespesaPrevista extends React.Component {
                 render: expense => (
                     <div>
                         <span >
+                            <EditDespesa data={expense} />
                             <Popconfirm title="Deletar Despesa?">
                                 <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
                             </Popconfirm>
