@@ -22,7 +22,7 @@ class SelectConta extends React.Component {
   }
 
   async deleteAcount(acountId) {
-    const endpoint = `http://localhost:8082/api/contas/${acountId}`
+    const endpoint = `http://seplaneje-com.umbler.net/api/contas/${acountId}`
     const resultStatus = await axios.delete(endpoint)
     if (resultStatus.status === 200) {
       message.success('   Conta Excluida com Sucesso', 5)
@@ -67,7 +67,7 @@ class SelectConta extends React.Component {
 
   async requestAPI() {
     const userID = localStorage.getItem('userId')
-    const endpointAPI = `http://localhost:8082/api/contas/${userID}`
+    const endpointAPI = `http://seplaneje-com.umbler.net/api/contas/${userID}`
     // console.log(endpointAPI)
     const result = await axios.get(endpointAPI)
     const conta = result.data
@@ -88,12 +88,12 @@ class SelectConta extends React.Component {
     // console.log('Valor:', this.state.search)
     const userID = localStorage.getItem('userId')
     if (evento !== '' && evento.length > 1) {
-      const endpoint = `http://localhost:8082/api/contas/search/${evento}/${userID}`
+      const endpoint = `http://seplaneje-com.umbler.net/api/contas/search/${evento}/${userID}`
       const result = await axios.get(endpoint)
       const conta = result.data
       this.props.listAcounts(conta)
     } else {
-      const endpoint = `http://localhost:8082/api/contas/${userID}`
+      const endpoint = `http://seplaneje-com.umbler.net/api/contas/${userID}`
       const result = await axios.get(endpoint)
       const conta = result.data
       this.props.listAcounts(conta)

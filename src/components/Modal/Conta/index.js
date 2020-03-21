@@ -39,7 +39,7 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://localhost:8082/api/contas'
+        const endpointAPI = 'http://seplaneje-com.umbler.net/api/contas'
 
         const body = {
             idUser: localStorage.getItem('userId'),
@@ -52,7 +52,7 @@ class ModalAcount extends React.Component {
             if (resultStatus.status === 200) {
                 message.success('   Conta Registrada com Sucesso ', 5)
                 const userID = localStorage.getItem('userId')
-                const endpoint = `http://localhost:8082/api/contas/${userID}`
+                const endpoint = `http://seplaneje-com.umbler.net/api/contas/${userID}`
 
                 const result = await axios.get(endpoint)
                 const acounts = result.data

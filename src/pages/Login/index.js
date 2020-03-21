@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Input, Button} from 'antd'
+import { Input, Button } from 'antd'
 import axios from 'axios'
 import { login } from '../../auth'
 import './styles.scss'
@@ -15,7 +15,7 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    const endpoint = 'http://localhost:8082/api/authenticate'
+    const endpoint = 'http://seplaneje-com.umbler.net/api/authenticate'
 
     const body = {
       email: email,
@@ -33,7 +33,7 @@ function Login() {
       login(token)
 
       history.push('/')
-    }    
+    }
   }
 
   return (
@@ -41,14 +41,14 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <h1>SE PLANEJE</h1>
         <div>
-          <Input 
+          <Input
             type='email'
-            placeholder="Seu melhor e-mail" 
-            onChange={e => setEmail(e.target.value)} 
+            placeholder="Seu melhor e-mail"
+            onChange={e => setEmail(e.target.value)}
           />
-          <Input 
+          <Input
             type='password' placeholder="Sua senha"
-            onChange={e => setPassword(e.target.value)}  
+            onChange={e => setPassword(e.target.value)}
           />
           <Button htmlType='submit'>Entrar</Button>
         </div>

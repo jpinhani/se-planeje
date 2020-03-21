@@ -36,7 +36,7 @@ class SelectDespesaPrevista extends React.Component {
             idGrupo: expense.ID_GRUPO,
 
         }
-        const endpoint = `http://localhost:8082/api/despesas/${expense.ID}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/${expense.ID}`
         const resultStatus = await axios.delete(endpoint, body)
         if (resultStatus.status === 200) {
             message.success('Despesa Excluida com Sucesso', 5)
@@ -104,7 +104,7 @@ class SelectDespesaPrevista extends React.Component {
 
     async requestAPI() {
         const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://localhost:8082/api/despesas/${userID}`
+        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
         const result = await axios.get(endpointAPI)
         console.log("RESULTADO", result)
         const despesa = result.data

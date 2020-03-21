@@ -11,8 +11,8 @@ import './styles.scss'
 
 function Vision() {
   const userId = window.localStorage.getItem('userId')
-  const endpoint = `http://localhost:8082/api/visions`
-  
+  const endpoint = `http://seplaneje-com.umbler.net/api/visions`
+
   const dispatch = useDispatch()
   const visions = useSelector(state => state.vision)
 
@@ -57,9 +57,9 @@ function Vision() {
       payload: (await axios.get(`${endpoint}/${userId}`)).data
     })
   }
-    
+
   useEffect(() => {
-    async function getVisions() {  
+    async function getVisions() {
       dispatch({
         type: 'LIST_VISION',
         payload: (await axios.get(`${endpoint}/${userId}`)).data
@@ -71,7 +71,7 @@ function Vision() {
 
   return <>
     <AddVision />
-    <Input 
+    <Input
       onChange={
         async e => (
           dispatch({
@@ -81,8 +81,8 @@ function Vision() {
             ).data
           })
         )
-      } 
-      name='conta' placeholder="Procureeee aqui a visao especifica" 
+      }
+      name='conta' placeholder="Procureeee aqui a visao especifica"
     />
     <Table columns={columns} dataSource={visions} rowKey='ID' />
   </>

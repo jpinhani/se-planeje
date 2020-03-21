@@ -41,7 +41,7 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://localhost:8082/api/visions'
+        const endpointAPI = 'http://seplaneje-com.umbler.net/api/visions'
 
         const body = {
             ID_USER: localStorage.getItem('userId'),
@@ -54,7 +54,7 @@ class ModalAcount extends React.Component {
         await axios.post(endpointAPI, body)
 
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/visions/${userID}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/visions/${userID}`
 
         const result = await axios.get(endpoint)
         const visions = result.data

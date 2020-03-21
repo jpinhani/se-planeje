@@ -116,7 +116,7 @@ class ModalExpense extends React.Component {
 
     async loadCategoria() {
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/despesas/category/${userID}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/category/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -130,7 +130,7 @@ class ModalExpense extends React.Component {
 
     async loadCartao() {
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/despesas/cartao/${userID}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/cartao/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -146,7 +146,7 @@ class ModalExpense extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
-        const endpointAPI = `http://localhost:8082/api/despesas/${this.props.data.ID}`
+        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/${this.props.data.ID}`
 
         const body = {
             idUser: localStorage.getItem('userId'),
@@ -201,7 +201,7 @@ class ModalExpense extends React.Component {
             if (resulStatus.status === 200) {
                 message.success('Despesa Editada com Sucesso', 7)
                 const userID = localStorage.getItem('userId')
-                const endpointAPIAll = `http://localhost:8082/api/despesas/${userID}`
+                const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
                 const result = await axios.get(endpointAPIAll)
 
                 // console.log('Despesa', result.status)

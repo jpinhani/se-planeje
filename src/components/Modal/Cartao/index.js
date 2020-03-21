@@ -41,7 +41,7 @@ class ModalCard extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://localhost:8082/api/cartoes'
+        const endpointAPI = 'http://seplaneje-com.umbler.net/api/api/cartoes'
 
         const body = {
             idUser: localStorage.getItem('userId'),
@@ -57,7 +57,7 @@ class ModalCard extends React.Component {
             if (ResultStatus.status === 200) {
                 message.success('  Cartão Cadastrado com Sucesso', 5)
                 const userID = localStorage.getItem('userId')
-                const endpoint = `http://localhost:8082/api/cartoes/${userID}`
+                const endpoint = `http://seplaneje-com.umbler.net/api/api/cartoes/${userID}`
 
                 const result = await axios.get(endpoint)
 

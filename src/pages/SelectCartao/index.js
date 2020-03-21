@@ -21,7 +21,7 @@ class SelectCartao extends React.Component {
   }
 
   async deleteCard(cardId) {
-    const endpoint = `http://localhost:8082/api/cartoes/${cardId}`
+    const endpoint = `http://seplaneje-com.umbler.net/api/cartoes/${cardId}`
     const resultStatus = await axios.delete(endpoint)
     if (resultStatus.status === 200) {
       message.success('Cartão Excluido com sucesso', 5)
@@ -70,7 +70,7 @@ class SelectCartao extends React.Component {
 
   async requestAPI() {
     const userID = localStorage.getItem('userId')
-    const endpointAPI = `http://localhost:8082/api/cartoes/${userID}`
+    const endpointAPI = `http://seplaneje-com.umbler.net/api/cartoes/${userID}`
     const result = await axios.get(endpointAPI)
     const cartao = result.data
     this.props.listCards(cartao)
@@ -90,12 +90,12 @@ class SelectCartao extends React.Component {
     // console.log('Valor:', this.state.search)
     const userID = localStorage.getItem('userId')
     if (evento === '') {
-      const endpointall = `http://localhost:8082/api/cartoes/${userID}`
+      const endpointall = `http://seplaneje-com.umbler.net/api/cartoes/${userID}`
       const resultall = await axios.get(endpointall)
       const cartaoall = resultall.data
       this.props.listCards(cartaoall)
     } else {
-      const endpoint = `http://localhost:8082/api/cartoes/search/${userID}/${evento}`
+      const endpoint = `http://seplaneje-com.umbler.net/api/cartoes/search/${userID}/${evento}`
       const result = await axios.get(endpoint)
       const cartao = result.data
       this.props.listCards(cartao)

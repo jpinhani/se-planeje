@@ -43,7 +43,7 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://localhost:8082/api/visions'
+        const endpointAPI = 'http://seplaneje-com.umbler.net/api/visions'
 
         const body = {
             ID: this.state.id,
@@ -59,7 +59,7 @@ class ModalAcount extends React.Component {
         await axios.put(endpointAPI, body)
 
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/visions/${userID}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/visions/${userID}`
 
         const result = await axios.get(endpoint)
         const visions = result.data
@@ -81,9 +81,9 @@ class ModalAcount extends React.Component {
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
-                        <Input name='vision' value={this.state.vision} onChange={e => this.setState({...this.state, vision: e.target.value})} placeholder="Visao" />
-                        <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({...this.state, startDate: e.target.value})} placeholder="Inicio" />
-                        <Input name='finalDate' value={this.state.finalDate} onChange={e => this.setState({...this.state, finalDate: e.target.value})} placeholder="Fim" />
+                        <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
+                        <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({ ...this.state, startDate: e.target.value })} placeholder="Inicio" />
+                        <Input name='finalDate' value={this.state.finalDate} onChange={e => this.setState({ ...this.state, finalDate: e.target.value })} placeholder="Fim" />
                     </Modal>
                 </form>
             </div >
