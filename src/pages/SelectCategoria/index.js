@@ -21,7 +21,7 @@ class SelectCategoria extends React.Component {
         this.searchCategory = this.searchCategory.bind(this)
     }
     async deleteAcount(categoriaId) {
-        const endpoint = `http://localhost:8082/api/categorias/${categoriaId}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${categoriaId}`
         const verify = await axios.delete(endpoint)
         if (verify.data.error === true) {
             message.error('   ' + verify.data.message, 5);
@@ -77,7 +77,7 @@ class SelectCategoria extends React.Component {
 
     async requestAPI() {
         const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
+        const endpointAPI = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
         const novosDados = await axios.get(endpointAPI)
         console.log('novosDados', novosDados)
 
@@ -139,7 +139,7 @@ class SelectCategoria extends React.Component {
 
     async ImportCategoryDefault() {
         const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://localhost:8082/api/categorias/${userID}`
+        const endpointAPI = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
         const novosDados = await axios.get(endpointAPI)
 
         if (novosDados.data.length > 3) {
@@ -155,7 +155,7 @@ class SelectCategoria extends React.Component {
             const body = {
                 idUser: userID
             }
-            const endpointAPIDefault = `http://localhost:8082/api/categorias/default/`
+            const endpointAPIDefault = `http://seplaneje-com.umbler.net/api/categorias/default/`
             const resultStatus = await axios.post(endpointAPIDefault, body)
             if (resultStatus.status === 200) {
                 message.success(' O Plano de categorias Padrão do SePlaneje foi importado com Sucesso', 10)
@@ -184,7 +184,7 @@ class SelectCategoria extends React.Component {
                 break;
 
             default:
-                const endpoint = `http://localhost:8082/api/categorias/search/${evento}/${userID}`
+                const endpoint = `http://seplaneje-com.umbler.net/api/categorias/search/${evento}/${userID}`
                 const result = await axios.get(endpoint)
                 const categoria = result.data
                 this.props.listCategorys(categoria)

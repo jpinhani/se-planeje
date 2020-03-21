@@ -28,10 +28,8 @@ class ModalExpense extends React.Component {
             cartao: this.props.data.ID_CARTAO,
             valorPrevistoInput: this.props.data.VL_PREVISTO2,
             dataPrevistaInput: this.props.data.DATANOVA,
-            // cartaoInput: this.props.data.CARTAO,
             cartaoInput: this.props.data.ID_CARTAO,
             parcelasInput: this.props.data.NUM_PARCELA,
-            // categoriaInput: this.props.data.DESCR_CATEGORIA,
             categoriaInput: this.props.data.ID_CATEGORIA,
             descrDespesaInput: this.props.data.DESCR_DESPESA,
         }
@@ -200,7 +198,6 @@ class ModalExpense extends React.Component {
         } else {
 
             const resulStatus = await axios.put(endpointAPI, body)
-            console.log(resulStatus.status)
             if (resulStatus.status === 200) {
                 message.success('Despesa Editada com Sucesso', 7)
                 const userID = localStorage.getItem('userId')

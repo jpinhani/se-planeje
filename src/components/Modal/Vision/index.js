@@ -76,9 +76,9 @@ class ModalAcount extends React.Component {
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
-                        <Input name='vision' value={this.state.vision} onChange={e => this.setState({...this.state, vision: e.target.value})} placeholder="Visao" />
-                        <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({...this.state, startDate: e.target.value})} placeholder="Inicio" />
-                        <Input name='finalDate' value={this.state.finalDate} onChange={e => this.setState({...this.state, finalDate: e.target.value})} placeholder="Fim" />
+                        <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
+                        <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({ ...this.state, startDate: e.target.value })} placeholder="Inicio" />
+                        <Input name='finalDate' value={this.state.finalDate} onChange={e => this.setState({ ...this.state, finalDate: e.target.value })} placeholder="Fim" />
                     </Modal>
                 </form>
             </div >

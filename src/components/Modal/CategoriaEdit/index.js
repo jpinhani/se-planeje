@@ -85,7 +85,7 @@ class ModalCategory extends React.Component {
 
     async ComboDependencia(tipo, nivel) {
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://localhost:8082/api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
+        const endpoint = `http://seplaneje-com.umbler.net/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
 
@@ -100,7 +100,7 @@ class ModalCategory extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://localhost:8082/api/categorias/'
+        const endpointAPI = 'http://seplaneje-com.umbler.net/api/categorias/'
 
 
         const updateTipoValue = () => this.state.tipo === 'DESPESA' | this.state.tipo === 'RECEITA' ? this.state.alterTipo : this.state.tipo
@@ -140,7 +140,7 @@ class ModalCategory extends React.Component {
             await axios.put(endpointAPI, body)
 
             const userID = localStorage.getItem('userId')
-            const endpoint = `http://localhost:8082/api/categorias/${userID}`
+            const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
 
             const novosDados = await axios.get(endpoint)
 
