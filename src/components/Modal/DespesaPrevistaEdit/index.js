@@ -203,10 +203,7 @@ class ModalExpense extends React.Component {
                 const userID = localStorage.getItem('userId')
                 const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
                 const result = await axios.get(endpointAPIAll)
-
-                // console.log('Despesa', result.status)
                 const despesa = result.data
-
                 this.props.listExpenses(despesa)
                 this.handleCancel()
             } else {

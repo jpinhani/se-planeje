@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { listExpenses } from '../../store/actions/generalExpenseAction'
 import DespesaPrevista from '../../components/Modal/DespesaPrevista'
+import Menu from '../../components/Menu'
 import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
-import { Table, Icon, Popconfirm, message, Checkbox } from 'antd'
+import SearchFilter from '../../components/searchFilterTable'
+import { Table, Icon, Popover, Input } from 'antd'
 import axios from 'axios'
-
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -16,36 +17,9 @@ class SelectDespesaPrevista extends React.Component {
 
         this.state = {
             search: '',
-            deleteDespesa: 'Deletar Despesa Selecionada'
+            filter: ''
         }
-
-        this.handleDespesaDelete = this.handleDespesaDelete.bind(this)
-        // this.searchAcount = this.searchAcount.bind(this)
-    }
-
-    async deleteAcount(expense) {
-        const body = {
-            idUser: localStorage.getItem('userId'),
-            dataPrevista: expense.DATANOVA,
-            valorPrevisto: expense.VL_PREVISTO2,
-            cartao: expense.ID_CARTAO,
-            categoria: expense.ID_CATEGORIA,
-            parcela: expense.NUM_PARCELA,
-            descrDespesa: expense.DESCR_DESPESA,
-            valueEdit: this.state.deleteDespesa,
-            idGrupo: expense.ID_GRUPO,
-
-        }
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/${expense.ID}`
-        const resultStatus = await axios.delete(endpoint, body)
-        if (resultStatus.status === 200) {
-            message.success('Despesa Excluida com Sucesso', 5)
-            this.requestAPI()
-        } else {
-            message.erro('A despesa não pode ser Excluida, Error ' + resultStatus.status, 5)
-        }
-
-
+        this.searchExpense = this.searchExpense.bind(this)
     }
 
     columns() {
@@ -83,10 +57,13 @@ class SelectDespesaPrevista extends React.Component {
                     <div>
                         <span >
                             <EditDespesa data={expense} />
-                            <Popconfirm title={this.state.deleteDespesa} onConfirm={() => this.deleteAcount(expense)}>
+
+                            <Popover
+                                placement="left"
+                                title='Excluir Despesa'
+                                content={<Menu data={expense} />} trigger="click">
                                 <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popconfirm>
-                            <Checkbox onChange={this.handleDespesaDelete} >Marcar demais parcelas</Checkbox>
+                            </Popover>
                         </span>
                     </div>
                 ),
@@ -94,21 +71,17 @@ class SelectDespesaPrevista extends React.Component {
         ]
     }
 
-    handleDespesaDelete(e) {
-        if (e.target.checked === true) {
-            this.setState({ ...this.state, deleteDespesa: 'Deletar Todas Despesas do grupo a partir da Selecionada' })
-        } else {
-            this.setState({ ...this.state, deleteDespesa: 'Deletar Despesa Selecionada' })
-        }
-    }
 
     async requestAPI() {
         const userID = localStorage.getItem('userId')
         const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
         const result = await axios.get(endpointAPI)
-        console.log("RESULTADO", result)
         const despesa = result.data
         this.props.listExpenses(despesa)
+    }
+
+    searchExpense(event) {
+        this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
 
     componentDidMount() {
@@ -120,9 +93,13 @@ class SelectDespesaPrevista extends React.Component {
             <div>
                 <div>
                     <DespesaPrevista />
+                    <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
                 </div>
                 <div>
-                    <Table columns={this.columns()} dataSource={this.props.expense} rowKey='ID' />
+                    <Table
+                        columns={this.columns()}
+                        dataSource={SearchFilter(this.props.expense, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
+                        rowKey='ID' />
                 </div>
 
             </div>

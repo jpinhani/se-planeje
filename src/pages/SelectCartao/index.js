@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import AddCartao from '../../components/Modal/Cartao/index'
 import EditCartao from '../../components/Modal/CartaoEdit/index'
+import SearchFilter from '../../components/searchFilterTable'
 import { listCards } from '../../store/actions/generalCardAction.js'
 import { Table, Divider, Icon, Input, Popconfirm, message } from 'antd'
 import axios from 'axios'
@@ -83,25 +84,8 @@ class SelectCartao extends React.Component {
 
   searchCard(event) {
     this.setState({ ...this.state, search: event.target.value })
-    this.updatelist(event.target.value)
   }
 
-  async updatelist(evento) {
-    // console.log('Valor:', this.state.search)
-    const userID = localStorage.getItem('userId')
-    if (evento === '') {
-      const endpointall = `http://seplaneje-com.umbler.net/api/cartoes/${userID}`
-      const resultall = await axios.get(endpointall)
-      const cartaoall = resultall.data
-      this.props.listCards(cartaoall)
-    } else {
-      const endpoint = `http://seplaneje-com.umbler.net/api/cartoes/search/${userID}/${evento}`
-      const result = await axios.get(endpoint)
-      const cartao = result.data
-      this.props.listCards(cartao)
-    }
-
-  }
 
   render() {
     return (
@@ -111,7 +95,9 @@ class SelectCartao extends React.Component {
           <Input name='cartao' value={this.state.search} onChange={this.searchCard} placeholder="Procure aqui o cartão especifico" />
         </div>
         <Divider type="horizontal" />
-        <Table columns={this.columns()} dataSource={this.props.card} rowKey='ID' />
+        <Table columns={this.columns()}
+          dataSource={SearchFilter(this.props.card, ['CARTAO'], this.state.search)}
+          rowKey='ID' />
       </div >
     )
   }

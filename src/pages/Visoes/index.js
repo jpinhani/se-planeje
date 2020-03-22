@@ -58,6 +58,7 @@ function Vision() {
     })
   }
 
+
   useEffect(() => {
     async function getVisions() {
       dispatch({

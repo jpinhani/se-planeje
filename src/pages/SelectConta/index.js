@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import AddAcount from '../../components/Modal/Conta/index'
 import EditaAcount from '../../components/Modal/ContaEdit/index'
+import SearchFilter from '../../components/searchFilterTable'
 import { listAcounts } from '../../store/actions/generalAcountAction'
 import { Table, Icon, Input, Popconfirm, message } from 'antd'
 import axios from 'axios'
@@ -80,27 +81,7 @@ class SelectConta extends React.Component {
 
   searchAcount(event) {
     this.setState({ ...this.state, search: event.target.value })
-    this.updateList(event.target.value)
-    // console.log(this.state.search)
   }
-
-  async updateList(evento) {
-    // console.log('Valor:', this.state.search)
-    const userID = localStorage.getItem('userId')
-    if (evento !== '' && evento.length > 1) {
-      const endpoint = `http://seplaneje-com.umbler.net/api/contas/search/${evento}/${userID}`
-      const result = await axios.get(endpoint)
-      const conta = result.data
-      this.props.listAcounts(conta)
-    } else {
-      const endpoint = `http://seplaneje-com.umbler.net/api/contas/${userID}`
-      const result = await axios.get(endpoint)
-      const conta = result.data
-      this.props.listAcounts(conta)
-    }
-  }
-
-
 
   render() {
     return (
@@ -110,7 +91,10 @@ class SelectConta extends React.Component {
           <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
         </div>
         <div className='headerTable'>
-          <Table columns={this.columns()} dataSource={this.props.acount} rowKey='ID' />
+          <Table
+            columns={this.columns()}
+            dataSource={SearchFilter(this.props.acount, ['DESCR_CONTA'], this.state.search)}
+            rowKey='ID' />
         </div>
 
       </div>

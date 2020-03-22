@@ -4,9 +4,6 @@ const addAcount = acount => ({
 })
 
 const listAcounts = acounts => {
-
-    // console.log('action', acounts)
-
     return ({
         type: 'LIST_ACOUNT',
         payload: acounts
