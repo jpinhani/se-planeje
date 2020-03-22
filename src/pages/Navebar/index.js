@@ -50,7 +50,7 @@ class SiderDemo extends React.Component {
                         }
                     >
                         <Menu.Item key="7"><Link to='/selectdespesaprevista'>Planejar Despesas</Link></Menu.Item>
-                        <Menu.Item key="8">Planejar Receitas</Menu.Item>
+                        <Menu.Item key="8"><Link to='/selectreceitaprevista'>Planejar Receitas</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu
                         key="sub3"

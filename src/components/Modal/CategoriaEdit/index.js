@@ -85,7 +85,8 @@ class ModalCategory extends React.Component {
 
     async ComboDependencia(tipo, nivel) {
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
+        console.log("Variaveis estão indo assim", userID, ' - ', tipo, ' - ', nivel)
+        const endpoint = `http://seplaneje-com.umbler.net/api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
 

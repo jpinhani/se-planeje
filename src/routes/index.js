@@ -16,6 +16,7 @@ import SelectConta from '../pages/SelectConta'
 import SelectCartao from '../pages/SelectCartao'
 import SelectCategory from '../pages/SelectCategoria'
 import SelectDespesaPrevista from '../pages/SelectDespesaPrevista'
+import SelectReceitaPrevista from '../pages/SelectReceitaPrevista'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 
@@ -38,6 +39,7 @@ export default () =>
               <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
               <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
               <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
+              <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
               <PrivateRoute exact path='/visao' component={Visao} />
               <PrivateRoute component={Home} />
             </Switch>
