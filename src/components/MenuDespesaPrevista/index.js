@@ -30,7 +30,7 @@ export default (props) => {
 
         const body = valor
         console.log('body', body)
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/teste/${props.data.ID}`
+        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/delete/${props.data.ID}`
         const resultStatus = await axios.put(endpoint, body)
 
         if (resultStatus.status === 200) {

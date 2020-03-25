@@ -251,7 +251,7 @@ class ModalRevenue extends React.Component {
                                 option.props.children.toLowerCase()
                                     .indexOf(input.toLowerCase()) >= 0
                             )}
-                            style={{ width: '99%' }}
+                            style={{ width: '64%' }}
                             placeholder="Informe a Categoria"
                             onSelect={this.handleCategoria}
                             value={this.state.categoriaInput}

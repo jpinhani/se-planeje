@@ -1,17 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { listRevenues } from '../../store/actions/generalRevenueAction'
-import ReceitaPrevista from '../../components/Modal/ReceitaPrevista'
-import Menu from '../../components/MenuReceitaPrevista'
-import EditReceita from '../../components/Modal/ReceitaPrevistaEdit'
+import { listExpenses } from '../../store/actions/generalExpenseAction'
 import SearchFilter from '../../components/searchFilterTable'
-import { Table, Icon, Popover, Input } from 'antd'
+import { Table, Input } from 'antd'
+import DespesaPagar from '../../components/Modal/DespesaPagar'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-class SelectReceitaPrevista extends React.Component {
+
+class SelectDespesaPagar extends React.Component {
     constructor(props) {
         super(props)
 
@@ -19,7 +18,7 @@ class SelectReceitaPrevista extends React.Component {
             search: '',
             filter: ''
         }
-        this.searchRevenue = this.searchRevenue.bind(this)
+        this.searchExpense = this.searchExpense.bind(this)
     }
 
     columns() {
@@ -40,9 +39,9 @@ class SelectReceitaPrevista extends React.Component {
                 key: 'DATANOVA'
             },
             {
-                title: 'RECEITA',
-                dataIndex: 'DESCR_RECEITA',
-                key: 'DESCR_RECEITA'
+                title: 'DESPESA',
+                dataIndex: 'DESCR_DESPESA',
+                key: 'DESCR_DESPESA'
             },
             {
                 title: 'PARCELA',
@@ -50,20 +49,18 @@ class SelectReceitaPrevista extends React.Component {
                 key: 'NUM_PARCELA'
             },
             {
+                title: 'CARTAO',
+                dataIndex: 'CARTAO',
+                key: 'CARTAO'
+            },
+            {
                 title: 'ACÃO',
                 key: 'ACÃO',
 
-                render: revenue => (
+                render: expense => (
                     <div>
                         <span >
-                            <EditReceita data={revenue} />
-
-                            <Popover
-                                placement="left"
-                                title='Excluir Receita'
-                                content={<Menu data={revenue} />} trigger="click">
-                                <Icon type="delete" title='Excluir Receita' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popover>
+                            <DespesaPagar data={expense} />
                         </span>
                     </div>
                 ),
@@ -74,31 +71,30 @@ class SelectReceitaPrevista extends React.Component {
 
     async requestAPI() {
         const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/receitas/${userID}`
+        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
         const result = await axios.get(endpointAPI)
-        const receita = result.data
-        await this.props.listRevenues(receita)
+        const despesa = result.data
+        this.props.listExpenses(despesa)
     }
 
-    searchRevenue(event) {
+    searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
 
-    componentDidMount() {
-        this.requestAPI()
+    async componentDidMount() {
+        await this.requestAPI()
     }
 
     render() {
         return (
             <div>
                 <div className='ViewExpense'>
-                    <ReceitaPrevista />
-                    <Input name='receita' value={this.state.search} onChange={this.searchRevenue} placeholder="Procure aqui a receita especifica" />
+                    <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
                 </div>
                 <div>
                     <Table className='table table-action'
                         columns={this.columns()}
-                        dataSource={SearchFilter(this.props.revenue, ['DESCR_RECEITA', 'DESCR_RECEITA'], this.state.filter)}
+                        dataSource={SearchFilter(this.props.expense, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
                         rowKey='ID' />
                 </div>
 
@@ -109,13 +105,13 @@ class SelectReceitaPrevista extends React.Component {
 
 const mapStateToProps = (state /*, ownProps*/) => {
     return {
-        revenue: state.revenue
+        expense: state.expense
     }
 }
 
-const mapDispatchToProps = { listRevenues }
+const mapDispatchToProps = { listExpenses }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SelectReceitaPrevista)
+)(SelectDespesaPagar)

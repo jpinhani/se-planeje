@@ -95,7 +95,9 @@ class SelectCartao extends React.Component {
           <Input name='cartao' value={this.state.search} onChange={this.searchCard} placeholder="Procure aqui o cartão especifico" />
         </div>
         <Divider type="horizontal" />
-        <Table columns={this.columns()}
+        <Table
+          className='table table-action'
+          columns={this.columns()}
           dataSource={SearchFilter(this.props.card, ['CARTAO'], this.state.search)}
           rowKey='ID' />
       </div >

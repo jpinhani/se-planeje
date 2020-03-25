@@ -1,7 +1,9 @@
-.headerCategory{
+.ViewExpense{
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 10px;
+    // background-color: red !important;
 }
 
 
@@ -61,7 +63,7 @@ table {
   }
   
   /* Small Sizes */
-  @media (max-width: 748px) { 
+  @media (max-width: 1115px) { 
     .table-action thead {
       display: none;
     }

@@ -6,7 +6,6 @@
     // background-color: red !important;
 }
 
-
 /* Table Base */
 
 table {
@@ -34,11 +33,13 @@ table {
 }
 .table thead th {
   background: #eeeeee;
+  // background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
   vertical-align: bottom;
 }   
 .table tbody > tr:nth-child(odd) > td,
 .table tbody > tr:nth-child(odd) > th {
   background-color: #fafafa;
+  // background-color: #d8edf7;
 }    
 .table .t-small {
   width: 5%;
@@ -63,7 +64,7 @@ table {
 }
 
 /* Small Sizes */
-@media (max-width: 842px) { 
+@media (max-width: 748px) { 
   .table-action thead {
     display: none;
   }

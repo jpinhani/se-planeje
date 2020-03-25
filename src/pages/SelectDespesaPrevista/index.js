@@ -50,6 +50,11 @@ class SelectDespesaPrevista extends React.Component {
                 key: 'NUM_PARCELA'
             },
             {
+                title: 'CARTAO',
+                dataIndex: 'CARTAO',
+                key: 'CARTAO'
+            },
+            {
                 title: 'ACÃO',
                 key: 'ACÃO',
 
@@ -96,7 +101,7 @@ class SelectDespesaPrevista extends React.Component {
                     <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
                 </div>
                 <div>
-                    <Table
+                    <Table className='table table-action'
                         columns={this.columns()}
                         dataSource={SearchFilter(this.props.expense, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
                         rowKey='ID' />

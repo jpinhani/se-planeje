@@ -2,10 +2,6 @@ import React from 'react'
 import { BrowserRouter, Switch } from 'react-router-dom'
 import { Layout, Breadcrumb } from 'antd'
 
-
-
-// import './styles.scss'
-
 import PublicRoute from './PublicRoutes'
 import PrivateRoute from './PrivateRoutes'
 
@@ -16,7 +12,9 @@ import SelectConta from '../pages/SelectConta'
 import SelectCartao from '../pages/SelectCartao'
 import SelectCategory from '../pages/SelectCategoria'
 import SelectDespesaPrevista from '../pages/SelectDespesaPrevista'
+import SelectDespesaRealizada from '../pages/SelectDespesaRealizada'
 import SelectReceitaPrevista from '../pages/SelectReceitaPrevista'
+import SelectTabDespesa from '../pages/SelectTabDespesa'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 
@@ -39,7 +37,9 @@ export default () =>
               <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
               <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
               <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
+              <PrivateRoute exact path='/selectdespesarealizada' component={SelectDespesaRealizada} />
               <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
+              <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
               <PrivateRoute exact path='/visao' component={Visao} />
               <PrivateRoute component={Home} />
             </Switch>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Radio } from 'antd'
 import moment from 'moment';
-import { listExpenses } from '../../../store/actions/generalExpenseAction'
+import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -12,7 +12,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
-// const dataAtual = moment(new Date(), dateFormat)
+
 class ModalExpense extends React.Component {
     constructor(props) {
         super(props)
@@ -25,7 +25,7 @@ class ModalExpense extends React.Component {
             categoria: [],
             cartao: [],
             valorPrevistoInput: null,
-            dataPrevistaInput: null,
+            dataPrevistaInput: new Date().dateString,
             cartaoInput: 'DÉBITO OU DINHEIRO',
             parcelasInput: 1,
             categoriaInput: [],
@@ -71,12 +71,10 @@ class ModalExpense extends React.Component {
 
     handleParcelas(num) {
         this.setState({ ...this.state, parcelasInput: num })
-        console.log('Parcela Inserida', num)
     }
 
     handleCategoria(Categorys) {
         this.setState({ ...this.state, categoriaInput: Categorys })
-        console.log('Categoria Inserida', Categorys)
     }
 
     handledescricaoDespesa(despesa) {
@@ -135,11 +133,10 @@ class ModalExpense extends React.Component {
 
         const endpointAPI = 'http://seplaneje-com.umbler.net/api/despesas'
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
-        const dataPrevistaNova = this.state.dataPrevistaInput ? this.state.dataPrevistaInput : moment(new Date(), dateFormat)
         const body = {
             idGrupo: ID(),
             idUser: localStorage.getItem('userId'),
-            dataPrevista: dataPrevistaNova,
+            dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
             cartao: this.state.cartaoInput,
             categoria: this.state.categoriaInput,
@@ -157,11 +154,20 @@ class ModalExpense extends React.Component {
             body.status = 'Fatura Pendente'
         }
 
-
-        const data = moment(body.dataPrevista, "DD/MM/YYYY");
-        body.dataPrevista = data.format("YYYY-MM-DD")
-        console.log('body.dataPrevista', body.dataPrevista)
-
+        if (body.dataPrevista === undefined) {
+            let Hoje = new Date();
+            const mm = Hoje.getMonth() + 1;
+            const dd = Hoje.getDate();
+            const yyyy = Hoje.getFullYear();
+            const dataNova = yyyy + '/' + mm + '/' + dd;
+            const dataAtual = dd + '/' + mm + '/' + yyyy;
+            this.setState({ ...this.state, dataPrevistaInput: dataAtual })
+            body.dataPrevista = dataNova;
+        } else {
+            const data = moment(body.dataPrevista, "DD/MM/YYYY");
+            body.dataPrevista = data.format("YYYY-MM-DD")
+            console.log('body.dataPrevista', body.dataPrevista)
+        }
 
         if (body.dataPrevista === null | body.valorPrevisto === null |
             body.categoria.length === 0 | body.parcela.length === 0 | body.descrDespesa.length === 0) {
@@ -179,12 +185,12 @@ class ModalExpense extends React.Component {
             if (resulStatus.status === 200) {
                 message.success('Despesa inserida com Sucesso', 7)
                 const userID = localStorage.getItem('userId')
-                const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
+                const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/real/${userID}`
                 const result = await axios.get(endpointAPIAll)
 
                 const despesa = result.data
 
-                this.props.listExpenses(despesa)
+                this.props.listExpensesPaga(despesa)
                 this.handleCancel()
             } else {
                 message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
@@ -298,11 +304,11 @@ class ModalExpense extends React.Component {
 
 const mapStateToProps = (state/*, ownProps*/) => {
     return {
-        expense: state.expense,
+        expenseReal: state.expenseReal,
     }
 }
 
-const mapDispatchToProps = { listExpenses }
+const mapDispatchToProps = { listExpensesPaga }
 
 
 export default connect(

@@ -20,11 +20,9 @@ class SiderDemo extends React.Component {
 
     render() {
         return (
-            // <Layout style={{ minHeight: '100vh' }}>
+
             <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-                {/* <div className="logo" /> */}
                 <div />
-                {/* <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"> */}
                 <Menu defaultSelectedKeys={['1']} mode="inline">
                     <SubMenu
                         key="sub1"
@@ -45,7 +43,7 @@ class SiderDemo extends React.Component {
                         title={
                             <span>
                                 <Icon type="schedule" theme="twoTone" />
-                                <span>Previsto</span>
+                                <span title='Registre nesse modulo suas Metas'>Previsto / Metas</span>
                             </span>
                         }
                     >
@@ -61,7 +59,7 @@ class SiderDemo extends React.Component {
                             </span>
                         }
                     >
-                        <Menu.Item key="9">Despesas</Menu.Item>
+                        <Menu.Item key="9"><Link to='/selecttabdespesa'>Despesas</Link></Menu.Item>
                         <Menu.Item key="10">Faturas</Menu.Item>
                         <Menu.Item key="11">Receitas</Menu.Item>
                         <Menu.Item key="12">Transferências</Menu.Item>

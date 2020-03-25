@@ -7,6 +7,7 @@ import categoryReducer from '../store/reducers/generalCategoryReducer'
 import visionReducer from '../store/reducers/visionReducer'
 import expenseReducer from '../store/reducers/generalExpenseReducer'
 import revenueReducer from '../store/reducers/generalRevenuesReducer'
+import expenseRealReducer from './reducers/generalExpenseRealReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -15,7 +16,8 @@ const reducers = combineReducers({
   category: categoryReducer,
   vision: visionReducer,
   expense: expenseReducer,
-  revenue: revenueReducer
+  revenue: revenueReducer,
+  expenseReal: expenseRealReducer
 })
 
 export default createStore(reducers)
