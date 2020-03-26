@@ -10,13 +10,12 @@ import moment from 'moment';
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { loadCategoria, loadCartao } from '../../ListagemCombo'
 
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-
-const { Option } = Select;
 const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
@@ -53,11 +52,14 @@ class ModalExpense extends React.Component {
     }
 
     async showModal() {
-        await this.loadCategoria()
-        await this.loadCartao()
+        const resultCategoria = await loadCategoria()
+        const resultCartao = await loadCartao()
+
+        this.setState({ ...this.state, categoria: resultCategoria, cartao: resultCartao, visible: true })
+
         if (this.props.data.ID_CARTAO === 0)
             this.setState({ ...this.state, visibleConta: false, cartaoInput: 'DÉBITO OU DINHEIRO' })
-        await this.setState({ ...this.state, visible: true })
+
     };
 
 
@@ -97,37 +99,6 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, contaInput: valorConta })
     }
 
-
-    async loadCategoria() {
-
-        const endpoint = `${urlBackend}api/despesas/category/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.DESCR_CATEGORIA}
-            </Option>
-        )
-
-        this.setState({ ...this.state, categoria: options })
-    }
-
-    async loadCartao() {
-
-        const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.CARTAO}
-            </Option>
-        )
-
-        options.push(<Option key='nd' value='DÉBITO OU DINHEIRO'>DÉBITO OU DINHEIRO</Option>)
-        this.setState({ ...this.state, cartao: options })
-    }
 
     async handleSubmit(event) {
         event.preventDefault()

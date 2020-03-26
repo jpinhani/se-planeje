@@ -7,12 +7,11 @@ import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { loadCartao, loadCategoria } from '../../ListagemCombo'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-
-const { Option } = Select;
 const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
@@ -53,11 +52,14 @@ class ModalExpense extends React.Component {
     }
 
     async showModal() {
-        await this.loadCategoria()
-        await this.loadCartao()
+        const resultCategoria = await loadCategoria()
+        const resultCartao = await loadCartao()
+
+        this.setState({ ...this.state, categoria: resultCategoria, cartao: resultCartao, visible: true })
+
         if (this.props.data.ID_CARTAO === 0)
             this.setState({ ...this.state, cartaoInput: 'DÉBITO OU DINHEIRO' })
-        await this.setState({ ...this.state, visible: true })
+
     };
 
 
@@ -108,38 +110,6 @@ class ModalExpense extends React.Component {
     handleDayValue(dias) {
         this.setState({ ...this.state, dayValue: dias })
     }
-
-    async loadCategoria() {
-
-        const endpoint = `${urlBackend}api/despesas/category/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.DESCR_CATEGORIA}
-            </Option>
-        )
-
-        this.setState({ ...this.state, categoria: options })
-    }
-
-    async loadCartao() {
-
-        const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.CARTAO}
-            </Option>
-        )
-
-        options.push(<Option key='nd' value='DÉBITO OU DINHEIRO'>DÉBITO OU DINHEIRO</Option>)
-        this.setState({ ...this.state, cartao: options })
-    }
-
 
     async handleSubmit(event) {
         event.preventDefault()
@@ -207,9 +177,9 @@ class ModalExpense extends React.Component {
                 const endpointAPIAll = `${urlBackend}api/despesas/real/${userID}`
                 const result = await axios.get(endpointAPIAll)
                 const despesa = result.data
-
-                this.props.listExpensesPaga(despesa)
                 this.handleCancel()
+                this.props.listExpensesPaga(despesa)
+
             } else {
                 message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
             }

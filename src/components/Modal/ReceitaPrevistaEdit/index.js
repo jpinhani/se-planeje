@@ -7,12 +7,11 @@ import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { loadCategoriaReceita } from '../../ListagemCombo'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-
-const { Option } = Select;
 const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
@@ -49,8 +48,8 @@ class ModalRevenue extends React.Component {
     }
 
     async showModal() {
-        await this.loadCategoria()
-        await this.setState({ ...this.state, visible: true })
+        const resultCategoria = await loadCategoriaReceita()
+        this.setState({ ...this.state, categoria: resultCategoria, visible: true })
     };
 
 
@@ -99,21 +98,6 @@ class ModalRevenue extends React.Component {
 
     handleDayValue(dias) {
         this.setState({ ...this.state, dayValue: dias })
-    }
-
-
-    async loadCategoria() {
-        const endpoint = `${urlBackend}api/receitas/category/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.DESCR_CATEGORIA}
-            </Option>
-        )
-
-        this.setState({ ...this.state, categoria: options })
     }
 
     async handleSubmit(event) {
@@ -176,8 +160,9 @@ class ModalRevenue extends React.Component {
                 const result = await axios.get(endpointAPIAll)
                 const receita = result.data
 
-                this.props.listRevenues(receita)
+
                 this.handleCancel()
+                this.props.listRevenues(receita)
 
             } else {
                 message.error(`Não foi possivel inserir a Receita, Erro: ${resulStatus.status}`, 7)

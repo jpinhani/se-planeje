@@ -7,16 +7,15 @@ import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { loadCartao, loadCategoria } from '../../ListagemCombo'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-
-const { Option } = Select;
 const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
-// const dataAtual = moment(new Date(), dateFormat)
+
 class ModalExpense extends React.Component {
     constructor(props) {
         super(props)
@@ -50,9 +49,10 @@ class ModalExpense extends React.Component {
     }
 
     async showModal() {
-        await this.loadCategoria()
-        await this.loadCartao()
-        await this.setState({ ...this.state, visible: true })
+        const resultCategoria = await loadCategoria()
+        const resultCartao = await loadCartao()
+
+        this.setState({ ...this.state, categoria: resultCategoria, cartao: resultCartao, visible: true })
     };
 
     handleCancel() {
@@ -99,36 +99,6 @@ class ModalExpense extends React.Component {
 
     handleDayValue(dias) {
         this.setState({ ...this.state, dayValue: dias })
-    }
-
-    async loadCategoria() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `${urlBackend}api/despesas/category/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.DESCR_CATEGORIA}
-            </Option>
-        )
-
-        this.setState({ ...this.state, categoria: options })
-    }
-
-    async loadCartao() {
-
-        const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
-
-        const result = await axios.get(endpoint)
-
-        const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
-                {desc.CARTAO}
-            </Option>
-        )
-        options.push(<Option key='nd' value='DÉBITO OU DINHEIRO'>DÉBITO OU DINHEIRO</Option>)
-        this.setState({ ...this.state, cartao: options })
     }
 
 
