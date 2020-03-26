@@ -118,7 +118,7 @@ class ModalExpense extends React.Component {
 
     async loadCartao() {
 
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/cartao/${userID}`
+        const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
 
         const result = await axios.get(endpoint)
 

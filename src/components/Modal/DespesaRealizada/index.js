@@ -191,7 +191,7 @@ class ModalExpense extends React.Component {
 
                 message.success('Despesa inserida com Sucesso', 7)
 
-                const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/real/${userID}`
+                const endpointAPIAll = `${urlBackend}api/despesas/real/${userID}`
                 const result = await axios.get(endpointAPIAll)
 
                 const despesa = result.data

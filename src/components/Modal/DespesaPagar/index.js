@@ -177,7 +177,7 @@ class ModalExpense extends React.Component {
             if (resulStatus.status === 200) {
                 message.success('Despesa contabilizada com Sucesso', 7)
 
-                const userID = localStorage.getItem('userId')
+
                 const endpointAPIAll = `${urlBackend}api/despesas/${userID}`
 
                 const result = await axios.get(endpointAPIAll)
