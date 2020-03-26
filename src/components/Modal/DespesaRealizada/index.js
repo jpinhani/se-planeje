@@ -1,9 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import axios from 'axios'
 import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Radio } from 'antd'
 import moment from 'moment';
+
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -45,9 +49,11 @@ class ModalExpense extends React.Component {
         this.handleDayValue = this.handleDayValue.bind(this)
     }
 
-    showModal() { this.setState({ ...this.state, visible: true }) };
-
-
+    async showModal() {
+        await this.loadCategoria()
+        await this.loadCartao()
+        await this.setState({ ...this.state, visible: true })
+    };
 
     handleCancel() {
         this.setState({
@@ -93,14 +99,9 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, dayValue: dias })
     }
 
-    componentDidMount() {
-        this.loadCategoria()
-        this.loadCartao()
-    }
-
     async loadCategoria() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/category/${userID}`
+
+        const endpoint = `${urlBackend}api/despesas/category/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -109,12 +110,13 @@ class ModalExpense extends React.Component {
                 {desc.DESCR_CATEGORIA}
             </Option>
         )
+
         this.setState({ ...this.state, categoria: options })
     }
 
     async loadCartao() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/cartao/${userID}`
+
+        const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -131,11 +133,12 @@ class ModalExpense extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/despesas'
+        const endpointAPI = `${urlBackend}api/despesas`
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
+
         const body = {
             idGrupo: ID(),
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
             cartao: this.state.cartaoInput,
@@ -163,6 +166,7 @@ class ModalExpense extends React.Component {
             const dataAtual = dd + '/' + mm + '/' + yyyy;
             this.setState({ ...this.state, dataPrevistaInput: dataAtual })
             body.dataPrevista = dataNova;
+
         } else {
             const data = moment(body.dataPrevista, "DD/MM/YYYY");
             body.dataPrevista = data.format("YYYY-MM-DD")
@@ -179,12 +183,14 @@ class ModalExpense extends React.Component {
                 duration: 5,
             };
             notification.open(args);
+
         } else {
 
-            const resulStatus = await axios.post(endpointAPI, body)
+            const resulStatus = await axios.post(endpointAPI, body, config)
             if (resulStatus.status === 200) {
+
                 message.success('Despesa inserida com Sucesso', 7)
-                const userID = localStorage.getItem('userId')
+
                 const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/real/${userID}`
                 const result = await axios.get(endpointAPIAll)
 

@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+
 import { Switch, Button, message } from 'antd'
+import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 
@@ -17,7 +20,7 @@ export default (props) => {
 
     async function handleDelete() {
         const valor = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             dataPrevista: props.data.DATANOVA,
             valorPrevisto: props.data.VL_PREVISTO2,
             cartao: props.data.ID_CARTAO,
@@ -29,14 +32,17 @@ export default (props) => {
         }
 
         const body = valor
-        console.log('body', body)
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/delete/${props.data.ID}`
-        const resultStatus = await axios.put(endpoint, body)
+
+        const endpoint = `${urlBackend}api/despesas/delete/${props.data.ID}`
+
+        const resultStatus = await axios.put(endpoint, body, config)
 
         if (resultStatus.status === 200) {
+
             message.success('   Despesa Excluida com Sucesso', 5)
 
-            const endpointAPIget = `http://seplaneje-com.umbler.net/api/despesas/${body.idUser}`
+            const endpointAPIget = `${urlBackend}api/despesas/${body.idUser}`
+
             const result = await axios.get(endpointAPIget)
 
             const despesa = result.data
@@ -50,10 +56,7 @@ export default (props) => {
             message.erro('   A Despesa não pode ser Excluida, Error ' + resultStatus.status, 5)
         }
 
-
     }
-
-
 
     return (<div>
         <div>

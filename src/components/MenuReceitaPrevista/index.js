@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+
 import { Switch, Button, message } from 'antd'
+import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 
@@ -8,6 +11,7 @@ export default (props) => {
     const dispatch = useDispatch()
 
     const [deleteReceita, setDeleteReceita] = useState('Deletar Receita Selecionada')
+
     function handleReceitaDelete(e) {
         e ? setDeleteReceita('Deletar Todas Receitas do grupo a partir da Selecionada') :
             setDeleteReceita('Deletar Receita Selecionada');
@@ -15,7 +19,7 @@ export default (props) => {
 
     async function handleDelete() {
         const valor = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             dataPrevista: props.data.DATANOVA,
             valorPrevisto: props.data.VL_PREVISTO2,
             categoria: props.data.ID_CATEGORIA,
@@ -26,13 +30,15 @@ export default (props) => {
         }
 
         const body = valor
-        const endpoint = `http://seplaneje-com.umbler.net/api/receitas/teste/${props.data.ID}`
-        const resultStatus = await axios.put(endpoint, body)
+        const endpoint = `${urlBackend}api/receitas/teste/${props.data.ID}`
+
+        const resultStatus = await axios.put(endpoint, body, config)
 
         if (resultStatus.status === 200) {
+
             message.success('Receita Excluida com Sucesso', 5)
 
-            const endpointAPIget = `http://seplaneje-com.umbler.net/api/receitas/${body.idUser}`
+            const endpointAPIget = `${urlBackend}api/receitas/${body.idUser}`
             const result = await axios.get(endpointAPIget)
 
             const receita = result.data
@@ -46,10 +52,7 @@ export default (props) => {
             message.erro('A Receita não pode ser Excluida, Error ' + resultStatus.status, 5)
         }
 
-
     }
-
-
 
     return (<div>
         <div>

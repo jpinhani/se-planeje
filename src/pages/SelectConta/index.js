@@ -1,12 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import AddAcount from '../../components/Modal/Conta/index'
 import EditaAcount from '../../components/Modal/ContaEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
+
 import { listAcounts } from '../../store/actions/generalAcountAction'
+import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+
 import { Table, Icon, Input, Popconfirm, message } from 'antd'
 import axios from 'axios'
-
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -23,8 +26,9 @@ class SelectConta extends React.Component {
   }
 
   async deleteAcount(acountId) {
-    const endpoint = `http://seplaneje-com.umbler.net/api/contas/${acountId}`
-    const resultStatus = await axios.delete(endpoint)
+    const endpoint = `${urlBackend}api/contas/${acountId}`
+    const resultStatus = await axios.delete(endpoint, config)
+
     if (resultStatus.status === 200) {
       message.success('   Conta Excluida com Sucesso', 5)
       this.requestAPI()
@@ -67,9 +71,9 @@ class SelectConta extends React.Component {
 
 
   async requestAPI() {
-    const userID = localStorage.getItem('userId')
-    const endpointAPI = `http://seplaneje-com.umbler.net/api/contas/${userID}`
-    // console.log(endpointAPI)
+
+    const endpointAPI = `${urlBackend}api/contas/${userID}`
+
     const result = await axios.get(endpointAPI)
     const conta = result.data
     this.props.listAcounts(conta)

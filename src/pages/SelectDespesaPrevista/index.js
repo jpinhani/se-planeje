@@ -1,11 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { listExpenses } from '../../store/actions/generalExpenseAction'
 import DespesaPrevista from '../../components/Modal/DespesaPrevista'
 import Menu from '../../components/MenuDespesaPrevista'
 import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
+
 import SearchFilter from '../../components/searchFilterTable'
 import { Table, Icon, Popover, Input } from 'antd'
+import { urlBackend, userID } from '../../routes/urlBackEnd'
+
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -78,19 +82,18 @@ class SelectDespesaPrevista extends React.Component {
 
 
     async requestAPI() {
-        const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
+        const endpointAPI = `${urlBackend}api/despesas/${userID}`
         const result = await axios.get(endpointAPI)
         const despesa = result.data
-        this.props.listExpenses(despesa)
+        await this.props.listExpenses(despesa)
     }
 
     searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
 
-    componentDidMount() {
-        this.requestAPI()
+    async  componentDidMount() {
+        await this.requestAPI()
     }
 
     render() {

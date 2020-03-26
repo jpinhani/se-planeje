@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, message, notification } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -39,34 +40,38 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/contas'
+        const endpointAPI = `${urlBackend}api/contas`
 
         const body = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
+
+
         if (body.descrConta !== '') {
-            const resultStatus = await axios.post(endpointAPI, body)
+            const resultStatus = await axios.post(endpointAPI, body, config)
+            console.log('resultStatus', resultStatus)
+            try {
+                if (resultStatus.status === 200) {
+                    message.success('   Conta Registrada com Sucesso ', 5)
+                    const endpoint = `${urlBackend}api/contas/${userID}`
 
-            if (resultStatus.status === 200) {
-                message.success('   Conta Registrada com Sucesso ', 5)
-                const userID = localStorage.getItem('userId')
-                const endpoint = `http://seplaneje-com.umbler.net/api/contas/${userID}`
+                    const result = await axios.get(endpoint)
+                    const acounts = result.data
 
-                const result = await axios.get(endpoint)
-                const acounts = result.data
+                    this.props.listAcounts(acounts)
 
-                this.props.listAcounts(acounts)
-
-                this.setState({ ...this.state, descrConta: '' })
-                this.setState({ ...this.state, visible: false })
-            } else {
-                message.error('   Conta Não pode ser Inserida, Error ' + resultStatus.status, 5)
+                    this.setState({ ...this.state, descrConta: '' })
+                    this.setState({ ...this.state, visible: false })
+                }
+            } catch (error) {
+                message.error('Conta Não pode ser Inserida, Error ' + resultStatus.status, 5)
             }
         } else {
             const args = {
                 message: 'Preencha todos os dados do Formulário',
+
                 description:
                     'Para Inserir uma conta é necessário que seja informado todos os campos',
                 duration: 5,
@@ -94,7 +99,7 @@ class ModalAcount extends React.Component {
     }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         acount: state.acount
     }

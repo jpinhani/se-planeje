@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, Select, notification, message } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -84,9 +85,7 @@ class ModalCategory extends React.Component {
     }
 
     async ComboDependencia(tipo, nivel) {
-        const userID = localStorage.getItem('userId')
-        console.log("Variaveis estão indo assim", userID, ' - ', tipo, ' - ', nivel)
-        const endpoint = `http://seplaneje-com.umbler.net/api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
+        const endpoint = `${urlBackend}api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
 
@@ -101,7 +100,7 @@ class ModalCategory extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/categorias/'
+        const endpointAPI = `${urlBackend}api/categorias/`
 
 
         const updateTipoValue = () => this.state.tipo === 'DESPESA' | this.state.tipo === 'RECEITA' ? this.state.alterTipo : this.state.tipo
@@ -110,7 +109,7 @@ class ModalCategory extends React.Component {
 
         const body = {
             id: this.state.alterId,
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             dependencia: updateDepenciaValue(),
             descrCategoria: this.state.descrCategoria,
             nivel: this.state.nivelInput,
@@ -138,10 +137,11 @@ class ModalCategory extends React.Component {
             };
             notification.open(args);
         } else {
-            await axios.put(endpointAPI, body)
+
+            await axios.put(endpointAPI, body, config)
 
             const userID = localStorage.getItem('userId')
-            const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
+            const endpoint = `${urlBackend}api/categorias/${userID}`
 
             const novosDados = await axios.get(endpoint)
 

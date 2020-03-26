@@ -1,11 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { listExpensesPaga } from '../../store/actions/generalExpenseRealAction'
 import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 // import Menu from '../../components/MenuDespesaPrevista'
+
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
+
 import { Table, Icon, Popover, Input } from 'antd'
+import { urlBackend, userID } from '../../routes/urlBackEnd'
+
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -88,8 +93,7 @@ class SelectDespesaReal extends React.Component {
 
 
     async requestAPI() {
-        const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/paga/${userID}`
+        const endpointAPI = `${urlBackend}api/despesas/paga/${userID}`
         const result = await axios.get(endpointAPI)
         const despesa = result.data
         this.props.listExpensesPaga(despesa)

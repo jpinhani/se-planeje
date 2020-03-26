@@ -1,9 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { listExpenses } from '../../store/actions/generalExpenseAction'
 import SearchFilter from '../../components/searchFilterTable'
+
 import { Table, Input } from 'antd'
 import DespesaPagar from '../../components/Modal/DespesaPagar'
+import { urlBackend, userID } from '../../routes/urlBackEnd'
+
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -70,8 +74,8 @@ class SelectDespesaPagar extends React.Component {
 
 
     async requestAPI() {
-        const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
+
+        const endpointAPI = `${urlBackend}api/despesas/${userID}`
         const result = await axios.get(endpointAPI)
         const despesa = result.data
         this.props.listExpenses(despesa)

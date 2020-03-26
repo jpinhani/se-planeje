@@ -1,7 +1,9 @@
 import React from 'react'
 import { Card } from 'antd'
+
 import Pagamentos from '../SelectDespesaRealizada'
 import Metas from '../SelectDespesaPagar'
+import Faturas from '../SelectFaturaPagar'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -9,17 +11,22 @@ import './styles.scss'
 const tabList = [
     {
         key: 'tab1',
-        tab: 'Metas Previstas',
+        tab: 'Metas',
     },
     {
         key: 'tab2',
-        tab: 'Lançamentos Realizados',
+        tab: 'Lançamentos',
     },
+    {
+        key: 'tab3',
+        tab: 'Faturas',
+    }
 ];
 
 const contentList = {
     tab1: <Metas />,
     tab2: <Pagamentos />,
+    tab3: <Faturas />
 };
 
 class SelectTabDespesa extends React.Component {

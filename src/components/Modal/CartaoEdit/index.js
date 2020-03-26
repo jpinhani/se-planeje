@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, notification, message } from 'antd'
 import { listCards } from '../../../store/actions/generalCardAction.js'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -25,7 +26,7 @@ class ModalCard extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    /* -------------------------------------  Comandos para Funcionamento do Modal*/
+
     showModal() {
         this.setState({ ...this.state, visible: true })
     };
@@ -33,7 +34,7 @@ class ModalCard extends React.Component {
     handleCancel() {
         this.setState({ ...this.state, visible: false })
     };
-    /* -------------------------------------  Comandos para Funcionamento do Modal*/
+
 
     handleCartao(event) {
         this.setState({ ...this.state, cartao: event.target.value })
@@ -50,12 +51,12 @@ class ModalCard extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/cartoes/${this.props.data.ID}`
+        const endpointAPI = `${urlBackend}api/cartoes/${this.props.data.ID}`
 
         console.log(endpointAPI)
 
         const body = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             cartao: this.state.cartao,
             dtVencimento: this.state.dtVencimento,
             diaCompra: this.state.diacompra,
@@ -64,24 +65,27 @@ class ModalCard extends React.Component {
 
         if (body.cartao !== '' && body.dtVencimento !== '' && body.diaCompra !== '') {
 
-            const resultStatus = await axios.put(endpointAPI, body)
+            const resultStatus = await axios.put(endpointAPI, body, config)
+
             if (resultStatus.status === 200) {
+
                 message.success('   Cartão Editado com Sucesso', 5)
-                const userID = localStorage.getItem('userId')
-                const endpoint = `http://seplaneje-com.umbler.net/api/cartoes/${userID}`
+
+                const endpoint = `${urlBackend}api/cartoes/${userID}`
                 const result = await axios.get(endpoint)
                 const cards = result.data
-                console.log('cards', cards)
 
                 this.props.listCards(cards)
 
                 this.setState({ ...this.state, visible: false })
+
             } else {
                 message.error('  Não foi possivel Editar o Cartão, error ' + resultStatus.status, 5)
             }
         } else {
 
             const args = {
+
                 message: 'Preencha todos os dados do Formulário',
                 description:
                     'Para editar o cartão é necessário que seja informado todos os campos',

@@ -1,0 +1,140 @@
+import React from 'react'
+import { connect } from 'react-redux'
+
+import { Tabs, Table } from 'antd';
+import { urlBackend, userID } from '../../routes/urlBackEnd'
+
+import { listFaturaPaga } from '../../store/actions/generalExpenseRealAction'
+import { listFaturadetalhe } from '../../store/actions/generalFaturaDetalheAction'
+
+import axios from 'axios'
+
+import 'antd/dist/antd.css';
+import './styles.scss'
+
+const { TabPane } = Tabs;
+
+class SelectFaturaPagar extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            mode: 'right',
+            detalheFaturaList: ''
+        };
+
+    }
+
+    columns() {
+        return [
+            {
+                title: 'REF',
+                dataIndex: 'ID',
+                key: 'ID2',
+            },
+            {
+                title: 'DETALHE',
+                dataIndex: 'DESCR_DESPESA',
+                key: 'DESCR_DESPESA',
+            },
+            {
+                title: 'CARD',
+                dataIndex: 'CARTAO',
+                key: 'CARTAO',
+            },
+            {
+                title: 'VENCIMENTO',
+                dataIndex: 'FATURA',
+                key: 'FATURA',
+            },
+            {
+                title: 'R$ PREVISTO',
+                dataIndex: 'VL_PREVISTO',
+                key: 'VL_PREVISTO',
+            },
+            {
+                title: 'R$ REAL',
+                dataIndex: 'VL_REAL',
+                key: 'VL_REAL',
+            },
+            {
+                title: 'ST',
+                dataIndex: 'STATUS',
+                key: 'STATUS',
+            }
+        ]
+    }
+
+
+    async requestAPI() {
+
+        const endpointAPI = `${urlBackend}api/despesas/fatura/${userID}`
+        const result = await axios.get(endpointAPI)
+        const fatura = result.data
+
+        const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID}`
+        const resultDetalhe = await axios.get(endpointAPIDetalhe)
+        const detalhe = resultDetalhe.data
+
+        await this.props.listFaturaPaga(fatura)
+        await this.props.listFaturadetalhe(detalhe)
+    }
+
+    async componentDidMount() {
+        await this.requestAPI()
+
+        const dadosFatura = this.props.expenseReal.map((ID, a) => (
+
+            < TabPane tab={`${ID.ID} - ${a}`} key={a} >
+                <Table className='table table-action'
+                    title={() => <div style={{ display: 'flex' }}>
+                        <div style={{ width: '100%', color: 'blue', fontSize: '14px' }}><h2>Fatura Atual:</h2> R$ {ID.VL_REAL} </div>
+                        <br />
+                        <div style={{ width: '100%', color: 'red', fontSize: '14px' }}><h2>Fatura Estimada: </h2> R$ {ID.VL_FORECAST}</div>
+                    </div>}
+
+                    style={{ height: '100%' }}
+                    columns={this.columns()}
+                    dataSource={this.props.detalheFatura.filter((DATA) => (
+                        DATA.ID === ID.ID
+                    ))}
+                    rowKey={ID => ID.ID_DESPESA}
+                />
+
+            </TabPane >
+        )
+        )
+
+        this.setState({ ...this.state, detalheFaturaList: dadosFatura })
+
+    }
+
+    render() {
+
+        return (
+            <div>
+                <Tabs className='tabs__list'
+                    defaultActiveKey="1"
+                    tabPosition={this.state.mode}
+                    style={{ height: '100%' }}>
+
+                    {this.state.detalheFaturaList}
+                </Tabs>
+            </div >
+        )
+    }
+}
+
+const mapStateToProps = (state /*, ownProps*/) => {
+    return {
+        expenseReal: state.expenseReal,
+        detalheFatura: state.detalheFatura
+    }
+}
+
+const mapDispatchToProps = { listFaturaPaga, listFaturadetalhe }
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SelectFaturaPagar)

@@ -1,11 +1,17 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import axios from 'axios'
+
 import { Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch, Divider } from 'antd'
 import { LikeTwoTone } from '@ant-design/icons';
 import moment from 'moment';
+
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -46,7 +52,13 @@ class ModalExpense extends React.Component {
         this.handleConta = this.handleConta.bind(this)
     }
 
-    showModal() { this.setState({ ...this.state, visible: true }) };
+    async showModal() {
+        await this.loadCategoria()
+        await this.loadCartao()
+        if (this.props.data.ID_CARTAO === 0)
+            this.setState({ ...this.state, visibleConta: false, cartaoInput: 'DÉBITO OU DINHEIRO' })
+        await this.setState({ ...this.state, visible: true })
+    };
 
 
     handleCancel() {
@@ -60,7 +72,6 @@ class ModalExpense extends React.Component {
             this.setState({ ...this.state, visibleEdit: 'Essa Despesa Esta sendo Contabilizada' })
         }
     }
-
 
     handledescricaoDespesa(despesa) {
         this.setState({ ...this.state, descrDespesaInput: despesa.toUpperCase() })
@@ -86,16 +97,10 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, contaInput: valorConta })
     }
 
-    async componentDidMount() {
-        this.loadCategoria()
-        this.loadCartao()
-        if (this.props.data.ID_CARTAO === 0)
-            this.setState({ ...this.state, visibleConta: false, cartaoInput: 'DÉBITO OU DINHEIRO' })
-    }
 
     async loadCategoria() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/category/${userID}`
+
+        const endpoint = `${urlBackend}api/despesas/category/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -104,12 +109,13 @@ class ModalExpense extends React.Component {
                 {desc.DESCR_CATEGORIA}
             </Option>
         )
+
         this.setState({ ...this.state, categoria: options })
     }
 
     async loadCartao() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/despesas/cartao/${userID}`
+
+        const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -118,20 +124,21 @@ class ModalExpense extends React.Component {
                 {desc.CARTAO}
             </Option>
         )
+
         options.push(<Option key='nd' value='DÉBITO OU DINHEIRO'>DÉBITO OU DINHEIRO</Option>)
         this.setState({ ...this.state, cartao: options })
     }
 
     async handleSubmit(event) {
         event.preventDefault()
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/despesas/pagar/${this.props.data.ID}`
+        const endpointAPI = `${urlBackend}api/despesas/pagar/${this.props.data.ID}`
 
         const valueStatus = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? 'Pagamento Realizado' : 'Fatura Pronta Para Pagamento'
         const valueData = this.state.dataRealInput ? this.state.dataRealInput : moment(new Date(), dateFormat)
         const valueCartao = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? null : this.state.cartaoInput
 
         const body = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             valueEdit: this.state.visibleEdit,
             idGrupo: this.props.data.ID_GRUPO,
             categoria: this.state.categoriaInput,
@@ -145,7 +152,6 @@ class ModalExpense extends React.Component {
             dataReal: valueData,
             status: valueStatus,
         }
-        console.log('body', body)
 
         const data = moment(body.dataReal, "DD/MM/YYYY");
         body.dataReal = data.format("YYYY-MM-DD")
@@ -162,22 +168,25 @@ class ModalExpense extends React.Component {
                     'Para editar uma despesa é necessário que seja informado todos os campos',
                 duration: 5,
             };
+
             notification.open(args);
+
         } else {
-            const resulStatus = await axios.put(endpointAPI, body)
+            const resulStatus = await axios.put(endpointAPI, body, config)
 
             if (resulStatus.status === 200) {
                 message.success('Despesa contabilizada com Sucesso', 7)
 
                 const userID = localStorage.getItem('userId')
-                const endpointAPIAll = `http://seplaneje-com.umbler.net/api/despesas/${userID}`
+                const endpointAPIAll = `${urlBackend}api/despesas/${userID}`
+
                 const result = await axios.get(endpointAPIAll)
                 const despesa = result.data
 
-
-                const endpointAPIAllPaga = `http://seplaneje-com.umbler.net/api/despesas/paga/${userID}`
+                const endpointAPIAllPaga = `${urlBackend}api/despesas/paga/${userID}`
                 const resultPaga = await axios.get(endpointAPIAllPaga)
                 const despesaPaga = resultPaga.data
+
                 this.handleCancel()
                 this.props.listExpensesPaga(despesaPaga)
                 this.props.listExpenses(despesa)
@@ -317,7 +326,7 @@ class ModalExpense extends React.Component {
     }
 }
 
-const mapStateToProps = (state/*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         expense: state.expense,
         expenseReal: state.expenseReal,

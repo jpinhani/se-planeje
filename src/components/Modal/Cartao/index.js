@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, message, notification } from 'antd'
 import { listCards } from '../../../store/actions/generalCardAction.js'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css'
 import './styles.scss'
 
@@ -26,9 +27,7 @@ class ModalCard extends React.Component {
     }
 
 
-
     handleCancel() { this.setState({ ...this.state, visible: false }) };
-
 
     handleCartao(event) { this.setState({ ...this.state, cartao: event.target.value }) };
 
@@ -41,10 +40,10 @@ class ModalCard extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/cartoes'
+        const endpointAPI = `${urlBackend}api/cartoes`
 
         const body = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             cartao: this.state.cartao,
             dtVencimento: this.state.dtVencimento,
             diaCompra: this.state.diacompra,
@@ -52,12 +51,13 @@ class ModalCard extends React.Component {
         }
         if (body.cartao.length > '' && body.dtVencimento.length > '' && body.diaCompra.length > '') {
 
-            const ResultStatus = await axios.post(endpointAPI, body)
+            const ResultStatus = await axios.post(endpointAPI, body, config)
 
             if (ResultStatus.status === 200) {
+
                 message.success('  Cartão Cadastrado com Sucesso', 5)
-                const userID = localStorage.getItem('userId')
-                const endpoint = `http://seplaneje-com.umbler.net/api/cartoes/${userID}`
+
+                const endpoint = `${urlBackend}api/cartoes/${userID}`
 
                 const result = await axios.get(endpoint)
 

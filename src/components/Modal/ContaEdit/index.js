@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, message, notification } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -41,27 +44,28 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/contas/${this.props.data.ID}`
+        const endpointAPI = `${urlBackend}api/contas/${this.props.data.ID}`
 
         const body = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
         if (body.descrConta !== '') {
-            const resultStatus = await axios.put(endpointAPI, body)
+
+            const resultStatus = await axios.put(endpointAPI, body, config)
+            console.log('resultStatus', resultStatus)
 
             if (resultStatus.status === 200) {
+
                 message.success(' Conta Editada Com Sucesso ', 5)
-                const userID = localStorage.getItem('userId')
-                const endpoint = `http://seplaneje-com.umbler.net/api/contas/${userID}`
+                const endpoint = `${urlBackend}api/contas/${userID}`
 
                 const result = await axios.get(endpoint)
                 const acounts = result.data
 
                 this.props.listAcounts(acounts)
 
-                // this.setState({ ...this.state, descrConta: '' })
                 this.setState({ ...this.state, visible: false })
             } else {
                 message.error(' Conta não pode ser modificada, error ' + resultStatus.status, 5)

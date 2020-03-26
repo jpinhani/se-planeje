@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Icon, Modal, Input, Select, notification, message } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -74,8 +75,8 @@ class ModalCategory extends React.Component {
     }
 
     async ComboDependencia(tipo, nivel) {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
+
+        const endpoint = `${urlBackend}api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
 
@@ -90,10 +91,10 @@ class ModalCategory extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/categorias/'
+        const endpointAPI = `${urlBackend}api/categorias/`
 
         const body = {
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             dependencia: this.state.dependenciaInput,
             descrCategoria: this.state.descrCategoria,
             nivel: this.state.nivelInput,
@@ -122,8 +123,8 @@ class ModalCategory extends React.Component {
             notification.open(args);
         } else {
 
-            await axios.post(endpointAPI, body)
-            const userID = localStorage.getItem('userId')
+            await axios.post(endpointAPI, body, config)
+
             const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
 
             const novosDados = await axios.get(endpoint)

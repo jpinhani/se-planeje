@@ -13,4 +13,16 @@ const listExpensesPaga = expenseReals => {
     })
 }
 
-export { addExpense, listExpensesPaga }
+
+const listFaturaPaga = FaturaReal => {
+
+    console.log('action', FaturaReal)
+
+    return ({
+        type: 'LIST_FATURAREAL',
+        payload: FaturaReal
+    })
+}
+
+
+export { addExpense, listExpensesPaga, listFaturaPaga }

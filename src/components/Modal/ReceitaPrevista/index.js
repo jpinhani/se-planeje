@@ -1,9 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import axios from 'axios'
 import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Radio } from 'antd'
 import moment from 'moment';
+
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
+import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -12,7 +16,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
-// const dataAtual = moment(new Date(), dateFormat)
+
 class ModalRevenue extends React.Component {
     constructor(props) {
         super(props)
@@ -43,7 +47,10 @@ class ModalRevenue extends React.Component {
         this.handleDayValue = this.handleDayValue.bind(this)
     }
 
-    showModal() { this.setState({ ...this.state, visible: true }) };
+    async  showModal() {
+        await this.loadCategoria()
+        await this.setState({ ...this.state, visible: true })
+    };
 
     handleCancel() {
         this.setState({
@@ -87,13 +94,9 @@ class ModalRevenue extends React.Component {
         this.setState({ ...this.state, dayValue: dias })
     }
 
-    componentDidMount() {
-        this.loadCategoria()
-    }
-
     async loadCategoria() {
-        const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/receitas/category/${userID}`
+
+        const endpoint = `${urlBackend}api/receitas/category/${userID}`
 
         const result = await axios.get(endpoint)
 
@@ -102,18 +105,19 @@ class ModalRevenue extends React.Component {
                 {desc.DESCR_CATEGORIA}
             </Option>
         )
+
         this.setState({ ...this.state, categoria: options })
     }
-
 
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/receitas'
+        const endpointAPI = `${urlBackend}/api/receitas`
+
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
         const body = {
             idGrupo: ID(),
-            idUser: localStorage.getItem('userId'),
+            idUser: userID,
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
             categoria: this.state.categoriaInput,
@@ -131,12 +135,13 @@ class ModalRevenue extends React.Component {
             const yyyy = Hoje.getFullYear();
             const dataNova = yyyy + '/' + mm + '/' + dd;
             const dataAtual = dd + '/' + mm + '/' + yyyy;
+
             this.setState({ ...this.state, dataPrevistaInput: dataAtual })
             body.dataPrevista = dataNova;
+
         } else {
             const data = moment(body.dataPrevista, "DD/MM/YYYY");
             body.dataPrevista = data.format("YYYY-MM-DD")
-            console.log('body.dataPrevista', body.dataPrevista)
         }
 
         if (body.dataPrevista === null | body.valorPrevisto === null |
@@ -148,20 +153,26 @@ class ModalRevenue extends React.Component {
                     'Para cadastrar uma nova Receita é necessário que seja informado todos os campos',
                 duration: 5,
             };
+
             notification.open(args);
+
         } else {
 
-            const resulStatus = await axios.post(endpointAPI, body)
+            const resulStatus = await axios.post(endpointAPI, body, config)
+
             if (resulStatus.status === 200) {
+
                 message.success('Receita inserida com Sucesso', 7)
-                const userID = localStorage.getItem('userId')
-                const endpointAPIAll = `http://seplaneje-com.umbler.net/api/receitas/${userID}`
+
+                const endpointAPIAll = `${urlBackend}api/receitas/${userID}`
+
                 const result = await axios.get(endpointAPIAll)
 
                 const receita = result.data
 
                 this.props.listRevenues(receita)
                 this.handleCancel()
+
             } else {
                 message.error(`Não foi possivel inserir a receita, Erro: ${resulStatus.status}`, 7)
             }
@@ -255,7 +266,7 @@ class ModalRevenue extends React.Component {
     }
 }
 
-const mapStateToProps = (state/*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         revenue: state.revenue,
     }

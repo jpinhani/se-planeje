@@ -1,9 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import AddCategory from '../../components/Modal/Categoria/index'
 import EditCategory from '../../components/Modal/CategoriaEdit/index'
+
+import { urlBackend, config, userID } from '../../routes/urlBackEnd'
 import { listCategorys } from '../../store/actions/generalCategoryAction'
 import { Table, Input, Popconfirm, Icon, message, notification } from 'antd'
+
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
@@ -21,8 +25,9 @@ class SelectCategoria extends React.Component {
         this.searchCategory = this.searchCategory.bind(this)
     }
     async deleteAcount(categoriaId) {
-        const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${categoriaId}`
-        const verify = await axios.delete(endpoint)
+        const endpoint = `${urlBackend}api/categorias/${categoriaId}`
+        const verify = await axios.delete(endpoint, config)
+
         if (verify.data.error === true) {
             message.error('   ' + verify.data.message, 5);
         } else {
@@ -33,11 +38,6 @@ class SelectCategoria extends React.Component {
 
     columns() {
         return [
-            // {
-            //     title: 'DEPENDENCIA',
-            //     dataIndex: 'PAI',
-            //     key: '1'
-            // },
             {
                 title: 'CATEGORIA',
                 dataIndex: 'DESCR_CATEGORIA',
@@ -76,10 +76,8 @@ class SelectCategoria extends React.Component {
     }
 
     async requestAPI() {
-        const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
+        const endpointAPI = `${urlBackend}api/categorias/${userID}`
         const novosDados = await axios.get(endpointAPI)
-        console.log('novosDados', novosDados)
 
         let nivel = []
         let n3 = 0
@@ -133,13 +131,13 @@ class SelectCategoria extends React.Component {
             }
         }
 
-        console.log('Forma Como os Dados estão vindo', nivel)
+        // console.log('Forma Como os Dados estão vindo', nivel)
         this.props.listCategorys(nivel)
     }
 
     async ImportCategoryDefault() {
-        const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/categorias/${userID}`
+
+        const endpointAPI = `${urlBackend}api/categorias/${userID}`
         const novosDados = await axios.get(endpointAPI)
 
         if (novosDados.data.length > 3) {
@@ -155,11 +153,14 @@ class SelectCategoria extends React.Component {
             const body = {
                 idUser: userID
             }
-            const endpointAPIDefault = `http://seplaneje-com.umbler.net/api/categorias/default/`
-            const resultStatus = await axios.post(endpointAPIDefault, body)
+            const endpointAPIDefault = `${urlBackend}api/categorias/default/`
+            const resultStatus = await axios.post(endpointAPIDefault, body, config)
+
             if (resultStatus.status === 200) {
+
                 message.success(' O Plano de categorias Padrão do SePlaneje foi importado com Sucesso', 10)
                 this.requestAPI()
+
             } else {
                 message.success(' O Plano de categorias Padrão do SePlaneje não pode ser importado, Error ' + resultStatus.status, 10)
             }
@@ -176,7 +177,7 @@ class SelectCategoria extends React.Component {
     }
 
     async updateList(evento) {
-        const userID = localStorage.getItem('userId')
+
         switch (evento) {
             case '':
 
@@ -184,7 +185,7 @@ class SelectCategoria extends React.Component {
                 break;
 
             default:
-                const endpoint = `http://seplaneje-com.umbler.net/api/categorias/search/${evento}/${userID}`
+                const endpoint = `${urlBackend}api/categorias/search/${evento}/${userID}`
                 const result = await axios.get(endpoint)
                 const categoria = result.data
                 this.props.listCategorys(categoria)

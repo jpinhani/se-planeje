@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { listRevenues } from '../../store/actions/generalRevenueAction'
 import ReceitaPrevista from '../../components/Modal/ReceitaPrevista'
 import Menu from '../../components/MenuReceitaPrevista'
+
+import { urlBackend, userID } from '../../routes/urlBackEnd'
 import EditReceita from '../../components/Modal/ReceitaPrevistaEdit'
 import SearchFilter from '../../components/searchFilterTable'
+
 import { Table, Icon, Popover, Input } from 'antd'
 import axios from 'axios'
 
@@ -73,8 +77,8 @@ class SelectReceitaPrevista extends React.Component {
 
 
     async requestAPI() {
-        const userID = localStorage.getItem('userId')
-        const endpointAPI = `http://seplaneje-com.umbler.net/api/receitas/${userID}`
+
+        const endpointAPI = `${urlBackend}api/receitas/${userID}`
         const result = await axios.get(endpointAPI)
         const receita = result.data
         await this.props.listRevenues(receita)
@@ -107,7 +111,7 @@ class SelectReceitaPrevista extends React.Component {
     }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         revenue: state.revenue
     }

@@ -1,11 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import axios from 'axios'
+
 import AddCartao from '../../components/Modal/Cartao/index'
 import EditCartao from '../../components/Modal/CartaoEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
+
 import { listCards } from '../../store/actions/generalCardAction.js'
+import { urlBackend, config, userID } from '../../routes/urlBackEnd'
 import { Table, Divider, Icon, Input, Popconfirm, message } from 'antd'
-import axios from 'axios'
 
 import 'antd/dist/antd.css';
 import './style.scss'
@@ -22,11 +25,13 @@ class SelectCartao extends React.Component {
   }
 
   async deleteCard(cardId) {
-    const endpoint = `http://seplaneje-com.umbler.net/api/cartoes/${cardId}`
-    const resultStatus = await axios.delete(endpoint)
+    const endpoint = `${urlBackend}api/cartoes/${cardId}`
+    const resultStatus = await axios.delete(endpoint, config)
+
     if (resultStatus.status === 200) {
       message.success('Cartão Excluido com sucesso', 5)
       this.requestAPI()
+
     } else {
       message.error('Não foi possivel excluir o cartão especifico, Error ' + resultStatus.status, 5)
     }
@@ -70,8 +75,9 @@ class SelectCartao extends React.Component {
 
 
   async requestAPI() {
-    const userID = localStorage.getItem('userId')
-    const endpointAPI = `http://seplaneje-com.umbler.net/api/cartoes/${userID}`
+
+    const endpointAPI = `${urlBackend}api/cartoes/${userID}`
+
     const result = await axios.get(endpointAPI)
     const cartao = result.data
     this.props.listCards(cartao)
@@ -85,7 +91,6 @@ class SelectCartao extends React.Component {
   searchCard(event) {
     this.setState({ ...this.state, search: event.target.value })
   }
-
 
   render() {
     return (
