@@ -18,7 +18,7 @@ function Login() {
 
   async function handleSubmit(e) {
 
-
+    e.preventDefault()
     const endpoint = `${urlBackend}api/authenticate`
 
     const body = {
@@ -37,7 +37,7 @@ function Login() {
 
       localStorage.setItem('userId', userId)
 
-      login(token)
+      await login(token)
 
       history.push('/')
     }

@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './style.scss'
 import { Menu, Dropdown, message, Layout } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { logout } from '../../auth/index'
 
 const { Header } = Layout;
-
 
 function handleMenuClick(e) {
     message.info('Click on menu item.');
@@ -32,6 +33,11 @@ const menu = (
     </Menu>
 );
 
+function handleclik() {
+    logout()
+}
+
+
 function PrincipalHeader() {
     return (
         <Header className='cabecalho'>
@@ -42,11 +48,13 @@ function PrincipalHeader() {
                 <Dropdown.Button style={{
 
                     alignSelf: 'right', opacity: 0.7,
+
                 }}
+                    onClick={handleclik}
                     overlay={menu}
                     icon={<UserOutlined />}>
-                    Sair
-              </Dropdown.Button>
+                    <Link to='/'>Sair</Link>
+                </Dropdown.Button>
             </div>
         </Header>
     );
