@@ -17,7 +17,7 @@ function Login() {
   const [password, setPassword] = useState('')
 
   async function handleSubmit(e) {
-    e.preventDefault()
+
 
     const endpoint = `${urlBackend}api/authenticate`
 

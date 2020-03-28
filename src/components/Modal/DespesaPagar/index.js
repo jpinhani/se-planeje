@@ -10,7 +10,7 @@ import moment from 'moment';
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
-import { loadCategoria, loadCartao } from '../../ListagemCombo'
+import { loadCategoria, loadCartao, loadConta } from '../../ListagemCombo'
 
 
 import 'antd/dist/antd.css';
@@ -30,6 +30,7 @@ class ModalExpense extends React.Component {
             visibleEdit: 'Essa Despesa Esta Sendo Contabilizada', //State Para saber se é Amortização ou não
             categoria: this.props.data.ID_CATEGORIA, //Listagem de Categoria
             cartao: this.props.data.ID_CARTAO, //Listagem de Cartão
+            conta: [],
             valorPrevistoInput: this.props.data.VL_PREVISTO2,
             dataPrevistaInput: this.props.data.DATANOVA,
             cartaoInput: this.props.data.ID_CARTAO, //Cartão Selecionado no Click
@@ -54,8 +55,15 @@ class ModalExpense extends React.Component {
     async showModal() {
         const resultCategoria = await loadCategoria()
         const resultCartao = await loadCartao()
+        const resultConta = await loadConta()
 
-        this.setState({ ...this.state, categoria: resultCategoria, cartao: resultCartao, visible: true })
+        this.setState({
+            ...this.state,
+            categoria: resultCategoria,
+            cartao: resultCartao,
+            conta: resultConta,
+            visible: true
+        })
 
         if (this.props.data.ID_CARTAO === 0)
             this.setState({ ...this.state, visibleConta: false, cartaoInput: 'DÉBITO OU DINHEIRO' })
@@ -222,7 +230,7 @@ class ModalExpense extends React.Component {
                             disabled={this.state.visibleConta}
                             onSelect={this.handleConta}
                         >
-                            {this.state.cartao}
+                            {this.state.conta}
                         </Select>
 
                         <TextArea

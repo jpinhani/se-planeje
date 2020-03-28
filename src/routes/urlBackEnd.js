@@ -1,6 +1,6 @@
 
-const urlBackend = 'http://seplaneje-com.umbler.net/'
-// const urlBackend = 'http://localhost:8082/'
+// const urlBackend = 'http://seplaneje-com.umbler.net/'
+const urlBackend = 'http://localhost:8082/'
 
 
 const USER_TOKEN = localStorage.getItem('token');

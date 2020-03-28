@@ -12,7 +12,7 @@ import { Table, Icon, Input, Popconfirm, message } from 'antd'
 import axios from 'axios'
 
 import 'antd/dist/antd.css';
-import './styles.scss'
+import '../SelectConta/styles.scss'
 
 class SelectConta extends React.Component {
   constructor(props) {
@@ -94,8 +94,8 @@ class SelectConta extends React.Component {
           <AddAcount />
           <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />
         </div>
-        <div className='headerTable'>
-          <Table
+        <div>
+          <Table className='table table-action'
             columns={this.columns()}
             dataSource={SearchFilter(this.props.acount, ['DESCR_CONTA'], this.state.search)}
             rowKey='ID' />

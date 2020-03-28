@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Icon, Modal, Input, message, notification } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { logout, isLogged } from '../../../auth/index'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -50,9 +51,10 @@ class ModalAcount extends React.Component {
 
 
         if (body.descrConta !== '') {
-            const resultStatus = await axios.post(endpointAPI, body, config)
-            console.log('resultStatus', resultStatus)
+            let resultStatus = 0
             try {
+                resultStatus = await axios.post(endpointAPI, body, config)
+
                 if (resultStatus.status === 200) {
                     message.success('   Conta Registrada com Sucesso ', 5)
                     const endpoint = `${urlBackend}api/contas/${userID}`
@@ -66,7 +68,11 @@ class ModalAcount extends React.Component {
                     this.setState({ ...this.state, visible: false })
                 }
             } catch (error) {
-                message.error('Conta Não pode ser Inserida, Error ' + resultStatus.status, 5)
+                const stat = error.response.status
+                error.response.status === 401 ? logout() : isLogged()
+                stat === 401
+                    ? message.error('Erro de Autenticação, sua Seção expirou, logue novamente, Error ', 5)
+                    : message.error('Conta Não pode ser Inserida, Error ' + error.message, 5)
             }
         } else {
             const args = {
