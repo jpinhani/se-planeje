@@ -102,7 +102,7 @@ class ModalRevenue extends React.Component {
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
         const body = {
             idGrupo: ID(),
-            idUser: userID,
+            idUser: userID(),
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
             categoria: this.state.categoriaInput,
@@ -149,7 +149,7 @@ class ModalRevenue extends React.Component {
 
                 message.success('Receita inserida com Sucesso', 7)
 
-                const endpointAPIAll = `${urlBackend}api/receitas/${userID}`
+                const endpointAPIAll = `${urlBackend}api/receitas/${userID()}`
 
                 const result = await axios.get(endpointAPIAll)
 

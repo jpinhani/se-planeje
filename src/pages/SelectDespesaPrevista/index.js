@@ -82,7 +82,7 @@ class SelectDespesaPrevista extends React.Component {
 
 
     async requestAPI() {
-        const endpointAPI = `${urlBackend}api/despesas/${userID}`
+        const endpointAPI = `${urlBackend}api/despesas/${userID()}`
         const result = await axios.get(endpointAPI)
         const despesa = result.data
         await this.props.listExpenses(despesa)

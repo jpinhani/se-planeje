@@ -78,7 +78,7 @@ class SelectReceitaPrevista extends React.Component {
 
     async requestAPI() {
 
-        const endpointAPI = `${urlBackend}api/receitas/${userID}`
+        const endpointAPI = `${urlBackend}api/receitas/${userID()}`
         const result = await axios.get(endpointAPI)
         const receita = result.data
         await this.props.listRevenues(receita)

@@ -56,7 +56,7 @@ class ModalCard extends React.Component {
         console.log(endpointAPI)
 
         const body = {
-            idUser: userID,
+            idUser: userID(),
             cartao: this.state.cartao,
             dtVencimento: this.state.dtVencimento,
             diaCompra: this.state.diacompra,
@@ -71,7 +71,7 @@ class ModalCard extends React.Component {
 
                 message.success('   Cartão Editado com Sucesso', 5)
 
-                const endpoint = `${urlBackend}api/cartoes/${userID}`
+                const endpoint = `${urlBackend}api/cartoes/${userID()}`
                 const result = await axios.get(endpoint)
                 const cards = result.data
 

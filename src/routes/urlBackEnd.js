@@ -9,6 +9,6 @@ const config = {
     headers: { Authorization: `Bearer ${USER_TOKEN}` }
 };
 
-const userID = localStorage.getItem('userId')
+const userID = () => localStorage.getItem('userId')
 
 export { urlBackend, config, userID }

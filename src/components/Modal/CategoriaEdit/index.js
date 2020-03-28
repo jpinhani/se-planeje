@@ -85,7 +85,7 @@ class ModalCategory extends React.Component {
     }
 
     async ComboDependencia(tipo, nivel) {
-        const endpoint = `${urlBackend}api/categorias/comboDependencia/${userID}/${tipo}/${nivel}`
+        const endpoint = `${urlBackend}api/categorias/comboDependencia/${userID()}/${tipo}/${nivel}`
 
         const result = await axios.get(endpoint)
 
@@ -109,7 +109,7 @@ class ModalCategory extends React.Component {
 
         const body = {
             id: this.state.alterId,
-            idUser: userID,
+            idUser: userID(),
             dependencia: updateDepenciaValue(),
             descrCategoria: this.state.descrCategoria,
             nivel: this.state.nivelInput,
@@ -140,8 +140,7 @@ class ModalCategory extends React.Component {
 
             await axios.put(endpointAPI, body, config)
 
-            const userID = localStorage.getItem('userId')
-            const endpoint = `${urlBackend}api/categorias/${userID}`
+            const endpoint = `${urlBackend}api/categorias/${userID()}`
 
             const novosDados = await axios.get(endpoint)
 

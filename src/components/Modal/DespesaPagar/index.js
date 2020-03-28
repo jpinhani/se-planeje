@@ -117,7 +117,7 @@ class ModalExpense extends React.Component {
         const valueCartao = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? null : this.state.cartaoInput
 
         const body = {
-            idUser: userID,
+            idUser: userID(),
             valueEdit: this.state.visibleEdit,
             idGrupo: this.props.data.ID_GRUPO,
             categoria: this.state.categoriaInput,
@@ -157,12 +157,12 @@ class ModalExpense extends React.Component {
                 message.success('Despesa contabilizada com Sucesso', 7)
 
 
-                const endpointAPIAll = `${urlBackend}api/despesas/${userID}`
+                const endpointAPIAll = `${urlBackend}api/despesas/${userID()}`
 
                 const result = await axios.get(endpointAPIAll)
                 const despesa = result.data
 
-                const endpointAPIAllPaga = `${urlBackend}api/despesas/paga/${userID}`
+                const endpointAPIAllPaga = `${urlBackend}api/despesas/paga/${userID()}`
                 const resultPaga = await axios.get(endpointAPIAllPaga)
                 const despesaPaga = resultPaga.data
 

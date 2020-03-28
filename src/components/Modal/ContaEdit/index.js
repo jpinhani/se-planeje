@@ -47,7 +47,7 @@ class ModalAcount extends React.Component {
         const endpointAPI = `${urlBackend}api/contas/${this.props.data.ID}`
 
         const body = {
-            idUser: userID,
+            idUser: userID(),
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
@@ -59,7 +59,7 @@ class ModalAcount extends React.Component {
             if (resultStatus.status === 200) {
 
                 message.success(' Conta Editada Com Sucesso ', 5)
-                const endpoint = `${urlBackend}api/contas/${userID}`
+                const endpoint = `${urlBackend}api/contas/${userID()}`
 
                 const result = await axios.get(endpoint)
                 const acounts = result.data

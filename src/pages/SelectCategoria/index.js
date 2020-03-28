@@ -76,7 +76,7 @@ class SelectCategoria extends React.Component {
     }
 
     async requestAPI() {
-        const endpointAPI = `${urlBackend}api/categorias/${userID}`
+        const endpointAPI = `${urlBackend}api/categorias/${userID()}`
         const novosDados = await axios.get(endpointAPI)
 
         let nivel = []
@@ -185,7 +185,7 @@ class SelectCategoria extends React.Component {
                 break;
 
             default:
-                const endpoint = `${urlBackend}api/categorias/search/${evento}/${userID}`
+                const endpoint = `${urlBackend}api/categorias/search/${evento}/${userID()}`
                 const result = await axios.get(endpoint)
                 const categoria = result.data
                 this.props.listCategorys(categoria)

@@ -124,7 +124,7 @@ class ModalExpense extends React.Component {
         const endpointAPI = `${urlBackend}api/despesas/${this.props.data.ID}`
 
         const body = {
-            idUser: userID,
+            idUser: userID(),
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
             cartao: this.state.cartaoInput,
@@ -176,7 +176,7 @@ class ModalExpense extends React.Component {
             if (resulStatus.status === 200) {
                 message.success('Despesa Editada com Sucesso', 7)
 
-                const endpointAPIAll = `${urlBackend}api/despesas/${userID}`
+                const endpointAPIAll = `${urlBackend}api/despesas/${userID()}`
 
                 const result = await axios.get(endpointAPIAll)
                 const despesa = result.data

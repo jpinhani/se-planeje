@@ -76,7 +76,7 @@ class SelectCartao extends React.Component {
 
   async requestAPI() {
 
-    const endpointAPI = `${urlBackend}api/cartoes/${userID}`
+    const endpointAPI = `${urlBackend}api/cartoes/${userID()}`
 
     const result = await axios.get(endpointAPI)
     const cartao = result.data

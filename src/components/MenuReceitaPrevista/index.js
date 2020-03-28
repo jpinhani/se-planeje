@@ -19,7 +19,7 @@ export default (props) => {
 
     async function handleDelete() {
         const valor = {
-            idUser: userID,
+            idUser: userID(),
             dataPrevista: props.data.DATANOVA,
             valorPrevisto: props.data.VL_PREVISTO2,
             categoria: props.data.ID_CATEGORIA,

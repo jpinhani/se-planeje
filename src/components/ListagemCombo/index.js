@@ -8,7 +8,7 @@ const { Option } = Select;
 
 async function loadCategoriaReceita() {
 
-    const endpoint = `${urlBackend}api/receitas/category/${userID}`
+    const endpoint = `${urlBackend}api/receitas/category/${userID()}`
 
     const result = await axios.get(endpoint)
 
@@ -23,7 +23,7 @@ async function loadCategoriaReceita() {
 
 async function loadCategoria() {
 
-    const endpoint = `${urlBackend}api/despesas/category/${userID}`
+    const endpoint = `${urlBackend}api/despesas/category/${userID()}`
     const result = await axios.get(endpoint)
 
     const options = result.data.map((desc, i) =>
@@ -37,7 +37,7 @@ async function loadCategoria() {
 
 async function loadCartao() {
 
-    const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
+    const endpoint = `${urlBackend}api/despesas/cartao/${userID()}`
     const result = await axios.get(endpoint)
 
     const options = result.data.map((desc, i) =>
@@ -55,7 +55,7 @@ async function loadCartao() {
 
 async function loadCartaoReal() {
 
-    const endpoint = `${urlBackend}api/despesas/cartao/${userID}`
+    const endpoint = `${urlBackend}api/despesas/cartao/${userID()}`
     const result = await axios.get(endpoint)
 
     const options = result.data.map((desc, i) =>
@@ -70,7 +70,7 @@ async function loadCartaoReal() {
 
 async function loadConta() {
 
-    const endpoint = `${urlBackend}api/contas/${userID}`
+    const endpoint = `${urlBackend}api/contas/${userID()}`
     const result = await axios.get(endpoint)
 
     const options = result.data.map((desc, i) =>

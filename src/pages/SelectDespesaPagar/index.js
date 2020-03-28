@@ -75,7 +75,7 @@ class SelectDespesaPagar extends React.Component {
 
     async requestAPI() {
 
-        const endpointAPI = `${urlBackend}api/despesas/${userID}`
+        const endpointAPI = `${urlBackend}api/despesas/${userID()}`
         const result = await axios.get(endpointAPI)
         const despesa = result.data
         this.props.listExpenses(despesa)

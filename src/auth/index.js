@@ -1,4 +1,7 @@
-const login = token => localStorage.setItem('token', token)
+const login = (token, userId) => {
+    localStorage.setItem('userId', userId)
+    localStorage.setItem('token', token)
+}
 
 const logout = () => {
 

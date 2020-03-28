@@ -68,11 +68,11 @@ class SelectFaturaPagar extends React.Component {
 
     async requestAPI() {
 
-        const endpointAPI = `${urlBackend}api/despesas/fatura/${userID}`
+        const endpointAPI = `${urlBackend}api/despesas/fatura/${userID()}`
         const result = await axios.get(endpointAPI)
         const fatura = result.data
 
-        const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID}`
+        const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID()}`
         const resultDetalhe = await axios.get(endpointAPIDetalhe)
         const detalhe = resultDetalhe.data
 

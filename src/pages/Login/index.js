@@ -32,12 +32,10 @@ function Login() {
 
     if (response.status === 200) {
 
-      const token = response.data.token
-      const userId = response.data.user.ID
+      const token = await response.data.token
+      const userId = await response.data.user.ID
 
-      localStorage.setItem('userId', userId)
-
-      await login(token)
+      login(token, userId)
 
       history.push('/')
     }

@@ -105,7 +105,7 @@ class ModalRevenue extends React.Component {
         const endpointAPI = `${urlBackend}api/receitas/${this.props.data.ID}`
 
         const body = {
-            idUser: userID,
+            idUser: userID(),
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
             categoria: this.state.categoriaInput,
@@ -156,7 +156,7 @@ class ModalRevenue extends React.Component {
 
                 message.success('Receita Editada com Sucesso', 7)
 
-                const endpointAPIAll = `${urlBackend}api/receitas/${userID}`
+                const endpointAPIAll = `${urlBackend}api/receitas/${userID()}`
                 const result = await axios.get(endpointAPIAll)
                 const receita = result.data
 

@@ -72,7 +72,7 @@ class SelectConta extends React.Component {
 
   async requestAPI() {
 
-    const endpointAPI = `${urlBackend}api/contas/${userID}`
+    const endpointAPI = `${urlBackend}api/contas/${userID()}`
 
     const result = await axios.get(endpointAPI)
     const conta = result.data

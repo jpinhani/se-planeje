@@ -44,7 +44,7 @@ class ModalAcount extends React.Component {
         const endpointAPI = `${urlBackend}api/contas`
 
         const body = {
-            idUser: userID,
+            idUser: userID(),
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
@@ -57,7 +57,7 @@ class ModalAcount extends React.Component {
 
                 if (resultStatus.status === 200) {
                     message.success('   Conta Registrada com Sucesso ', 5)
-                    const endpoint = `${urlBackend}api/contas/${userID}`
+                    const endpoint = `${urlBackend}api/contas/${userID()}`
 
                     const result = await axios.get(endpoint)
                     const acounts = result.data
