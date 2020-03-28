@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch } from 'antd'
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
-import { loadCartao, loadCategoria } from '../../ListagemCombo'
+import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -16,79 +16,96 @@ const { TextArea } = Input;
 
 const dateFormat = 'DD/MM/YYYY'
 
+
 class ModalExpense extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             visible: false,
-            value: 1,
-            dayVisible: true,
-            tipoParcela: true,
-            dayValue: null,
-            visibleEdit: 'Apenas essa parcela será alterada',
-            categoria: this.props.data.ID_CATEGORIA,
-            cartao: this.props.data.ID_CARTAO,
-            valorPrevistoInput: this.props.data.VL_PREVISTO2,
-            dataPrevistaInput: this.props.data.DATANOVA,
-            cartaoInput: this.props.data.ID_CARTAO,
-            parcelasInput: this.props.data.NUM_PARCELA,
+            visibleEdit: this.props.data.DESCR_CONTA === null ? 'CRÉDITO' : 'A VISTA',
+            check: this.props.data.DESCR_CONTA === null ? true : false,
+            stateConta: this.props.data.DESCR_CONTA === null ? true : false,
+            stateCartao: this.props.data.DESCR_CONTA === null ? false : true,
+            categoria: [],
+            cartao: [],
+            conta: [],
+            valorRealInput: this.props.data.VL_REAL2,
+            dataRealInput: this.props.data.DATANOVAREAL,
+            cartaoInput: this.props.data.CARTAO === null ? [] : this.props.data.ID_CARTAO,
             categoriaInput: this.props.data.ID_CATEGORIA,
+            contaInput: this.props.data.DESCR_CONTA === null ? [] : this.props.data.ID_CONTA,
             descrDespesaInput: this.props.data.DESCR_DESPESA,
         }
 
+        console.log(this.props.data.DT_REAL)
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleValorPrevisto = this.handleValorPrevisto.bind(this)
-        this.handleDataPrevisto = this.handleDataPrevisto.bind(this)
+        this.handleValorReal = this.handleValorReal.bind(this)
+        this.handleDataReal = this.handleDataReal.bind(this)
         this.handleCartao = this.handleCartao.bind(this)
-        this.handleParcelas = this.handleParcelas.bind(this)
         this.handleCategoria = this.handleCategoria.bind(this)
         this.handledescricaoDespesa = this.handledescricaoDespesa.bind(this)
-        this.handleEdit = this.handleEdit.bind(this)
-        this.handleValue = this.handleValue.bind(this)
-        this.handleDayValue = this.handleDayValue.bind(this)
+        this.handleConta = this.handleConta.bind(this)
+        this.handletipoPagamento = this.handletipoPagamento.bind(this)
     }
 
     async showModal() {
         const resultCategoria = await loadCategoria()
-        const resultCartao = await loadCartao()
+        const resultCartao = await loadCartaoReal()
+        const resultConta = await loadConta()
 
-        this.setState({ ...this.state, categoria: resultCategoria, cartao: resultCartao, visible: true })
-
-        if (this.props.data.ID_CARTAO === 0)
-            this.setState({ ...this.state, cartaoInput: 'DÉBITO OU DINHEIRO' })
-
+        this.setState({
+            ...this.state,
+            categoria: resultCategoria,
+            cartao: resultCartao,
+            conta: resultConta,
+            visible: true
+        })
     };
 
+    handletipoPagamento(value) {
+
+        value === true
+            ? this.setState({
+                ...this.state, visibleEdit: `CRÉDITO`,
+                stateConta: true,
+                contaInput: [],
+                check: true,
+                stateCartao: false
+            })
+            : this.setState({
+                ...this.state, visibleEdit: `A VISTA`,
+                stateConta: false,
+                cartaoInput: [],
+                check: false,
+                stateCartao: true
+            })
+
+    }
 
     handleCancel() {
-        this.setState({ ...this.state, visible: false })
+        this.setState({
+            ...this.state,
+            visible: false
+        })
     };
 
-    handleEdit(valor) {
-        if (valor === true) {
-            this.setState({ ...this.state, tipoParcela: false, visibleEdit: `Todas as despesas a partir da ${this.state.parcelasInput}º parcela serão alteradas` })
-        } else {
-            this.setState({ ...this.state, dayValue: null, dayVisible: true, tipoParcela: true, visibleEdit: 'Apenas essa parcela será alterada' })
-        }
+    handleValorReal(valor) {
+        this.setState({ ...this.state, valorRealInput: valor })
     }
 
-    handleValorPrevisto(valor) {
-        this.setState({ ...this.state, valorPrevistoInput: valor })
-    }
-
-    handleDataPrevisto(date, dateString) {
-        this.setState({ ...this.state, dataPrevistaInput: dateString })
+    handleDataReal(date, dateString) {
+        this.setState({ ...this.state, dataRealInput: dateString })
     }
 
     handleCartao(card) {
         this.setState({ ...this.state, cartaoInput: card })
     }
 
-    handleParcelas(num) {
-        this.setState({ ...this.state, parcelasInput: num })
+    handleConta(acount) {
+        this.setState({ ...this.state, contaInput: acount })
     }
 
     handleCategoria(Categorys) {
@@ -99,158 +116,130 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, descrDespesaInput: despesa.toUpperCase() })
     }
 
-    handleValue = e => {
-        if (e.target.value === 3) {
-            this.setState({ ...this.state, dayVisible: false, value: e.target.value });
-        } else {
-            this.setState({ ...this.state, dayValue: null, dayVisible: true, value: e.target.value });
-        }
-    };
-
-    handleDayValue(dias) {
-        this.setState({ ...this.state, dayValue: dias })
-    }
-
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/despesas/real/${this.props.data.ID}`
+        const endpointAPI = `${urlBackend}api/despesas/real/${userID()}`
+
+        const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
         const body = {
+            id: this.props.data.ID,
+            idGrupo: ID(),
             idUser: userID(),
-            dataPrevista: this.state.dataPrevistaInput,
-            valorPrevisto: this.state.valorPrevistoInput,
+            dataReal: moment(this.state.dataRealInput, "DD/MM/YYYY"),
+            valorReal: this.state.valorRealInput,
             cartao: this.state.cartaoInput,
+            conta: this.state.contaInput,
             categoria: this.state.categoriaInput,
-            parcela: this.state.parcelasInput,
+            parcela: '1',
             descrDespesa: this.state.descrDespesaInput,
-            valueEdit: this.state.visibleEdit,
-            idGrupo: this.props.data.ID_GRUPO,
-            tipoParcela: this.state.value,
-            dayValue: this.state.dayValue,
-            status: "Ativo",
-        }
-        console.log(body)
-        if (body.cartao === 'DÉBITO OU DINHEIRO') {
-            body.cartao = null
-            body.status = 'Esperando Pagamento'
-        } else {
-            body.status = 'Fatura Pendente'
+            status: this.state.visibleEdit === 'A VISTA'
+                ? 'Pagamento Realizado'
+                : 'Fatura Pronta Para Pagamento',
         }
 
-        if (body.dataPrevista === undefined) {
-            let Hoje = new Date();
-            const mm = Hoje.getMonth() + 1;
-            const dd = Hoje.getDate();
-            const yyyy = Hoje.getFullYear();
-            const dataNova = yyyy + '/' + mm + '/' + dd;
-            const dataAtual = dd + '/' + mm + '/' + yyyy;
-            this.setState({ ...this.state, dataPrevistaInput: dataAtual })
-            body.dataPrevista = dataNova;
+        const data = moment(body.dataReal, "DD/MM/YYYY");
+        body.dataReal = data.format("YYYY-MM-DD")
 
-        } else {
-            const data = moment(body.dataPrevista, "DD/MM/YYYY");
-            body.dataPrevista = data.format("YYYY-MM-DD")
-            console.log('body.dataPrevista', body.dataPrevista)
-        }
-
-        if (body.dataPrevista === null | body.valorPrevisto === null |
-            body.categoria.length === 0 | body.parcela.length === 0 | body.descrDespesa.length === 0) {
+        console.log(body.dataReal)
+        if (body.dataReal === null |
+            body.valorReal === null |
+            body.categoria.length === 0 |
+            body.descrDespesa.length === 0 |
+            (body.conta.length === 0 && body.cartao.length === 0)) {
 
             const args = {
                 message: 'Preencha todos os dados do Formulário',
                 description:
-                    'Para editar uma despesa é necessário que seja informado todos os campos',
+                    'Para alterar uma despesa é necessário que seja informado todos os campos',
                 duration: 5,
             };
-
             notification.open(args);
 
         } else {
 
             const resulStatus = await axios.put(endpointAPI, body, config)
-
             if (resulStatus.status === 200) {
 
-                message.success('Despesa Editada com Sucesso', 7)
+                message.success('Despesa Alterada com Sucesso', 7)
 
-                const endpointAPIAll = `${urlBackend}api/despesas/real/${userID()}`
+                const endpointAPIAll = `${urlBackend}api/despesas/paga/${userID()}`
                 const result = await axios.get(endpointAPIAll)
+
                 const despesa = result.data
                 this.handleCancel()
                 this.props.listExpensesPaga(despesa)
 
             } else {
-                message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
+                message.error(`Não foi possivel alterar a Despesa, Erro: ${resulStatus.status}`, 7)
             }
-
         }
-
     }
 
     render() {
 
         return (
             <div>
-                <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Despesa Prevista' theme="twoTone" onClick={this.showModal} />
-
+                <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Adicionar nova Despesa Prevista' theme="twoTone" onClick={this.showModal} />
 
                 <form onSubmit={this.handleSubmit}>
                     <Modal
-                        title="Editar Despesa Prevista"
+                        title="Editar Registro de Despesa Realizada"
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
-                        <div className='SwitchAjust'>
+                        <div style={{ width: '100%', textAlign: 'initial' }}>
                             <Switch
-                                style={{ width: '10%' }}
-                                title='Habilite para Editar Todas as Despesas'
-                                onChange={this.handleEdit} />
+                                checked={this.state.check}
+                                title='Pagamento no Crédito ou no Dinheiro?'
+                                onChange={this.handletipoPagamento} />
 
-                            <label>{this.state.visibleEdit}</label>
+                            <label style={{ padding: '30px' }}>
+                                <strong>
+                                    {this.state.visibleEdit}
+                                </strong>
+                            </label>
                         </div>
-
-                        <Radio.Group
-                            style={{ width: '73%' }}
-                            onChange={this.handleValue}
-                            value={this.state.value}
-                            disabled={this.state.tipoParcela}>
-                            <Radio value={1}>Mensalmente</Radio>
-                            <Radio value={2}>Quinzenalmente</Radio>
-                            <Radio value={3}>Outro</Radio>
-                        </Radio.Group>
-
-                        <InputNumber
-                            style={{ width: '25%' }}
-                            placeholder="Dias"
-                            min={1}
-                            onChange={this.handleDayValue}
-                            value={this.state.dayValue}
-                            disabled={this.state.dayVisible}
-                        />
 
                         <InputNumber
                             style={{ width: '49%' }}
-                            placeholder="Valor Previsto"
+                            placeholder="Valor Executado"
                             decimalSeparator=','
                             precision={2}
                             min={0}
-                            onChange={this.handleValorPrevisto}
-                            value={this.state.valorPrevistoInput}
+                            autoFocus
+                            onChange={this.handleValorReal}
+                            value={this.state.valorRealInput}
                         />
 
                         <DatePicker style={{ width: '49%' }}
-                            onChange={this.handleDataPrevisto}
-                            placeholder="Data Prevista"
-                            defaultValue={moment(this.state.dataPrevistaInput, dateFormat)}
+                            onChange={this.handleDataReal}
+                            placeholder="Data Executada"
+                            defaultValue={moment(this.props.data.DATANOVAREAL, dateFormat)}
                             format={dateFormat}
                         />
+                        <Select
+                            showSearch
+                            disabled={this.state.stateConta}
+                            style={{ width: '49%' }}
+                            placeholder="Informe o Conta"
+                            optionFilterProp="children"
+                            filterOption={(input, option) => (
+                                option.props.children.toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            )}
+                            onSelect={this.handleConta}
+                            value={this.state.contaInput}
+                        >
+                            {this.state.conta}
+                        </Select>
 
                         <Select
-                            defaultValue='DÉBITO OU DINHEIRO'
                             showSearch
-                            style={{ width: '65%' }}
+                            disabled={this.state.stateCartao}
+                            style={{ width: '49%' }}
                             placeholder="Informe o Cartão"
                             optionFilterProp="children"
                             filterOption={(input, option) => (
@@ -263,14 +252,6 @@ class ModalExpense extends React.Component {
                             {this.state.cartao}
                         </Select>
 
-                        <InputNumber
-                            style={{ width: '35%' }}
-                            placeholder='N Parcelas'
-                            min={1}
-                            onChange={this.handleParcelas}
-                            value={this.state.parcelasInput}
-                            disabled
-                        />
                         <Select
                             showSearch
                             optionFilterProp="children"

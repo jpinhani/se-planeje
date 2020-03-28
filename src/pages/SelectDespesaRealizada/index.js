@@ -8,8 +8,8 @@ import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
 
-import { Table, Icon, Popover, Input } from 'antd'
-import { urlBackend, userID } from '../../routes/urlBackEnd'
+import { Table, Icon, Popconfirm, Input, message } from 'antd'
+import { urlBackend, userID, config } from '../../routes/urlBackEnd'
 
 import axios from 'axios'
 
@@ -26,6 +26,21 @@ class SelectDespesaReal extends React.Component {
         }
         this.searchExpense = this.searchExpense.bind(this)
     }
+
+    async deleteAcount(expenseRealID) {
+        const endpoint = `${urlBackend}api/despesas/${expenseRealID}`
+        const resultStatus = await axios.delete(endpoint, config)
+
+        if (resultStatus.status === 200) {
+            message.success('Despesa Excluida com Sucesso', 5)
+            this.requestAPI()
+        } else {
+            message.erro('A Despesa não pode ser Excluida, Error ' + resultStatus.status, 5)
+        }
+
+
+    }
+
 
     columns() {
         return [
@@ -78,12 +93,9 @@ class SelectDespesaReal extends React.Component {
                         <span >
                             <EditDespesa data={expenseReal} />
 
-                            <Popover
-                                placement="left"
-                                title='Excluir Despesa'
-                                content={'teste'} trigger="click">
+                            <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => this.deleteReal(expenseReal.ID)}>
                                 <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popover>
+                            </Popconfirm>
                         </span>
                     </div>
                 ),

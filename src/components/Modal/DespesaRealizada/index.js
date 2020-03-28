@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch } from 'antd'
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
@@ -23,11 +23,14 @@ class ModalExpense extends React.Component {
 
         this.state = {
             visible: false,
+            visibleEdit: "A VISTA",
+            stateConta: false,
+            stateCartao: true,
             categoria: [],
             cartao: [],
             conta: [],
             valorRealInput: null,
-            dataRealInput: new Date().dateString,
+            dataRealInput: moment(new Date(), dateFormat),
             cartaoInput: [],
             categoriaInput: [],
             contaInput: [],
@@ -43,6 +46,7 @@ class ModalExpense extends React.Component {
         this.handleCategoria = this.handleCategoria.bind(this)
         this.handledescricaoDespesa = this.handledescricaoDespesa.bind(this)
         this.handleConta = this.handleConta.bind(this)
+        this.handletipoPagamento = this.handletipoPagamento.bind(this)
     }
 
     async showModal() {
@@ -59,6 +63,24 @@ class ModalExpense extends React.Component {
         })
     };
 
+    handletipoPagamento(value) {
+
+        value === true
+            ? this.setState({
+                ...this.state, visibleEdit: `CRÉDITO`,
+                stateConta: true,
+                contaInput: [],
+                stateCartao: false
+            })
+            : this.setState({
+                ...this.state, visibleEdit: `A VISTA`,
+                stateConta: false,
+                cartaoInput: [],
+                stateCartao: true
+            })
+
+    }
+
     handleCancel() {
         this.setState({
             ...this.state,
@@ -66,7 +88,8 @@ class ModalExpense extends React.Component {
             dataRealInput: null,
             categoriaInput: [],
             descrDespesaInput: '',
-            cartaoInput: '',
+            cartaoInput: [],
+            contaInput: [],
             visible: false
         })
     };
@@ -98,7 +121,7 @@ class ModalExpense extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/despesas`
+        const endpointAPI = `${urlBackend}api/despesas/real`
 
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
@@ -108,18 +131,23 @@ class ModalExpense extends React.Component {
             dataReal: this.state.dataRealInput,
             valorReal: this.state.valorRealInput,
             cartao: this.state.cartaoInput,
+            conta: this.state.contaInput,
             categoria: this.state.categoriaInput,
             parcela: '1',
             descrDespesa: this.state.descrDespesaInput,
-            status: "Ativo",
+            status: this.state.visibleEdit === 'A VISTA'
+                ? 'Pagamento Realizado'
+                : 'Fatura Pronta Para Pagamento',
         }
 
         const data = moment(body.dataReal, "DD/MM/YYYY");
         body.dataReal = data.format("YYYY-MM-DD")
 
-
-        if (body.dataReal === null | body.valorReal === null |
-            body.categoria.length === 0 | body.descrDespesa.length === 0) {
+        if (body.dataReal === null |
+            body.valorReal === null |
+            body.categoria.length === 0 |
+            body.descrDespesa.length === 0 |
+            (body.conta.length === 0 && body.cartao.length === 0)) {
 
             const args = {
                 message: 'Preencha todos os dados do Formulário',
@@ -136,7 +164,7 @@ class ModalExpense extends React.Component {
 
                 message.success('Despesa inserida com Sucesso', 7)
 
-                const endpointAPIAll = `${urlBackend}api/despesas/real/${userID()}`
+                const endpointAPIAll = `${urlBackend}api/despesas/paga/${userID()}`
                 const result = await axios.get(endpointAPIAll)
 
                 const despesa = result.data
@@ -162,6 +190,17 @@ class ModalExpense extends React.Component {
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
+                        <div style={{ width: '100%', textAlign: 'initial' }}>
+                            <Switch
+                                title='Pagamento no Crédito ou no Dinheiro?'
+                                onChange={this.handletipoPagamento} />
+
+                            <label style={{ padding: '30px' }}>
+                                <strong>
+                                    {this.state.visibleEdit}
+                                </strong>
+                            </label>
+                        </div>
 
                         <InputNumber
                             style={{ width: '49%' }}
@@ -182,6 +221,7 @@ class ModalExpense extends React.Component {
                         />
                         <Select
                             showSearch
+                            disabled={this.state.stateConta}
                             style={{ width: '49%' }}
                             placeholder="Informe o Conta"
                             optionFilterProp="children"
@@ -197,6 +237,7 @@ class ModalExpense extends React.Component {
 
                         <Select
                             showSearch
+                            disabled={this.state.stateCartao}
                             style={{ width: '49%' }}
                             placeholder="Informe o Cartão"
                             optionFilterProp="children"
