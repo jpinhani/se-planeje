@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input } from 'antd'
+import { Icon, Modal, Input, message } from 'antd'
 import { listVisions } from '../../../store/actions/visionAction'
+import { urlBackend, config } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -43,7 +44,7 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/visions'
+        const endpointAPI = `${urlBackend}api/visions`
 
         const body = {
             ID: this.state.id,
@@ -54,20 +55,19 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        console.log('body', body)
-
-        await axios.put(endpointAPI, body)
+        await axios.put(endpointAPI, body, config)
 
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/visions/${userID}`
+        const endpoint = `${urlBackend}api/visions/${userID}`
 
         const result = await axios.get(endpoint)
         const visions = result.data
 
         this.props.listVisions(visions)
 
-        this.setState({ ...this.state, vision: '' })
-        this.setState({ ...this.state, visible: false })
+        message.success('Visao editada com sucesso')
+
+        this.handleCancel()
     }
 
     render() {

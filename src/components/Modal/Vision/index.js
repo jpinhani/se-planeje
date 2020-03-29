@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input } from 'antd'
+import { Icon, Modal, Input, message, DatePicker } from 'antd'
+import moment from 'moment'
 import { listVisions } from '../../../store/actions/visionAction'
+import { urlBackend, config } from '../../../routes/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
+
+const dateFormat = 'DD/MM/YYYY'
 
 class ModalAcount extends React.Component {
     constructor(props) {
@@ -41,7 +45,7 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = 'http://seplaneje-com.umbler.net/api/visions'
+        const endpointAPI = `${urlBackend}api/visions`
 
         const body = {
             ID_USER: localStorage.getItem('userId'),
@@ -51,15 +55,23 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        await axios.post(endpointAPI, body)
+        const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
+        body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
+
+        const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
+        body.DT_FIM = dataFim.format("YYYY-MM-DD")
+
+        await axios.post(endpointAPI, body, config)
 
         const userID = localStorage.getItem('userId')
-        const endpoint = `http://seplaneje-com.umbler.net/api/visions/${userID}`
+        const endpoint = `${urlBackend}api/visions/${userID}`
 
         const result = await axios.get(endpoint)
         const visions = result.data
 
         this.props.listVisions(visions)
+
+        message.success('Visao adicionada com sucesso')
 
         this.setState({ ...this.state, vision: '' })
         this.setState({ ...this.state, visible: false })
@@ -77,8 +89,18 @@ class ModalAcount extends React.Component {
                         onCancel={this.handleCancel}
                     >
                         <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
-                        <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({ ...this.state, startDate: e.target.value })} placeholder="Inicio" />
-                        <Input name='finalDate' value={this.state.finalDate} onChange={e => this.setState({ ...this.state, finalDate: e.target.value })} placeholder="Fim" />
+                        <DatePicker style={{ width: '100%' }}
+                            onChange={(date, dateString) =>  this.setState({ ...this.state, startDate: dateString })}
+                            placeholder="Data Executada"
+                            defaultValue={moment(new Date(), dateFormat)}
+                            format={dateFormat}
+                        />
+                        <DatePicker style={{ width: '100%' }}
+                            onChange={(date, dateString) =>  this.setState({ ...this.state, finalDate: dateString })}
+                            placeholder="Data Executada"
+                            defaultValue={moment(new Date(), dateFormat)}
+                            format={dateFormat}
+                        />
                     </Modal>
                 </form>
             </div >
