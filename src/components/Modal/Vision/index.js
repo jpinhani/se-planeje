@@ -55,26 +55,30 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
-        body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
+        if (body.DT_INICIO < body.DT_FIM) {
+            const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
+            body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
 
-        const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
-        body.DT_FIM = dataFim.format("YYYY-MM-DD")
+            const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
+            body.DT_FIM = dataFim.format("YYYY-MM-DD")
 
-        await axios.post(endpointAPI, body, config)
+            await axios.post(endpointAPI, body, config)
 
-        const userID = localStorage.getItem('userId')
-        const endpoint = `${urlBackend}api/visions/${userID}`
+            const userID = localStorage.getItem('userId')
+            const endpoint = `${urlBackend}api/visions/${userID}`
 
-        const result = await axios.get(endpoint)
-        const visions = result.data
+            const result = await axios.get(endpoint)
+            const visions = result.data
 
-        this.props.listVisions(visions)
+            this.props.listVisions(visions)
 
-        message.success('Visao adicionada com sucesso')
+            this.setState({ ...this.state, vision: '' })
+            this.setState({ ...this.state, visible: false })
 
-        this.setState({ ...this.state, vision: '' })
-        this.setState({ ...this.state, visible: false })
+            message.success('Visao adicionada com sucesso')
+        } else {
+            message.error('A Data inicio nao pode ser maior que a data final')
+        }
     }
 
     render() {
