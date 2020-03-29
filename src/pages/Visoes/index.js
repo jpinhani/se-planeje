@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Table, Icon, Input, Popconfirm } from 'antd'
+import { Table, Icon, Input, Popconfirm, message } from 'antd'
+import moment from 'moment'
 import axios from 'axios'
+import { urlBackend, config, userID } from '../../routes/urlBackEnd'
 
 import AddVision from '../../components/Modal/Vision/index'
 import EditVision from '../../components/Modal/VisionEdit'
@@ -10,11 +12,21 @@ import 'antd/dist/antd.css'
 import './styles.scss'
 
 function Vision() {
-  const userId = window.localStorage.getItem('userId')
-  const endpoint = `http://seplaneje-com.umbler.net/api/visions`
+  const userId = userID()
+  const endpoint = `${urlBackend}api/visions`
 
   const dispatch = useDispatch()
   const visions = useSelector(state => state.vision)
+
+  const formatDate = visions => visions.map(vision => {
+    const date1 = moment(vision.DT_INICIO, "YYYY/MM/DD");
+    vision.DT_INICIO = date1.format("DD/MM/YYYY")
+
+    const date2 = moment(vision.DT_FIM, "YYYY/MM/DD");
+    vision.DT_FIM = date2.format("DD/MM/YYYY")
+    
+    return vision
+  })
 
   const columns = [
     {
@@ -40,7 +52,7 @@ function Vision() {
         <div className='ModeloBotoesGrid'>
           <span className='ModeloBotoesGridDetalhes' >
             <EditVision data={vision} />
-            <Popconfirm title="Sure to delete?" onConfirm={() => removeVision(vision.ID)}>
+            <Popconfirm title="Sure to delete?" onConfirm={() => { message.success('Excluido com sucesso'); removeVision(vision.ID) }}>
               <Icon type="delete" style={{ fontSize: '18px', color: '#08c' }} />
             </Popconfirm>
           </span>
@@ -50,7 +62,7 @@ function Vision() {
   ]
 
   const removeVision = async visionID => {
-    await axios.delete(`${endpoint}/${visionID}`)
+    await axios.delete(`${endpoint}/${visionID}`, config)
 
     dispatch({
       type: 'LIST_VISION',
@@ -85,7 +97,7 @@ function Vision() {
       }
       name='conta' placeholder="Procureeee aqui a visao especifica"
     />
-    <Table columns={columns} dataSource={visions} rowKey='ID' />
+    <Table columns={columns} dataSource={formatDate(visions)} rowKey='ID' />
   </>
 }
 
