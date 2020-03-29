@@ -38,7 +38,6 @@ class ModalExpense extends React.Component {
             descrDespesaInput: this.props.data.DESCR_DESPESA,
         }
 
-        console.log(this.props.data.DT_REAL)
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)

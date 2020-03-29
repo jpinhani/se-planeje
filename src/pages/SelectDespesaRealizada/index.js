@@ -27,9 +27,12 @@ class SelectDespesaReal extends React.Component {
         this.searchExpense = this.searchExpense.bind(this)
     }
 
-    async deleteAcount(expenseRealID) {
-        const endpoint = `${urlBackend}api/despesas/${expenseRealID}`
-        const resultStatus = await axios.delete(endpoint, config)
+    async deleteReal(expenseReal) {
+
+        const body = expenseReal
+        // console.log(body)
+        const endpoint = `${urlBackend}api/despesas/delete/real/${expenseReal.ID}`
+        const resultStatus = await axios.put(endpoint, body, config)
 
         if (resultStatus.status === 200) {
             message.success('Despesa Excluida com Sucesso', 5)
@@ -93,7 +96,7 @@ class SelectDespesaReal extends React.Component {
                         <span >
                             <EditDespesa data={expenseReal} />
 
-                            <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => this.deleteReal(expenseReal.ID)}>
+                            <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => this.deleteReal(expenseReal)}>
                                 <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
                             </Popconfirm>
                         </span>
