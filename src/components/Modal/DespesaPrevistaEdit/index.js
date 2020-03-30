@@ -59,7 +59,7 @@ class ModalExpense extends React.Component {
 
         this.setState({ ...this.state, cartao: resultCartao, categoria: resultCategoria, visible: true })
 
-        if (this.props.data.ID_CARTAO === 0)
+        if (this.props.data.ID_CARTAO === null)
             this.setState({ ...this.state, cartaoInput: 'DÉBITO OU DINHEIRO' })
 
     };
@@ -172,7 +172,7 @@ class ModalExpense extends React.Component {
             notification.open(args);
         } else {
 
-            const resulStatus = await axios.put(endpointAPI, body, config)
+            const resulStatus = await axios.put(endpointAPI, body, config())
             if (resulStatus.status === 200) {
                 message.success('Despesa Editada com Sucesso', 7)
 

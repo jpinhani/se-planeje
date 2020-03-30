@@ -7,8 +7,11 @@ import EditCartao from '../../components/Modal/CartaoEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
 
 import { listCards } from '../../store/actions/generalCardAction.js'
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
-import { Table, Divider, Icon, Input, Popconfirm, message } from 'antd'
+import { urlBackend, userID } from '../../routes/urlBackEnd'
+import { Table, Divider, Icon, Input, Popconfirm } from 'antd'
+
+import { DeleteCard, GetCard } from '../../components/crudSendAxios/cartao'
+import { verifySend } from '../../components/verifySendAxios/index'
 
 import 'antd/dist/antd.css';
 import './style.scss'
@@ -24,17 +27,16 @@ class SelectCartao extends React.Component {
     this.searchCard = this.searchCard.bind(this)
   }
 
-  async deleteCard(cardId) {
-    const endpoint = `${urlBackend}api/cartoes/${cardId}`
-    const resultStatus = await axios.delete(endpoint, config)
+  async deleteCard(card) {
 
-    if (resultStatus.status === 200) {
-      message.success('Cartão Excluido com sucesso', 5)
-      this.requestAPI()
+    const resultStatus = await DeleteCard(card.ID)
 
-    } else {
-      message.error('Não foi possivel excluir o cartão especifico, Error ' + resultStatus.status, 5)
-    }
+    verifySend(resultStatus, 'DELETE', card.CARTAO)
+
+    const cardData = resultStatus === 200 ? await GetCard() : {}
+
+    this.props.listCards(cardData)
+
   }
 
   columns() {
@@ -62,7 +64,7 @@ class SelectCartao extends React.Component {
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
               <EditCartao data={card} />
-              <Popconfirm title="Deletar o Cartão?" onConfirm={() => this.deleteCard(card.ID)}>
+              <Popconfirm title="Deletar o Cartão?" onConfirm={() => this.deleteCard(card)}>
                 <Icon type="delete" title='Excluir Cartão' style={{ fontSize: '18px', color: '#08c' }} />
               </Popconfirm>
             </span>
@@ -110,7 +112,7 @@ class SelectCartao extends React.Component {
   }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state) => {
   return {
     card: state.card
   }

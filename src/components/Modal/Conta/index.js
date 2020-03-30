@@ -53,7 +53,8 @@ class ModalAcount extends React.Component {
         if (body.descrConta !== '') {
             let resultStatus = 0
             try {
-                resultStatus = await axios.post(endpointAPI, body, config)
+
+                resultStatus = await axios.post(endpointAPI, body, config())
 
                 if (resultStatus.status === 200) {
                     message.success('   Conta Registrada com Sucesso ', 5)

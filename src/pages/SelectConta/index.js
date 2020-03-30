@@ -27,7 +27,7 @@ class SelectConta extends React.Component {
 
   async deleteAcount(acountId) {
     const endpoint = `${urlBackend}api/contas/${acountId}`
-    const resultStatus = await axios.delete(endpoint, config)
+    const resultStatus = await axios.delete(endpoint, config())
 
     if (resultStatus.status === 200) {
       message.success('   Conta Excluida com Sucesso', 5)

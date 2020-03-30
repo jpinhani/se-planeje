@@ -55,7 +55,7 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        await axios.put(endpointAPI, body, config)
+        await axios.put(endpointAPI, body, config())
 
         const userID = localStorage.getItem('userId')
         const endpoint = `${urlBackend}api/visions/${userID}`

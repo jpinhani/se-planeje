@@ -24,7 +24,7 @@ function Vision() {
 
     const date2 = moment(vision.DT_FIM, "YYYY/MM/DD");
     vision.DT_FIM = date2.format("DD/MM/YYYY")
-    
+
     return vision
   })
 
@@ -62,7 +62,7 @@ function Vision() {
   ]
 
   const removeVision = async visionID => {
-    await axios.delete(`${endpoint}/${visionID}`, config)
+    await axios.delete(`${endpoint}/${visionID}`, config())
 
     dispatch({
       type: 'LIST_VISION',

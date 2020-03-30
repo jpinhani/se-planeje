@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import FaturaPagar from '../../components/Modal/DespesaCartao';
 import { Tabs, Table } from 'antd';
 import { urlBackend, userID } from '../../routes/urlBackEnd'
 
@@ -85,12 +86,17 @@ class SelectFaturaPagar extends React.Component {
 
         const dadosFatura = this.props.expenseReal.map((ID, a) => (
 
-            < TabPane tab={`${ID.ID} - ${a}`} key={a} >
+            < TabPane tab={`${ID.ID}`} key={a} >
                 <Table className='table table-action'
                     title={() => <div style={{ display: 'flex' }}>
                         <div style={{ width: '100%', color: 'blue', fontSize: '14px' }}><h2>Fatura Atual:</h2> R$ {ID.VL_REAL} </div>
                         <br />
                         <div style={{ width: '100%', color: 'red', fontSize: '14px' }}><h2>Fatura Estimada: </h2> R$ {ID.VL_FORECAST}</div>
+                        <br />
+                        <div style={{ width: '100%', color: 'red', fontSize: '14px' }}>
+                            <FaturaPagar data={ID} />
+                            {console.log(ID)}
+                        </div>
                     </div>}
 
                     style={{ height: '100%' }}
@@ -100,7 +106,6 @@ class SelectFaturaPagar extends React.Component {
                     ))}
                     rowKey={ID => ID.ID_DESPESA}
                 />
-
             </TabPane >
         )
         )

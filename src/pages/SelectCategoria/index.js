@@ -26,7 +26,7 @@ class SelectCategoria extends React.Component {
     }
     async deleteAcount(categoriaId) {
         const endpoint = `${urlBackend}api/categorias/${categoriaId}`
-        const verify = await axios.delete(endpoint, config)
+        const verify = await axios.delete(endpoint, config())
 
         if (verify.data.error === true) {
             message.error('   ' + verify.data.message, 5);
@@ -154,7 +154,7 @@ class SelectCategoria extends React.Component {
                 idUser: userID
             }
             const endpointAPIDefault = `${urlBackend}api/categorias/default/`
-            const resultStatus = await axios.post(endpointAPIDefault, body, config)
+            const resultStatus = await axios.post(endpointAPIDefault, body, config())
 
             if (resultStatus.status === 200) {
 

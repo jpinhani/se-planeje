@@ -1,7 +1,10 @@
-const addCard = card => ({
-  type: 'INSERT_CARD',
-  payload: card
-})
+
+const addCard = card => {
+  return ({
+    type: 'INSERT_CARD',
+    payload: card
+  })
+}
 
 const listCards = cards => {
 

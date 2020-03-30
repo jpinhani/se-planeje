@@ -35,7 +35,7 @@ export default (props) => {
 
         const endpoint = `${urlBackend}api/despesas/delete/${props.data.ID}`
 
-        const resultStatus = await axios.put(endpoint, body, config)
+        const resultStatus = await axios.put(endpoint, body, config())
 
         if (resultStatus.status === 200) {
 

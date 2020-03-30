@@ -138,7 +138,7 @@ class ModalCategory extends React.Component {
             notification.open(args);
         } else {
 
-            await axios.put(endpointAPI, body, config)
+            await axios.put(endpointAPI, body, config())
 
             const endpoint = `${urlBackend}api/categorias/${userID()}`
 

@@ -62,7 +62,7 @@ class ModalAcount extends React.Component {
             const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
             body.DT_FIM = dataFim.format("YYYY-MM-DD")
 
-            await axios.post(endpointAPI, body, config)
+            await axios.post(endpointAPI, body, config())
 
             const userID = localStorage.getItem('userId')
             const endpoint = `${urlBackend}api/visions/${userID}`
@@ -94,13 +94,13 @@ class ModalAcount extends React.Component {
                     >
                         <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
                         <DatePicker style={{ width: '100%' }}
-                            onChange={(date, dateString) =>  this.setState({ ...this.state, startDate: dateString })}
+                            onChange={(date, dateString) => this.setState({ ...this.state, startDate: dateString })}
                             placeholder="Data Executada"
                             defaultValue={moment(new Date(), dateFormat)}
                             format={dateFormat}
                         />
                         <DatePicker style={{ width: '100%' }}
-                            onChange={(date, dateString) =>  this.setState({ ...this.state, finalDate: dateString })}
+                            onChange={(date, dateString) => this.setState({ ...this.state, finalDate: dateString })}
                             placeholder="Data Executada"
                             defaultValue={moment(new Date(), dateFormat)}
                             format={dateFormat}

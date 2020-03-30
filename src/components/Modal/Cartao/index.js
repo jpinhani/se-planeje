@@ -1,9 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
-import { Icon, Modal, Input, message, notification } from 'antd'
+
+import { Icon, Modal, Input, notification } from 'antd'
+
 import { listCards } from '../../../store/actions/generalCardAction.js'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
+
+import { InsertCard, GetCard } from '../../crudSendAxios/cartao'
+import { verifySend } from '../../verifySendAxios/index'
+
 import 'antd/dist/antd.css'
 import './styles.scss'
 
@@ -26,8 +31,14 @@ class ModalCard extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-
-    handleCancel() { this.setState({ ...this.state, visible: false }) };
+    handleCancel() {
+        this.setState({
+            ...this.state, cartao: '',
+            dtVencimento: '',
+            diacompra: '',
+            visible: false
+        })
+    };
 
     handleCartao(event) { this.setState({ ...this.state, cartao: event.target.value }) };
 
@@ -37,10 +48,9 @@ class ModalCard extends React.Component {
         this.setState({ ...this.state, diacompra: event.target.value });
     }
     showModal() { this.setState({ ...this.state, visible: true }) };
+
     async handleSubmit(event) {
         event.preventDefault()
-
-        const endpointAPI = `${urlBackend}api/cartoes`
 
         const body = {
             idUser: userID(),
@@ -51,25 +61,14 @@ class ModalCard extends React.Component {
         }
         if (body.cartao.length > '' && body.dtVencimento.length > '' && body.diaCompra.length > '') {
 
-            const ResultStatus = await axios.post(endpointAPI, body, config)
+            const resultStatus = await InsertCard(body)
 
-            if (ResultStatus.status === 200) {
+            verifySend(resultStatus, 'INSERT', body.cartao)
 
-                message.success('  Cartão Cadastrado com Sucesso', 5)
+            const cardData = resultStatus === 200 ? await GetCard() : {}
 
-                const endpoint = `${urlBackend}api/cartoes/${userID()}`
-
-                const result = await axios.get(endpoint)
-
-                const cards = result.data
-
-                this.props.listCards(cards)
-
-                this.setState({ ...this.state, cartao: '', dtVencimento: '', diacompra: '', visible: false });
-
-            } else {
-                message.error('Não foi possivel efetuar o Cadastro do Cartão ' + ResultStatus.status, 5)
-            }
+            this.props.listCards(cardData)
+            this.handleCancel()
         } else {
             const args = {
                 message: 'Preencha todo os dados do Formulário',
@@ -102,7 +101,7 @@ class ModalCard extends React.Component {
     }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         card: state.card
     }

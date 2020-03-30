@@ -150,7 +150,7 @@ class ModalRevenue extends React.Component {
 
         } else {
 
-            const resulStatus = await axios.put(endpointAPI, body, config)
+            const resulStatus = await axios.put(endpointAPI, body, config())
 
             if (resulStatus.status === 200) {
 

@@ -1,12 +1,11 @@
-const login = (token, userId) => {
+const login = (userId, tokenovo) => {
     localStorage.setItem('userId', userId)
-    localStorage.setItem('token', token)
+    localStorage.setItem('token', tokenovo)
 }
 
 const logout = () => {
-
-    localStorage.removeItem('token')
     localStorage.removeItem('userId')
+    localStorage.removeItem('token')
 }
 const isLogged = () => !!localStorage.getItem('token')
 

@@ -53,7 +53,7 @@ class ModalAcount extends React.Component {
         }
         if (body.descrConta !== '') {
 
-            const resultStatus = await axios.put(endpointAPI, body, config)
+            const resultStatus = await axios.put(endpointAPI, body, config())
             console.log('resultStatus', resultStatus)
 
             if (resultStatus.status === 200) {

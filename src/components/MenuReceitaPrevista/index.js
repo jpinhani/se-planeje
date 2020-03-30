@@ -32,7 +32,7 @@ export default (props) => {
         const body = valor
         const endpoint = `${urlBackend}api/receitas/teste/${props.data.ID}`
 
-        const resultStatus = await axios.put(endpoint, body, config)
+        const resultStatus = await axios.put(endpoint, body, config())
 
         if (resultStatus.status === 200) {
 

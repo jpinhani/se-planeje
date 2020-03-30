@@ -123,7 +123,7 @@ class ModalCategory extends React.Component {
             notification.open(args);
         } else {
 
-            await axios.post(endpointAPI, body, config)
+            await axios.post(endpointAPI, body, config())
 
             const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${userID()}`
 

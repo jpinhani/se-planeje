@@ -32,12 +32,13 @@ function Login() {
 
     if (response.status === 200) {
 
-      const token = await response.data.token
-      const userId = await response.data.user.ID
+      const token = response.data.token
+      const userId = response.data.user.ID
 
-      login(token, userId)
+      login(userId, token)
 
-      history.push('/')
+      await history.push('/')
+
     }
   }
 

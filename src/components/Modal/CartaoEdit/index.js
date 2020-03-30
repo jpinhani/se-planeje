@@ -1,9 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
-import { Icon, Modal, Input, notification, message } from 'antd'
+
+import { Icon, Modal, Input, notification } from 'antd'
 import { listCards } from '../../../store/actions/generalCardAction.js'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
+
+import { UpdateCard, GetCard } from '../../crudSendAxios/cartao'
+import { verifySend } from '../../verifySendAxios/index'
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -26,7 +30,6 @@ class ModalCard extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-
     showModal() {
         this.setState({ ...this.state, visible: true })
     };
@@ -34,7 +37,6 @@ class ModalCard extends React.Component {
     handleCancel() {
         this.setState({ ...this.state, visible: false })
     };
-
 
     handleCartao(event) {
         this.setState({ ...this.state, cartao: event.target.value })
@@ -51,11 +53,8 @@ class ModalCard extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/cartoes/${this.props.data.ID}`
-
-        console.log(endpointAPI)
-
         const body = {
+            id: this.props.data.ID,
             idUser: userID(),
             cartao: this.state.cartao,
             dtVencimento: this.state.dtVencimento,
@@ -65,24 +64,18 @@ class ModalCard extends React.Component {
 
         if (body.cartao !== '' && body.dtVencimento !== '' && body.diaCompra !== '') {
 
-            const resultStatus = await axios.put(endpointAPI, body, config)
+            const resultStatus = await UpdateCard(body)
 
-            if (resultStatus.status === 200) {
+            verifySend(resultStatus, 'UPDATE', body.cartao)
 
-                message.success('   Cartão Editado com Sucesso', 5)
+            const cardData = resultStatus === 200 ? await GetCard() : {}
 
-                const endpoint = `${urlBackend}api/cartoes/${userID()}`
-                const result = await axios.get(endpoint)
-                const cards = result.data
+            this.props.listCards(cardData)
 
-                this.props.listCards(cards)
+            this.handleCancel()
 
-                this.setState({ ...this.state, visible: false })
-
-            } else {
-                message.error('  Não foi possivel Editar o Cartão, error ' + resultStatus.status, 5)
-            }
-        } else {
+        }
+        else {
 
             const args = {
 

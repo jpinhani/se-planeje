@@ -10,7 +10,7 @@ import moment from 'moment';
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
-import { loadCategoria, loadCartao, loadConta } from '../../ListagemCombo'
+import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
 
 
 import 'antd/dist/antd.css';
@@ -26,14 +26,18 @@ class ModalExpense extends React.Component {
 
         this.state = {
             visible: false, //Controla a visibilidade do formulário
-            visibleConta: true, //Se for despesa de cartão bloqueia conta se não desbloqueia
+            visibleConta: this.props.data.ID_CARTAO === 0 ? false : true,
+            visibleCartao: this.props.data.ID_CARTAO === 0 ? true : false,
+            visibleTipoPagamento: this.props.data.ID_CARTAO === 0 ? `A VISTA` : `CRÉDITO`,
+            check: this.props.data.ID_CARTAO === 0 ? false : true,
             visibleEdit: 'Essa Despesa Esta Sendo Contabilizada', //State Para saber se é Amortização ou não
             categoria: this.props.data.ID_CATEGORIA, //Listagem de Categoria
             cartao: this.props.data.ID_CARTAO, //Listagem de Cartão
             conta: [],
+
             valorPrevistoInput: this.props.data.VL_PREVISTO2,
             dataPrevistaInput: this.props.data.DATANOVA,
-            cartaoInput: this.props.data.ID_CARTAO, //Cartão Selecionado no Click
+            cartaoInput: this.props.data.ID_CARTAO === 0 ? [] : this.props.data.ID_CARTAO, //Cartão Selecionado no Click
             parcelasInput: this.props.data.NUM_PARCELA,
             categoriaInput: this.props.data.ID_CATEGORIA, //Categoria Selecionada no Click
             descrDespesaInput: this.props.data.DESCR_DESPESA,
@@ -50,11 +54,13 @@ class ModalExpense extends React.Component {
         this.handleValorReal = this.handleValorReal.bind(this)
         this.handleDataReal = this.handleDataReal.bind(this)
         this.handleConta = this.handleConta.bind(this)
+        this.handleCartao = this.handleCartao.bind(this)
+        this.handletipoPagamento = this.handletipoPagamento.bind(this)
     }
 
     async showModal() {
         const resultCategoria = await loadCategoria()
-        const resultCartao = await loadCartao()
+        const resultCartao = await loadCartaoReal()
         const resultConta = await loadConta()
 
         this.setState({
@@ -64,9 +70,6 @@ class ModalExpense extends React.Component {
             conta: resultConta,
             visible: true
         })
-
-        if (this.props.data.ID_CARTAO === 0)
-            this.setState({ ...this.state, visibleConta: false, cartaoInput: 'DÉBITO OU DINHEIRO' })
 
     };
 
@@ -81,6 +84,26 @@ class ModalExpense extends React.Component {
         } else {
             this.setState({ ...this.state, visibleEdit: 'Essa Despesa Esta sendo Contabilizada' })
         }
+    }
+
+    handletipoPagamento(tipo) {
+
+        tipo === true
+            ? this.setState({
+                ...this.state, visibleTipoPagamento: `CRÉDITO`,
+                visibleConta: true,
+                check: true,
+                contaInput: [],
+                cartaoInput: this.props.data.ID_CARTAO === 0 ? [] : this.props.data.ID_CARTAO,
+                visibleCartao: false
+            })
+            : this.setState({
+                ...this.state, visibleTipoPagamento: `A VISTA`,
+                visibleConta: false,
+                check: false,
+                cartaoInput: 'DÉBITO OU DINHEIRO',
+                visibleCartao: true
+            })
     }
 
     handledescricaoDespesa(despesa) {
@@ -107,6 +130,10 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, contaInput: valorConta })
     }
 
+    handleCartao(valorCartao) {
+        this.setState({ ...this.state, cartaoInput: valorCartao })
+    }
+
 
     async handleSubmit(event) {
         event.preventDefault()
@@ -131,6 +158,7 @@ class ModalExpense extends React.Component {
             dataReal: valueData,
             status: valueStatus,
         }
+        console.log('Conta Input', body.idConta)
 
         const data = moment(body.dataReal, "DD/MM/YYYY");
         body.dataReal = data.format("YYYY-MM-DD")
@@ -151,7 +179,7 @@ class ModalExpense extends React.Component {
             notification.open(args);
 
         } else {
-            const resulStatus = await axios.put(endpointAPI, body, config)
+            const resulStatus = await axios.put(endpointAPI, body, config())
 
             if (resulStatus.status === 200) {
                 message.success('Despesa contabilizada com Sucesso', 7)
@@ -191,13 +219,26 @@ class ModalExpense extends React.Component {
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
                     >
-                        <div className='SwitchAjust'>
+
+                        <div style={{ width: '99%', textAlign: 'initial' }}>
+                            <Switch
+                                title='Pagamento no Crédito ou no Dinheiro?'
+                                onChange={this.handletipoPagamento}
+                                checked={this.state.check} />
+
+                            <label style={{ padding: '10px' }}>
+                                <strong>
+                                    {this.state.visibleTipoPagamento}
+                                </strong>
+                            </label>
+
                             <Switch
                                 style={{ width: '10%' }}
                                 title='Habilite para Amortizações'
                                 onChange={this.handleEdit} />
 
-                            <label>{this.state.visibleEdit}</label>
+                            <label style={{ padding: '15px' }}> {this.state.visibleEdit}</label>
+
                         </div>
 
                         <InputNumber
@@ -220,7 +261,7 @@ class ModalExpense extends React.Component {
 
                         <Select
                             showSearch
-                            style={{ width: '99%' }}
+                            style={{ width: '49%' }}
                             placeholder="Informe a Conta"
                             optionFilterProp="children"
                             filterOption={(input, option) => (
@@ -231,6 +272,22 @@ class ModalExpense extends React.Component {
                             onSelect={this.handleConta}
                         >
                             {this.state.conta}
+                        </Select>
+
+                        <Select
+                            showSearch
+                            style={{ width: '49%' }}
+                            placeholder="Informe o Cartão"
+                            optionFilterProp="children"
+                            filterOption={(input, option) => (
+                                option.props.children.toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            )}
+                            disabled={this.state.visibleCartao}
+                            onSelect={this.handleCartao}
+                            value={this.state.cartaoInput}
+                        >
+                            {this.state.cartao}
                         </Select>
 
                         <TextArea
@@ -259,20 +316,6 @@ class ModalExpense extends React.Component {
                             disabled
                         />
 
-                        <Select
-                            showSearch
-                            style={{ width: '65%' }}
-                            placeholder="Informe o Cartão"
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            disabled
-                            value={this.state.cartaoInput}
-                        >
-                            {this.state.cartao}
-                        </Select>
 
                         <InputNumber
                             style={{ width: '35%' }}
@@ -290,7 +333,7 @@ class ModalExpense extends React.Component {
                                 option.props.children.toLowerCase()
                                     .indexOf(input.toLowerCase()) >= 0
                             )}
-                            style={{ width: '99%' }}
+                            style={{ width: '64%' }}
                             placeholder="Informe a Categoria"
                             disabled
                             value={this.state.categoriaInput}

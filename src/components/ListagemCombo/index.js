@@ -62,9 +62,11 @@ async function loadCartaoReal() {
         <Option key={i} value={desc.ID}>
             {desc.CARTAO}
         </Option>
+
+
     )
 
-
+    options.push(<Option disabled key='nd' value='DÉBITO OU DINHEIRO'>DÉBITO OU DINHEIRO</Option>)
     return options
 }
 

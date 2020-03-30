@@ -159,7 +159,7 @@ class ModalExpense extends React.Component {
 
         } else {
 
-            const resulStatus = await axios.post(endpointAPI, body, config)
+            const resulStatus = await axios.post(endpointAPI, body, config())
             if (resulStatus.status === 200) {
 
                 message.success('Despesa inserida com Sucesso', 7)
