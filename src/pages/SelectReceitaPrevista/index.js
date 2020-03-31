@@ -5,12 +5,13 @@ import { listRevenues } from '../../store/actions/generalRevenueAction'
 import ReceitaPrevista from '../../components/Modal/ReceitaPrevista'
 import Menu from '../../components/MenuReceitaPrevista'
 
-import { urlBackend, userID } from '../../routes/urlBackEnd'
+
 import EditReceita from '../../components/Modal/ReceitaPrevistaEdit'
 import SearchFilter from '../../components/searchFilterTable'
 
+import { GetRequest } from '../../components/crudSendAxios/crud'
+
 import { Table, Icon, Popover, Input } from 'antd'
-import axios from 'axios'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -78,10 +79,8 @@ class SelectReceitaPrevista extends React.Component {
 
     async requestAPI() {
 
-        const endpointAPI = `${urlBackend}api/receitas/${userID()}`
-        const result = await axios.get(endpointAPI)
-        const receita = result.data
-        await this.props.listRevenues(receita)
+        const Data = await GetRequest('api/receitas')
+        await this.props.listRevenues(Data)
     }
 
     searchRevenue(event) {

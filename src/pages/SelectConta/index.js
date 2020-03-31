@@ -6,10 +6,11 @@ import EditaAcount from '../../components/Modal/ContaEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
 
 import { listAcounts } from '../../store/actions/generalAcountAction'
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
 
-import { Table, Icon, Input, Popconfirm, message } from 'antd'
-import axios from 'axios'
+import { GetRequest, DeleteRequest } from '../../components/crudSendAxios/crud'
+import { verifySend } from '../../components/verifySendAxios'
+
+import { Table, Icon, Input, Popconfirm } from 'antd'
 
 import 'antd/dist/antd.css';
 import '../SelectConta/styles.scss'
@@ -25,18 +26,12 @@ class SelectConta extends React.Component {
     this.searchAcount = this.searchAcount.bind(this)
   }
 
-  async deleteAcount(acountId) {
-    const endpoint = `${urlBackend}api/contas/${acountId}`
-    const resultStatus = await axios.delete(endpoint, config())
+  async deleteAcount(conta) {
+    const resultStatus = await DeleteRequest(conta.ID, 'api/contas')
 
-    if (resultStatus.status === 200) {
-      message.success('   Conta Excluida com Sucesso', 5)
-      this.requestAPI()
-    } else {
-      message.erro('   A Conta não pode ser Excluida, Error ' + resultStatus.status, 5)
-    }
+    verifySend(resultStatus, 'DELETE', conta.DESCR_CONTA)
 
-
+    this.requestAPI()
   }
 
   columns() {
@@ -59,7 +54,7 @@ class SelectConta extends React.Component {
           <div className='ModeloBotoesGrid'>
             <span className='ModeloBotoesGridDetalhes' >
               <EditaAcount data={acount} />
-              <Popconfirm title="Excluir Conta?" onConfirm={() => this.deleteAcount(acount.ID)}>
+              <Popconfirm title="Excluir Conta?" onConfirm={() => this.deleteAcount(acount)}>
                 <Icon type="delete" title='Excluir Conta' style={{ fontSize: '18px', color: '#08c' }} />
               </Popconfirm>
             </span>
@@ -72,11 +67,9 @@ class SelectConta extends React.Component {
 
   async requestAPI() {
 
-    const endpointAPI = `${urlBackend}api/contas/${userID()}`
+    const Data = await GetRequest('api/contas')
 
-    const result = await axios.get(endpointAPI)
-    const conta = result.data
-    this.props.listAcounts(conta)
+    this.props.listAcounts(Data)
   }
 
   componentDidMount() {

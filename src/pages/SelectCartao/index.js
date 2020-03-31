@@ -10,7 +10,7 @@ import { listCards } from '../../store/actions/generalCardAction.js'
 import { urlBackend, userID } from '../../routes/urlBackEnd'
 import { Table, Divider, Icon, Input, Popconfirm } from 'antd'
 
-import { DeleteCard, GetCard } from '../../components/crudSendAxios/cartao'
+import { DeleteRequest, GetRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
 
 import 'antd/dist/antd.css';
@@ -29,11 +29,11 @@ class SelectCartao extends React.Component {
 
   async deleteCard(card) {
 
-    const resultStatus = await DeleteCard(card.ID)
+    const resultStatus = await DeleteRequest(card.ID, 'api/cartoes')
 
     verifySend(resultStatus, 'DELETE', card.CARTAO)
 
-    const cardData = resultStatus === 200 ? await GetCard() : {}
+    const cardData = resultStatus === 200 ? await GetRequest('api/cartoes') : {}
 
     this.props.listCards(cardData)
 

@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 
-import { Switch, Button, message } from 'antd'
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+import { Switch, Button } from 'antd'
+import { userID } from '../../routes/urlBackEnd'
+
+import { GetRequest, UpdateRequest } from '../crudSendAxios/crud'
+import { verifySend } from '../verifySendAxios/index'
 
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 
 export default (props) => {
 
@@ -19,38 +21,30 @@ export default (props) => {
 
     async function handleDelete() {
         const valor = {
+            id: props.data.ID,
             idUser: userID(),
             dataPrevista: props.data.DATANOVA,
             valorPrevisto: props.data.VL_PREVISTO2,
             categoria: props.data.ID_CATEGORIA,
             parcela: props.data.NUM_PARCELA,
-            descrDespesa: props.data.DESCR_DESPESA,
+            descrReceita: props.data.DESCR_RECEITA,
             valueEdit: deleteReceita,
             idGrupo: props.data.ID_GRUPO,
         }
 
         const body = valor
-        const endpoint = `${urlBackend}api/receitas/teste/${props.data.ID}`
 
-        const resultStatus = await axios.put(endpoint, body, config())
+        const resultStatus = await UpdateRequest(body, 'api/receitas/teste')
+        verifySend(resultStatus, 'DELETE', body.descrReceita)
 
-        if (resultStatus.status === 200) {
+        const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
 
-            message.success('Receita Excluida com Sucesso', 5)
 
-            const endpointAPIget = `${urlBackend}api/receitas/${body.idUser}`
-            const result = await axios.get(endpointAPIget)
+        dispatch({
+            type: 'LIST_REVENUE',
+            payload: Data
+        })
 
-            const receita = result.data
-
-            dispatch({
-                type: 'LIST_REVENUE',
-                payload: receita
-            })
-
-        } else {
-            message.erro('A Receita não pode ser Excluida, Error ' + resultStatus.status, 5)
-        }
 
     }
 

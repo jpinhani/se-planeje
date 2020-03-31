@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Switch, Radio } from 'antd'
 import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
 import { loadCartao, loadCategoria } from '../../ListagemCombo'
+
+import { GetRequest, UpdateRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index.js'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -121,9 +123,9 @@ class ModalExpense extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
-        const endpointAPI = `${urlBackend}api/despesas/${this.props.data.ID}`
 
         const body = {
+            id: this.props.data.ID,
             idUser: userID(),
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
@@ -172,21 +174,14 @@ class ModalExpense extends React.Component {
             notification.open(args);
         } else {
 
-            const resulStatus = await axios.put(endpointAPI, body, config())
-            if (resulStatus.status === 200) {
-                message.success('Despesa Editada com Sucesso', 7)
+            const resultStatus = await UpdateRequest(body, 'api/despesas')
 
-                const endpointAPIAll = `${urlBackend}api/despesas/${userID()}`
+            verifySend(resultStatus, 'UPDATE', body.descrDespesa)
 
-                const result = await axios.get(endpointAPIAll)
-                const despesa = result.data
+            const Data = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
-                this.handleCancel()
-                this.props.listExpenses(despesa)
-            } else {
-                message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
-            }
-
+            this.props.listExpenses(Data)
+            this.handleCancel()
         }
 
     }

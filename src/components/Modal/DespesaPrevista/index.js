@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Radio } from 'antd'
 import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
 import { loadCartao, loadCategoria } from '../../ListagemCombo'
+
+import { GetRequest, InsertRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index.js'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -105,12 +107,12 @@ class ModalExpense extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/despesas`
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
         const dataPrevistaNova = this.state.dataPrevistaInput ? this.state.dataPrevistaInput : moment(new Date(), dateFormat)
 
         const body = {
+            // id: this.props.data.ID,
             idGrupo: ID(),
             idUser: userID(),
             dataPrevista: dataPrevistaNova,
@@ -131,7 +133,6 @@ class ModalExpense extends React.Component {
             body.status = 'Fatura Pendente'
         }
 
-
         const data = moment(body.dataPrevista, "DD/MM/YYYY");
         body.dataPrevista = data.format("YYYY-MM-DD")
 
@@ -147,22 +148,15 @@ class ModalExpense extends React.Component {
             notification.open(args);
         } else {
 
-            const resulStatus = await axios.post(endpointAPI, body, config())
+            const resultStatus = await InsertRequest(body, 'api/despesas')
 
-            if (resulStatus.status === 200) {
-                message.success('Despesa inserida com Sucesso', 7)
+            verifySend(resultStatus, 'INSERT', body.descrDespesa)
 
-                const endpointAPIAll = `${urlBackend}api/despesas/${userID()}`
+            const Data = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
-                const result = await axios.get(endpointAPIAll)
+            this.props.listExpenses(Data)
+            this.handleCancel()
 
-                const despesa = result.data
-
-                this.props.listExpenses(despesa)
-                this.handleCancel()
-            } else {
-                message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
-            }
         }
     }
 

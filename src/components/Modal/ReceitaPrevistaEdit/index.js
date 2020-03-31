@@ -1,12 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Switch, Radio } from 'antd'
 import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
+
+import { UpdateRequest, GetRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index'
+
 import { loadCategoriaReceita } from '../../ListagemCombo'
 
 import 'antd/dist/antd.css';
@@ -102,9 +105,9 @@ class ModalRevenue extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
-        const endpointAPI = `${urlBackend}api/receitas/${this.props.data.ID}`
 
         const body = {
+            id: this.props.data.ID,
             idUser: userID(),
             dataPrevista: this.state.dataPrevistaInput,
             valorPrevisto: this.state.valorPrevistoInput,
@@ -150,24 +153,13 @@ class ModalRevenue extends React.Component {
 
         } else {
 
-            const resulStatus = await axios.put(endpointAPI, body, config())
+            const resultStatus = await UpdateRequest(body, 'api/receitas')
+            verifySend(resultStatus, 'UPDATE', body.descrReceita)
 
-            if (resulStatus.status === 200) {
+            const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
 
-                message.success('Receita Editada com Sucesso', 7)
-
-                const endpointAPIAll = `${urlBackend}api/receitas/${userID()}`
-                const result = await axios.get(endpointAPIAll)
-                const receita = result.data
-
-
-                this.handleCancel()
-                this.props.listRevenues(receita)
-
-            } else {
-                message.error(`Não foi possivel inserir a Receita, Erro: ${resulStatus.status}`, 7)
-            }
-
+            this.handleCancel()
+            this.props.listRevenues(Data)
         }
 
     }

@@ -5,7 +5,7 @@ import { Icon, Modal, Input, notification } from 'antd'
 import { listCards } from '../../../store/actions/generalCardAction.js'
 import { userID } from '../../../routes/urlBackEnd'
 
-import { UpdateCard, GetCard } from '../../crudSendAxios/cartao'
+import { UpdateRequest, GetRequest } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
 
 import 'antd/dist/antd.css';
@@ -64,11 +64,11 @@ class ModalCard extends React.Component {
 
         if (body.cartao !== '' && body.dtVencimento !== '' && body.diaCompra !== '') {
 
-            const resultStatus = await UpdateCard(body)
+            const resultStatus = await UpdateRequest(body, 'api/cartoes')
 
             verifySend(resultStatus, 'UPDATE', body.cartao)
 
-            const cardData = resultStatus === 200 ? await GetCard() : {}
+            const cardData = resultStatus === 200 ? await GetRequest('api/cartoes') : {}
 
             this.props.listCards(cardData)
 

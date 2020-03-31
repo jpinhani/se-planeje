@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Radio } from 'antd'
 import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
 import { loadCategoriaReceita } from '../../ListagemCombo'
+import { InsertRequest, GetRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -28,7 +29,7 @@ class ModalRevenue extends React.Component {
             categoria: [],
             cartao: [],
             valorPrevistoInput: null,
-            dataPrevistaInput: new Date().dateString,
+            dataPrevistaInput: null,
             parcelasInput: 1,
             categoriaInput: [],
             descrReceitaInput: '',
@@ -97,7 +98,7 @@ class ModalRevenue extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}/api/receitas`
+
 
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
         const body = {
@@ -113,7 +114,7 @@ class ModalRevenue extends React.Component {
             status: "Esperando Pagamento",
         }
 
-        if (body.dataPrevista === undefined) {
+        if (body.dataPrevista === null) {
             let Hoje = new Date();
             const mm = Hoje.getMonth() + 1;
             const dd = Hoje.getDate();
@@ -142,25 +143,13 @@ class ModalRevenue extends React.Component {
             notification.open(args);
 
         } else {
+            const resultStatus = await InsertRequest(body, 'api/receitas')
+            verifySend(resultStatus, 'INSERT', body.descrReceita)
+            const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
 
-            const resulStatus = await axios.post(endpointAPI, body, config())
 
-            if (resulStatus.status === 200) {
-
-                message.success('Receita inserida com Sucesso', 7)
-
-                const endpointAPIAll = `${urlBackend}api/receitas/${userID()}`
-
-                const result = await axios.get(endpointAPIAll)
-
-                const receita = result.data
-
-                this.props.listRevenues(receita)
-                this.handleCancel()
-
-            } else {
-                message.error(`Não foi possivel inserir a receita, Erro: ${resulStatus.status}`, 7)
-            }
+            this.props.listRevenues(Data)
+            this.handleCancel()
         }
     }
 

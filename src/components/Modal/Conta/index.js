@@ -1,10 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
-import { Icon, Modal, Input, message, notification } from 'antd'
+
+import { Icon, Modal, Input, notification } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
-import { logout, isLogged } from '../../../auth/index'
+import { userID } from '../../../routes/urlBackEnd'
+
+import { GetRequest, InsertRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index.js'
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 
@@ -29,7 +32,11 @@ class ModalAcount extends React.Component {
     };
 
     handleCancel() {
-        this.setState({ ...this.state, visible: false })
+        this.setState({
+            ...this.state,
+            descrConta: '',
+            visible: false
+        })
     };
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
 
@@ -41,39 +48,25 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/contas`
-
         const body = {
             idUser: userID(),
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
 
-
         if (body.descrConta !== '') {
-            let resultStatus = 0
             try {
 
-                resultStatus = await axios.post(endpointAPI, body, config())
+                const resultStatus = await InsertRequest(body, 'api/contas')
 
-                if (resultStatus.status === 200) {
-                    message.success('   Conta Registrada com Sucesso ', 5)
-                    const endpoint = `${urlBackend}api/contas/${userID()}`
+                verifySend(resultStatus, 'INSERT', body.descrConta)
+                const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
 
-                    const result = await axios.get(endpoint)
-                    const acounts = result.data
+                this.props.listAcounts(Data)
+                this.handleCancel()
 
-                    this.props.listAcounts(acounts)
-
-                    this.setState({ ...this.state, descrConta: '' })
-                    this.setState({ ...this.state, visible: false })
-                }
             } catch (error) {
-                const stat = error.response.status
-                error.response.status === 401 ? logout() : isLogged()
-                stat === 401
-                    ? message.error('Erro de Autenticação, sua Seção expirou, logue novamente, Error ', 5)
-                    : message.error('Conta Não pode ser Inserida, Error ' + error.message, 5)
+
             }
         } else {
             const args = {
