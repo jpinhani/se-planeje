@@ -1,16 +1,18 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import axios from 'axios'
 
-import { Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch, Divider } from 'antd'
+import { Modal, Input, Select, DatePicker, InputNumber, notification, Switch, Divider } from 'antd'
 import { LikeTwoTone } from '@ant-design/icons';
 import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
+
+import { GetRequest, UpdateRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index'
 
 
 import 'antd/dist/antd.css';
@@ -137,13 +139,13 @@ class ModalExpense extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
-        const endpointAPI = `${urlBackend}api/despesas/pagar/${this.props.data.ID}`
 
         const valueStatus = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? 'Pagamento Realizado' : 'Fatura Pronta Para Pagamento'
         const valueData = this.state.dataRealInput ? this.state.dataRealInput : moment(new Date(), dateFormat)
         const valueCartao = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? null : this.state.cartaoInput
 
         const body = {
+            id: this.props.data.ID,
             idUser: userID(),
             valueEdit: this.state.visibleEdit,
             idGrupo: this.props.data.ID_GRUPO,
@@ -158,7 +160,6 @@ class ModalExpense extends React.Component {
             dataReal: valueData,
             status: valueStatus,
         }
-        console.log('Conta Input', body.idConta)
 
         const data = moment(body.dataReal, "DD/MM/YYYY");
         body.dataReal = data.format("YYYY-MM-DD")
@@ -179,28 +180,16 @@ class ModalExpense extends React.Component {
             notification.open(args);
 
         } else {
-            const resulStatus = await axios.put(endpointAPI, body, config())
 
-            if (resulStatus.status === 200) {
-                message.success('Despesa contabilizada com Sucesso', 7)
+            const resulStatus = await UpdateRequest(body, 'api/despesas/pagar')
+            verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
+            const despesa = resulStatus === 200 ? await GetRequest('api/despesas') : {}
 
+            const despesaPaga = await GetRequest('api/despesas/paga')
 
-                const endpointAPIAll = `${urlBackend}api/despesas/${userID()}`
-
-                const result = await axios.get(endpointAPIAll)
-                const despesa = result.data
-
-                const endpointAPIAllPaga = `${urlBackend}api/despesas/paga/${userID()}`
-                const resultPaga = await axios.get(endpointAPIAllPaga)
-                const despesaPaga = resultPaga.data
-
-                this.handleCancel()
-                this.props.listExpensesPaga(despesaPaga)
-                this.props.listExpenses(despesa)
-
-            } else {
-                message.error(`Não foi possivel contabilizar a Despesa, Erro: ${resulStatus.status}`, 7)
-            }
+            this.handleCancel()
+            this.props.listExpensesPaga(despesaPaga)
+            this.props.listExpenses(despesa)
 
         }
 

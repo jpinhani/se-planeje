@@ -8,9 +8,8 @@ import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
 
 import SearchFilter from '../../components/searchFilterTable'
 import { Table, Icon, Popover, Input } from 'antd'
-import { urlBackend, userID } from '../../routes/urlBackEnd'
 
-import axios from 'axios'
+import { GetRequest } from '../../components/crudSendAxios/crud'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -82,9 +81,8 @@ class SelectDespesaPrevista extends React.Component {
 
 
     async requestAPI() {
-        const endpointAPI = `${urlBackend}api/despesas/${userID()}`
-        const result = await axios.get(endpointAPI)
-        const despesa = result.data
+
+        const despesa = await GetRequest('api/despesas')
         await this.props.listExpenses(despesa)
     }
 

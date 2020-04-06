@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Switch } from 'antd'
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
+
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
+import { GetRequest, UpdateRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -118,16 +120,14 @@ class ModalExpense extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/despesas/real/${userID()}`
-
-        const ID = () => '_' + Math.random().toString(36).substr(2, 9);
-
         const body = {
             id: this.props.data.ID,
-            idGrupo: ID(),
+            idGrupo: this.props.data.ID_GRUPO,
             idUser: userID(),
+            dataPrevista: this.props.data.DT_PREVISTO,
             dataReal: moment(this.state.dataRealInput, "DD/MM/YYYY"),
             valorReal: this.state.valorRealInput,
+            valorCorrigir: this.props.data.VL_REAL2 - this.state.valorRealInput,
             cartao: this.state.cartaoInput,
             conta: this.state.contaInput,
             categoria: this.state.categoriaInput,
@@ -158,21 +158,13 @@ class ModalExpense extends React.Component {
 
         } else {
 
-            const resulStatus = await axios.put(endpointAPI, body, config())
-            if (resulStatus.status === 200) {
+            const resulStatus = await UpdateRequest(body, 'api/despesas/real')
+            verifySend(resulStatus, 'UPDATE', body.descrDespesa)
 
-                message.success('Despesa Alterada com Sucesso', 7)
+            const despesa = resulStatus === 200 ? await GetRequest('api/despesas/paga') : {}
 
-                const endpointAPIAll = `${urlBackend}api/despesas/paga/${userID()}`
-                const result = await axios.get(endpointAPIAll)
-
-                const despesa = result.data
-                this.handleCancel()
-                this.props.listExpensesPaga(despesa)
-
-            } else {
-                message.error(`Não foi possivel alterar a Despesa, Erro: ${resulStatus.status}`, 7)
-            }
+            this.handleCancel()
+            this.props.listExpensesPaga(despesa)
         }
     }
 

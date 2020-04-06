@@ -1,9 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import axios from 'axios'
 import { Icon, Modal, Input, Select, notification, message } from 'antd'
+
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+
 import 'antd/dist/antd.css';
 import './styles.scss'
 

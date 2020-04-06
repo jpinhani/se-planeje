@@ -15,6 +15,7 @@ import SelectDespesaPrevista from '../pages/SelectDespesaPrevista'
 import SelectDespesaRealizada from '../pages/SelectDespesaRealizada'
 import SelectReceitaPrevista from '../pages/SelectReceitaPrevista'
 import SelectTabDespesa from '../pages/SelectTabDespesa'
+import Teste from '../components/Teste/index'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 import testGrafico from '../components/TestGrafico'
@@ -42,6 +43,7 @@ export default () =>
               <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
               <PrivateRoute exact path='/grafico' component={testGrafico} />
               <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
+              <PrivateRoute exact path='/teste' component={Teste} />
               <PrivateRoute exact path='/visao' component={Visao} />
               <PrivateRoute component={Home} />
             </Switch>

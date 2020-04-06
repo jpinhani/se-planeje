@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Radio, Form } from 'antd'
 import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
@@ -103,9 +103,15 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, dayValue: dias })
     }
 
+    handleSubmit = e => {
+        e.preventDefault()
+        this.props.form.validateFields((err) => { /* !err */
 
-    async handleSubmit(event) {
-        event.preventDefault()
+            if (!err) this.handleSubmitok()
+        });
+    }
+
+    async handleSubmitok() {
 
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
@@ -136,44 +142,34 @@ class ModalExpense extends React.Component {
         const data = moment(body.dataPrevista, "DD/MM/YYYY");
         body.dataPrevista = data.format("YYYY-MM-DD")
 
-        if (body.dataPrevista === null | body.valorPrevisto === null |
-            body.categoria.length === 0 | body.parcela.length === 0 | body.descrDespesa.length === 0) {
 
-            const args = {
-                message: 'Preencha todos os dados do Formulário',
-                description:
-                    'Para cadastrar uma nova despesa é necessário que seja informado todos os campos',
-                duration: 5,
-            };
-            notification.open(args);
-        } else {
 
-            const resultStatus = await InsertRequest(body, 'api/despesas')
+        const resultStatus = await InsertRequest(body, 'api/despesas')
 
-            verifySend(resultStatus, 'INSERT', body.descrDespesa)
+        verifySend(resultStatus, 'INSERT', body.descrDespesa)
 
-            const Data = resultStatus === 200 ? await GetRequest('api/despesas') : {}
+        const Data = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
-            this.props.listExpenses(Data)
-            this.handleCancel()
+        this.props.listExpenses(Data)
+        this.handleCancel()
 
-        }
+
     }
 
     render() {
-
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Despesa Prevista' theme="twoTone" onClick={this.showModal} />
 
-                <form onSubmit={this.handleSubmit}>
-                    <Modal
-                        title="Cadastrar Despesa Prevista"
-                        visible={this.state.visible}
-                        onOk={this.handleSubmit}
-                        onCancel={this.handleCancel}
-                    >
 
+                <Modal
+                    title="Cadastrar Despesa Prevista"
+                    visible={this.state.visible}
+                    onOk={this.handleSubmit}
+                    onCancel={this.handleCancel}
+                >
+                    <Form>
                         <Radio.Group
                             style={{ width: '73%' }}
                             onChange={this.handleValue}
@@ -191,25 +187,41 @@ class ModalExpense extends React.Component {
                             value={this.state.dayValue}
                             disabled={this.state.dayVisible}
                         />
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item
+                                name='vlPrevisto'
+                                onChange={this.handleValorPrevisto}
+                                style={{ width: '50%' }}
+                            >
+                                {getFieldDecorator('vlPrevisto', {
+                                    rules: [{ required: true, message: 'Por Favor, Informe o Valor da Despesa!' }],
+                                    initialValue: this.state.valorPrevistoInput
+                                })(
+                                    <InputNumber
+                                        style={{ width: '100%' }}
+                                        placeholder="Valor Previsto"
+                                        decimalSeparator=','
+                                        precision={2}
+                                        min={0}
+                                        autoFocus
+                                    />
+                                )}
+                            </Form.Item >
 
-                        <InputNumber
-                            style={{ width: '49%' }}
-                            placeholder="Valor Previsto"
-                            decimalSeparator=','
-                            precision={2}
-                            min={0}
-                            autoFocus
-                            onChange={this.handleValorPrevisto}
-                            value={this.state.valorPrevistoInput}
-                        />
-
-                        <DatePicker style={{ width: '49%' }}
-                            onChange={this.handleDataPrevisto}
-                            placeholder="Data Prevista"
-                            defaultValue={moment(new Date(), dateFormat)}
-                            format={dateFormat}
-                        />
-
+                            <Form.Item style={{ width: '50%' }}
+                                onChange={this.handleDataPrevisto}
+                            >{getFieldDecorator('dtPrevisto', {
+                                rules: [{ required: true, message: 'Por Favor, Informe a Data Prevista!' }],
+                                initialValue: moment(new Date(), dateFormat)
+                            })(
+                                <DatePicker
+                                    style={{ width: '100%' }}
+                                    placeholder="Data Prevista"
+                                    defaultValue={moment(new Date(), dateFormat)}
+                                    format={dateFormat}
+                                />)}
+                            </Form.Item>
+                        </div>
                         <Select
                             defaultValue='DÉBITO OU DINHEIRO'
                             showSearch
@@ -256,13 +268,15 @@ class ModalExpense extends React.Component {
                             onChange={(event) => this.handledescricaoDespesa(event.target.value)}
                             value={this.state.descrDespesaInput}
                         />
+                    </Form>
+                </Modal>
 
-                    </Modal>
-                </form>
             </div >
         )
     }
 }
+
+const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
 
 const mapStateToProps = (state/*, ownProps*/) => {
     return {
@@ -276,4 +290,4 @@ const mapDispatchToProps = { listExpenses }
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModalExpense)
+)(WrappedApp)

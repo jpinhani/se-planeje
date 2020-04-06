@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, notification } from 'antd'
+import { Icon, Modal, Input, Form } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../routes/urlBackEnd'
 
@@ -39,8 +39,16 @@ class ModalAcount extends React.Component {
         this.setState({ ...this.state, descrConta: event.target.value })
     }
 
-    async handleSubmit(event) {
-        event.preventDefault()
+    handleSubmit = e => {
+        e.preventDefault()
+        this.props.form.validateFields((err) => { /* !err */
+
+            if (!err) this.handleSubmitok()
+        });
+    }
+
+    async handleSubmitok() {
+
 
         const body = {
             id: this.props.data.ID,
@@ -48,47 +56,49 @@ class ModalAcount extends React.Component {
             descrConta: this.state.descrConta,
             status: "Ativo"
         }
-        if (body.descrConta !== '') {
 
-            const resultStatus = await UpdateRequest(body, 'api/contas')
+        const resultStatus = await UpdateRequest(body, 'api/contas')
 
-            verifySend(resultStatus, 'UPDATE', body.cartao)
+        verifySend(resultStatus, 'UPDATE', body.descrConta)
 
-            const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
+        const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
 
-            this.props.listAcounts(Data)
+        this.props.listAcounts(Data)
 
-            this.handleCancel()
-        }
-        else {
-            const args = {
-                message: 'Preencha todos os dados do Formulário',
-                description:
-                    'Para editar a conta é necessário que seja informado todos os campos',
-                duration: 5,
-            };
-            notification.open(args);
-        }
+        this.handleCancel()
+        // this.props.form.resetFields()
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Conta/ Fonte de Entrada e Saída' theme="twoTone" onClick={this.showModal} />
-                <form onSubmit={this.handleSubmit}>
-                    <Modal
-                        title="Editar Conta"
-                        visible={this.state.visible}
-                        onOk={this.handleSubmit}
-                        onCancel={this.handleCancel}
-                    >
-                        <Input name='conta' value={this.state.descrConta} onChange={this.handleDescrConta} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
-                    </Modal>
-                </form>
+                <Modal
+                    title="Editar Conta"
+                    visible={this.state.visible}
+                    onOk={this.handleSubmit}
+                    onCancel={this.handleCancel}
+                >
+                    <Form>
+                        <Form.Item
+                            name='conta'
+                            value={this.state.descrConta}
+                            onChange={this.handleDescrConta}
+                        >
+                            {getFieldDecorator('conta', {
+                                rules: [{ required: true, message: 'Por Favor, Informe a Conta!' }],
+                                initialValue: this.state.descrConta
+                            })(
+                                <Input placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />)}
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </div >
         )
     }
 }
+const WrappedApp = Form.create({ name: 'coordinated' })(ModalAcount);
 
 const mapStateToProps = (state /*, ownProps*/) => {
     return {
@@ -101,4 +111,4 @@ const mapDispatchToProps = { listAcounts }
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModalAcount)
+)(WrappedApp)

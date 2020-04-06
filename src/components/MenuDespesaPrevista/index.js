@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 
-import { Switch, Button, message } from 'antd'
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+import { Switch, Button } from 'antd'
+import { userID } from '../../routes/urlBackEnd'
+
+import { GetRequest, UpdateRequest } from '../crudSendAxios/crud'
+import { verifySend } from '../verifySendAxios/index'
 
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 
 export default (props) => {
 
@@ -20,6 +22,7 @@ export default (props) => {
 
     async function handleDelete() {
         const valor = {
+            id: props.data.ID,
             idUser: userID(),
             dataPrevista: props.data.DATANOVA,
             valorPrevisto: props.data.VL_PREVISTO2,
@@ -33,28 +36,15 @@ export default (props) => {
 
         const body = valor
 
-        const endpoint = `${urlBackend}api/despesas/delete/${props.data.ID}`
+        const resultStatus = await UpdateRequest(body, 'api/despesas/delete')
+        verifySend(resultStatus, 'DELETE', body.descrDespesa)
 
-        const resultStatus = await axios.put(endpoint, body, config())
+        const despesa = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
-        if (resultStatus.status === 200) {
-
-            message.success('   Despesa Excluida com Sucesso', 5)
-
-            const endpointAPIget = `${urlBackend}api/despesas/${body.idUser}`
-
-            const result = await axios.get(endpointAPIget)
-
-            const despesa = result.data
-
-            dispatch({
-                type: 'LIST_EXPENSE',
-                payload: despesa
-            })
-
-        } else {
-            message.erro('   A Despesa não pode ser Excluida, Error ' + resultStatus.status, 5)
-        }
+        dispatch({
+            type: 'LIST_EXPENSE',
+            payload: despesa
+        })
 
     }
 

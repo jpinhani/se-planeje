@@ -16,6 +16,12 @@ const respOk = (req, descr) => {
         case 'DELETE':
             message.success(`${descr} Excluido Com Sucesso`)
             break;
+        case 'METAPAGA':
+            message.success(`${descr} Contabilizado Com Sucesso`)
+            break;
+        case 'DELETEDESPESAREAL':
+            message.success(`${descr} Excluida`)
+            break;
         default:
             break;
     }
@@ -28,10 +34,15 @@ const respError = (req, descr) => {
             break;
         case 'UPDATE':
             message.error(`Erro ao tentar Editar ${descr}, a transação não sera salva`)
-
             break;
         case 'DELETE':
             message.error(`Erro ao tentar Excluir ${descr}, a transação não sera salva`)
+            break;
+        case 'METAPAGA':
+            message.error(`Erro ao tentar Contabilizar a Meta ${descr}, a transação não sera salva`)
+            break;
+        case 'DELETEDESPESAREAL':
+            message.error(`Erro ao tentar excluir a despesa ${descr}, a transação não sera salva`)
             break;
         default:
             break;

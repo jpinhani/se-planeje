@@ -61,7 +61,7 @@ class SiderDemo extends React.Component {
                     >
                         <Menu.Item key="9"><Link to='/selecttabdespesa'>Despesas</Link></Menu.Item>
                         <Menu.Item key="10"><Link to='/grafico'>Faturas</Link></Menu.Item>
-                        <Menu.Item key="11">Receitas</Menu.Item>
+                        <Menu.Item key="11"><Link to='/teste'>Receitas</Link></Menu.Item>
                         <Menu.Item key="12">Transferências</Menu.Item>
                     </SubMenu>
                     <SubMenu

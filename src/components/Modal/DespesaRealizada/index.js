@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import axios from 'axios'
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, message, Switch } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Switch } from 'antd'
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../routes/urlBackEnd'
+
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
+import { InsertRequest, GetRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -121,8 +123,6 @@ class ModalExpense extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/despesas/real`
-
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
         const body = {
@@ -159,21 +159,14 @@ class ModalExpense extends React.Component {
 
         } else {
 
-            const resulStatus = await axios.post(endpointAPI, body, config())
-            if (resulStatus.status === 200) {
+            const resulStatus = await InsertRequest(body, 'api/despesas/real')
+            verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 
-                message.success('Despesa inserida com Sucesso', 7)
+            const despesa = resulStatus === 200 ? await GetRequest('api/despesas/paga') : {}
 
-                const endpointAPIAll = `${urlBackend}api/despesas/paga/${userID()}`
-                const result = await axios.get(endpointAPIAll)
+            this.props.listExpensesPaga(despesa)
+            this.handleCancel()
 
-                const despesa = result.data
-
-                this.props.listExpensesPaga(despesa)
-                this.handleCancel()
-            } else {
-                message.error(`Não foi possivel inserir as Despesas, Erro: ${resulStatus.status}`, 7)
-            }
         }
     }
 

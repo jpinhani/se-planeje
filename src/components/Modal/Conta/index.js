@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, notification } from 'antd'
+import { Icon, Modal, Input, Form } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../routes/urlBackEnd'
 
@@ -10,6 +10,8 @@ import { verifySend } from '../../verifySendAxios/index.js'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
+
+
 
 class ModalAcount extends React.Component {
     constructor(props) {
@@ -45,8 +47,16 @@ class ModalAcount extends React.Component {
     }
 
 
-    async handleSubmit(event) {
-        event.preventDefault()
+
+    handleSubmit = e => {
+        e.preventDefault()
+        this.props.form.validateFields((err) => { /* !err */
+
+            if (!err) this.handleSubmitok()
+        });
+    }
+
+    async handleSubmitok() {
 
         const body = {
             idUser: userID(),
@@ -54,50 +64,49 @@ class ModalAcount extends React.Component {
             status: "Ativo"
         }
 
-        if (body.descrConta !== '') {
-            try {
+        const resultStatus = await InsertRequest(body, 'api/contas')
 
-                const resultStatus = await InsertRequest(body, 'api/contas')
+        verifySend(resultStatus, 'INSERT', body.descrConta)
+        const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
 
-                verifySend(resultStatus, 'INSERT', body.descrConta)
-                const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
-
-                this.props.listAcounts(Data)
-                this.handleCancel()
-
-            } catch (error) {
-
-            }
-        } else {
-            const args = {
-                message: 'Preencha todos os dados do Formulário',
-
-                description:
-                    'Para Inserir uma conta é necessário que seja informado todos os campos',
-                duration: 5,
-            };
-            notification.open(args);
-        }
+        this.props.listAcounts(Data)
+        this.handleCancel()
+        this.props.form.resetFields()
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Conta / Fonte de Entrada e Saída' theme="twoTone" onClick={this.showModal} />
-                <form onSubmit={this.handleSubmit}>
-                    <Modal
-                        title="Cadastrar Nova Conta"
-                        visible={this.state.visible}
-                        onOk={this.handleSubmit}
-                        onCancel={this.handleCancel}
-                    >
-                        <Input name='conta' value={this.state.descrConta} onChange={this.handleDescrConta} placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />
-                    </Modal>
-                </form>
+
+                <Modal
+                    title="Cadastrar Nova Conta"
+                    visible={this.state.visible}
+                    onOk={this.handleSubmit}
+                    onCancel={this.handleCancel}
+                >
+                    <Form >
+
+                        <Form.Item
+                            name='conta'
+                            value={this.state.descrConta}
+                            onChange={this.handleDescrConta}
+                        >
+                            {getFieldDecorator('conta', {
+                                rules: [{ required: true, message: 'Por Favor, Informe a Conta!' }],
+                            })(
+                                <Input placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />)}
+                        </Form.Item>
+
+                    </Form>
+                </Modal>
+
             </div >
         )
     }
 }
+const WrappedApp = Form.create({ name: 'coordinated' })(ModalAcount);
 
 const mapStateToProps = (state) => {
     return {
@@ -110,4 +119,4 @@ const mapDispatchToProps = { listAcounts }
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModalAcount)
+)(WrappedApp)

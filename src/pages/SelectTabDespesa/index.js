@@ -46,9 +46,6 @@ class SelectTabDespesa extends React.Component {
     render() {
         return (<div>
             <Card
-                // style={{ width: '100%' }}
-                // title="SePlaneje - Contabilizar Despesas"
-                // extra={<a href="#">More</a>}
                 tabList={tabList}
                 activeTabKey={this.state.key}
                 onTabChange={key => {

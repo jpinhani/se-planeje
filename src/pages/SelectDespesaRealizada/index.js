@@ -2,16 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { listExpensesPaga } from '../../store/actions/generalExpenseRealAction'
+import { listExpenses } from '../../store/actions/generalExpenseAction'
+
 import DespesaRealizada from '../../components/Modal/DespesaRealizada'
-// import Menu from '../../components/MenuDespesaPrevista'
 
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
 
-import { Table, Icon, Popconfirm, Input, message } from 'antd'
-import { urlBackend, userID, config } from '../../routes/urlBackEnd'
+import { Table, Icon, Popconfirm, Input } from 'antd'
 
-import axios from 'axios'
+import { GetRequest, UpdateRequest } from '../../components/crudSendAxios/crud'
+import { verifySend } from '../../components/verifySendAxios/index'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -30,18 +31,16 @@ class SelectDespesaReal extends React.Component {
     async deleteReal(expenseReal) {
 
         const body = expenseReal
-        // console.log(body)
-        const endpoint = `${urlBackend}api/despesas/delete/real/${expenseReal.ID}`
-        const resultStatus = await axios.put(endpoint, body, config())
+        body.id = expenseReal.ID
 
-        if (resultStatus.status === 200) {
-            message.success('Despesa Excluida com Sucesso', 5)
-            this.requestAPI()
-        } else {
-            message.erro('A Despesa não pode ser Excluida, Error ' + resultStatus.status, 5)
-        }
+        const resultStatus = await UpdateRequest(body, 'api/despesas/delete/real')
+        verifySend(resultStatus, 'DELETEDESPESAREAL', body.DESCR_DESPESA)
 
+        const metaList = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
+        this.props.listExpenses(metaList)
+
+        this.requestAPI()
     }
 
 
@@ -108,9 +107,8 @@ class SelectDespesaReal extends React.Component {
 
 
     async requestAPI() {
-        const endpointAPI = `${urlBackend}api/despesas/paga/${userID()}`
-        const result = await axios.get(endpointAPI)
-        const despesa = result.data
+
+        const despesa = await GetRequest('api/despesas/paga')
         this.props.listExpensesPaga(despesa)
     }
 
@@ -143,11 +141,12 @@ class SelectDespesaReal extends React.Component {
 
 const mapStateToProps = (state /*, ownProps*/) => {
     return {
-        expenseReal: state.expenseReal
+        expenseReal: state.expenseReal,
+        expense: state.expense
     }
 }
 
-const mapDispatchToProps = { listExpensesPaga }
+const mapDispatchToProps = { listExpensesPaga, listExpenses }
 
 export default connect(
     mapStateToProps,

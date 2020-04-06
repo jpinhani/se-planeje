@@ -6,13 +6,10 @@ import SearchFilter from '../../components/searchFilterTable'
 
 import { Table, Input } from 'antd'
 import DespesaPagar from '../../components/Modal/DespesaPagar'
-import { urlBackend, userID } from '../../routes/urlBackEnd'
-
-import axios from 'axios'
+import { GetRequest } from '../../components/crudSendAxios/crud'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
-
 
 class SelectDespesaPagar extends React.Component {
     constructor(props) {
@@ -75,9 +72,7 @@ class SelectDespesaPagar extends React.Component {
 
     async requestAPI() {
 
-        const endpointAPI = `${urlBackend}api/despesas/${userID()}`
-        const result = await axios.get(endpointAPI)
-        const despesa = result.data
+        const despesa = await GetRequest('api/despesas')
         this.props.listExpenses(despesa)
     }
 

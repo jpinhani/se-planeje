@@ -1,13 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
 
 import AddCartao from '../../components/Modal/Cartao/index'
 import EditCartao from '../../components/Modal/CartaoEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
 
 import { listCards } from '../../store/actions/generalCardAction.js'
-import { urlBackend, userID } from '../../routes/urlBackEnd'
 import { Table, Divider, Icon, Input, Popconfirm } from 'antd'
 
 import { DeleteRequest, GetRequest } from '../../components/crudSendAxios/crud'
@@ -33,9 +31,7 @@ class SelectCartao extends React.Component {
 
     verifySend(resultStatus, 'DELETE', card.CARTAO)
 
-    const cardData = resultStatus === 200 ? await GetRequest('api/cartoes') : {}
-
-    this.props.listCards(cardData)
+    this.requestAPI()
 
   }
 
@@ -78,10 +74,7 @@ class SelectCartao extends React.Component {
 
   async requestAPI() {
 
-    const endpointAPI = `${urlBackend}api/cartoes/${userID()}`
-
-    const result = await axios.get(endpointAPI)
-    const cartao = result.data
+    const cartao = await GetRequest('api/cartoes')
     this.props.listCards(cartao)
   }
 
