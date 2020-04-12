@@ -152,7 +152,7 @@ class ModalExpense extends React.Component {
 
         this.props.listExpenses(Data)
         this.handleCancel()
-
+        this.props.form.resetFields()
 
     }
 
@@ -190,7 +190,6 @@ class ModalExpense extends React.Component {
                         <div style={{ width: '100%', display: 'flex' }}>
                             <Form.Item
                                 name='vlPrevisto'
-                                onChange={this.handleValorPrevisto}
                                 style={{ width: '50%' }}
                             >
                                 {getFieldDecorator('vlPrevisto', {
@@ -200,6 +199,7 @@ class ModalExpense extends React.Component {
                                     <InputNumber
                                         style={{ width: '100%' }}
                                         placeholder="Valor Previsto"
+                                        onChange={this.handleValorPrevisto}
                                         decimalSeparator=','
                                         precision={2}
                                         min={0}
@@ -217,57 +217,81 @@ class ModalExpense extends React.Component {
                                 <DatePicker
                                     style={{ width: '100%' }}
                                     placeholder="Data Prevista"
-                                    defaultValue={moment(new Date(), dateFormat)}
+                                    //        defaultValue={moment(new Date(), dateFormat)}
                                     format={dateFormat}
                                 />)}
                             </Form.Item>
                         </div>
-                        <Select
-                            defaultValue='DÉBITO OU DINHEIRO'
-                            showSearch
-                            style={{ width: '65%' }}
-                            placeholder="Informe o Cartão"
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            onSelect={this.handleCartao}
-                            value={this.state.cartaoInput}
-                        >
-                            {this.state.cartao}
-                        </Select>
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item style={{ width: '80%' }}>
+                                {getFieldDecorator('cartao', {
+                                    rules: [{ required: true, message: 'Por Favor, Informe como sera o pagamento!' }],
+                                    initialValue: this.state.cartaoInput
+                                })(
+                                    <Select
+                                        //      defaultValue='DÉBITO OU DINHEIRO'
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        placeholder="Informe o Cartão"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) => (
+                                            option.props.children.toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        )}
+                                        onSelect={this.handleCartao}
+                                    //    value={this.state.cartaoInput}
+                                    >
+                                        {this.state.cartao}
+                                    </Select>)}
+                            </Form.Item>
 
-                        <InputNumber
-                            style={{ width: '35%' }}
-                            placeholder='N Parcelas'
-                            min={1}
-                            onChange={this.handleParcelas}
-                            value={this.state.parcelasInput}
-                        />
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            style={{ width: '99%' }}
-                            placeholder="Informe a Categoria"
-                            onSelect={this.handleCategoria}
-                            value={this.state.categoriaInput}
-                        >
-                            {this.state.categoria}
-                        </Select>
+                            <Form.Item style={{ width: '20%' }}>
+                                {getFieldDecorator('parcela', {
+                                    rules: [{ required: true, message: 'Por Favor, Informe a quantidade de parcelas!' }],
+                                    initialValue: this.state.parcelasInput
+                                })(<InputNumber
+                                    style={{ width: '100%' }}
+                                    placeholder='N Parcelas'
+                                    min={1}
+                                    onChange={this.handleParcelas}
+                                //    value={this.state.parcelasInput}
+                                />)}
+                            </Form.Item>
+                        </div>
 
-                        <TextArea
-                            placeholder="Descreva a Despesa"
-                            style={{ width: '99%' }}
-                            rows={6}
-                            // value={descrDespesaInput}
-                            onChange={(event) => this.handledescricaoDespesa(event.target.value)}
-                            value={this.state.descrDespesaInput}
-                        />
+                        <Form.Item style={{ width: '100%' }}>
+                            {getFieldDecorator('categoria', {
+                                rules: [{ required: true, message: 'Por Favor, Informe a Categoria!' }],
+                                initialValue: this.state.categoriaInput
+                            })(
+                                <Select
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) => (
+                                        option.props.children.toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    )}
+                                    style={{ width: '100%' }}
+                                    placeholder="Informe a Categoria"
+                                    onSelect={this.handleCategoria}
+                                //     value={this.state.categoriaInput}
+                                >
+                                    {this.state.categoria}
+                                </Select>)}
+                        </Form.Item>
+
+                        <Form.Item style={{ width: '100%' }}>
+                            {getFieldDecorator('descricao', {
+                                rules: [{ required: true, message: 'Por Favor, Informe a Descrição!' }],
+                                initialValue: this.state.descrDespesaInput
+                            })(
+                                <TextArea
+                                    placeholder="Descreva a Despesa"
+                                    style={{ width: '100%' }}
+                                    rows={6}
+                                    onChange={(event) => this.handledescricaoDespesa(event.target.value)}
+                                />)}
+                        </Form.Item>
                     </Form>
                 </Modal>
 

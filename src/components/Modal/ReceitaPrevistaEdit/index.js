@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Switch, Radio } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Radio, Form } from 'antd'
 import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
@@ -103,8 +103,16 @@ class ModalRevenue extends React.Component {
         this.setState({ ...this.state, dayValue: dias })
     }
 
-    async handleSubmit(event) {
-        event.preventDefault()
+
+    handleSubmit = e => {
+        e.preventDefault()
+        this.props.form.validateFields((err) => { /* !err */
+
+            if (!err) this.handleSubmitok()
+        });
+    }
+
+    async handleSubmitok() {
 
         const body = {
             id: this.props.data.ID,
@@ -139,33 +147,20 @@ class ModalRevenue extends React.Component {
             console.log('body.dataPrevista', body.dataPrevista)
         }
 
-        if (body.dataPrevista === null | body.valorPrevisto === null |
-            body.categoria.length === 0 | body.parcela.length === 0 | body.descrReceita.length === 0) {
 
-            const args = {
-                message: 'Preencha todos os dados do Formulário',
-                description:
-                    'Para editar uma receita é necessário que seja informado todos os campos',
-                duration: 5,
-            };
+        const resultStatus = await UpdateRequest(body, 'api/receitas')
+        verifySend(resultStatus, 'UPDATE', body.descrReceita)
 
-            notification.open(args);
+        const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
 
-        } else {
+        this.handleCancel()
+        this.props.listRevenues(Data)
 
-            const resultStatus = await UpdateRequest(body, 'api/receitas')
-            verifySend(resultStatus, 'UPDATE', body.descrReceita)
-
-            const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
-
-            this.handleCancel()
-            this.props.listRevenues(Data)
-        }
 
     }
 
     render() {
-
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Receita Prevista' theme="twoTone" onClick={this.showModal} />
@@ -205,60 +200,86 @@ class ModalRevenue extends React.Component {
                             disabled={this.state.dayVisible}
                         />
 
-                        <InputNumber
-                            style={{ width: '49%' }}
-                            placeholder="Valor Previsto"
-                            decimalSeparator=','
-                            precision={2}
-                            min={0}
-                            onChange={this.handleValorPrevisto}
-                            value={this.state.valorPrevistoInput}
-                        />
-
-                        <DatePicker style={{ width: '49%' }}
-                            onChange={this.handleDataPrevisto}
-                            placeholder="Data Prevista"
-                            defaultValue={moment(this.state.dataPrevistaInput, dateFormat)}
-                            format={dateFormat}
-                        />
-
-                        <InputNumber
-                            style={{ width: '35%' }}
-                            placeholder='N Parcelas'
-                            min={1}
-                            onChange={this.handleParcelas}
-                            value={this.state.parcelasInput}
-                            disabled
-                        />
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            style={{ width: '64%' }}
-                            placeholder="Informe a Categoria"
-                            onSelect={this.handleCategoria}
-                            value={this.state.categoriaInput}
-                        >
-                            {this.state.categoria}
-                        </Select>
-
-                        <TextArea
-                            placeholder="Descreva a Receita"
-                            style={{ width: '99%' }}
-                            rows={6}
-                            onChange={(event) => this.handledescricaoReceita(event.target.value)}
-                            value={this.state.descrReceitaInput}
-                        />
-
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('vlprevisto', {
+                                    rules: [{ required: true, message: 'Por Favor, informe o valor!' }],
+                                    initialValue: this.state.valorPrevistoInput
+                                })(
+                                    <InputNumber
+                                        style={{ width: '100%' }}
+                                        placeholder="Valor Previsto"
+                                        decimalSeparator=','
+                                        precision={2}
+                                        min={0}
+                                        onChange={this.handleValorPrevisto}
+                                    />)}
+                            </Form.Item>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('dtprevista', {
+                                    rules: [{ required: true, message: 'Por Favor, informe a data prevista!' }],
+                                    initialValue: moment(this.state.dataPrevistaInput, dateFormat)
+                                })(
+                                    <DatePicker style={{ width: '100%' }}
+                                        onChange={this.handleDataPrevisto}
+                                        placeholder="Data Prevista"
+                                        format={dateFormat}
+                                    />)}
+                            </Form.Item>
+                        </div>
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item style={{ width: '30%' }}>
+                                {getFieldDecorator('parcelas', {
+                                    rules: [{ required: true, message: 'Por Favor, informe a qtd de parcelas' }],
+                                    initialValue: this.state.parcelasInput
+                                })(
+                                    <InputNumber
+                                        style={{ width: '100%' }}
+                                        placeholder='N Parcelas'
+                                        min={1}
+                                        onChange={this.handleParcelas}
+                                        disabled
+                                    />)}
+                            </Form.Item>
+                            <Form.Item style={{ width: '70%' }}>
+                                {getFieldDecorator('categoria', {
+                                    rules: [{ required: true, message: 'Por Favor, informe a categoria!' }],
+                                    initialValue: this.state.categoriaInput
+                                })(
+                                    <Select
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) => (
+                                            option.props.children.toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        )}
+                                        style={{ width: '100%' }}
+                                        placeholder="Informe a Categoria"
+                                        onSelect={this.handleCategoria}
+                                    >
+                                        {this.state.categoria}
+                                    </Select>)}
+                            </Form.Item>
+                        </div>
+                        <Form.Item style={{ width: '100%' }}>
+                            {getFieldDecorator('description', {
+                                rules: [{ required: true, message: 'Por favor, informe a descrição da despesa' }],
+                                initialValue: this.state.descrReceitaInput
+                            })(
+                                <TextArea
+                                    placeholder="Descreva a Receita"
+                                    style={{ width: '100%' }}
+                                    rows={6}
+                                    onChange={(event) => this.handledescricaoReceita(event.target.value)}
+                                />)}
+                        </Form.Item>
                     </Modal>
                 </form>
             </div >
         )
     }
 }
+const WrappedApp = Form.create({ name: 'coordinated' })(ModalRevenue);
 
 const mapStateToProps = (state) => {
     return {
@@ -272,4 +293,4 @@ const mapDispatchToProps = { listRevenues }
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModalRevenue)
+)(WrappedApp)
