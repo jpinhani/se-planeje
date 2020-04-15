@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import FaturaPagar from '../../components/Modal/DespesaCartao';
-import { Tabs, Table } from 'antd';
+import {  Tabs,  Table } from 'antd';
 import { urlBackend, userID } from '../../routes/urlBackEnd'
 
 import { listFaturaPaga } from '../../store/actions/generalFaturaAction'
@@ -16,14 +16,12 @@ import './styles.scss'
 const { TabPane } = Tabs;
 
 class SelectFaturaPagar extends React.Component {
-    _isMounted = false;
     constructor(props) {
         super(props)
 
         this.state = {
             mode: 'right',
-            detalheFaturaList: '',
-            isLoading: true
+            detalheFaturaList: ''
         };
 
     }
@@ -68,7 +66,6 @@ class SelectFaturaPagar extends React.Component {
         ]
     }
 
-
     async requestAPI() {
 
         const endpointAPI = `${urlBackend}api/despesas/fatura/${userID()}`
@@ -105,47 +102,29 @@ class SelectFaturaPagar extends React.Component {
                     rowKey={ID => ID.ID_DESPESA}
                 />
             </TabPane >
+              
         )
         )
 
         this.setState({ ...this.state, detalheFaturaList: dadosFatura })
     }
 
-    componentDidMount() {
-        
-        this._isMounted = true
-        
-        callAPI_or_DB(this.requestAPI()).then(result => {
-          if (this._isMounted) {
-            this.setState({isLoading: false})
-          }
-        });
-
-        
+    componentDidMount() {      
+        this.requestAPI()
     }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-      }
-
-    // componentWillUnmount() {
-    //     // fix Warning: Can't perform a React state update on an unmounted component
-    //     this.setState = (state, callback) => {
-    //         return;
-    //     };
-    // }
 
     render() {
 
         return (
             <div>
-                <Tabs className='tabs__list'
+                   <Tabs className='tabs__list'
                     defaultActiveKey="1"
                     tabPosition={this.state.mode}
-                    style={{ height: '100%' }}>
-
+                    style={{ height: '100%' }}>   
                     {this.state.detalheFaturaList}
-                </Tabs>
+                    </Tabs>      
+
             </div >
         )
     }
@@ -158,7 +137,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     }
 }
 
-const mapDispatchToProps = { listFaturaPaga, listFaturadetalhe }
+const mapDispatchToProps = { listFaturaPaga , listFaturadetalhe  }
 
 export default connect(
     mapStateToProps,

@@ -9,9 +9,9 @@ import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
 
-import { Table, Icon, Popconfirm, Input } from 'antd'
+import { Table,  Icon, Popconfirm,  Input } from 'antd'
 
-import { GetRequest, UpdateRequest } from '../../components/crudSendAxios/crud'
+import {  GetRequest,  UpdateRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
 
 import 'antd/dist/antd.css';
@@ -40,11 +40,11 @@ class SelectDespesaReal extends React.Component {
 
         this.props.listExpenses(metaList)
 
-        this.requestAPI()
+         this.requestAPI()
     }
 
 
-    columns() {
+    columns_teste() {
         return [
             {
                 title: 'CATEGORIA',
@@ -54,50 +54,50 @@ class SelectDespesaReal extends React.Component {
             {
                 title: 'R$ PREVISTO',
                 dataIndex: 'VL_PREVISTO',
-                key: 'VL_PREVISTO'
+                key: 'VL_PREVISTOR'
             },
             {
                 title: 'R$ REAL',
                 dataIndex: 'VL_REAL',
-                key: 'VL_REAL'
+                key: 'VL_REALR'
             },
             {
                 title: 'DATA PREVISTA',
                 dataIndex: 'DATANOVA',
-                key: 'DATANOVA'
+                key: 'DATANOVAR'
             },
             {
                 title: 'DATA REALIZADA',
                 dataIndex: 'DATANOVAREAL',
-                key: 'DATANOVAREAL'
+                key: 'DATANOVAREALR'
             },
             {
                 title: 'DESPESA',
                 dataIndex: 'DESCR_DESPESA',
-                key: 'DESCR_DESPESA'
+                key: 'DESCR_DESPESAR'
             },
             {
                 title: 'PARCELA',
                 dataIndex: 'NUM_PARCELA',
-                key: 'NUM_PARCELA'
+                key: 'NUM_PARCELAR'
             },
             {
                 title: 'CARTAO',
                 dataIndex: 'CARTAO',
-                key: 'CARTAO'
+                key: 'CARTAOR'
             },
             {
                 title: 'ACÃO',
-                key: 'ACÃO',
+                key: 'ACÃOR',
 
                 render: expenseReal => (
                     <div>
                         <span >
-                            <EditDespesa data={expenseReal} />
+                           <EditDespesa data={expenseReal} /> 
 
                             <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => this.deleteReal(expenseReal)}>
                                 <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popconfirm>
+                            </Popconfirm> 
                         </span>
                     </div>
                 ),
@@ -107,7 +107,6 @@ class SelectDespesaReal extends React.Component {
 
 
     async requestAPI() {
-
         const despesa = await GetRequest('api/despesas/paga')
         this.props.listExpensesPaga(despesa)
     }
@@ -129,10 +128,10 @@ class SelectDespesaReal extends React.Component {
                     <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
                 </div>
                 <div>
-                    <Table className='table table-action'
-                        columns={this.columns()}
+                    <Table name='Despesa' className='table table-action'
+                        columns={this.columns_teste()}
                         dataSource={SearchFilter(this.props.expenseReal, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
-                        rowKey='ID' />
+                        rowKey={'ID'} />
                 </div>
 
             </div>
@@ -147,7 +146,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     }
 }
 
-const mapDispatchToProps = { listExpensesPaga, listExpenses }
+const mapDispatchToProps = { listExpensesPaga , listExpenses  }
 
 export default connect(
     mapStateToProps,

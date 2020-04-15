@@ -13,4 +13,5 @@ const listExpensesPaga = expenseReals => {
     })
 }
 
+
 export { addExpense, listExpensesPaga }

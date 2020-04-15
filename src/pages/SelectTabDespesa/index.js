@@ -27,6 +27,7 @@ const contentList = {
     tab1: <Metas />,
     tab2: <Pagamentos />,
     tab3: <Faturas />
+
 };
 
 class SelectTabDespesa extends React.Component {
@@ -40,7 +41,7 @@ class SelectTabDespesa extends React.Component {
 
     onTabChange = (key, type) => {
         console.log(key, [type]);
-        this.setState({...this.state, key:key});
+        this.setState({[type]:key});
     };
 
     render() {

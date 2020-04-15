@@ -142,8 +142,6 @@ class ModalExpense extends React.Component {
         const data = moment(body.dataPrevista, "DD/MM/YYYY");
         body.dataPrevista = data.format("YYYY-MM-DD")
 
-
-
         const resultStatus = await InsertRequest(body, 'api/despesas')
 
         verifySend(resultStatus, 'INSERT', body.descrDespesa)

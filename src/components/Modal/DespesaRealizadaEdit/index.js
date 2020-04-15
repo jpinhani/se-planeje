@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, notification, Switch } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form } from 'antd'
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
+import { listExpenses } from '../../../store/actions/generalExpenseAction'
 import { userID } from '../../../routes/urlBackEnd'
 
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
@@ -117,8 +118,15 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, descrDespesaInput: despesa.toUpperCase() })
     }
 
-    async handleSubmit(event) {
-        event.preventDefault()
+    handleSubmit = e => {
+        e.preventDefault()
+        this.props.form.validateFields((err) => { /* !err */
+
+            if (!err) this.handleSubmitok()
+        });
+    }
+
+    async handleSubmitok() {
 
         const body = {
             id: this.props.data.ID,
@@ -141,35 +149,23 @@ class ModalExpense extends React.Component {
         const data = moment(body.dataReal, "DD/MM/YYYY");
         body.dataReal = data.format("YYYY-MM-DD")
 
-        console.log(body.dataReal)
-        if (body.dataReal === null |
-            body.valorReal === null |
-            body.categoria.length === 0 |
-            body.descrDespesa.length === 0 |
-            (body.conta.length === 0 && body.cartao.length === 0)) {
 
-            const args = {
-                message: 'Preencha todos os dados do Formulário',
-                description:
-                    'Para alterar uma despesa é necessário que seja informado todos os campos',
-                duration: 5,
-            };
-            notification.open(args);
+        const resulStatus = await UpdateRequest(body, 'api/despesas/real')
+        verifySend(resulStatus, 'UPDATE', body.descrDespesa)
 
-        } else {
 
-            const resulStatus = await UpdateRequest(body, 'api/despesas/real')
-            verifySend(resulStatus, 'UPDATE', body.descrDespesa)
-
-            const despesa = resulStatus === 200 ? await GetRequest('api/despesas/paga') : {}
-
+        if (resulStatus === 200) {
+            const despesareal = await GetRequest('api/despesas/paga')
+            const despesa = await GetRequest('api/despesas')
             this.handleCancel()
-            this.props.listExpensesPaga(despesa)
+            this.props.listExpensesPaga(despesareal)
+            this.props.listExpenses(despesa)
         }
+
     }
 
     render() {
-
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Adicionar nova Despesa Prevista' theme="twoTone" onClick={this.showModal} />
@@ -194,79 +190,112 @@ class ModalExpense extends React.Component {
                             </label>
                         </div>
 
-                        <InputNumber
-                            style={{ width: '49%' }}
-                            placeholder="Valor Executado"
-                            decimalSeparator=','
-                            precision={2}
-                            min={0}
-                            autoFocus
-                            onChange={this.handleValorReal}
-                            value={this.state.valorRealInput}
-                        />
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('vlexecutado', {
+                                    rules: [{ required: true, message: 'Informe o valor Realizado!' }],
+                                    initialValue: this.state.valorRealInput
+                                })(
+                                    <InputNumber
+                                        style={{ width: '100%' }}
+                                        placeholder="Valor Executado"
+                                        decimalSeparator=','
+                                        precision={2}
+                                        min={0}
+                                        autoFocus
+                                        onChange={this.handleValorReal}
+                                    />)}
+                            </Form.Item>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('dtexecutada', {
+                                    rules: [{ required: true, message: 'Informe a Data do Pagamento!' }],
+                                    initialValue: moment(this.props.data.DATANOVAREAL, dateFormat)
+                                })(
+                                    <DatePicker style={{ width: '100%' }}
+                                        onChange={this.handleDataReal}
+                                        placeholder="Data Executada"
+                                        format={dateFormat}
+                                    />)}
+                            </Form.Item>
+                        </div>
 
-                        <DatePicker style={{ width: '49%' }}
-                            onChange={this.handleDataReal}
-                            placeholder="Data Executada"
-                            defaultValue={moment(this.props.data.DATANOVAREAL, dateFormat)}
-                            format={dateFormat}
-                        />
-                        <Select
-                            showSearch
-                            disabled={this.state.stateConta}
-                            style={{ width: '49%' }}
-                            placeholder="Informe o Conta"
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            onSelect={this.handleConta}
-                            value={this.state.contaInput}
-                        >
-                            {this.state.conta}
-                        </Select>
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('conta', {
+                                    rules: [{ required: this.state.stateConta === true ? false : true, message: 'Informe a Conta de Pagamento!' }],
+                                    initialValue: this.state.contaInput
+                                })(
+                                    <Select
+                                        showSearch
+                                        disabled={this.state.stateConta}
+                                        style={{ width: '100%' }}
+                                        placeholder="Informe o Conta"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) => (
+                                            option.props.children.toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        )}
+                                        onSelect={this.handleConta}
+                                    >
+                                        {this.state.conta}
+                                    </Select>)}
+                            </Form.Item>
 
-                        <Select
-                            showSearch
-                            disabled={this.state.stateCartao}
-                            style={{ width: '49%' }}
-                            placeholder="Informe o Cartão"
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            onSelect={this.handleCartao}
-                            value={this.state.cartaoInput}
-                        >
-                            {this.state.cartao}
-                        </Select>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('cartao', {
+                                    rules: [{ required: this.state.stateCartao === true ? false : true, message: 'Informe o cartão!' }],
+                                    initialValue: this.state.cartaoInput
+                                })(
+                                    <Select
+                                        showSearch
+                                        disabled={this.state.stateCartao}
+                                        style={{ width: '100%' }}
+                                        placeholder="Informe o Cartão"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) => (
+                                            option.props.children.toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        )}
+                                        onSelect={this.handleCartao}
+                                    >
+                                        {this.state.cartao}
+                                    </Select>)}
+                            </Form.Item>
+                        </div>
 
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            style={{ width: '99%' }}
-                            placeholder="Informe a Categoria"
-                            onSelect={this.handleCategoria}
-                            value={this.state.categoriaInput}
-                        >
-                            {this.state.categoria}
-                        </Select>
+                        <Form.Item style={{ width: '100%' }}>
+                            {getFieldDecorator('categoria', {
+                                rules: [{ required: true, message: 'Informa a Categoria!' }],
+                                initialValue: this.state.categoriaInput
+                            })(
+                                <Select
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) => (
+                                        option.props.children.toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    )}
+                                    style={{ width: '100%' }}
+                                    placeholder="Informe a Categoria"
+                                    onSelect={this.handleCategoria}
+                                >
+                                    {this.state.categoria}
+                                </Select>)}
 
-                        <TextArea
-                            placeholder="Descreva a Despesa"
-                            style={{ width: '99%' }}
-                            rows={6}
-                            // value={descrDespesaInput}
-                            onChange={(event) => this.handledescricaoDespesa(event.target.value)}
-                            value={this.state.descrDespesaInput}
-                        />
+                        </Form.Item>
 
+                        <Form.Item style={{ width: '100%' }}>
+                            {getFieldDecorator('description', {
+                                rules: [{ required: true, message: 'Descreva a Despesa!' }],
+                                initialValue: this.state.descrDespesaInput
+                            })(
+                                <TextArea
+                                    placeholder="Descreva a Despesa"
+                                    style={{ width: '99%' }}
+                                    rows={6}
+                                    onChange={(event) => this.handledescricaoDespesa(event.target.value)}
+                                />)}
+                        </Form.Item>
                     </Modal>
                 </form>
             </div >
@@ -274,16 +303,19 @@ class ModalExpense extends React.Component {
     }
 }
 
+const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
+
 const mapStateToProps = (state) => {
     return {
         expenseReal: state.expenseReal,
+        expense: state.expense
     }
 }
 
-const mapDispatchToProps = { listExpensesPaga }
+const mapDispatchToProps = { listExpensesPaga, listExpenses }
 
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModalExpense)
+)(WrappedApp)

@@ -1,5 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
 import { Link } from 'react-router-dom'
+
+import { colapseMenu } from '../../store/actions/generalSiderAction'
+
 import 'antd/dist/antd.css';
 import './style.scss'
 
@@ -11,17 +16,24 @@ const { SubMenu } = Menu;
 class SiderDemo extends React.Component {
     state = {
         collapsed: false,
+
     };
 
     onCollapse = collapsed => {
         console.log(collapsed);
         this.setState({ collapsed });
+        // this.props.siderMenu(collapsed)
     };
+
+    // componentDidMount() {
+    //     this.props.siderMenu(this.state.collapsed)
+    // }
 
     render() {
         return (
 
             <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+                {/* <Sider collapsible collapsed={this.props.siderMenu} onCollapse={this.onCollapse}> */}
                 <div />
                 <Menu defaultSelectedKeys={['1']} mode="inline">
                     <SubMenu
@@ -93,4 +105,17 @@ class SiderDemo extends React.Component {
     }
 }
 
-export default SiderDemo
+
+const mapStateToProps = (state /*, ownProps*/) => {
+    return {
+        siderMenu: state.siderMenu
+    }
+}
+
+const mapDispatchToProps = { colapseMenu }
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SiderDemo)
+

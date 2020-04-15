@@ -2,10 +2,7 @@ const INITIAL_STATE = []
 
 export default function (state = INITIAL_STATE, action) {
     switch (action.type) {
-        case 'INSERT_EXPENSEREAL':
-            state = action.payload
-            return state
-        case 'LIST_EXPENSEREAL':
+        case 'SIDE_MENU':
             state = action.payload
             return state
         default:

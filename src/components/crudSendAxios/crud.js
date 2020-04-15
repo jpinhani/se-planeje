@@ -16,8 +16,7 @@ async function InsertRequest(body, rota) {
     const endpointAPI = `${urlBackend}${rota}`
 
     const ResultStatus = await axios.post(endpointAPI, body, config())
-    console.log(endpointAPI)
-    console.log(body)
+
     return ResultStatus.status
 }
 
