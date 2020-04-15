@@ -39,8 +39,8 @@ class SelectTabDespesa extends React.Component {
     }
 
     onTabChange = (key, type) => {
-        console.log(key, type);
-        this.setState({ [type]: key });
+        console.log(key, [type]);
+        this.setState({...this.state, key:key});
     };
 
     render() {

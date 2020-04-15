@@ -37,7 +37,7 @@ function Login() {
 
       login(userId, token)
 
-      await history.push('/')
+      history.push('/')
 
     }
   }

@@ -5,7 +5,7 @@ import FaturaPagar from '../../components/Modal/DespesaCartao';
 import { Tabs, Table } from 'antd';
 import { urlBackend, userID } from '../../routes/urlBackEnd'
 
-import { listFaturaPaga } from '../../store/actions/generalExpenseRealAction'
+import { listFaturaPaga } from '../../store/actions/generalFaturaAction'
 import { listFaturadetalhe } from '../../store/actions/generalFaturaDetalheAction'
 
 import axios from 'axios'
@@ -16,12 +16,14 @@ import './styles.scss'
 const { TabPane } = Tabs;
 
 class SelectFaturaPagar extends React.Component {
+    _isMounted = false;
     constructor(props) {
         super(props)
 
         this.state = {
             mode: 'right',
-            detalheFaturaList: ''
+            detalheFaturaList: '',
+            isLoading: true
         };
 
     }
@@ -77,14 +79,10 @@ class SelectFaturaPagar extends React.Component {
         const resultDetalhe = await axios.get(endpointAPIDetalhe)
         const detalhe = resultDetalhe.data
 
-        await this.props.listFaturaPaga(fatura)
-        await this.props.listFaturadetalhe(detalhe)
-    }
+        this.props.listFaturaPaga(fatura)
+        this.props.listFaturadetalhe(detalhe)
 
-    async componentDidMount() {
-        await this.requestAPI()
-
-        const dadosFatura = this.props.expenseReal.map((ID, a) => (
+        const dadosFatura = this.props.fatura.map((ID, a) => (
 
             < TabPane tab={`${ID.ID}`} key={a} >
                 <Table className='table table-action'
@@ -111,8 +109,31 @@ class SelectFaturaPagar extends React.Component {
         )
 
         this.setState({ ...this.state, detalheFaturaList: dadosFatura })
-
     }
+
+    componentDidMount() {
+        
+        this._isMounted = true
+        
+        callAPI_or_DB(this.requestAPI()).then(result => {
+          if (this._isMounted) {
+            this.setState({isLoading: false})
+          }
+        });
+
+        
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+
+    // componentWillUnmount() {
+    //     // fix Warning: Can't perform a React state update on an unmounted component
+    //     this.setState = (state, callback) => {
+    //         return;
+    //     };
+    // }
 
     render() {
 
@@ -132,7 +153,7 @@ class SelectFaturaPagar extends React.Component {
 
 const mapStateToProps = (state /*, ownProps*/) => {
     return {
-        expenseReal: state.expenseReal,
+        fatura: state.fatura,
         detalheFatura: state.detalheFatura
     }
 }

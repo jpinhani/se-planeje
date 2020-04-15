@@ -1,12 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 // import axios from 'axios'
 import { Modal, Select, DatePicker } from 'antd'
 import { CreditCardOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
-import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
 // import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import { loadConta } from '../../ListagemCombo'
 
@@ -111,16 +110,5 @@ class ModalExpense extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        expenseReal: state.expenseReal,
-    }
-}
 
-const mapDispatchToProps = { listExpensesPaga }
-
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ModalExpense)
+export default ModalExpense

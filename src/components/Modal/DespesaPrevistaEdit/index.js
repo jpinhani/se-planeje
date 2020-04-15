@@ -187,7 +187,7 @@ class ModalExpense extends React.Component {
             <div>
                 <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Despesa Prevista' theme="twoTone" onClick={this.showModal} />
 
-                <form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit}>
                     <Modal
                         title="Editar Despesa Prevista"
                         visible={this.state.visible}
@@ -246,7 +246,6 @@ class ModalExpense extends React.Component {
                                     <DatePicker style={{ width: '100%' }}
                                         onChange={this.handleDataPrevisto}
                                         placeholder="Data Prevista"
-
                                         format={dateFormat}
                                     />)}
                             </Form.Item>
@@ -259,7 +258,6 @@ class ModalExpense extends React.Component {
                                     initialValue: this.state.cartaoInput
                                 })(
                                     <Select
-                                        defaultValue='DÉBITO OU DINHEIRO'
                                         showSearch
                                         style={{ width: '100%' }}
                                         placeholder="Informe o Cartão"
@@ -323,7 +321,7 @@ class ModalExpense extends React.Component {
                                 />)}
                         </Form.Item>
                     </Modal>
-                </form>
+                </Form>
             </div >
         )
     }

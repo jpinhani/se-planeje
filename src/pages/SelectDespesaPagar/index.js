@@ -80,8 +80,8 @@ class SelectDespesaPagar extends React.Component {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
 
-    async componentDidMount() {
-        await this.requestAPI()
+    componentDidMount() {
+        this.requestAPI()
     }
 
     render() {

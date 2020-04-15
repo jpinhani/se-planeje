@@ -189,7 +189,6 @@ class ModalExpense extends React.Component {
                         />
                         <div style={{ width: '100%', display: 'flex' }}>
                             <Form.Item
-                                name='vlPrevisto'
                                 style={{ width: '50%' }}
                             >
                                 {getFieldDecorator('vlPrevisto', {
@@ -217,7 +216,6 @@ class ModalExpense extends React.Component {
                                 <DatePicker
                                     style={{ width: '100%' }}
                                     placeholder="Data Prevista"
-                                    //        defaultValue={moment(new Date(), dateFormat)}
                                     format={dateFormat}
                                 />)}
                             </Form.Item>
@@ -229,7 +227,6 @@ class ModalExpense extends React.Component {
                                     initialValue: this.state.cartaoInput
                                 })(
                                     <Select
-                                        //      defaultValue='DÉBITO OU DINHEIRO'
                                         showSearch
                                         style={{ width: '100%' }}
                                         placeholder="Informe o Cartão"
@@ -239,7 +236,6 @@ class ModalExpense extends React.Component {
                                                 .indexOf(input.toLowerCase()) >= 0
                                         )}
                                         onSelect={this.handleCartao}
-                                    //    value={this.state.cartaoInput}
                                     >
                                         {this.state.cartao}
                                     </Select>)}
@@ -254,7 +250,6 @@ class ModalExpense extends React.Component {
                                     placeholder='N Parcelas'
                                     min={1}
                                     onChange={this.handleParcelas}
-                                //    value={this.state.parcelasInput}
                                 />)}
                             </Form.Item>
                         </div>
@@ -274,7 +269,6 @@ class ModalExpense extends React.Component {
                                     style={{ width: '100%' }}
                                     placeholder="Informe a Categoria"
                                     onSelect={this.handleCategoria}
-                                //     value={this.state.categoriaInput}
                                 >
                                     {this.state.categoria}
                                 </Select>)}

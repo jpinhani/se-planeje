@@ -9,6 +9,7 @@ import expenseReducer from '../store/reducers/generalExpenseReducer'
 import revenueReducer from '../store/reducers/generalRevenuesReducer'
 import expenseRealReducer from './reducers/generalExpenseRealReducer'
 import faturaDetalheReducer from './reducers/generalFaturaDetalheReducer'
+import faturaReducer from './reducers/generalFaturaReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   revenue: revenueReducer,
   expenseReal: expenseRealReducer,
   detalheFatura: faturaDetalheReducer,
+  fatura: faturaReducer,
 })
 
 export default createStore(reducers)
