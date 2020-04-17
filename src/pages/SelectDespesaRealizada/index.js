@@ -9,21 +9,27 @@ import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
 
-import { Table,  Icon, Popconfirm,  Input } from 'antd'
+import { Table, Icon, Popconfirm, Input, Select } from 'antd'
 
-import {  GetRequest,  UpdateRequest } from '../../components/crudSendAxios/crud'
+import { GetRequest, UpdateRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+
+const { Option } = Select;
 class SelectDespesaReal extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             search: '',
-            filter: ''
+            filter: '',
+            visions: [],
+            visionInput: [],
+            dataVision: [],
+            despesaList: []
         }
         this.searchExpense = this.searchExpense.bind(this)
     }
@@ -40,7 +46,7 @@ class SelectDespesaReal extends React.Component {
 
         this.props.listExpenses(metaList)
 
-         this.requestAPI()
+        this.requestAPI()
     }
 
 
@@ -93,11 +99,11 @@ class SelectDespesaReal extends React.Component {
                 render: expenseReal => (
                     <div>
                         <span >
-                           <EditDespesa data={expenseReal} /> 
+                            <EditDespesa data={expenseReal} />
 
                             <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => this.deleteReal(expenseReal)}>
                                 <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popconfirm> 
+                            </Popconfirm>
                         </span>
                     </div>
                 ),
@@ -107,12 +113,40 @@ class SelectDespesaReal extends React.Component {
 
 
     async requestAPI() {
+
+        const resultVision = await GetRequest('api/visions')
         const despesa = await GetRequest('api/despesas/paga')
-        this.props.listExpensesPaga(despesa)
+
+        const options = resultVision.map((desc, i) =>
+            <Option key={i} value={desc.VISAO}>
+                {desc.VISAO}
+            </Option>
+        )
+        options.push(<Option key='all' value='ALL'>TODAS METAS</Option>)
+
+        this.setState({ ...this.state, visions: options, dataVision: resultVision, despesaList: despesa })
     }
 
     searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
+    }
+
+    async searchExpenses(selectVisao) {
+
+        const novaVisao = this.state.dataVision.map((FIL) =>
+            this.state.despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DT_VISAO &&
+                FIL.DT_INICIO <= DATA.DT_VISAO &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
+
+
+        // console.log(novaVisao[0])
+        this.props.listExpensesPaga(selectVisao !== 'ALL' ?
+            novaVisao[0] !== undefined ? novaVisao[0] : [] :
+            this.state.despesaList)
+
+        this.setState({ ...this.state, visionInput: selectVisao })
     }
 
     componentDidMount() {
@@ -126,6 +160,14 @@ class SelectDespesaReal extends React.Component {
                 <div className='ViewExpense'>
                     <DespesaRealizada />
                     <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
+                    <Select style={{ width: '50%' }}
+                        placeholder="Filtrar por Visão"
+                        value={this.state.visionInput}
+                        onSelect={(teste) => this.searchExpenses(teste)}
+                    // value={this.state.nivelInput}
+                    >
+                        {this.state.visions}
+                    </Select>
                 </div>
                 <div>
                     <Table name='Despesa' className='table table-action'
@@ -146,7 +188,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     }
 }
 
-const mapDispatchToProps = { listExpensesPaga , listExpenses  }
+const mapDispatchToProps = { listExpensesPaga, listExpenses }
 
 export default connect(
     mapStateToProps,

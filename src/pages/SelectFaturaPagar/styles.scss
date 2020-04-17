@@ -1,4 +1,18 @@
 
+.cards{
+     margin: 4px !important;
+     display: flex !important;
+    //  justify-content: center;
+     align-items: center;
+    //  background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+     border-color: blue;
+     max-width: 100%;
+     flex-wrap: wrap;
+}
+
+.ant-btn {
+  margin: 5px!important;
+}
 /* Table Base */
 
 .cd-tabs__list {

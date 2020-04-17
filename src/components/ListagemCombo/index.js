@@ -87,4 +87,21 @@ async function loadConta() {
 
 
 
-export { loadCartao, loadCategoria, loadCategoriaReceita, loadCartaoReal, loadConta }
+async function loadVisions() {
+
+    const endpoint = `${urlBackend}api/visions/${userID()}`
+    const result = await axios.get(endpoint)
+
+    console.log(result.data)
+    const options = result.data.map((desc, i) =>
+        <Option key={i} value={desc.DT_INICIO}>
+            {desc.VISAO}
+        </Option>
+    )
+    console.log(options)
+
+    return options
+}
+
+
+export { loadCartao, loadCategoria, loadCategoriaReceita, loadCartaoReal, loadConta, loadVisions }

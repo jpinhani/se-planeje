@@ -22,18 +22,17 @@ class SiderDemo extends React.Component {
     onCollapse = collapsed => {
         console.log(collapsed);
         this.setState({ collapsed });
-        // this.props.siderMenu(collapsed)
+        this.props.colapseMenu(collapsed)
     };
 
-    // componentDidMount() {
-    //     this.props.siderMenu(this.state.collapsed)
-    // }
+    componentDidMount() {
+        this.props.colapseMenu(this.state.collapsed)
+    }
 
     render() {
         return (
 
-            <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-                {/* <Sider collapsible collapsed={this.props.siderMenu} onCollapse={this.onCollapse}> */}
+            <Sider collapsible collapsed={this.props.siderMenu} onCollapse={this.onCollapse}>
                 <div />
                 <Menu defaultSelectedKeys={['1']} mode="inline">
                     <SubMenu

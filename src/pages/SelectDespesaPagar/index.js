@@ -2,22 +2,31 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { listExpenses } from '../../store/actions/generalExpenseAction'
-import SearchFilter from '../../components/searchFilterTable'
+import SearchFilter from '../../components/searchFilterTable/index'
+// import SearchFilterVision from '../../components/searchFilterTableVision'
 
-import { Table, Input } from 'antd'
+import { Table, Input, Select } from 'antd'
 import DespesaPagar from '../../components/Modal/DespesaPagar'
 import { GetRequest } from '../../components/crudSendAxios/crud'
+
+// import { loadVisions } from '../../components/ListagemCombo/index'
+
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+const { Option } = Select;
 class SelectDespesaPagar extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             search: '',
-            filter: ''
+            filter: '',
+            visions: [],
+            visionInput: [],
+            dataVision: [],
+            despesaList: []
         }
         this.searchExpense = this.searchExpense.bind(this)
     }
@@ -72,12 +81,39 @@ class SelectDespesaPagar extends React.Component {
 
     async requestAPI() {
 
+        const resultVision = await GetRequest('api/visions')
         const despesa = await GetRequest('api/despesas')
-        this.props.listExpenses(despesa)
+
+        const options = resultVision.map((desc, i) =>
+            <Option key={i} value={desc.VISAO}>
+                {desc.VISAO}
+            </Option>
+        )
+        options.push(<Option key='all' value='ALL'>TODAS METAS</Option>)
+
+        this.setState({ ...this.state, visions: options, dataVision: resultVision, despesaList: despesa })
     }
 
     searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
+    }
+
+    async searchExpenses(selectVisao) {
+
+        const novaVisao = this.state.dataVision.map((FIL) =>
+            this.state.despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DT_VISAO &&
+                FIL.DT_INICIO <= DATA.DT_VISAO &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
+
+
+        // console.log(novaVisao[0])
+        this.props.listExpenses(selectVisao !== 'ALL' ?
+            novaVisao[0] !== undefined ? novaVisao[0] : [] :
+            this.state.despesaList)
+
+        this.setState({ ...this.state, visionInput: selectVisao })
     }
 
     componentDidMount() {
@@ -88,16 +124,32 @@ class SelectDespesaPagar extends React.Component {
         return (
             <div>
                 <div className='ViewExpense'>
-                    <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
-                </div>
+                    <Input name='despesa'
+                        style={{ width: '50%' }}
+                        value={this.state.search}
+                        onChange={this.searchExpense}
+                        placeholder="Procure aqui a despesa especifica" />
+
+                    <Select style={{ width: '50%' }}
+                        placeholder="Filtrar por Visão"
+                        value={this.state.visionInput}
+                        onSelect={(teste) => this.searchExpenses(teste)}
+                    // value={this.state.nivelInput}
+                    >
+                        {this.state.visions}
+                    </Select>
+                </div >
+
                 <div>
                     <Table className='table table-action'
                         columns={this.columns()}
-                        dataSource={SearchFilter(this.props.expense, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
+                        dataSource={SearchFilter(this.props.expense,
+                            ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'DATANOVA'],
+                            this.state.filter)}
                         rowKey='ID' />
                 </div>
 
-            </div>
+            </div >
         )
     }
 }

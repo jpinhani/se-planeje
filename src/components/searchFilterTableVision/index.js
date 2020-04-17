@@ -1,5 +1,5 @@
 /* eslint no-eval: 0 */
-const SearchFilter = (array, fields, value) => {
+const SearchFilterVision = (array, fields, value) => {
     if (!Array.isArray(array)) return [];
     else if (value === '') {
         return array;
@@ -32,4 +32,4 @@ const vectorSearch = (item, field, value) => {
 }
 
 
-export default SearchFilter
+export default SearchFilterVision
