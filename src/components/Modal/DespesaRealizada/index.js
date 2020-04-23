@@ -5,10 +5,13 @@ import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form } fro
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
+import { listVisionsControler } from '../../../store/actions/controlerVisionAction'
+import { listExpenseControlerPaga } from '../../../store/actions/controlerExpenseRealAction'
+
 import { userID } from '../../../routes/urlBackEnd'
 
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
-import { InsertRequest, GetRequest } from '../../crudSendAxios/crud'
+import { InsertRequest, GetRequest, visionSerch } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
 
 import 'antd/dist/antd.css';
@@ -160,12 +163,20 @@ class ModalExpense extends React.Component {
         const resulStatus = await InsertRequest(body, 'api/despesas/real')
         verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 
-        const despesa = resulStatus === 200 ? await GetRequest('api/despesas/paga') : {}
+        if (resulStatus === 200) {
+            const despesa = await GetRequest('api/despesas/paga')
+            const resultVision = await GetRequest('api/visions')
 
-        this.props.listExpensesPaga(despesa)
-        this.handleCancel()
+            const novaVisaoReal = visionSerch(resultVision, despesa, this.props.visionControler)
 
+            this.props.listExpensesPaga(this.props.visionControler !== 'ALL' ?
+                novaVisaoReal[0] !== undefined ? novaVisaoReal[0] : [] :
+                despesa)
 
+            this.props.listExpenseControlerPaga(despesa)
+
+            this.handleCancel()
+        }
     }
 
     render() {
@@ -307,10 +318,12 @@ const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
 const mapStateToProps = (state) => {
     return {
         expenseReal: state.expenseReal,
+        visionControler: state.visionControler,
+        controlerExpenseReal: state.controlerExpenseReal
     }
 }
 
-const mapDispatchToProps = { listExpensesPaga }
+const mapDispatchToProps = { listExpensesPaga, listVisionsControler, listExpenseControlerPaga }
 
 
 export default connect(

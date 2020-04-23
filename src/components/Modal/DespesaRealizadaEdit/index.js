@@ -5,11 +5,12 @@ import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form } fro
 import moment from 'moment';
 
 import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
-import { listExpenses } from '../../../store/actions/generalExpenseAction'
+// import { listExpenseControlerPaga } from '../../../store/actions/controlerExpenseRealAction'
+import { listVisionsControler } from '../../../store/actions/controlerVisionAction'
 import { userID } from '../../../routes/urlBackEnd'
 
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
-import { GetRequest, UpdateRequest } from '../../crudSendAxios/crud'
+import { GetRequest, UpdateRequest, visionSerch } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
 
 import 'antd/dist/antd.css';
@@ -21,6 +22,7 @@ const dateFormat = 'DD/MM/YYYY'
 
 
 class ModalExpense extends React.Component {
+    _isMounted = false
     constructor(props) {
         super(props)
 
@@ -51,6 +53,14 @@ class ModalExpense extends React.Component {
         this.handledescricaoDespesa = this.handledescricaoDespesa.bind(this)
         this.handleConta = this.handleConta.bind(this)
         this.handletipoPagamento = this.handletipoPagamento.bind(this)
+    }
+
+    componentDidMount() {
+        this._isMounted = true
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
     }
 
     async showModal() {
@@ -127,41 +137,46 @@ class ModalExpense extends React.Component {
     }
 
     async handleSubmitok() {
+        if (this._isMounted === true) {
+            const body = {
+                id: this.props.data.ID,
+                idGrupo: this.props.data.ID_GRUPO,
+                idUser: userID(),
+                dataPrevista: this.props.data.DT_PREVISTO,
+                dataReal: moment(this.state.dataRealInput, "DD/MM/YYYY"),
+                valorReal: this.state.valorRealInput,
+                valorCorrigir: this.props.data.VL_REAL2 - this.state.valorRealInput,
+                cartao: this.state.cartaoInput,
+                conta: this.state.contaInput,
+                categoria: this.state.categoriaInput,
+                parcela: '1',
+                descrDespesa: this.state.descrDespesaInput,
+                status: this.state.visibleEdit === 'A VISTA'
+                    ? 'Pagamento Realizado'
+                    : 'Fatura Pronta Para Pagamento',
+            }
 
-        const body = {
-            id: this.props.data.ID,
-            idGrupo: this.props.data.ID_GRUPO,
-            idUser: userID(),
-            dataPrevista: this.props.data.DT_PREVISTO,
-            dataReal: moment(this.state.dataRealInput, "DD/MM/YYYY"),
-            valorReal: this.state.valorRealInput,
-            valorCorrigir: this.props.data.VL_REAL2 - this.state.valorRealInput,
-            cartao: this.state.cartaoInput,
-            conta: this.state.contaInput,
-            categoria: this.state.categoriaInput,
-            parcela: '1',
-            descrDespesa: this.state.descrDespesaInput,
-            status: this.state.visibleEdit === 'A VISTA'
-                ? 'Pagamento Realizado'
-                : 'Fatura Pronta Para Pagamento',
+            const data = moment(body.dataReal, "DD/MM/YYYY");
+            body.dataReal = data.format("YYYY-MM-DD")
+
+
+            const resulStatus = await UpdateRequest(body, 'api/despesas/real')
+            verifySend(resulStatus, 'UPDATE', body.descrDespesa)
+
+
+            if (resulStatus === 200) {
+                const despesareal = await GetRequest('api/despesas/paga')
+                const resultVision = await GetRequest('api/visions')
+
+                console.log(despesareal)
+                const novaVisao = visionSerch(resultVision, despesareal, this.props.visionControler)
+
+                this.props.listExpensesPaga(this.props.visionControler !== 'ALL' ?
+                    novaVisao[0] !== undefined ? novaVisao[0] : [] :
+                    despesareal)
+                this.handleCancel()
+            }
         }
-
-        const data = moment(body.dataReal, "DD/MM/YYYY");
-        body.dataReal = data.format("YYYY-MM-DD")
-
-
-        const resulStatus = await UpdateRequest(body, 'api/despesas/real')
-        verifySend(resulStatus, 'UPDATE', body.descrDespesa)
-
-
-        if (resulStatus === 200) {
-            const despesareal = await GetRequest('api/despesas/paga')
-            const despesa = await GetRequest('api/despesas')
-            this.handleCancel()
-            this.props.listExpensesPaga(despesareal)
-            this.props.listExpenses(despesa)
-        }
-
     }
 
     render() {
@@ -308,11 +323,12 @@ const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
 const mapStateToProps = (state) => {
     return {
         expenseReal: state.expenseReal,
-        expense: state.expense
+        // controlerExpenseReal: state.controlerExpenseReal,
+        visionControler: state.visionControler
     }
 }
 
-const mapDispatchToProps = { listExpensesPaga, listExpenses }
+const mapDispatchToProps = { listExpensesPaga, listVisionsControler }
 
 
 export default connect(

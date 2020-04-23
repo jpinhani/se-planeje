@@ -30,7 +30,7 @@ class ModalExpense extends React.Component {
             categoria: [],
             cartao: [],
             valorPrevistoInput: null,
-            dataPrevistaInput: null,
+            dataPrevistaInput: moment(new Date(), dateFormat),
             cartaoInput: 'DÉBITO OU DINHEIRO',
             parcelasInput: 1,
             categoriaInput: [],
@@ -213,6 +213,7 @@ class ModalExpense extends React.Component {
                             })(
                                 <DatePicker
                                     style={{ width: '100%' }}
+                                    onChange={this.handleDataPrevisto}
                                     placeholder="Data Prevista"
                                     format={dateFormat}
                                 />)}

@@ -92,13 +92,12 @@ async function loadVisions() {
     const endpoint = `${urlBackend}api/visions/${userID()}`
     const result = await axios.get(endpoint)
 
-    console.log(result.data)
     const options = result.data.map((desc, i) =>
-        <Option key={i} value={desc.DT_INICIO}>
+        <Option key={i} value={desc.VISAO}>
             {desc.VISAO}
         </Option>
     )
-    console.log(options)
+    options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
 
     return options
 }

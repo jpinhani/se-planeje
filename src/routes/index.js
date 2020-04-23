@@ -1,6 +1,7 @@
 import React from 'react'
+
 import { BrowserRouter, Switch } from 'react-router-dom'
-import { Layout, Breadcrumb } from 'antd'
+import { Layout } from 'antd'
 
 import PublicRoute from './PublicRoutes'
 import PrivateRoute from './PrivateRoutes'
@@ -14,8 +15,10 @@ import SelectCategory from '../pages/SelectCategoria'
 import SelectDespesaPrevista from '../pages/SelectDespesaPrevista'
 import SelectDespesaRealizada from '../pages/SelectDespesaRealizada'
 import SelectReceitaPrevista from '../pages/SelectReceitaPrevista'
+import SelectPagarMeta from '../pages/SelectDespesaPagar'
+import SelectFaturaPagar from '../pages/SelectFaturaPagar'
 import SelectTabDespesa from '../pages/SelectTabDespesa'
-import Teste from '../components/Teste/index'
+import SelectFaturaContabilizada from '../pages/selectFaturasContabilizadas'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 import testGrafico from '../components/TestGrafico'
@@ -23,32 +26,41 @@ import testGrafico from '../components/TestGrafico'
 
 const { Content } = Layout;
 
-export default () =>
-  <BrowserRouter>
-    <Layout style={{ minHeight: '100vh' }}>
-      <Navebar />
-      <Layout>
-        <Header />
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-          </Breadcrumb>
-          <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-            <Switch name='http://localhost:3000'>
-              <PublicRoute exact path='/login' component={Login} />
-              <PrivateRoute exact path='/selectconta' component={SelectConta} />
-              <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
-              <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
-              <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
-              <PrivateRoute exact path='/selectdespesarealizada' component={SelectDespesaRealizada} />
-              <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
-              <PrivateRoute exact path='/grafico' component={testGrafico} />
-              <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
-              <PrivateRoute exact path='/teste' component={Teste} />
-              <PrivateRoute exact path='/visao' component={Visao} />
-              <PrivateRoute component={Home} />
-            </Switch>
-          </div>
-        </Content>
-      </Layout>
-    </Layout >
-  </BrowserRouter>
+class routesSePlaneje extends React.Component {
+
+  render() {
+    return (
+      <BrowserRouter>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Navebar />
+          <Layout>
+            <Header />
+            <Content style={{ margin: '0 16px' }}>
+              <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+                <Switch name='http://localhost:3000'>
+                  <PublicRoute exact path='/login' component={Login} />
+                  <PrivateRoute exact path='/selectconta' component={SelectConta} />
+                  <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
+                  <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
+                  <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
+                  <PrivateRoute exact path='/selectdespesarealizada' component={SelectDespesaRealizada} />
+                  <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
+                  <PrivateRoute exact path='/selectPagarMeta' component={SelectPagarMeta} />
+                  <PrivateRoute exact path='/SelectFaturaPagar' component={SelectFaturaPagar} />
+                  <PrivateRoute exact path='/SelectFaturaContabilizada' component={SelectFaturaContabilizada} />
+                  <PrivateRoute exact path='/grafico' component={testGrafico} />
+                  <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
+                  <PrivateRoute exact path='/visao' component={Visao} />
+                  <PrivateRoute component={Home} />
+                </Switch>
+              </div>
+            </Content>
+          </Layout>
+        </Layout >
+      </BrowserRouter>)
+  }
+}
+
+
+export default routesSePlaneje
+

@@ -4,7 +4,10 @@ import { connect } from 'react-redux'
 import AddCategory from '../../components/Modal/Categoria/index'
 import EditCategory from '../../components/Modal/CategoriaEdit/index'
 
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+import { urlBackend, userID } from '../../routes/urlBackEnd'
+import { InsertRequest, GetRequest, DeleteRequest } from '../../components/crudSendAxios/crud'
+import { verifySend } from '../../components/verifySendAxios/index'
+
 import { listCategorys } from '../../store/actions/generalCategoryAction'
 import { Table, Input, Popconfirm, Icon, message, notification } from 'antd'
 
@@ -21,19 +24,16 @@ class SelectCategoria extends React.Component {
         this.state = {
             search: ''
         }
-
         this.searchCategory = this.searchCategory.bind(this)
     }
-    async deleteAcount(categoriaId) {
-        const endpoint = `${urlBackend}api/categorias/${categoriaId}`
-        const verify = await axios.delete(endpoint, config())
 
-        if (verify.data.error === true) {
-            message.error('   ' + verify.data.message, 5);
-        } else {
-            message.success(" Categoria Excluida Com Sucesso", 5);
+    async deleteAcount(categoriaId) {
+        const verify = await DeleteRequest(categoriaId, 'api/categorias')
+        console.log(verify)
+        verifySend(verify, 'DELETE', 'Categoria')
+
+        if (verify === 200)
             this.requestAPI()
-        }
     }
 
     columns() {
@@ -76,71 +76,40 @@ class SelectCategoria extends React.Component {
     }
 
     async requestAPI() {
-        const endpointAPI = `${urlBackend}api/categorias/${userID()}`
-        const novosDados = await axios.get(endpointAPI)
 
-        let nivel = []
-        let n3 = 0
-        for (let x = 0; x < novosDados.data.length; x++) {
-            if (novosDados.data[x].NIVEL === 3) {
-                nivel[n3] = novosDados.data[x]
+        const novosDados = await GetRequest('api/categorias')
 
-                let col = []
-                for (let y = 0; y < novosDados.data.length; y++) {
-                    if (novosDados.data[y].IDPAI === nivel[n3].ID
-                        && novosDados.data[y].NIVEL === 4) {
-                        col.push(novosDados.data[y])
+        const nivel3 = novosDados.filter((DATA) => DATA.NIVEL === 3)
+        const nivel4 = novosDados.filter((DATA) => DATA.NIVEL === 4)
+        const nivel5 = novosDados.filter((DATA) => DATA.NIVEL === 5)
+        const nivel6 = novosDados.filter((DATA) => DATA.NIVEL === 6)
 
-                        // let n4 = 0
+        const gera5 = nivel5.reduce((novo, n6, i) => {
+            if (nivel6.filter((data) => n6.ID === data.IDPAI).length > 0)
+                novo[i].children = nivel6.filter((data) => n6.ID === data.IDPAI)
+            return novo
+        }, nivel5)
 
-                        for (let n4 = 0; n4 < col.length; n4++) {
-                            let col2 = []
-                            for (let z = 0; z < novosDados.data.length; z++) {
+        const gera4 = nivel4.reduce((novo, n5, i) => {
+            if (gera5.filter((data) => n5.ID === data.IDPAI).length > 0)
+                novo[i].children = gera5.filter((data) => n5.ID === data.IDPAI)
+            return novo
+        }, nivel4)
 
-                                if (novosDados.data[z].IDPAI === col[n4].ID
-                                    && novosDados.data[z].NIVEL === 5) {
-                                    col2.push(novosDados.data[z])
+        const nivel = nivel3.reduce((novo, n4, i) => {
+            if (gera4.filter((data) => n4.ID === data.IDPAI).length > 0)
+                novo[i].children = gera4.filter((data) => n4.ID === data.IDPAI)
+            return novo
+        }, nivel3)
 
-
-                                    // let n5 = 0
-
-                                    for (let n5 = 0; n5 < col2.length; n5++) {
-                                        let col3 = []
-                                        for (let u = 0; u < novosDados.data.length; u++) {
-
-                                            if (novosDados.data[u].IDPAI === col2[n5].ID
-                                                && novosDados.data[u].NIVEL === 6) {
-
-                                                col3.push(novosDados.data[u])
-                                                col2[n5].children = col3
-                                            }
-                                        }
-                                    }
-
-                                    col[n4].children = col2
-                                }
-
-                            }
-                        }
-
-                        nivel[n3].children = col
-                    }
-
-                }
-                n3 = n3 + 1
-            }
-        }
-
-        // console.log('Forma Como os Dados estão vindo', nivel)
         this.props.listCategorys(nivel)
     }
 
     async ImportCategoryDefault() {
 
-        const endpointAPI = `${urlBackend}api/categorias/${userID}`
-        const novosDados = await axios.get(endpointAPI)
+        const novosDados = await GetRequest('api/categorias')
 
-        if (novosDados.data.length > 3) {
+        if (novosDados.length > 3) {
             const args = {
                 message: 'Não é possivel importar o Plano de Categorias do SePlaneje',
                 description:
@@ -151,12 +120,12 @@ class SelectCategoria extends React.Component {
         } else {
 
             const body = {
-                idUser: userID
+                idUser: userID()
             }
-            const endpointAPIDefault = `${urlBackend}api/categorias/default/`
-            const resultStatus = await axios.post(endpointAPIDefault, body, config())
 
-            if (resultStatus.status === 200) {
+            const resultStatus = await InsertRequest(body, 'api/categorias/default')
+
+            if (resultStatus === 200) {
 
                 message.success(' O Plano de categorias Padrão do SePlaneje foi importado com Sucesso', 10)
                 this.requestAPI()

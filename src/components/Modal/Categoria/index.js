@@ -5,7 +5,9 @@ import axios from 'axios'
 import { Icon, Modal, Input, Select, notification, message } from 'antd'
 
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
-import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
+import { InsertRequest, GetRequest } from '../../crudSendAxios/crud'
+
+import { urlBackend, userID } from '../../../routes/urlBackEnd'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -94,8 +96,6 @@ class ModalCategory extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
-        const endpointAPI = `${urlBackend}api/categorias/`
-
         const body = {
             idUser: userID(),
             dependencia: this.state.dependenciaInput,
@@ -125,49 +125,45 @@ class ModalCategory extends React.Component {
             };
             notification.open(args);
         } else {
+            const insertCategoria = await InsertRequest(body, 'api/categorias/')
+            const novosDados = await GetRequest('api/categorias')
 
-            await axios.post(endpointAPI, body, config())
-
-            const endpoint = `http://seplaneje-com.umbler.net/api/categorias/${userID()}`
-
-            const novosDados = await axios.get(endpoint)
-
-            if (novosDados.status === 200) {
+            if (insertCategoria === 200) {
                 message.success("   Cadastro Efetuado Com Sucesso", 5);
 
                 let nivel = []
                 let n3 = 0
-                for (let x = 0; x < novosDados.data.length; x++) {
-                    if (novosDados.data[x].NIVEL === 3) {
-                        nivel[n3] = novosDados.data[x]
+                for (let x = 0; x < novosDados.length; x++) {
+                    if (novosDados[x].NIVEL === 3) {
+                        nivel[n3] = novosDados[x]
 
                         let col = []
-                        for (let y = 0; y < novosDados.data.length; y++) {
-                            if (novosDados.data[y].IDPAI === nivel[n3].ID
-                                && novosDados.data[y].NIVEL === 4) {
-                                col.push(novosDados.data[y])
+                        for (let y = 0; y < novosDados.length; y++) {
+                            if (novosDados[y].IDPAI === nivel[n3].ID
+                                && novosDados[y].NIVEL === 4) {
+                                col.push(novosDados[y])
 
                                 // let n4 = 0
 
                                 for (let n4 = 0; n4 < col.length; n4++) {
                                     let col2 = []
-                                    for (let z = 0; z < novosDados.data.length; z++) {
+                                    for (let z = 0; z < novosDados.length; z++) {
 
-                                        if (novosDados.data[z].IDPAI === col[n4].ID
-                                            && novosDados.data[z].NIVEL === 5) {
-                                            col2.push(novosDados.data[z])
+                                        if (novosDados[z].IDPAI === col[n4].ID
+                                            && novosDados[z].NIVEL === 5) {
+                                            col2.push(novosDados[z])
 
 
                                             // let n5 = 0
 
                                             for (let n5 = 0; n5 < col2.length; n5++) {
                                                 let col3 = []
-                                                for (let u = 0; u < novosDados.data.length; u++) {
+                                                for (let u = 0; u < novosDados.length; u++) {
 
-                                                    if (novosDados.data[u].IDPAI === col2[n5].ID
-                                                        && novosDados.data[u].NIVEL === 6) {
+                                                    if (novosDados[u].IDPAI === col2[n5].ID
+                                                        && novosDados[u].NIVEL === 6) {
 
-                                                        col3.push(novosDados.data[u])
+                                                        col3.push(novosDados[u])
                                                         col2[n5].children = col3
                                                     }
                                                 }
@@ -187,6 +183,7 @@ class ModalCategory extends React.Component {
                     }
                 }
 
+                console.log(nivel)
                 this.props.listCategorys(nivel)
 
                 this.handleCancel()

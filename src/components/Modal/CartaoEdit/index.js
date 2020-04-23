@@ -21,6 +21,7 @@ class ModalCard extends React.Component {
             dtVencimento: this.props.data.DT_VENCIMENTO,
             diacompra: this.props.data.DIA_COMPRA
         }
+        console.log(this.props.data.DIA_COMPRA)
 
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)

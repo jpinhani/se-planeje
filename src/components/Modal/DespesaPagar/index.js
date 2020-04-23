@@ -6,12 +6,13 @@ import { Modal, Input, Select, DatePicker, InputNumber, Switch, Divider, Form } 
 import { LikeTwoTone } from '@ant-design/icons';
 import moment from 'moment';
 
-import { listExpenses } from '../../../store/actions/generalExpenseAction'
-import { listExpensesPaga } from '../../../store/actions/generalExpenseRealAction'
+import { listExpenseControlerMeta } from '../../../store/actions/controlerExpenseAction'
+import { listVisionsControler } from '../../../store/actions/controlerVisionAction'
+
 import { userID } from '../../../routes/urlBackEnd'
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
 
-import { GetRequest, UpdateRequest } from '../../crudSendAxios/crud'
+import { GetRequest, UpdateRequest, visionSerchMeta } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
 
 
@@ -23,6 +24,7 @@ const { TextArea } = Input;
 const dateFormat = 'DD/MM/YYYY'
 
 class ModalExpense extends React.Component {
+    _isMounted = false
     constructor(props) {
         super(props)
 
@@ -138,13 +140,19 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, cartaoInput: valorCartao })
     }
 
-
     handleSubmit = e => {
         e.preventDefault()
-        this.props.form.validateFields((err) => { /* !err */
-
+        this.props.form.validateFields((err) => {
             if (!err) this.handleSubmitok()
         });
+    }
+
+    componentDidMount() {
+        this._isMounted = true
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
     }
 
     async handleSubmitok() {
@@ -179,17 +187,25 @@ class ModalExpense extends React.Component {
 
 
         const resulStatus = await UpdateRequest(body, 'api/despesas/pagar')
-        verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
-        const despesa = resulStatus === 200 ? await GetRequest('api/despesas') : {}
 
-        const despesaPaga = await GetRequest('api/despesas/paga')
-
-        this.handleCancel()
-        this.props.listExpensesPaga(despesaPaga)
-        this.props.listExpenses(despesa)
+        if (this._isMounted === true) {
+            verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 
 
+            if (resulStatus === 200) {
+                const despesa = await GetRequest('api/despesas')
+                const resultVision = await GetRequest('api/visions')
 
+                const novaVisao = visionSerchMeta(resultVision, despesa, this.props.visionControler)
+
+                this.handleCancel()
+                this.props.listExpenseControlerMeta(this.props.visionControler !== 'ALL' ?
+                    novaVisao[0] !== undefined ? novaVisao[0] : [] :
+                    despesa)
+
+                // this.props.listExpenseControlerMeta(despesa)
+            }
+        }
     }
 
     render() {
@@ -358,12 +374,12 @@ const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
 
 const mapStateToProps = (state) => {
     return {
-        expense: state.expense,
-        expenseReal: state.expenseReal,
+        controlerexpenseMeta: state.controlerexpenseMeta,
+        visionControler: state.visionControler
     }
 }
 
-const mapDispatchToProps = { listExpenses, listExpensesPaga }
+const mapDispatchToProps = { listExpenseControlerMeta, listVisionsControler }
 
 
 export default connect(

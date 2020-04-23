@@ -83,15 +83,15 @@ class SelectDespesaPrevista extends React.Component {
     async requestAPI() {
 
         const despesa = await GetRequest('api/despesas')
-        await this.props.listExpenses(despesa)
+        this.props.listExpenses(despesa)
     }
 
     searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
 
-    async  componentDidMount() {
-        await this.requestAPI()
+    componentDidMount() {
+        this.requestAPI()
     }
 
     render() {

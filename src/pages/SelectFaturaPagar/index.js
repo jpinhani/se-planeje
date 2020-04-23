@@ -5,6 +5,8 @@ import FaturaPagar from '../../components/Modal/DespesaCartao';
 import { Tabs, Table, Button } from 'antd';
 import { urlBackend, userID } from '../../routes/urlBackEnd'
 
+import { Link } from 'react-router-dom'
+
 import { listFaturaPaga } from '../../store/actions/generalFaturaAction'
 import { listFaturadetalhe } from '../../store/actions/generalFaturaDetalheAction'
 import { colapseMenu } from '../../store/actions/generalSiderAction'
@@ -78,16 +80,12 @@ class SelectFaturaPagar extends React.Component {
 
     async listCardItens(fatura, detalhe) {
 
-        // console.log('DATA', DATA)
-
-
-        // console.log('this.props.fatura', fatura)
         const dadosFatura = fatura.map((ID, a) => (
 
             < TabPane tab={`${ID.ID}`} key={a} >
                 <Table className='table table-action'
                     title={() => <div style={{ display: 'flex' }}>
-                        <div style={{ width: '100%', color: 'blue', fontSize: '14px' }}><h2>Fatura Atual:</h2> R$ {ID.VL_REAL} </div>
+                        <div style={{ width: '100%', color: 'blue', fontSize: '14px' }}><h2>Fatura Atual:</h2> R$ {ID.VL_REAL !== null ? ID.VL_REAL : 0.00} </div>
                         <br />
                         <div style={{ width: '100%', color: 'red', fontSize: '14px' }}><h2>Fatura Estimada: </h2> R$ {ID.VL_FORECAST}</div>
                         <br />
@@ -108,7 +106,8 @@ class SelectFaturaPagar extends React.Component {
 
         )
         )
-        this.setState({ ...this.state, detalheFaturaList: dadosFatura })
+        // this.setState({ ...this.state, detalheFaturaList: dadosFatura })
+        this.props.listFaturadetalhe(dadosFatura)
     }
 
     async requestAPI() {
@@ -117,22 +116,20 @@ class SelectFaturaPagar extends React.Component {
         const result = await axios.get(endpointAPI)
         const fatura = result.data
 
-        this.props.listFaturaPaga(fatura)
-
         const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID()}`
         const resultDetalhe = await axios.get(endpointAPIDetalhe)
         const detalhe = resultDetalhe.data
 
-        this.props.listFaturadetalhe(detalhe)
-
-        const unique = new Set(this.props.fatura.map((DATA) => DATA.CARTAO))
+        const unique = new Set(fatura.map((DATA) => DATA.CARTAO))
         const cardNew = Array.from(unique).map((DATA, i) => <Button value={i}
             key={i}
             ghost
             type='primary'
             onClick={() => this.listCardItens(fatura.filter((DADOS) => DADOS.CARTAO === DATA), detalhe)} > {DATA}</Button>)
 
-        this.setState({ ...this.state, seletorCard: cardNew })
+        // this.setState({ ...this.state, seletorCard: cardNew })
+        this.props.listFaturaPaga(cardNew)
+        this.props.listFaturadetalhe([])
 
     }
 
@@ -140,6 +137,7 @@ class SelectFaturaPagar extends React.Component {
         this.requestAPI()
         this.props.colapseMenu(true)
     }
+
 
     componentWillUnmount() {
         this.props.colapseMenu(false)
@@ -149,14 +147,19 @@ class SelectFaturaPagar extends React.Component {
 
         return (
             <div>
+                < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
+                    <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
+                    <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>
+                </div >
+                <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>Resumo de Lançamentos no Cartão</div>
                 <div className='cards'>
-                    {this.state.seletorCard}
+                    {this.props.fatura}
                 </div>
                 <Tabs className='tabs__list'
                     defaultActiveKey="1"
                     tabPosition={this.state.mode}
                     style={{ height: '100%', width: '100%', diplay: 'flex' }}>
-                    {this.state.detalheFaturaList}
+                    {this.props.detalheFatura}
                 </Tabs>
 
             </div >

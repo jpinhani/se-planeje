@@ -1,24 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { listExpenses } from '../../store/actions/generalExpenseAction'
+import { Link } from 'react-router-dom'
+
+import { listExpenseControlerMeta } from '../../store/actions/controlerExpenseAction'
+import { listVisionsControler } from '../../store/actions/controlerVisionAction'
+
 import SearchFilter from '../../components/searchFilterTable/index'
-// import SearchFilterVision from '../../components/searchFilterTableVision'
 
-import { Table, Input, Select } from 'antd'
+import { Table, Input, Select, Button } from 'antd'
 import DespesaPagar from '../../components/Modal/DespesaPagar'
-import { GetRequest } from '../../components/crudSendAxios/crud'
-
-// import { loadVisions } from '../../components/ListagemCombo/index'
-
+import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+
+
 const { Option } = Select;
 class SelectDespesaPagar extends React.Component {
+    _isMounted = false;
     constructor(props) {
         super(props)
+
+        this.searchExpense = this.searchExpense.bind(this)
 
         this.state = {
             search: '',
@@ -28,7 +33,7 @@ class SelectDespesaPagar extends React.Component {
             dataVision: [],
             despesaList: []
         }
-        this.searchExpense = this.searchExpense.bind(this)
+
     }
 
     columns() {
@@ -78,51 +83,81 @@ class SelectDespesaPagar extends React.Component {
         ]
     }
 
-
-    async requestAPI() {
-
-        const resultVision = await GetRequest('api/visions')
-        const despesa = await GetRequest('api/despesas')
-
-        const options = resultVision.map((desc, i) =>
-            <Option key={i} value={desc.VISAO}>
-                {desc.VISAO}
-            </Option>
-        )
-        options.push(<Option key='all' value='ALL'>TODAS METAS</Option>)
-
-        this.setState({ ...this.state, visions: options, dataVision: resultVision, despesaList: despesa })
-    }
-
     searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
 
-    async searchExpenses(selectVisao) {
+    async getdespesa() {
+        const despesa = await GetRequest('api/despesas')
+        return despesa
+    }
 
-        const novaVisao = this.state.dataVision.map((FIL) =>
-            this.state.despesaList.filter((DATA) =>
-                FIL.DT_FIM >= DATA.DT_VISAO &&
-                FIL.DT_INICIO <= DATA.DT_VISAO &&
-                FIL.VISAO === selectVisao
-            )).filter((data) => data.length > 0)
+    async getvision() {
+        const resultVision = await GetRequest('api/visions')
+        return resultVision
+    }
 
+    async requestAPI() {
 
-        // console.log(novaVisao[0])
-        this.props.listExpenses(selectVisao !== 'ALL' ?
-            novaVisao[0] !== undefined ? novaVisao[0] : [] :
-            this.state.despesaList)
+        if (this._isMounted === true) {
+            // const despesa = await this.getdespesa()
+            const resultVision = await this.getvision()
 
-        this.setState({ ...this.state, visionInput: selectVisao })
+            const options = resultVision.map((desc, i) =>
+                <Option key={i} value={desc.VISAO}>
+                    {desc.VISAO}
+                </Option>
+            )
+            options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
+
+            this.setState({
+                ...this.state, visions: options,
+                dataVision: resultVision,
+            })
+
+            if (this.props.visionControler.length > 0)
+                this.searchExpenses(this.props.visionControler)
+        }
+    }
+
+    async  searchExpenses(selectVisao) {
+
+        if (this._isMounted === true) {
+            const despesa = await this.getdespesa()
+            const novaVisao = visionSerchMeta(this.state.dataVision, despesa, selectVisao)
+
+            this.props.listExpenseControlerMeta((selectVisao !== 'ALL') ?
+                novaVisao[0] !== undefined ? novaVisao[0] : [] :
+                despesa)
+
+            this.props.listVisionsControler(selectVisao)
+
+            this.setState({ ...this.state, visionInput: selectVisao })
+
+        }
     }
 
     componentDidMount() {
-        this.requestAPI()
+        this._isMounted = true;
+        if (this._isMounted === true)
+            this.requestAPI()
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
         return (
             <div>
+                < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
+                    <Link to='selectdespesarealizada'><Button key='Lnc'>Lançamentos</Button></Link>
+                    <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
+                </div >
+                <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
+                    Metas Cadastradas
+                </div>
+
                 <div className='ViewExpense'>
                     <Input name='despesa'
                         style={{ width: '50%' }}
@@ -133,8 +168,7 @@ class SelectDespesaPagar extends React.Component {
                     <Select style={{ width: '50%' }}
                         placeholder="Filtrar por Visão"
                         value={this.state.visionInput}
-                        onSelect={(teste) => this.searchExpenses(teste)}
-                    // value={this.state.nivelInput}
+                        onSelect={(vision) => this.searchExpenses(vision)}
                     >
                         {this.state.visions}
                     </Select>
@@ -142,8 +176,8 @@ class SelectDespesaPagar extends React.Component {
 
                 <div>
                     <Table className='table table-action'
-                        columns={this.columns()}
-                        dataSource={SearchFilter(this.props.expense,
+                        columns={this._isMounted === true ? this.columns() : []}
+                        dataSource={SearchFilter(this._isMounted === true ? this.props.controlerexpenseMeta : [],
                             ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'DATANOVA'],
                             this.state.filter)}
                         rowKey='ID' />
@@ -154,15 +188,16 @@ class SelectDespesaPagar extends React.Component {
     }
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
-        expense: state.expense
+        controlerexpenseMeta: state.controlerexpenseMeta,
+        visionControler: state.visionControler
     }
 }
 
-const mapDispatchToProps = { listExpenses }
+const mapDispatchToProps = { listExpenseControlerMeta, listVisionsControler }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SelectDespesaPagar)
+)(SelectDespesaPagar) 

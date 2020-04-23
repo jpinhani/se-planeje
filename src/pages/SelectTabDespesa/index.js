@@ -5,8 +5,10 @@ import Pagamentos from '../SelectDespesaRealizada'
 import Metas from '../SelectDespesaPagar'
 import Faturas from '../SelectFaturaPagar'
 
+
 import 'antd/dist/antd.css';
 import './styles.scss'
+
 
 const tabList = [
     {
@@ -31,6 +33,7 @@ const contentList = {
 };
 
 class SelectTabDespesa extends React.Component {
+    _isMounted = false
     constructor(props) {
         super(props)
 
@@ -40,24 +43,33 @@ class SelectTabDespesa extends React.Component {
     }
 
     onTabChange = (key, type) => {
-        console.log(key, [type]);
-        this.setState({[type]:key});
+        if (this._isMounted === true)
+            this.setState({ [type]: key });
     };
+
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+
+    componentDidMount() {
+        this._isMounted = true
+    }
 
     render() {
         return (<div>
             <Card
                 tabList={tabList}
-                activeTabKey={this.state.key}
+                activeTabKey={this._isMounted === true ? this.state.key : ''}
                 onTabChange={key => {
-                    this.onTabChange(key, 'key');
+                    this.onTabChange(key, 'key')
                 }}
             >
                 {contentList[this.state.key]}
             </Card>
-        </div>
+        </div >
         )
     }
 }
 
 export default SelectTabDespesa
+

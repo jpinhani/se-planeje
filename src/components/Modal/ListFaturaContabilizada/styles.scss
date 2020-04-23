@@ -1,0 +1,28 @@
+// .ant-timeline.ant-timeline-right{
+//     left: calc(10% - -24px);
+//     width: calc(50% - 14px);
+//     text-align: left;
+// }
+
+// .ant-timeline-item-left{
+//     left: calc(50% - -24px);
+//     width: calc(50% - 14px);
+//     text-align: left;
+// }
+
+// .ant-timeline-item-content {
+//     left: calc(-5% - 4px);
+//     // right: calc(05% - 4px);
+//     width: calc(50% - 14px);
+//     text-align: left;
+// }
+
+.ant-timeline.ant-timeline-alternate .ant-timeline-item-left .ant-timeline-item-content, .ant-timeline.ant-timeline-right .ant-timeline-item-left .ant-timeline-item-content {
+    left: calc(50% - -24px);
+    width: calc(50% - 14px);
+    text-align: left;
+}
+
+.ant-modal_Personalizado {
+    width: 850px !important;
+}

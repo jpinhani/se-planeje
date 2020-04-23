@@ -16,17 +16,16 @@ const { SubMenu } = Menu;
 class SiderDemo extends React.Component {
     state = {
         collapsed: false,
-
     };
 
     onCollapse = collapsed => {
-        console.log(collapsed);
         this.setState({ collapsed });
         this.props.colapseMenu(collapsed)
     };
 
     componentDidMount() {
         this.props.colapseMenu(this.state.collapsed)
+
     }
 
     render() {
@@ -70,8 +69,9 @@ class SiderDemo extends React.Component {
                             </span>
                         }
                     >
-                        <Menu.Item key="9"><Link to='/selecttabdespesa'>Despesas</Link></Menu.Item>
-                        <Menu.Item key="10"><Link to='/grafico'>Faturas</Link></Menu.Item>
+
+                        <Menu.Item key="9"><Link to='/selectPagarMeta'>Despesas</Link></Menu.Item>
+                        <Menu.Item key="10"><Link to='/SelectFaturaContabilizada'>Faturas</Link></Menu.Item>
                         <Menu.Item key="11"><Link to='/teste'>Receitas</Link></Menu.Item>
                         <Menu.Item key="12">Transferências</Menu.Item>
                     </SubMenu>
@@ -99,7 +99,7 @@ class SiderDemo extends React.Component {
                     >
                     </SubMenu>
                 </Menu>
-            </Sider>
+            </Sider >
         );
     }
 }

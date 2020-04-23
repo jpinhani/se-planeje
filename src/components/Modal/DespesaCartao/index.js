@@ -1,21 +1,28 @@
 import React from 'react'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 
-// import axios from 'axios'
-import { Modal, Select, DatePicker } from 'antd'
+import { Modal, Select, DatePicker, Form, Tabs, Table, Button } from 'antd'
 import { CreditCardOutlined } from '@ant-design/icons';
+
+import FaturaPagar from '../../../components/Modal/DespesaCartao'
+import { InsertRequest } from '../../crudSendAxios/crud'
+import { verifySend } from '../../verifySendAxios/index'
+import { userID, urlBackend } from '../../../routes/urlBackEnd'
+
+import { listFaturaPaga } from '../../../store/actions/generalFaturaAction'
+import { listFaturadetalhe } from '../../../store/actions/generalFaturaDetalheAction'
+
+import axios from 'axios'
+
 import moment from 'moment';
 
-// import { urlBackend, config, userID } from '../../../routes/urlBackEnd'
 import { loadConta } from '../../ListagemCombo'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
-
 const dateFormat = 'DD/MM/YYYY'
-
-
+const { TabPane } = Tabs;
 class ModalExpense extends React.Component {
     constructor(props) {
         super(props)
@@ -24,7 +31,7 @@ class ModalExpense extends React.Component {
             visible: false,
             conta: [],
             valorRealInput: this.props.data.VL_REAL,
-            dataRealInput: null,
+            dataRealInput: moment(this.props.data.FATURA, "YYYY/MM/DD"),
             contaInput: this.props.data.DESCR_CONTA === null ? [] : this.props.data.ID_CONTA,
         }
 
@@ -33,6 +40,47 @@ class ModalExpense extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleDataReal = this.handleDataReal.bind(this)
         this.handleConta = this.handleConta.bind(this)
+    }
+
+
+    columns() {
+        return [
+            {
+                title: 'REF',
+                dataIndex: 'ID',
+                key: 'ID2',
+            },
+            {
+                title: 'DETALHE',
+                dataIndex: 'DESCR_DESPESA',
+                key: 'DESCR_DESPESA',
+            },
+            {
+                title: 'CARD',
+                dataIndex: 'CARTAO',
+                key: 'CARTAO',
+            },
+            {
+                title: 'VENCIMENTO',
+                dataIndex: 'FATURA',
+                key: 'FATURA',
+            },
+            {
+                title: 'R$ PREVISTO',
+                dataIndex: 'VL_PREVISTO',
+                key: 'VL_PREVISTO',
+            },
+            {
+                title: 'R$ REAL',
+                dataIndex: 'VL_REAL',
+                key: 'VL_REAL',
+            },
+            {
+                title: 'ST',
+                dataIndex: 'STATUS',
+                key: 'STATUS',
+            }
+        ]
     }
 
     async showModal() {
@@ -60,13 +108,97 @@ class ModalExpense extends React.Component {
         this.setState({ ...this.state, contaInput: acount })
     }
 
-    async handleSubmit(event) {
-        event.preventDefault()
+    handleSubmit = e => {
+        e.preventDefault()
+        this.props.form.validateFields((err) => {
+            if (!err) this.handleSubmitok()
+        });
+    }
+    async handleSubmitok() {
+        const body = {
+            idUser: userID(),
+            id: this.props.data.ID,
+            conta: this.state.contaInput,
+            dataReal: this.state.dataRealInput
+        }
+
+        const data = moment(body.dataReal, "DD/MM/YYYY");
+        body.dataReal = data.format("YYYY-MM-DD")
+
+
+        const result = await InsertRequest(body, 'api/despesas/fatura')
+        verifySend(result, 'INSERT', `Pagamento de Fatura ${body.id}`)
+
+        if (result === 200) {
+            // const listCard = await GetRequest('api/despesas/fatura')
+            // this.props.listFaturaPaga(listCard)
+            this.requestAPI()
+            this.handleCancel()
+
+        }
+
+    }
+
+    async listCardItens(fatura, detalhe) {
+
+        const dadosFatura = fatura.map((ID, a) => (
+
+            < TabPane tab={`${ID.ID}`} key={a} >
+                <Table className='table table-action'
+                    title={() => <div style={{ display: 'flex' }}>
+                        <div style={{ width: '100%', color: 'blue', fontSize: '14px' }}><h2>Fatura Atual:</h2> R$ {ID.VL_REAL !== null ? ID.VL_REAL : 0.00} </div>
+                        <br />
+                        <div style={{ width: '100%', color: 'red', fontSize: '14px' }}><h2>Fatura Estimada: </h2> R$ {ID.VL_FORECAST}</div>
+                        <br />
+                        <div style={{ width: '100%', color: 'red', fontSize: '14px' }}>
+                            <FaturaPagar data={ID} />
+                        </div>
+                    </div>}
+
+                    style={{ height: '100%' }}
+                    columns={this.columns()}
+                    dataSource={detalhe.filter((DATA) => (
+                        DATA.ID === ID.ID
+                    ))}
+                    rowKey={ID => ID.ID_DESPESA}
+                />
+            </TabPane >
+
+        )
+        )
+        // this.setState({ ...this.state, detalheFaturaList: dadosFatura })
+        this.props.listFaturadetalhe(dadosFatura)
+    }
+
+    async requestAPI() {
+
+        const endpointAPI = `${urlBackend}api/despesas/fatura/${userID()}`
+        const result = await axios.get(endpointAPI)
+        const fatura = result.data
+
+        const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID()}`
+        const resultDetalhe = await axios.get(endpointAPIDetalhe)
+        const detalhe = resultDetalhe.data
+
+        const unique = new Set(fatura.map((DATA) => DATA.CARTAO))
+
+        const cardNew = Array.from(unique).map((DATA, i) =>
+            <Button value={i}
+                key={i}
+                ghost
+                type='primary'
+                onClick={() => this.listCardItens(fatura.filter((DADOS) => DADOS.CARTAO === DATA), detalhe)} > {DATA}</Button>
+        )
+
+        // this.setState({ ...this.state, seletorCard: cardNew })
+        this.props.listFaturaPaga(cardNew)
+        this.props.listFaturadetalhe([])
+
 
     }
 
     render() {
-
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <CreditCardOutlined style={{ fontSize: '38px', color: '#08c' }} title='Pagar Cartão' theme="twoTone" onClick={this.showModal} />
@@ -79,30 +211,41 @@ class ModalExpense extends React.Component {
                     >
                         <div>
                             <label style={{ width: '99%', fontSize: '18px' }}>
-                                <strong>Total da Fatura:</strong> R$ {this.state.valorRealInput}
+                                <strong>Total da Fatura:</strong> R$ {this.state.valorRealInput !== null ? this.state.valorRealInput : 0}
                             </label>
                         </div>
-                        <DatePicker style={{ width: '49%' }}
-                            onChange={this.handleDataReal}
-                            placeholder="Data Executada"
-                            defaultValue={moment(this.props.data.FATURA, "YYYY/MM/DD")}
-                            format={dateFormat}
-                        />
-                        <Select
-                            showSearch
-                            style={{ width: '49%' }}
-                            placeholder="Informe o Conta"
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            onSelect={this.handleConta}
-                            value={this.state.contaInput}
-                        >
-                            {this.state.conta}
-                        </Select>
-
+                        <div style={{ width: '100%', display: 'flex' }}>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('dtreal', {
+                                    rules: [{ required: true, message: 'informe a Data de Pagamento da Fatura!' }],
+                                    initialValue: moment(this.props.data.FATURA, "YYYY/MM/DD")
+                                })(
+                                    <DatePicker style={{ width: '100%' }}
+                                        onChange={this.handleDataReal}
+                                        placeholder="Data Executada"
+                                        format={dateFormat}
+                                    />)}
+                            </Form.Item>
+                            <Form.Item style={{ width: '50%' }}>
+                                {getFieldDecorator('conta', {
+                                    rules: [{ required: true, message: 'Informe a Conta!' }],
+                                    initialValue: this.state.contaInput
+                                })(
+                                    <Select
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        placeholder="Informe o Conta"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) => (
+                                            option.props.children.toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        )}
+                                        onSelect={this.handleConta}
+                                    >
+                                        {this.state.conta}
+                                    </Select>)}
+                            </Form.Item>
+                        </div>
                     </Modal>
                 </form>
             </div >
@@ -110,5 +253,18 @@ class ModalExpense extends React.Component {
     }
 }
 
+const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
 
-export default ModalExpense
+const mapStateToProps = (state /*, ownProps*/) => {
+    return {
+        fatura: state.fatura,
+        detalheFatura: state.detalheFatura,
+    }
+}
+
+const mapDispatchToProps = { listFaturaPaga, listFaturadetalhe }
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(WrappedApp)
