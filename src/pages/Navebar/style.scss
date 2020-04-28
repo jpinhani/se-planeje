@@ -1,7 +1,38 @@
+
+// .ant-drawer-body {
+//    padding: 12px;
+//    width: 60% !important;
+//    position: absolute !important;
+// }
+
+// .ant-drawer-wrapper-body {
+//      position: absolute !important;
+//      width: 100%;
+//      background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+// }
+.ant-layout-sider-zero-width-trigger {
+   top: 37px;
+   padding: 2px;
+   font-size: 38px;
+   color: black;
+   background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
+}
+.ant-menu {
+   width: 100%;
+}
+
+.ant-layout-sider {
+    position: relative;
+    min-width: 0;
+    // width: 300px !important;
+     background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
 .ant-layout-sider-children{
-    background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
-    margin: 2px;
-    
+    // background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+    height: 100vh;
 }
 
 div.ant-menu-submenu-title{
@@ -18,14 +49,20 @@ div.ant-menu-submenu-title{
 }
 
 .ant-menu-submenu{
-    background: radial-gradient(rgb(129, 214, 243), rgb(146, 159, 196));
-
+    background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
+    width: 100%;
+    
+    // border-radius: -5px;
+    padding: 5px 0 0 0;
 }
 
 li.ant-menu-item{
     background: radial-gradient(rgb(234, 238, 240), rgb(96, 158, 180));
     color: black;
     border:1px solid white;
+    width: 100%;
+    padding-left: 30px !important;
+    // border-radius: 15px;
     
 }
 

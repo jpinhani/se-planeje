@@ -52,12 +52,12 @@ class SelectConta extends React.Component {
 
         render: acount => (
           <div className='ModeloBotoesGrid'>
-            <span className='ModeloBotoesGridDetalhes' >
-              <EditaAcount data={acount} />
-              <Popconfirm title="Excluir Conta?" onConfirm={() => this.deleteAcount(acount)}>
-                <Icon type="delete" title='Excluir Conta' style={{ fontSize: '18px', color: '#08c' }} />
-              </Popconfirm>
-            </span>
+            {/* <span className='ModeloBotoesGridDetalhes' > */}
+            <EditaAcount data={acount} />
+            <Popconfirm title="Excluir Conta?" onConfirm={() => this.deleteAcount(acount)}>
+              <Icon type="delete" title='Excluir Conta' style={{ fontSize: '18px', color: '#08c' }} />
+            </Popconfirm>
+            {/* </span> */}
           </div>
         ),
       }

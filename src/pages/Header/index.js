@@ -41,15 +41,11 @@ function handleclik() {
 function PrincipalHeader() {
     return (
         <Header className='cabecalho'>
-            <div style={{ width: '90%' }}>
+            <div >
                 <h1 className='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
             </div>
-            <div style={{ width: '10%' }} >
-                <Dropdown.Button style={{
-
-                    alignSelf: 'right', opacity: 0.7,
-
-                }}
+            <div  >
+                <Dropdown.Button style={{ alignSelf: 'right', opacity: 0.7 }}
                     onClick={handleclik}
                     overlay={menu}
                     icon={<UserOutlined />}>

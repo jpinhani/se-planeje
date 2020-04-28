@@ -1,9 +1,12 @@
 .cabecalho{
     // background: radial-gradient(rgb(129, 214, 243), rgb(146, 159, 196));
     background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
-    height: 100px;
+    height: 120px;
     display: flex;
+    width: 100%;
     align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
     border:1px solid white;
     h1{
         color:white ;

@@ -31,29 +31,31 @@ class routesSePlaneje extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ minHeight: '100vh' }} >
           <Navebar />
           <Layout>
             <Header />
-            <Content style={{ margin: '0 16px' }}>
-              <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-                <Switch name='http://localhost:3000'>
-                  <PublicRoute exact path='/login' component={Login} />
-                  <PrivateRoute exact path='/selectconta' component={SelectConta} />
-                  <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
-                  <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
-                  <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
-                  <PrivateRoute exact path='/selectdespesarealizada' component={SelectDespesaRealizada} />
-                  <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
-                  <PrivateRoute exact path='/selectPagarMeta' component={SelectPagarMeta} />
-                  <PrivateRoute exact path='/SelectFaturaPagar' component={SelectFaturaPagar} />
-                  <PrivateRoute exact path='/SelectFaturaContabilizada' component={SelectFaturaContabilizada} />
-                  <PrivateRoute exact path='/grafico' component={testGrafico} />
-                  <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
-                  <PrivateRoute exact path='/visao' component={Visao} />
-                  <PrivateRoute component={Home} />
-                </Switch>
-              </div>
+
+            <Content
+              style={{ padding: '30px' }}>
+
+              <Switch name='http://localhost:3000'>
+                <PublicRoute exact path='/login' component={Login} />
+                <PrivateRoute exact path='/selectconta' component={SelectConta} />
+                <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
+                <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
+                <PrivateRoute exact path='/selectdespesaprevista' component={SelectDespesaPrevista} />
+                <PrivateRoute exact path='/selectdespesarealizada' component={SelectDespesaRealizada} />
+                <PrivateRoute exact path='/selectreceitaprevista' component={SelectReceitaPrevista} />
+                <PrivateRoute exact path='/selectPagarMeta' component={SelectPagarMeta} />
+                <PrivateRoute exact path='/SelectFaturaPagar' component={SelectFaturaPagar} />
+                <PrivateRoute exact path='/SelectFaturaContabilizada' component={SelectFaturaContabilizada} />
+                <PrivateRoute exact path='/grafico' component={testGrafico} />
+                <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
+                <PrivateRoute exact path='/visao' component={Visao} />
+                <PrivateRoute component={Home} />
+              </Switch>
+
             </Content>
           </Layout>
         </Layout >

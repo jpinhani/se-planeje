@@ -1,3 +1,10 @@
+.ModeloBotoesGrid{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 20%;
+}
+
 .headerConta{
     display: flex;
     justify-content: center;
@@ -10,7 +17,6 @@
     align-items: center;
     width: 100%;
 }
-
 
 
 table {
