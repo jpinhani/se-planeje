@@ -154,8 +154,8 @@ class SelectDespesaPagar extends React.Component {
                     <Link to='selectdespesarealizada'><Button key='Lnc'>Lançamentos</Button></Link>
                     <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
                 </div >
-                <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
-                    Metas Cadastradas
+                <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
+                    Metas Cadastradas - Despesas
                 </div>
 
                 <div className='ViewExpense'>

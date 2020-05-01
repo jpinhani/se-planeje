@@ -37,12 +37,18 @@ async function DeleteRequest(body, rota) {
 
 function visionSerchMeta(dataVision, despesaList, selectVisao) {
 
+    console.log('dataVision', dataVision)
+    console.log('despesaList', despesaList)
+    console.log('selectVisao', selectVisao)
+
     const novaVisao = dataVision.map((FIL) =>
         despesaList.filter((DATA) =>
             FIL.DT_FIM >= DATA.DT_PREVISTO &&
             FIL.DT_INICIO <= DATA.DT_PREVISTO &&
             FIL.VISAO === selectVisao
         )).filter((data) => data.length > 0)
+
+    console.log(novaVisao)
 
     return novaVisao
 }

@@ -60,8 +60,13 @@ li.ant-menu-item{
     background: radial-gradient(rgb(234, 238, 240), rgb(96, 158, 180));
     color: black;
     border:1px solid white;
+    font-weight: bold;
     width: 100%;
-    padding-left: 30px !important;
+    padding-left: 10px !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: first baseline;
+    align-items: center;
     // border-radius: 15px;
     
 }

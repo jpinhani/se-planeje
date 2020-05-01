@@ -74,7 +74,7 @@ class listCard extends React.Component {
                     <Timeline mode="alternate">
                         {this.state.lancamentos}
                     </Timeline>
-                    <div style={{ width: '20%' }}><h1>Total de {this.props.data.VL_REAL2}</h1></div>
+                    <div style={{ width: '100%', justifyContent: 'left' }}><h1>Total de {this.props.data.VL_REAL2}</h1></div>
 
                 </Modal>
             </div>
