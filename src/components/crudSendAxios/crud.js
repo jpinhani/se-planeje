@@ -28,7 +28,6 @@ async function UpdateRequest(body, rota) {
 async function DeleteRequest(body, rota) {
     const endpoint = `${urlBackend}${rota}/${body}`
     const ResultStatus = await axios.delete(endpoint, config())
-    console.log(ResultStatus)
 
     return ResultStatus.data.error === undefined ? ResultStatus.status : '400'
 }
@@ -36,23 +35,40 @@ async function DeleteRequest(body, rota) {
 
 
 function visionSerchMeta(dataVision, despesaList, selectVisao) {
+    let visao = []
+    if (selectVisao === 'ALL') {
+        visao = despesaList
+    } else {
+        const novaVisao = selectVisao === 'ALL' ? despesaList : dataVision.map((FIL) =>
+            despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DT_PREVISTO &&
+                FIL.DT_INICIO <= DATA.DT_PREVISTO &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
 
-    console.log('dataVision', dataVision)
-    console.log('despesaList', despesaList)
-    console.log('selectVisao', selectVisao)
-
-    const novaVisao = dataVision.map((FIL) =>
-        despesaList.filter((DATA) =>
-            FIL.DT_FIM >= DATA.DT_PREVISTO &&
-            FIL.DT_INICIO <= DATA.DT_PREVISTO &&
-            FIL.VISAO === selectVisao
-        )).filter((data) => data.length > 0)
-
-    console.log(novaVisao)
-
-    return novaVisao
+        visao = novaVisao === undefined ? [] : novaVisao[0]
+    }
+    return visao
 }
 
+function visionSerchReceita(dataVision, despesaList, selectVisao) {
+
+    let visao = []
+
+    if (selectVisao === 'ALL') {
+        visao = despesaList
+    } else {
+        const novaVisao = dataVision.map((FIL) =>
+            despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DT_REAL &&
+                FIL.DT_INICIO <= DATA.DT_REAL &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
+
+        visao = novaVisao === undefined ? [] : novaVisao[0]
+    }
+    return visao
+}
 
 function visionSerch(dataVision, despesaList, selectVisao) {
 
@@ -66,4 +82,4 @@ function visionSerch(dataVision, despesaList, selectVisao) {
     return novaVisao
 }
 
-export { GetRequest, InsertRequest, UpdateRequest, DeleteRequest, visionSerch, visionSerchMeta }
+export { GetRequest, InsertRequest, UpdateRequest, DeleteRequest, visionSerch, visionSerchMeta, visionSerchReceita }

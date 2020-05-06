@@ -23,6 +23,7 @@ import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
 import testGrafico from '../components/TestGrafico'
 import SelectReceitaMeta from '../pages/SelectReceitaMeta'
+import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 
 
 const { Content } = Layout;
@@ -55,6 +56,7 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
                 <PrivateRoute exact path='/selectReceitaMeta' component={SelectReceitaMeta} />
                 <PrivateRoute exact path='/visao' component={Visao} />
+                <PrivateRoute exact path='/SelectReceitaReal' component={SelectReceitaReal} />
                 <PrivateRoute component={Home} />
               </Switch>
 

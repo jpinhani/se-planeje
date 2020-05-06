@@ -53,6 +53,7 @@ class SiderDemo extends React.Component {
             visible: false,
         });
     };
+
     render() {
         return (
             <div>

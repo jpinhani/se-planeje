@@ -68,6 +68,7 @@ function ReceitaMeta(props) {
             const receitas = await GetRequest('api/receitas')
 
             setVisible(false)
+
             dispatch({
                 type: 'LIST_REVENUE',
                 payload: receitas
@@ -86,6 +87,7 @@ function ReceitaMeta(props) {
         setcontas(rs)
         setVisible(true)
         setCategoria(cat)
+
     }
 
     return (
@@ -224,7 +226,6 @@ function ReceitaMeta(props) {
                                     precision={2}
                                     min={0}
                                     autoFocus
-                                // onChange={valor => setValorPrevistoInput(valor)}
                                 />)}
                         </Form.Item>
 

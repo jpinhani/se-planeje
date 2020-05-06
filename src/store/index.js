@@ -15,6 +15,7 @@ import faturaReducer from './reducers/generalFaturaReducer'
 import siderReducer from './reducers/generalSiderReducer'
 import visionControlerReducer from './reducers/controlerVisionReducer'
 import visionControlerComboReducer from './reducers/controlerListVisionReducer'
+import revenueRealReducer from './reducers/generalRevenuesRealReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -31,7 +32,8 @@ const reducers = combineReducers({
   fatura: faturaReducer,
   siderMenu: siderReducer,
   controlerExpenseReal: controlerexpenseRealReducer,
-  controlerexpenseMeta: controlerexpenseMetaReducer
+  controlerexpenseMeta: controlerexpenseMetaReducer,
+  revenueReal: revenueRealReducer
 })
 
 export default createStore(reducers)

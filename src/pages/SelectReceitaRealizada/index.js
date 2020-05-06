@@ -1,25 +1,25 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud'
-import ReceitaMetaComponente from '../../components/Modal/ReceitaMeta'
+import { GetRequest, visionSerchReceita } from '../../components/crudSendAxios/crud'
 import SearchFilter from '../../components/searchFilterTable/index'
 
-import { Table, Button, Input, Select } from 'antd'
+import { Table, Button, Input, Select } from 'antd';
 
 const { Option } = Select;
 
-export default (props) => {
+function ReceitaRealizada() {
 
-    const dispatch = useDispatch()
-    const receitaMeta = useSelector(state => state.revenue)
+    const receitaReal = useSelector(state => state.revenueReal);
     const visionControler = useSelector(state => state.visionControler)
+
+    const dispatch = useDispatch();
 
     const [search, setSearch] = useState('');
     // const [vision, setVision] = useState([]);
-    const [mapvision, setMapVision] = useState([]);
     const [visions, setVisions] = useState([]);
+    const [mapvision, setMapVision] = useState([]);
 
     const Collumns = [
         {
@@ -33,9 +33,19 @@ export default (props) => {
             key: 'VL_PREVISTO'
         },
         {
+            title: 'R$ REAL',
+            dataIndex: 'VL_REAL',
+            key: 'VL_REAL'
+        },
+        {
             title: 'DATA PREVISTA',
             dataIndex: 'DATANOVA',
             key: 'DATANOVA'
+        },
+        {
+            title: 'DATA REAL',
+            dataIndex: 'DATANOVAREAL',
+            key: 'DATANOVAREAL'
         },
         {
             title: 'RECEITA',
@@ -46,31 +56,18 @@ export default (props) => {
             title: 'PARCELA',
             dataIndex: 'NUM_PARCELA',
             key: 'NUM_PARCELA'
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: receitaMeta => (
-                <div>
-                    <ReceitaMetaComponente data={receitaMeta} />
-                </div>
-            )
         }
     ]
 
-    async function filterVision(selectVisao) {
+    const getvision = useCallback(async () => await GetRequest('api/visions'), [])
+
+    const filterVision = async (selectVisao) => {
 
         // setVision(selectVisao);
-
-        dispatch({
-            type: 'LIST_VISIONCONTROLER',
-            payload: selectVisao
-        })
-
+        dispatch({ type: 'LIST_VISIONCONTROLER', payload: selectVisao })
 
     }
 
-    const getvision = useCallback(async () => await GetRequest('api/visions'), [])
 
     const listaVisao = useCallback(async () => {
         const resultVision = await getvision();
@@ -80,25 +77,22 @@ export default (props) => {
                 {desc.VISAO}
             </Option>
         )
+
         options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
 
         setVisions(options)
-
-        const receitas = await GetRequest('api/receitas')
-        // const novaVisao = visionSerchMeta(resultVision, receitas, visionControler)
-        // dispatch({
-        //     type: 'LIST_VISIONCONTROLER',
-        //     payload: 'ALL'
-        // })
+        const receitas = await GetRequest('api/receitas/paga')
+        // const novaVisao = visionSerchReceita(resultVision, receitas, visionControler)
 
         dispatch({
-            type: 'LIST_REVENUE',
+            type: 'LIST_REVENUE_REAL',
             payload: receitas
         })
 
         // setVision(visionControler)
         setMapVision(resultVision)
     }, [getvision, dispatch])
+
 
     useEffect(() => {
         listaVisao();
@@ -108,10 +102,10 @@ export default (props) => {
     return (
         <div>
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
-                <Link to='SelectReceitaReal'><Button key='Lnc'>Novos Lançamentos</Button></Link>
+                <Link to='SelectReceitaMeta'><Button key='Lnc'>Metas - Receitas</Button></Link>
             </div >
             <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
-                Metas Cadastradas - Receitas
+                Lançamentos de Receita - Não Previstos
             </div>
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                 <Input name='receita'
@@ -128,13 +122,17 @@ export default (props) => {
                     {visions}
                 </Select>
             </div >
-            < Table className='table table-action'
+            <Table
+                className='table table-action'
                 columns={Collumns}
                 dataSource={SearchFilter(
-                    visionSerchMeta(mapvision, receitaMeta, visionControler), ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
-                rowKey={receitaMeta => receitaMeta.ID} />
+                    visionSerchReceita(mapvision, receitaReal, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
+                rowKey='ID'
+            />
         </div>
-    )
 
+    )
 }
 
+export default ReceitaRealizada

@@ -192,7 +192,7 @@ class SelectDespesaReal extends React.Component {
                     <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
                     <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
                 </div >
-                <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
+                <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
                     Novas Despesas - Imprevistos
                 </div>
                 <div className='ViewExpense'>

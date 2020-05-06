@@ -151,7 +151,7 @@ class SelectFaturaPagar extends React.Component {
                     <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
                     <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>
                 </div >
-                <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>Resumo de Lançamentos no Cartão</div>
+                <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>Resumo de Lançamentos no Cartão</div>
                 <div className='cards'>
                     {this.props.fatura}
                 </div>
