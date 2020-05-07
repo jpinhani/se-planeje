@@ -6,6 +6,7 @@ import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../routes/urlBackEnd'
 
 import { GetRequest, InsertRequest } from '../../crudSendAxios/crud'
+// import { useHistory, Redirect, Link, withRouter } from 'react-router-dom'
 import { verifySend } from '../../verifySendAxios/index.js'
 
 import 'antd/dist/antd.css';
@@ -28,6 +29,9 @@ class ModalAcount extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
+    // static propTypes = {
+    //     history: PropTypes.object.isRequired
+    // }
     /* -------------------------------------  Comandos para Funcionamento do Modal*/
     showModal() {
         this.setState({ ...this.state, visible: true })
@@ -57,7 +61,7 @@ class ModalAcount extends React.Component {
     }
 
     async handleSubmitok() {
-
+        // const history = useHistory();
         const body = {
             idUser: userID(),
             descrConta: this.state.descrConta,
@@ -65,8 +69,13 @@ class ModalAcount extends React.Component {
         }
 
         const resultStatus = await InsertRequest(body, 'api/contas')
+        // if (resultStatus === 401) {
+        //     this.props.history.push('/')
+        // }
+        // // useHistory().push('/')
 
         verifySend(resultStatus, 'INSERT', body.descrConta)
+
         const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
 
         this.props.listAcounts(Data)

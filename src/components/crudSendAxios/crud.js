@@ -1,6 +1,12 @@
+
 import axios from 'axios'
 import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+import { logout } from '../../auth/index'
 
+
+function redirect() {
+    window.location.href = 'http://localhost:3000/login'
+}
 
 async function GetRequest(rota) {
     const endpoint = `${urlBackend}${rota}/${userID()}`
@@ -11,28 +17,43 @@ async function GetRequest(rota) {
     return dados
 }
 
-async function InsertRequest(body, rota) {
-    const endpointAPI = `${urlBackend}${rota}`
-    const ResultStatus = await axios.post(endpointAPI, body, config())
 
-    return ResultStatus.status
+async function InsertRequest(body, rota) {
+
+    try {
+        const endpointAPI = `${urlBackend}${rota}`
+        const ResultStatus = await axios.post(endpointAPI, body, config())
+        return ResultStatus.status
+    } catch (error) {
+        logout();
+        redirect();
+    }
 }
 
-async function UpdateRequest(body, rota) {
-    const endpointAPI = `${urlBackend}${rota}/${body.id}`
 
-    const ResultStatus = await axios.put(endpointAPI, body, config())
-    return ResultStatus.status
+
+async function UpdateRequest(body, rota) {
+    try {
+        const endpointAPI = `${urlBackend}${rota}/${body.id}`
+        const ResultStatus = await axios.put(endpointAPI, body, config())
+        return ResultStatus.status
+    } catch (error) {
+        logout();
+        redirect();
+    }
+
 }
 
 async function DeleteRequest(body, rota) {
-    const endpoint = `${urlBackend}${rota}/${body}`
-    const ResultStatus = await axios.delete(endpoint, config())
-
-    return ResultStatus.data.error === undefined ? ResultStatus.status : '400'
+    try {
+        const endpoint = `${urlBackend}${rota}/${body}`
+        const ResultStatus = await axios.delete(endpoint, config())
+        return ResultStatus.data.error === undefined ? ResultStatus.status : '400'
+    } catch (error) {
+        logout();
+        redirect();
+    }
 }
-
-
 
 function visionSerchMeta(dataVision, despesaList, selectVisao) {
     let visao = []
@@ -82,4 +103,12 @@ function visionSerch(dataVision, despesaList, selectVisao) {
     return novaVisao
 }
 
-export { GetRequest, InsertRequest, UpdateRequest, DeleteRequest, visionSerch, visionSerchMeta, visionSerchReceita }
+export {
+    GetRequest,
+    InsertRequest,
+    UpdateRequest,
+    DeleteRequest,
+    visionSerch,
+    visionSerchMeta,
+    visionSerchReceita
+}
