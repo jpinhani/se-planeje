@@ -45,7 +45,9 @@ function Login() {
   return (
     <div className='login'>
       <form onSubmit={handleSubmit}>
-        <h1>SE PLANEJE</h1>
+
+        <h1><span className='logoheaderLogin'>Se</span>Planeje</h1>
+
         <div>
           <Input
             type='email'

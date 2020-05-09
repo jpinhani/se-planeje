@@ -66,8 +66,6 @@ export default (props) => {
             type: 'LIST_VISIONCONTROLER',
             payload: selectVisao
         })
-
-
     }
 
     const getvision = useCallback(async () => await GetRequest('api/visions'), [])
@@ -85,18 +83,12 @@ export default (props) => {
         setVisions(options)
 
         const receitas = await GetRequest('api/receitas')
-        // const novaVisao = visionSerchMeta(resultVision, receitas, visionControler)
-        // dispatch({
-        //     type: 'LIST_VISIONCONTROLER',
-        //     payload: 'ALL'
-        // })
 
         dispatch({
             type: 'LIST_REVENUE',
             payload: receitas
         })
 
-        // setVision(visionControler)
         setMapVision(resultVision)
     }, [getvision, dispatch])
 
@@ -131,7 +123,9 @@ export default (props) => {
             < Table className='table table-action'
                 columns={Collumns}
                 dataSource={SearchFilter(
-                    visionSerchMeta(mapvision, receitaMeta, visionControler), ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
+                    visionSerchMeta(mapvision, receitaMeta, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
+
                 rowKey={receitaMeta => receitaMeta.ID} />
         </div>
     )

@@ -2,10 +2,14 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { GetRequest, visionSerchReceita } from '../../components/crudSendAxios/crud'
+import { GetRequest, visionSerchReceita, UpdateRequest } from '../../components/crudSendAxios/crud'
 import SearchFilter from '../../components/searchFilterTable/index'
+import NewRevenue from '../../components/Modal/ReceitaRealizada'
+import ReceitaEdit from '../../components/Modal/ReceitaRealizadaEdit'
 
-import { Table, Button, Input, Select } from 'antd';
+import { Table, Button, Input, Select, Popconfirm, Icon } from 'antd';
+
+import { verifySend } from '../../components/verifySendAxios/index'
 
 const { Option } = Select;
 
@@ -20,6 +24,25 @@ function ReceitaRealizada() {
     // const [vision, setVision] = useState([]);
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
+
+    async function deleteReal(receitaReal) {
+
+        const body = receitaReal
+        body.id = receitaReal.ID
+
+        const resultStatus = await UpdateRequest(body, 'api/receitas/delete/real')
+        verifySend(resultStatus, 'DELETEDESPESAREAL', body.DESCR_RECEITA)
+
+        if (resultStatus === 200) {
+
+            const receita = await GetRequest('api/receitas/paga')
+            dispatch({
+                type: 'LIST_REVENUE_REAL',
+                payload: receita
+            })
+        }
+    }
+
 
     const Collumns = [
         {
@@ -56,6 +79,23 @@ function ReceitaRealizada() {
             title: 'PARCELA',
             dataIndex: 'NUM_PARCELA',
             key: 'NUM_PARCELA'
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: receitaReal => (
+                <div>
+                    <ReceitaEdit data={receitaReal} />
+                    <Popconfirm
+                        title="Excluir Lançamento Realizado?"
+                        onConfirm={() => deleteReal(receitaReal)}>
+                        <Icon
+                            type="delete"
+                            title='Excluir Receita'
+                            style={{ fontSize: '18px', color: '#08c' }} />
+                    </Popconfirm>
+                </div>
+            )
         }
     ]
 
@@ -108,6 +148,7 @@ function ReceitaRealizada() {
                 Lançamentos de Receita - Não Previstos
             </div>
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                <NewRevenue />
                 <Input name='receita'
                     style={{ width: '49%' }}
                     value={search}
