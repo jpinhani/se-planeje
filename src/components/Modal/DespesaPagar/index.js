@@ -1,180 +1,127 @@
-import React from 'react'
-
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Modal, Input, Select, DatePicker, InputNumber, Switch, Divider, Form } from 'antd'
 import { LikeTwoTone } from '@ant-design/icons';
 import moment from 'moment';
-
-import { listExpenseControlerMeta } from '../../../store/actions/controlerExpenseAction'
-import { listVisionsControler } from '../../../store/actions/controlerVisionAction'
-
 import { userID } from '../../../routes/urlBackEnd'
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
+import { GetRequest, UpdateRequest } from '../../crudSendAxios/crud'
 
-import { GetRequest, UpdateRequest, visionSerchMeta } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
-
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
 const { TextArea } = Input;
-
 const dateFormat = 'DD/MM/YYYY'
 
-class ModalExpense extends React.Component {
-    _isMounted = false
-    constructor(props) {
-        super(props)
+function DespesaPagar(props) {
 
-        this.state = {
-            visible: false, //Controla a visibilidade do formulário
-            visibleConta: (this.props.data.ID_CARTAO === 0 | this.props.data.ID_CARTAO === null) ? false : true,
-            visibleCartao: (this.props.data.ID_CARTAO === 0 | this.props.data.ID_CARTAO === null) ? true : false,
-            visibleTipoPagamento: (this.props.data.ID_CARTAO === 0 | this.props.data.ID_CARTAO === null) ? `A VISTA` : `CRÉDITO`,
-            check: (this.props.data.ID_CARTAO === 0 | this.props.data.ID_CARTAO === null) ? false : true,
-            visibleEdit: 'Essa Despesa Esta Sendo Contabilizada', //State Para saber se é Amortização ou não
-            categoria: this.props.data.ID_CATEGORIA, //Listagem de Categoria
-            cartao: this.props.data.ID_CARTAO, //Listagem de Cartão
-            conta: [],
+    const dispatch = useDispatch();
 
-            valorPrevistoInput: this.props.data.VL_PREVISTO2,
-            dataPrevistaInput: this.props.data.DATANOVA,
-            cartaoInput: (this.props.data.ID_CARTAO === 0 | this.props.data.ID_CARTAO === null) ? 'DÉBITO OU DINHEIRO' : this.props.data.ID_CARTAO, //Cartão Selecionado no Click
-            parcelasInput: this.props.data.NUM_PARCELA,
-            categoriaInput: this.props.data.ID_CATEGORIA, //Categoria Selecionada no Click
-            descrDespesaInput: this.props.data.DESCR_DESPESA,
-            contaInput: [],
-            valorRealizadoInput: null,
-            dataRealInput: '',
-        }
+    const [visible, setVisible] = useState(false);
+    const [visibleConta, setVisibleConta] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? false : true);
+    const [visibleCartao, setVisibleCartao] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? true : false);
+    const [visibleTipoPagamento, setVisibleTipoPagamento] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? `A VISTA` : `CRÉDITO`);
+    const [check, setCheck] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? false : true);
+    const [visibleEdit, setVisibleEdit] = useState('Essa Despesa Esta Sendo Contabilizada');
+    const [categoria, setCategoria] = useState(props.data.ID_CATEGORIA);
+    const [cartao, setCartao] = useState(props.data.ID_CARTAO);
+    const [conta, setConta] = useState([]);
 
-        this.showModal = this.showModal.bind(this)
-        this.handleCancel = this.handleCancel.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handledescricaoDespesa = this.handledescricaoDespesa.bind(this)
-        this.handleEdit = this.handleEdit.bind(this)
-        this.handleValorReal = this.handleValorReal.bind(this)
-        this.handleDataReal = this.handleDataReal.bind(this)
-        this.handleConta = this.handleConta.bind(this)
-        this.handleCartao = this.handleCartao.bind(this)
-        this.handletipoPagamento = this.handletipoPagamento.bind(this)
-    }
+    const [valorPrevistoInput] = useState(props.data.VL_PREVISTO2);
+    const [dataPrevistaInput] = useState(props.data.DATANOVA);
+    const [cartaoInput, setCartaoInput] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? 'DÉBITO OU DINHEIRO' : props.data.ID_CARTAO);
+    const [parcelasInput] = useState(props.data.NUM_PARCELA);
+    const [categoriaInput] = useState(props.data.ID_CATEGORIA);
+    const [descrDespesaInput, setDescrDespesaInput] = useState(props.data.DESCR_DESPESA);
+    const [contaInput, setContaInput] = useState([]);
+    const [valorRealizadoInput, setValorRealizadoInput] = useState(null);
+    const [dataRealInput, setDataRealInput] = useState('');
 
-    async showModal() {
+    async function showModal() {
         const resultCategoria = await loadCategoria()
         const resultCartao = await loadCartaoReal()
         const resultConta = await loadConta()
 
-        this.setState({
-            ...this.state,
-            categoria: resultCategoria,
-            cartao: resultCartao,
-            conta: resultConta,
-            visible: true
-        })
-
+        setCategoria(resultCategoria);
+        setCartao(resultCartao);
+        setConta(resultConta);
+        setVisible(true);
     };
 
+    function handleEdit(valor) {
+        valor === true ?
+            setVisibleEdit(`Essa Despesa esta sendo Amortizada`) :
+            setVisibleEdit(`Essa Despesa Esta sendo Contabilizada`);
+    }
 
-    handleCancel() {
-        this.setState({ ...this.state, visible: false })
-    };
-
-    handleEdit(valor) {
-        if (valor === true) {
-            this.setState({ ...this.state, visibleEdit: `Essa Despesa esta sendo Amortizada` })
+    function handletipoPagamento(tipo) {
+        if (tipo === true) {
+            setVisibleTipoPagamento(`CRÉDITO`);
+            setCheck(true);
+            setContaInput([]);
+            setVisibleConta(true);
+            setCartaoInput((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? [] : props.data.ID_CARTAO);
+            setVisibleCartao(false);
         } else {
-            this.setState({ ...this.state, visibleEdit: 'Essa Despesa Esta sendo Contabilizada' })
+            setVisibleTipoPagamento(`A VISTA`);
+            setVisibleConta(false);
+            setCheck(false);
+            setCartaoInput('DÉBITO OU DINHEIRO');
+            setVisibleCartao(true);
         }
+        props.form.resetFields('contaid', 'cartao')
     }
 
-    handletipoPagamento(tipo) {
-
-        tipo === true
-            ? this.setState({
-                ...this.state, visibleTipoPagamento: `CRÉDITO`,
-                check: true,
-                contaInput: [],
-                visibleConta: true,
-                cartaoInput: (this.props.data.ID_CARTAO === 0 | this.props.data.ID_CARTAO === null) ? [] : this.props.data.ID_CARTAO,
-                visibleCartao: false
-
-            })
-            : this.setState({
-                ...this.state, visibleTipoPagamento: `A VISTA`,
-                visibleConta: false,
-                check: false,
-                cartaoInput: 'DÉBITO OU DINHEIRO',
-                visibleCartao: true
-            })
-        this.props.form.resetFields('contaid', 'cartao')
+    function handledescricaoDespesa(despesa) {
+        setDescrDespesaInput(despesa.toUpperCase());
     }
 
-    handledescricaoDespesa(despesa) {
-        this.setState({ ...this.state, descrDespesaInput: despesa.toUpperCase() })
+    function handleValorReal(valor) {
+        setValorRealizadoInput(valor);
     }
 
-    handleValue = e => {
-        if (e.target.value === 3) {
-            this.setState({ ...this.state, dayVisible: false, value: e.target.value });
-        } else {
-            this.setState({ ...this.state, dayValue: null, dayVisible: true, value: e.target.value });
-        }
-    };
-
-    handleValorReal(valor) {
-        this.setState({ ...this.state, valorRealizadoInput: valor })
+    function handleDataReal(date, dateString) {
+        setDataRealInput(dateString);
     }
 
-    handleDataReal(date, dateString) {
-        this.setState({ ...this.state, dataRealInput: dateString })
+    function handleConta(valorConta) {
+        setContaInput(valorConta);
     }
 
-    handleConta(valorConta) {
-        this.setState({ ...this.state, contaInput: valorConta })
+    function handleCartao(valorCartao) {
+        setCartaoInput(valorCartao);
     }
 
-    handleCartao(valorCartao) {
-        this.setState({ ...this.state, cartaoInput: valorCartao })
-    }
-
-    handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault()
-        this.props.form.validateFields((err) => {
-            if (!err) this.handleSubmitok()
+        props.form.validateFields((err) => {
+            if (!err) handleSubmitok()
         });
     }
 
-    componentDidMount() {
-        this._isMounted = true
-    }
+    async function handleSubmitok() {
 
-    componentWillUnmount() {
-        this._isMounted = false
-    }
-
-    async handleSubmitok() {
-
-        const valueStatus = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? 'Pagamento Realizado' : 'Fatura Pronta Para Pagamento'
-        const valueData = this.state.dataRealInput ? this.state.dataRealInput : moment(new Date(), dateFormat)
-        const valueCartao = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? null : this.state.cartaoInput
-        const valueConta = this.state.cartaoInput === 'DÉBITO OU DINHEIRO' ? this.state.contaInput : null
+        const valueStatus = cartaoInput === 'DÉBITO OU DINHEIRO' ? 'Pagamento Realizado' : 'Fatura Pronta Para Pagamento';
+        const valueData = dataRealInput ? dataRealInput : moment(new Date(), dateFormat);
+        const valueCartao = cartaoInput === 'DÉBITO OU DINHEIRO' ? null : cartaoInput;
+        const valueConta = cartaoInput === 'DÉBITO OU DINHEIRO' ? contaInput : null;
 
         const body = {
-            id: this.props.data.ID,
+            id: props.data.ID,
             idUser: userID(),
-            valueEdit: this.state.visibleEdit,
-            idGrupo: this.props.data.ID_GRUPO,
-            categoria: this.state.categoriaInput,
+            valueEdit: visibleEdit,
+            idGrupo: props.data.ID_GRUPO,
+            categoria: categoriaInput,
             cartao: valueCartao,
-            parcela: this.state.parcelasInput,
-            valorPrevisto: this.state.valorPrevistoInput,
-            dataPrevista: this.state.dataPrevistaInput,
-            descrDespesa: this.state.descrDespesaInput,
+            parcela: parcelasInput,
+            valorPrevisto: valorPrevistoInput,
+            dataPrevista: dataPrevistaInput,
+            descrDespesa: descrDespesaInput,
             idConta: valueConta,
-            valorReal: this.state.valorRealizadoInput,
+            valorReal: valorRealizadoInput,
             dataReal: valueData,
             status: valueStatus,
         }
@@ -185,204 +132,188 @@ class ModalExpense extends React.Component {
         const dataPrev = moment(body.dataPrevista, "DD/MM/YYYY");
         body.dataPrevista = dataPrev.format("YYYY-MM-DD")
 
-
         const resulStatus = await UpdateRequest(body, 'api/despesas/pagar')
+        verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 
-        if (this._isMounted === true) {
-            verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
+        if (resulStatus === 200) {
+            const despesa = await GetRequest('api/despesas')
+            setVisible(false)
 
-
-            if (resulStatus === 200) {
-                const despesa = await GetRequest('api/despesas')
-                const resultVision = await GetRequest('api/visions')
-
-                const novaVisao = visionSerchMeta(resultVision, despesa, this.props.visionControler)
-
-                this.handleCancel()
-                this.props.listExpenseControlerMeta(this.props.visionControler !== 'ALL' ?
-                    novaVisao[0] !== undefined ? novaVisao[0] : [] :
-                    despesa)
-
-                // this.props.listExpenseControlerMeta(despesa)
-            }
+            dispatch({
+                type: 'LIST_EXPENSE',
+                payload: despesa
+            })
         }
     }
 
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <div>
-                <LikeTwoTone title='Efetura Contabilização' style={{ fontSize: '18px', color: '#08c' }} onClick={this.showModal} />
+    const { getFieldDecorator } = props.form;
 
-                <form onSubmit={this.handleSubmit}>
-                    <Modal
-                        title="Efetuar Pagamento Despesa Prevista"
-                        visible={this.state.visible}
-                        onOk={this.handleSubmit}
-                        onCancel={this.handleCancel}
+    return (
+        <div>
+            <LikeTwoTone
+                title='Efetura Contabilização'
+                style={{ fontSize: '18px', color: '#08c' }}
+                onClick={showModal} />
+
+            <form>
+                <Modal
+                    title="Efetuar Pagamento Despesa Prevista"
+                    visible={visible}
+                    onOk={handleSubmit}
+                    onCancel={() => setVisible(false)}
+                >
+
+                    <div style={{ width: '99%', textAlign: 'initial' }}>
+                        <Switch
+                            title='Pagamento no Crédito ou no Dinheiro?'
+                            onChange={valor => handletipoPagamento(valor)}
+                            checked={check} />
+
+                        <label style={{ padding: '10px' }}>
+                            <strong>
+                                {visibleTipoPagamento}
+                            </strong>
+                        </label>
+
+                        <Switch
+                            style={{ width: '10%' }}
+                            title='Habilite para Amortizações'
+                            onChange={valor => handleEdit(valor)} />
+
+                        <label style={{ padding: '15px' }}> {visibleEdit}</label>
+
+                    </div>
+                    <div style={{ width: '100%', display: 'flex' }}>
+                        <Form.Item style={{ width: '50%' }}>
+                            {getFieldDecorator('vlreal', {
+                                rules: [{ required: true, message: 'Informe o valor Pago!' }],
+                                initialValue: valorRealizadoInput
+                            })(
+                                <InputNumber
+                                    style={{ width: '100%' }}
+                                    placeholder="Valor Real"
+                                    decimalSeparator=','
+                                    precision={2}
+                                    min={0}
+                                    onChange={valor => handleValorReal(valor)}
+                                />)}
+                        </Form.Item>
+                        <Form.Item style={{ width: '50%' }}>
+                            {getFieldDecorator('dtteral', {
+                                rules: [{ required: true, message: 'Por Favor, informe a Data Realizada!' }],
+                                initialValue: moment(new Date(), dateFormat)
+                            })(
+                                <DatePicker style={{ width: '100%' }}
+                                    onChange={data => handleDataReal(data)}
+                                    placeholder="Data Real"
+                                    format={dateFormat}
+                                />)}
+                        </Form.Item>
+                    </div>
+                    <div style={{ width: '100%', display: 'flex' }}>
+                        <Form.Item style={{ width: '50%' }}>
+                            {getFieldDecorator('contaid', {
+                                rules: [{
+                                    required: visibleConta === true ? false : true,
+                                    message: 'Por favor informe a conta de pagamento!'
+                                }],
+                                initialValue: contaInput
+                            })(
+                                <Select
+                                    showSearch
+                                    style={{ width: '100%' }}
+                                    placeholder="Informe a Conta"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) => (
+                                        option.props.children.toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    )}
+                                    disabled={visibleConta}
+                                    onSelect={valor => handleConta(valor)}
+                                >
+                                    {conta}
+                                </Select>)}
+                        </Form.Item>
+                        <Form.Item style={{ width: '50%' }}>
+                            {getFieldDecorator('cartao', {
+                                rules: [{
+                                    required: visibleCartao === true ? false : true,
+                                    message: 'Por favor, informe o cartão de crédito!'
+                                }],
+                                initialValue: cartaoInput
+                            })(
+                                <Select
+                                    showSearch
+                                    style={{ width: '100%' }}
+                                    placeholder="Informe o Cartão"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) => (
+                                        option.props.children.toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    )}
+                                    disabled={visibleCartao}
+                                    onSelect={valor => handleCartao(valor)}
+                                >
+                                    {cartao}
+                                </Select>)}
+                        </Form.Item>
+                    </div>
+                    <TextArea
+                        placeholder="Descreva a Despesa"
+                        style={{ width: '99%' }}
+                        rows={4}
+                        onChange={(event) => handledescricaoDespesa(event.target.value)}
+                        value={descrDespesaInput}
+                    />
+
+                    <Divider orientation="left">Detalhes da Despesa - Meta</Divider>
+
+                    <InputNumber
+                        style={{ width: '49%' }}
+                        placeholder="Valor Previsto"
+                        decimalSeparator=','
+                        precision={2}
+                        min={0}
+                        disabled
+                        value={valorPrevistoInput}
+                    />
+
+                    <DatePicker style={{ width: '49%' }}
+                        placeholder="Data Prevista"
+                        defaultValue={moment(dataPrevistaInput, dateFormat)}
+                        format={dateFormat}
+                        disabled
+                    />
+
+                    <InputNumber
+                        style={{ width: '35%' }}
+                        placeholder='N Parcelas'
+                        min={1}
+                        value={parcelasInput}
+                        disabled
+                    />
+
+                    <Select
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) => (
+                            option.props.children.toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        )}
+                        style={{ width: '64%' }}
+                        placeholder="Informe a Categoria"
+                        disabled
+                        value={categoriaInput}
                     >
+                        {categoria}
+                    </Select>
 
-                        <div style={{ width: '99%', textAlign: 'initial' }}>
-                            <Switch
-                                title='Pagamento no Crédito ou no Dinheiro?'
-                                onChange={this.handletipoPagamento}
-                                checked={this.state.check} />
-
-                            <label style={{ padding: '10px' }}>
-                                <strong>
-                                    {this.state.visibleTipoPagamento}
-                                </strong>
-                            </label>
-
-                            <Switch
-                                style={{ width: '10%' }}
-                                title='Habilite para Amortizações'
-                                onChange={this.handleEdit} />
-
-                            <label style={{ padding: '15px' }}> {this.state.visibleEdit}</label>
-
-                        </div>
-                        <div style={{ width: '100%', display: 'flex' }}>
-                            <Form.Item style={{ width: '50%' }}>
-                                {getFieldDecorator('vlreal', {
-                                    rules: [{ required: true, message: 'Informe o valor Pago!' }],
-                                    initialValue: this.state.valorRealizadoInput
-                                })(
-                                    <InputNumber
-                                        style={{ width: '100%' }}
-                                        placeholder="Valor Real"
-                                        decimalSeparator=','
-                                        precision={2}
-                                        min={0}
-                                        onChange={this.handleValorReal}
-                                    />)}
-                            </Form.Item>
-                            <Form.Item style={{ width: '50%' }}>
-                                {getFieldDecorator('dtteral', {
-                                    rules: [{ required: true, message: 'Por Favor, informe a Data Realizada!' }],
-                                    initialValue: moment(new Date(), dateFormat)
-                                })(
-                                    <DatePicker style={{ width: '100%' }}
-                                        onChange={this.handleDataReal}
-                                        placeholder="Data Real"
-                                        format={dateFormat}
-                                    />)}
-                            </Form.Item>
-                        </div>
-                        <div style={{ width: '100%', display: 'flex' }}>
-                            <Form.Item style={{ width: '50%' }}>
-                                {getFieldDecorator('contaid', {
-                                    rules: [{ required: this.state.visibleConta === true ? false : true, message: 'Por favor informe a conta de pagamento!' }],
-                                    initialValue: this.state.contaInput
-                                })(
-                                    <Select
-                                        showSearch
-                                        style={{ width: '100%' }}
-                                        placeholder="Informe a Conta"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) => (
-                                            option.props.children.toLowerCase()
-                                                .indexOf(input.toLowerCase()) >= 0
-                                        )}
-                                        disabled={this.state.visibleConta}
-                                        onSelect={this.handleConta}
-                                    >
-                                        {this.state.conta}
-                                    </Select>)}
-                            </Form.Item>
-                            <Form.Item style={{ width: '50%' }}>
-                                {getFieldDecorator('cartao', {
-                                    rules: [{ required: this.state.visibleCartao === true ? false : true, message: 'Por favor, informe o cartão de crédito!' }],
-                                    initialValue: this.state.cartaoInput
-                                })(
-                                    <Select
-                                        showSearch
-                                        style={{ width: '100%' }}
-                                        placeholder="Informe o Cartão"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) => (
-                                            option.props.children.toLowerCase()
-                                                .indexOf(input.toLowerCase()) >= 0
-                                        )}
-                                        disabled={this.state.visibleCartao}
-                                        onSelect={this.handleCartao}
-                                    >
-                                        {this.state.cartao}
-                                    </Select>)}
-                            </Form.Item>
-                        </div>
-                        <TextArea
-                            placeholder="Descreva a Despesa"
-                            style={{ width: '99%' }}
-                            rows={4}
-                            onChange={(event) => this.handledescricaoDespesa(event.target.value)}
-                            value={this.state.descrDespesaInput}
-                        />
-
-                        <Divider orientation="left">Detalhes da Despesa - Meta</Divider>
-
-                        <InputNumber
-                            style={{ width: '49%' }}
-                            placeholder="Valor Previsto"
-                            decimalSeparator=','
-                            precision={2}
-                            min={0}
-                            disabled
-                            value={this.state.valorPrevistoInput}
-                        />
-
-                        <DatePicker style={{ width: '49%' }}
-                            placeholder="Data Prevista"
-                            defaultValue={moment(this.state.dataPrevistaInput, dateFormat)}
-                            format={dateFormat}
-                            disabled
-                        />
-
-
-                        <InputNumber
-                            style={{ width: '35%' }}
-                            placeholder='N Parcelas'
-                            min={1}
-                            onChange={this.handleParcelas}
-                            value={this.state.parcelasInput}
-                            disabled
-                        />
-
-                        <Select
-                            showSearch
-                            optionFilterProp="children"
-                            filterOption={(input, option) => (
-                                option.props.children.toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            )}
-                            style={{ width: '64%' }}
-                            placeholder="Informe a Categoria"
-                            disabled
-                            value={this.state.categoriaInput}
-                        >
-                            {this.state.categoria}
-                        </Select>
-
-                    </Modal>
-                </form>
-            </div >
-        )
-    }
+                </Modal>
+            </form>
+        </div >
+    )
 }
 
-const WrappedApp = Form.create({ name: 'coordinated' })(ModalExpense);
+const WrappedApp = Form.create({ name: 'coordinated' })(DespesaPagar);
 
-const mapStateToProps = (state) => {
-    return {
-        controlerexpenseMeta: state.controlerexpenseMeta,
-        visionControler: state.visionControler
-    }
-}
-
-const mapDispatchToProps = { listExpenseControlerMeta, listVisionsControler }
-
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(WrappedApp)
+export default WrappedApp

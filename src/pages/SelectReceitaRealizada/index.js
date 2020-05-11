@@ -21,7 +21,6 @@ function ReceitaRealizada() {
     const dispatch = useDispatch();
 
     const [search, setSearch] = useState('');
-    // const [vision, setVision] = useState([]);
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
 
@@ -103,7 +102,6 @@ function ReceitaRealizada() {
 
     const filterVision = async (selectVisao) => {
 
-        // setVision(selectVisao);
         dispatch({ type: 'LIST_VISIONCONTROLER', payload: selectVisao })
 
     }

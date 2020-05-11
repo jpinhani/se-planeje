@@ -74,8 +74,6 @@ function ReceitaMeta(props) {
                 payload: receitas
             })
         }
-
-
     }
 
     const { getFieldDecorator } = props.form;

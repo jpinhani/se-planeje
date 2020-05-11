@@ -55,23 +55,6 @@ async function DeleteRequest(body, rota) {
     }
 }
 
-function visionSerchMeta(dataVision, despesaList, selectVisao) {
-    let visao = []
-    if (selectVisao === 'ALL') {
-        visao = despesaList
-    } else {
-        const novaVisao = selectVisao === 'ALL' ? despesaList : dataVision.map((FIL) =>
-            despesaList.filter((DATA) =>
-                FIL.DT_FIM >= DATA.DT_PREVISTO &&
-                FIL.DT_INICIO <= DATA.DT_PREVISTO &&
-                FIL.VISAO === selectVisao
-            )).filter((data) => data.length > 0)
-
-        visao = novaVisao === undefined ? [] : novaVisao[0]
-    }
-    return visao
-}
-
 function visionSerchReceita(dataVision, despesaList, selectVisao) {
 
     let visao = []
@@ -91,16 +74,39 @@ function visionSerchReceita(dataVision, despesaList, selectVisao) {
     return visao
 }
 
+function visionSerchMeta(dataVision, despesaList, selectVisao) {
+    let visao = []
+    if (selectVisao === 'ALL') {
+        visao = despesaList
+    } else {
+        const novaVisao = selectVisao === 'ALL' ? despesaList : dataVision.map((FIL) =>
+            despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DT_PREVISTO &&
+                FIL.DT_INICIO <= DATA.DT_PREVISTO &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
+
+        visao = novaVisao === undefined ? [] : novaVisao[0]
+    }
+    return visao
+}
+
 function visionSerch(dataVision, despesaList, selectVisao) {
+    let visao = []
+    if (selectVisao === 'ALL') {
+        visao = despesaList
+    } else {
+        const novaVisao = selectVisao === 'ALL' ? despesaList : dataVision.map((FIL) =>
+            despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DT_VISAO &&
+                FIL.DT_INICIO <= DATA.DT_VISAO &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
 
-    const novaVisao = dataVision.map((FIL) =>
-        despesaList.filter((DATA) =>
-            FIL.DT_FIM >= DATA.DT_VISAO &&
-            FIL.DT_INICIO <= DATA.DT_VISAO &&
-            FIL.VISAO === selectVisao
-        )).filter((data) => data.length > 0)
+        visao = novaVisao === undefined ? [] : novaVisao[0]
+    }
 
-    return novaVisao
+    return visao
 }
 
 export {
