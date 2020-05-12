@@ -113,7 +113,7 @@ export default () => {
                 <Input name='despesa'
                     style={{ width: '50%' }}
                     value={search}
-                    onChange={valor => setSearch(valor)}
+                    onChange={valor => setSearch(valor.target.value)}
                     placeholder="Procure aqui a despesa especifica" />
 
                 <Select style={{ width: '50%' }}
