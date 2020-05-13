@@ -1,44 +1,29 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import FaturaPagar from '../../components/Modal/DespesaCartao';
+
 import { Tabs, Table, Button } from 'antd';
-import { urlBackend, userID } from '../../routes/urlBackEnd'
 
 import { Link } from 'react-router-dom'
-
-import { listFaturaPaga } from '../../store/actions/generalFaturaAction'
-import { listFaturadetalhe } from '../../store/actions/generalFaturaDetalheAction'
-import { colapseMenu } from '../../store/actions/generalSiderAction'
-
-// import { Card } from 'antd';
-import axios from 'axios'
+import { GetRequest } from '../../components/crudSendAxios/crud';
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
 const { TabPane } = Tabs;
 
-// const gridStyle = {
-//     width: '25%',
-//     textAlign: 'center',
-// };
+export default (props) => {
 
-class SelectFaturaPagar extends React.Component {
-    constructor(props) {
-        super(props)
+    const dispatch = useDispatch();
+    const fatura = useSelector(state => state.fatura);
+    const detalheFatura = useSelector(state => state.detalheFatura);
 
-        this.state = {
-            mode: 'right',
-            detalheFaturaList: '',
-            seletorCard: [],
-            dados: null
-        };
+    const [mode] = useState('top');
 
-    }
+    const listCardItens = useCallback((fatura, detalhe) => {
 
-    columns() {
-        return [
+        const columns = [
             {
                 title: 'REF',
                 dataIndex: 'ID',
@@ -75,10 +60,6 @@ class SelectFaturaPagar extends React.Component {
                 key: 'STATUS',
             }
         ]
-    }
-
-
-    async listCardItens(fatura, detalhe) {
 
         const dadosFatura = fatura.map((ID, a) => (
 
@@ -91,93 +72,82 @@ class SelectFaturaPagar extends React.Component {
                         <br />
                         <div style={{ width: '100%', color: 'red', fontSize: '14px' }}>
                             <FaturaPagar data={ID} />
-                            {console.log(ID)}
                         </div>
                     </div>}
 
                     style={{ height: '100%' }}
-                    columns={this.columns()}
+                    columns={columns}
                     dataSource={detalhe.filter((DATA) => (
                         DATA.ID === ID.ID
                     ))}
                     rowKey={ID => ID.ID_DESPESA}
                 />
             </TabPane >
+        ))
 
-        )
-        )
-        // this.setState({ ...this.state, detalheFaturaList: dadosFatura })
-        this.props.listFaturadetalhe(dadosFatura)
-    }
+        dispatch({
+            type: 'LIST_FATURADETALHE',
+            payload: dadosFatura
+        })
+    }, [dispatch])
 
-    async requestAPI() {
+    const requestAPI = useCallback(async () => {
 
-        const endpointAPI = `${urlBackend}api/despesas/fatura/${userID()}`
-        const result = await axios.get(endpointAPI)
-        const fatura = result.data
-
-        const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID()}`
-        const resultDetalhe = await axios.get(endpointAPIDetalhe)
-        const detalhe = resultDetalhe.data
+        const fatura = await GetRequest('api/despesas/fatura')
+        const detalhe = await GetRequest('api/despesas/faturadetalhe');
 
         const unique = new Set(fatura.map((DATA) => DATA.CARTAO))
         const cardNew = Array.from(unique).map((DATA, i) => <Button value={i}
             key={i}
             ghost
             type='primary'
-            onClick={() => this.listCardItens(fatura.filter((DADOS) => DADOS.CARTAO === DATA), detalhe)} > {DATA}</Button>)
+            onClick={() => listCardItens(fatura.filter((DADOS) => DADOS.CARTAO === DATA), detalhe)} > {DATA}</Button>)
 
-        // this.setState({ ...this.state, seletorCard: cardNew })
-        this.props.listFaturaPaga(cardNew)
-        this.props.listFaturadetalhe([])
+        dispatch({
+            type: 'LIST_FATURAREAL',
+            payload: cardNew
+        })
 
-    }
+        dispatch({
+            type: 'LIST_FATURADETALHE',
+            payload: []
+        })
+    }, [dispatch, listCardItens])
 
-    componentDidMount() {
-        this.requestAPI()
-        this.props.colapseMenu(true)
-    }
+    useEffect(() => {
+        requestAPI();
+    }, [requestAPI])
 
-
-    componentWillUnmount() {
-        this.props.colapseMenu(false)
-    }
-
-    render() {
-
-        return (
-            <div>
-                < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
-                    <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
-                    <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>
-                </div >
-                <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>Resumo de Lançamentos no Cartão</div>
-                <div className='cards'>
-                    {this.props.fatura}
-                </div>
-                <Tabs className='tabs__list'
-                    defaultActiveKey="1"
-                    tabPosition={this.state.mode}
-                    style={{ height: '100%', width: '100%', diplay: 'flex' }}>
-                    {this.props.detalheFatura}
-                </Tabs>
-
+    return (
+        <div>
+            < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
+                <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
+                <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>
             </div >
-        )
-    }
+            <div
+                style={{
+                    padding: '15px',
+                    fontSize: '16px',
+                    background: '#FF6347'
+                }}>Resumo de Lançamentos no Cartão
+            </div>
+            <div
+                className='cards'>
+                {fatura}
+            </div>
+            <Tabs
+                className='tabs__list'
+                defaultActiveKey="1"
+                tabPosition={mode}
+                style={{
+                    height: '100%',
+                    width: '100%',
+                    diplay: 'flex'
+                }}>
+                {detalheFatura}
+            </Tabs>
+        </div >
+    )
 }
 
-const mapStateToProps = (state /*, ownProps*/) => {
-    return {
-        fatura: state.fatura,
-        detalheFatura: state.detalheFatura,
-        siderMenu: state.siderMenu,
-    }
-}
 
-const mapDispatchToProps = { listFaturaPaga, listFaturadetalhe, colapseMenu }
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SelectFaturaPagar)

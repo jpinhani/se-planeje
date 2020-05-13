@@ -1,15 +1,6 @@
-
-.cards{
-     margin: 4px !important;
-     display: flex !important;
-    //  justify-content: center;
-     align-items: center;
-    //  background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
-     border-color: blue;
-     max-width: 100%;
-     flex-wrap: wrap;
+.ant-tabs .ant-tabs-top-content.ant-tabs-content-animated, .ant-tabs .ant-tabs-bottom-content.ant-tabs-content-animated {
+display:block !important;
 }
-
 .ant-btn {
   margin: 5px!important;
 }
