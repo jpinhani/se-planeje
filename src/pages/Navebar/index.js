@@ -132,9 +132,10 @@ class SiderDemo extends React.Component {
                             <Menu.Item key="11">
                                 <UploadOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'blue' }} />
                                 <Link to='/SelectReceitaMeta'>Receitas</Link></Menu.Item>
+
                             <Menu.Item key="12">
                                 <LoadingOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                Transferências</Menu.Item>
+                                <Link to='/SelectTransferencia'>Transferências</Link></Menu.Item>
                         </SubMenu>
 
                         <SubMenu

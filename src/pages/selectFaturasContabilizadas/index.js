@@ -1,114 +1,114 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import ListCard from '../../components/Modal/ListFaturaContabilizada'
+import { userID } from '../../routes/urlBackEnd'
 
-import { listFaturaPaga } from '../../store/actions/generalFaturaAction'
 import SearchFilter from '../../components/searchFilterTable'
-import { GetRequest } from '../../components/crudSendAxios/crud'
+import { GetRequest, UpdateRequest } from '../../components/crudSendAxios/crud'
+import { verifySend } from '../../components/verifySendAxios'
 
 import { Table, Input, Popconfirm, Icon } from 'antd';
 
 import 'antd/dist/antd.css';
-//import './styles.scss'
 
-class FaturaContabilizada extends React.Component {
-    constructor(props) {
-        super(props)
+export default () => {
 
-        this.state = {
-            search: '',
-            filter: ''
+    const dispatch = useDispatch();
+    const faturaPaga = useSelector(state => state.faturaPaga);
+
+    const [search, setSearch] = useState('');
+
+    async function deleteAcount(faturaId) {
+
+        const body = {
+            idUser: userID(),
+            id: faturaId
         }
-        this.searchExpense = this.searchExpense.bind(this)
+
+        const deleteFatura = await UpdateRequest(body, 'api/fatura/contabilizada')
+        verifySend(deleteFatura, 'DELETE', body.id)
+
+        if (deleteFatura === 200) {
+            requestAPI()
+        }
     }
 
-    deleteAcount(faturaId) {
-        console.log(faturaId)
-    }
-
-    columns() {
-        return [
-            {
-                title: 'FATURA',
-                dataIndex: 'ID_FATURA',
-                key: 'ID_FATURA',
-            },
-            {
-                title: 'VENCIMENTO',
-                dataIndex: 'DT_VENCIMENTO2',
-                key: 'DT_VENCIMENTO2',
-            },
-            {
-                title: 'PAGAMENTO',
-                dataIndex: 'DT_PAGAMENTO2',
-                key: 'DT_PAGAMENTO2',
-            },
-            {
-                title: 'VALOR PAGO',
-                dataIndex: 'VL_REAL2',
-                key: 'VL_REAL2'
-            },
-            {
-                title: 'AÇÃO',
-                key: 'action',
-                render: fatura => (
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <div>
-                            <ListCard data={fatura} />
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Popconfirm title="Deseja Realmente Reabrir essa Fatura?" onConfirm={() => this.deleteAcount(fatura.ID_FATURA)}>
-                                <Icon type="delete" title='Excluir Fatura' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popconfirm>
-                        </div>
+    const columns = [
+        {
+            title: 'FATURA',
+            dataIndex: 'ID_FATURA',
+            key: 'ID_FATURA',
+        },
+        {
+            title: 'VENCIMENTO',
+            dataIndex: 'DT_VENCIMENTO2',
+            key: 'DT_VENCIMENTO2',
+        },
+        {
+            title: 'PAGAMENTO',
+            dataIndex: 'DT_PAGAMENTO2',
+            key: 'DT_PAGAMENTO2',
+        },
+        {
+            title: 'VALOR PAGO',
+            dataIndex: 'VL_REAL2',
+            key: 'VL_REAL2'
+        },
+        {
+            title: 'AÇÃO',
+            key: 'action',
+            render: faturaPaga => (
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                }}>
+                    <div>
+                        <ListCard data={faturaPaga} />
                     </div>
-                ),
-            }
-        ]
-    }
+                    <div style={{ padding: '10px' }}>
+                        <Popconfirm
+                            title="Deseja Realmente Reabrir essa Fatura?"
+                            onConfirm={() => deleteAcount(faturaPaga.ID_FATURA)}>
+                            <Icon
+                                type="delete"
+                                title='Excluir Fatura'
+                                style={{ fontSize: '18px', color: '#08c' }} />
+                        </Popconfirm>
+                    </div>
+                </div>
+            ),
+        }
+    ]
 
 
-    async requestAPI() {
+    const requestAPI = useCallback(async () => {
         const faturas = await GetRequest('api/fatura')
-        this.props.listFaturaPaga(faturas)
-    }
+        dispatch({
+            type: 'LIST_FATURACONTABILIZADA',
+            payload: faturas
+        });
+    }, [dispatch])
 
-    componentDidMount() {
-        this.requestAPI()
-    }
+    useEffect(() => {
+        requestAPI();
+    }, [requestAPI])
 
-    searchExpense(event) {
-        this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
-    }
-    render() {
-        return (
+    return (
+        <div>
             <div>
-                <div>
-                    <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a fatura especifica" />
-                </div>
-                <div>
-                    <Table className='table table-action'
-                        columns={this.columns()}
-                        dataSource={SearchFilter(this.props.fatura, ['ID_FATURA'], this.state.filter)}
-                        rowKey='ID_FATURA' />
-
-
-                </div>
+                <Input
+                    name='despesa'
+                    value={search}
+                    onChange={valor => setSearch(valor.target.value)}
+                    placeholder="Procure aqui a fatura especifica" />
             </div>
-        )
-    }
+            <div>
+                <Table className='table table-action'
+                    columns={columns}
+                    dataSource={SearchFilter(faturaPaga, ['ID_FATURA'], search)}
+                    rowKey='ID_FATURA' />
+            </div>
+        </div>
+    )
 }
-
-const mapStateToProps = (state /*, ownProps*/) => {
-    return {
-        fatura: state.fatura
-    }
-}
-
-const mapDispatchToProps = { listFaturaPaga }
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FaturaContabilizada)

@@ -24,6 +24,7 @@ import Header from '../pages/Header/index.js'
 import testGrafico from '../components/TestGrafico'
 import SelectReceitaMeta from '../pages/SelectReceitaMeta'
 import SelectReceitaReal from '../pages/SelectReceitaRealizada'
+import SelectTransferencia from '../pages/SelectTransferencias'
 
 
 const { Content } = Layout;
@@ -57,6 +58,7 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/selectReceitaMeta' component={SelectReceitaMeta} />
                 <PrivateRoute exact path='/visao' component={Visao} />
                 <PrivateRoute exact path='/SelectReceitaReal' component={SelectReceitaReal} />
+                <PrivateRoute exact path='/SelectTransferencia' component={SelectTransferencia} />
                 <PrivateRoute component={Home} />
               </Switch>
 

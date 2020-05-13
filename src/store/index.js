@@ -12,10 +12,12 @@ import controlerexpenseRealReducer from './reducers/controlerExpenseRealReducer'
 import controlerexpenseMetaReducer from './reducers/controlerExpenseReducer'
 import faturaDetalheReducer from './reducers/generalFaturaDetalheReducer'
 import faturaReducer from './reducers/generalFaturaReducer'
+import faturaPagaReducer from './reducers/generalFaturaPagaReducer'
 import siderReducer from './reducers/generalSiderReducer'
 import visionControlerReducer from './reducers/controlerVisionReducer'
 import visionControlerComboReducer from './reducers/controlerListVisionReducer'
 import revenueRealReducer from './reducers/generalRevenuesRealReducer'
+import transferenciaReducer from './reducers/generalTransferenciaReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -30,10 +32,12 @@ const reducers = combineReducers({
   expenseReal: expenseRealReducer,
   detalheFatura: faturaDetalheReducer,
   fatura: faturaReducer,
+  faturaPaga: faturaPagaReducer,
   siderMenu: siderReducer,
   controlerExpenseReal: controlerexpenseRealReducer,
   controlerexpenseMeta: controlerexpenseMetaReducer,
-  revenueReal: revenueRealReducer
+  revenueReal: revenueRealReducer,
+  transferencia: transferenciaReducer
 })
 
 export default createStore(reducers)
