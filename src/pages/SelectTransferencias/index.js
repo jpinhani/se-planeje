@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { GetRequest } from '../../components/crudSendAxios/crud';
+import NovaTransferencia from '../../components/Modal/Transferencia'
 
 import { Input, Table } from 'antd';
 import SearchFilter from '../../components/searchFilterTable'
+import EditTransferencia from '../../components/Modal/TransferenciaEdit'
 
 import 'antd/dist/antd.css';
 
@@ -40,6 +42,15 @@ export default () => {
             title: 'DESCRIÇÃO',
             dataIndex: 'DESCR_TRANSFERENCIA',
             key: 'DESCR_TRANSFERENCIA',
+        },
+        {
+            title: 'action',
+            key: 'action',
+            render: transferencia => (
+                <div>
+                    <EditTransferencia dados={transferencia} />
+                </div>
+            )
         }
     ]
 
@@ -59,7 +70,12 @@ export default () => {
 
     return (
         <div>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+            <NovaTransferencia />
+            <div style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}>
                 {/* <NewRevenue /> */}
                 <Input name='transferencia'
                     style={{ width: '49%' }}
@@ -79,7 +95,9 @@ export default () => {
                 className='table table-action'
                 columns={Collumns}
                 dataSource={SearchFilter(transferencia,
-                    ['DESCR_TRANSFERENCIA', 'CONTA_CREDITO', 'CONTA_DEBITO'], search)}
+                    ['DESCR_TRANSFERENCIA',
+                        'CONTA_CREDITO',
+                        'CONTA_DEBITO'], search)}
                 rowKey='ID'
             />
         </div>
