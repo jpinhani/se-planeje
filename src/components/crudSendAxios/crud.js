@@ -109,6 +109,24 @@ function visionSerch(dataVision, despesaList, selectVisao) {
     return visao
 }
 
+function visionSerchTransferencia(dataVision, despesaList, selectVisao) {
+    let visao = []
+    if (selectVisao === 'ALL') {
+        visao = despesaList
+    } else {
+        const novaVisao = selectVisao === 'ALL' ? despesaList : dataVision.map((FIL) =>
+            despesaList.filter((DATA) =>
+                FIL.DT_FIM >= DATA.DATA_TRANSFERENCIA &&
+                FIL.DT_INICIO <= DATA.DATA_TRANSFERENCIA &&
+                FIL.VISAO === selectVisao
+            )).filter((data) => data.length > 0)
+
+        visao = novaVisao === undefined ? [] : novaVisao[0]
+    }
+
+    return visao
+}
+
 export {
     GetRequest,
     InsertRequest,
@@ -116,5 +134,6 @@ export {
     DeleteRequest,
     visionSerch,
     visionSerchMeta,
-    visionSerchReceita
+    visionSerchReceita,
+    visionSerchTransferencia
 }

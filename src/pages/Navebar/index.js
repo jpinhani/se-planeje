@@ -11,13 +11,14 @@ import './style.scss'
 import { Layout, Menu, Icon } from 'antd'
 
 import {
+    HomeOutlined,
     DislikeOutlined,
     LikeOutlined,
     CalendarOutlined,
     CreditCardOutlined,
     WalletOutlined,
     FlagOutlined,
-    LoadingOutlined,
+    SyncOutlined,
     UploadOutlined,
     DownloadOutlined
 } from '@ant-design/icons'
@@ -66,6 +67,32 @@ class SiderDemo extends React.Component {
                 >
 
                     <div />
+                    <Link to='/home'>
+                        <div
+                            // onClick={<Link to='/home' />}
+                            style={{
+                                paddingTop: '10px',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+
+                            <HomeOutlined type="tool" theme="twoTone" style={{
+                                paddingLeft: '26px',
+                                fontSize: '28px', color: 'blue'
+                            }} />
+                            <p style={{
+                                color: 'white',
+                                fontWeight: 'bold',
+                                paddingLeft: '15px',
+                                fontSize: '20px'
+                            }}><span style={{
+                                color: 'red',
+                                fontSize: '28px'
+                            }}>Se</span>Planeje</p>
+
+                        </div>
+                    </Link>
                     <Menu defaultSelectedKeys={['1']} mode="inline">
                         <SubMenu
                             key="sub1"
@@ -134,7 +161,7 @@ class SiderDemo extends React.Component {
                                 <Link to='/SelectReceitaMeta'>Receitas</Link></Menu.Item>
 
                             <Menu.Item key="12">
-                                <LoadingOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
+                                <SyncOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
                                 <Link to='/SelectTransferencia'>Transferências</Link></Menu.Item>
                         </SubMenu>
 
@@ -163,7 +190,7 @@ class SiderDemo extends React.Component {
                         </SubMenu>
                     </Menu>
                 </Sider >
-            </div>
+            </div >
         );
     }
 }
