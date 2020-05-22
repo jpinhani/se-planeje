@@ -10,6 +10,10 @@
 //      width: 100%;
 //      background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
 // }
+
+.ant-layout-sider ant-layout-sider-dark{
+    width: 50px !important;
+}
 .ant-layout-sider-zero-width-trigger {
    top: 37px;
    padding: 2px;
@@ -23,10 +27,12 @@
 }
 
 .ant-layout-sider {
-    position: relative;
+    // position: relative;
+    width: 50px !important;
     height: 100%;
     min-width: 0;
-    // width: 300px !important;
+    // max-width: 150px !important;
+    // width: 15px !important;
      background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
     -webkit-transition: all 0.2s;
     transition: all 0.2s;
