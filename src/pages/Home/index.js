@@ -1,18 +1,25 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
 import { GetRequest } from '../../components/crudSendAxios/crud';
 import { gera_cor } from '../../components/GeraCor'
 import Chart from "chart.js";
-import { Button, Switch } from 'antd'
+import { Switch } from 'antd';
+import moment from 'moment';
+import PagarDespesa from '../../components/Modal/DespesaPagar'
 import './styles.scss'
 
 
 let vet = 0;
 
 export default () => {
+
+    // const dispatch = useDispatch();
+    // const next = useSelector(state => state.home)
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
-    const [itens, setItens] = useState(true)
+    const [itens, setItens] = useState(false)
+
     const chartContainer = useRef(null);
     const chartContainer1 = useRef(null);
     const [grafico, setGrafico] = useState(null);
@@ -29,12 +36,19 @@ export default () => {
     }, [])
 
     const SaldoConta = useCallback((listaArray, tipo) => {
-        return groupByConta(listaArray.reduce((acum, atual, i) => {
-            let objeto = acum
-            objeto[i] = { Conta: atual.DESCR_CONTA, Categoria: atual.DESCR_CATEGORIA, Valor: atual.VL_REAL2, Status: atual.STATUS, Data: atual.DT_REAL }
-            return objeto
-        }, []).filter((dados) =>
-            dados.Status === 'Pagamento Realizado'), tipo)
+        return groupByConta(listaArray.filter((dados) =>
+            dados.STATUS === 'Pagamento Realizado' ||
+            dados.STATUS === 'Fatura Paga').reduce((acum, atual, i) => {
+                let objeto = acum
+                objeto[i] = {
+                    Conta: atual.DESCR_CONTA,
+                    Categoria: atual.DESCR_CATEGORIA,
+                    Valor: atual.VL_REAL,
+                    Status: atual.STATUS,
+                    Data: atual.DT_REAL
+                }
+                return objeto
+            }, []), tipo)
     }, [])
 
     function groupByConta(ArrayConta, tipo) {
@@ -70,8 +84,8 @@ export default () => {
             const dataAtual = new Date();
 
             let timeDiff = data.getTime() - dataAtual.getTime()
-
             let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
             return diffDays <= 5
         })
     }
@@ -79,10 +93,18 @@ export default () => {
     const SaldoCategoria = useCallback((listaArray) => {
         return groupByCategoria(listaArray.reduce((acum, atual, i) => {
             let objeto = acum
-            objeto[i] = { Conta: atual.DESCR_CONTA, Categoria: atual.DESCR_CATEGORIA, Valor: atual.VL_REAL2, Status: atual.STATUS, Data: atual.DT_REAL }
+            objeto[i] = {
+                Conta: atual.DESCR_CONTA,
+                Categoria: atual.DESCR_CATEGORIA,
+                Valor: atual.VL_REAL,
+                Status: atual.STATUS,
+                Data: atual.DT_REAL
+            }
             return objeto
         }, []).filter((dados) =>
-            dados.Status === 'Pagamento Realizado'))
+            dados.Status === 'Pagamento Realizado' ||
+            dados.Status === 'Fatura Paga' ||
+            dados.Status === 'Fatura Pronta Para Pagamento'))
     }, [])
 
     function groupByCategoria(ArrayCategoria) {
@@ -136,7 +158,7 @@ export default () => {
             type: 'bar',
             data: {
                 datasets: [{
-                    barPercentage: 0.5,
+                    barPercentage: 0.3,
                     data: dataGrafico,
                     backgroundColor: corGrafico,
                     borderColor: corGrafico,
@@ -150,10 +172,8 @@ export default () => {
     }, [])
 
     const requestApi = useCallback(async () => {
-        const despesas = await GetRequest('api/despesas/paga');
-        const despesasMetas = await GetRequest('api/despesas');
-        const receitas = await GetRequest('api/receitas/paga');
-        const receitasMetas = await GetRequest('api/receitas');
+        const despesas = await GetRequest('api/chartDespesa');
+        const receitas = await GetRequest('api/chartReceita');
         const transferencias = await GetRequest('api/transferencia');
 
         /* Saldo Atual das Contas */
@@ -184,22 +204,28 @@ export default () => {
         setContaSaldoAtual(SaldoFinal);
 
         /* Ultimos lançamentos com base nos ultimos 5 dias */
-        const ultimasLançamentosDespesa = UltimosLancamentos(despesas).map((data) => {
+        const ultimasLançamentosDespesa = UltimosLancamentos(despesas).filter((filtro) =>
+            filtro.STATUS === 'Pagamento Realizado' ||
+            filtro.STATUS === 'Fatura Pronta Para Pagamento' ||
+            filtro.STATUS === 'Fatura Paga'
+        ).map((data) => {
             return {
                 Descricao: data.DESCR_DESPESA,
                 Categoria: data.DESCR_CATEGORIA,
-                Valor: data.VL_REAL2 * (-1),
-                Data: data.DATANOVAREAL,
+                Valor: data.VL_REAL * (-1),
+                Data: data.STATUS === 'Fatua Paga' ? data.DT_CREDITO : data.DT_REAL,
                 Tipo: 'Despesa'
             }
         })
 
-        const ultimasLançamentosReceita = UltimosLancamentos(receitas).map((data) => {
+        const ultimasLançamentosReceita = UltimosLancamentos(receitas).filter((filtro) =>
+            filtro.STATUS === 'Pagamento Realizado'
+        ).map((data) => {
             return {
                 Descricao: data.DESCR_RECEITA,
                 Categoria: data.DESCR_CATEGORIA,
-                Valor: data.VL_REAL2 * (1),
-                Data: data.DATANOVAREAL,
+                Valor: data.VL_REAL * (1),
+                Data: data.DT_REAL,
                 Tipo: 'Receita'
             }
         })
@@ -213,7 +239,7 @@ export default () => {
                 </div>
                 <div>
                     <strong style={{ fontSize: '12px' }}>Data</strong>
-                    <p style={{ fontSize: '12px' }}>{novo.Data}</p>
+                    <p style={{ fontSize: '12px' }}>{moment(novo.Data).format("DD/MM/YYYY")}</p>
                 </div>
                 <div>
                     <strong style={{ fontSize: '12px' }}>Valor</strong>
@@ -222,45 +248,70 @@ export default () => {
             </li>);
 
         setLastLanc(LastLancamentos);
-        // setItens(LastLancamentos)
 
-        const proximosLancamentosDespesa = ProximosLancamentos(despesasMetas).map((data) => {
+        const proximosLancamentosDespesa = ProximosLancamentos(despesas).filter((filtro) =>
+            filtro.STATUS === 'Esperando Pagamento' ||
+            filtro.STATUS === 'Fatura Pendente'
+        ).map((data) => {
             return {
+                /* Campos Modal Pagar*/
+                ID: data.ID,
+                ID_CARTAO: data.ID_CARTAO,
+                ID_CATEGORIA: data.ID_CATEGORIA,
+                VL_PREVISTO2: data.VL_PREVISTO,
+                DATANOVA: moment(data.DT_PREVISTO).format("DD/MM/YYYY"),
+                NUM_PARCELA: data.NUM_PARCELA,
+                DESCR_DESPESA: data.DESCR_DESPESA,
+                ID_GRUPO: data.ID_GRUPO,
+                /* Campos Home*/
                 Descricao: data.DESCR_DESPESA,
                 Categoria: data.DESCR_CATEGORIA,
-                Valor: data.VL_PREVISTO2 * (-1),
-                Data: data.DATANOVA,
+                Valor: data.VL_PREVISTO * (-1),
+                Data: data.DT_PREVISTO,
                 Tipo: 'Despesa'
             }
         })
 
-        const proximosLancamentosReceita = ProximosLancamentos(receitasMetas).map((data) => {
+        const proximosLancamentosReceita = ProximosLancamentos(receitas).filter((filtro) =>
+            filtro.STATUS === 'Esperando Pagamento'
+        ).map((data) => {
             return {
                 Descricao: data.DESCR_RECEITA,
                 Categoria: data.DESCR_CATEGORIA,
-                Valor: data.VL_PREVISTO2 * (1),
-                Data: data.DATANOVA,
+                Valor: data.VL_PREVISTO * (1),
+                Data: data.DT_PREVISTO,
                 Tipo: 'Receita'
             }
         })
 
         const NextLancamentos = [...proximosLancamentosDespesa, ...proximosLancamentosReceita].map((novo, i) =>
-            <li key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                <div>
+            <li key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+                <div style={{ width: '50%' }}>
                     <strong style={{ fontSize: '12px' }}>Categoria</strong>
                     <p style={{ fontSize: '12px' }}>{novo.Categoria}</p>
                 </div>
                 <div>
                     <strong style={{ fontSize: '12px' }}>Data</strong>
-                    <p style={{ fontSize: '12px' }}>{novo.Data}</p>
+                    <p style={{ fontSize: '12px' }}>{moment(novo.Data).format("DD/MM/YYYY")}</p>
                 </div>
                 <div>
                     <strong style={{ fontSize: '12px' }}>Valor</strong>
                     <p style={{ fontSize: '12px' }}>{novo.Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                 </div>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '5%'
+                }}>
+                    <PagarDespesa data={novo} />
+                </div>
             </li>);
 
         setNextLanc(NextLancamentos);
+        // dispatch({
+        //     type: 'LIST_HOME',
+        //     payload: NextLancamentos
+        // })
 
         const dadosGrafico = SaldoCategoria(despesas)
 
@@ -282,18 +333,6 @@ export default () => {
 
 
     }, [SaldoConta, SaldoTransferencia, chartContainer, SaldoCategoria, ChartConfig, ChartConfig1])
-
-
-    const updateDataset = (datasetIndex, newData) => {
-        grafico.data.datasets[datasetIndex].data = newData;
-        grafico.update();
-    };
-
-    const onButtonClick = () => {
-
-        const data = [1, 2, 3, 4, 5, 6];
-        updateDataset(0, data);
-    };
 
     useEffect(() => {
         requestApi()

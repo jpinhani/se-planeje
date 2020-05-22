@@ -18,6 +18,7 @@ import visionControlerReducer from './reducers/controlerVisionReducer'
 import visionControlerComboReducer from './reducers/controlerListVisionReducer'
 import revenueRealReducer from './reducers/generalRevenuesRealReducer'
 import transferenciaReducer from './reducers/generalTransferenciaReducer'
+import homeReducer from './reducers/generalHomeReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -37,7 +38,8 @@ const reducers = combineReducers({
   controlerExpenseReal: controlerexpenseRealReducer,
   controlerexpenseMeta: controlerexpenseMetaReducer,
   revenueReal: revenueRealReducer,
-  transferencia: transferenciaReducer
+  transferencia: transferenciaReducer,
+  home: homeReducer
 })
 
 export default createStore(reducers)

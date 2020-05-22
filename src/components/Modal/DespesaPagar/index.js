@@ -143,6 +143,11 @@ function DespesaPagar(props) {
                 type: 'LIST_EXPENSE',
                 payload: despesa
             })
+
+            dispatch({
+                type: 'LIST_HOME',
+                payload: []
+            })
         }
     }
 
