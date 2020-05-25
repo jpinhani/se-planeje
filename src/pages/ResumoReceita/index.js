@@ -1,18 +1,13 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { GeraDespesas } from '../../components/ResumoDespesa'
+import { GeraReceitas } from '../../components/ResumoReceita'
 import { Table, Switch } from 'antd';
 
 export default (props) => {
 
-    const [tabDespesa, setTabDespesa] = useState([]);
+    const [tabReceita, setTabReceita] = useState([]);
     const [itens, setItens] = useState(true)
 
     const columns = [
-        {
-            title: 'CARTAO',
-            dataIndex: 'CARTAO',
-            key: 'CARTAO'
-        },
         {
             title: 'CATEGORIA',
             dataIndex: 'DESCR_CATEGORIA',
@@ -39,9 +34,9 @@ export default (props) => {
             key: 'DT_REAL'
         },
         {
-            title: 'DESPESA',
-            dataIndex: 'DESCR_DESPESA',
-            key: 'DESCR_DESPESA'
+            title: 'RECEITA',
+            dataIndex: 'DESCR_RECEITA',
+            key: 'DESCR_RECEITA'
         },
         {
             title: 'PARCELA',
@@ -49,18 +44,17 @@ export default (props) => {
             key: 'NUM_PARCELA'
         }];
 
-    const ResumoDespesa = useCallback(() => {
-        const despesas = props.data;
+    const ResumoReceita = useCallback(() => {
+        const receitas = props.data;
         const visaoSetada = props.visao;
-        const cartaoListagem = props.cartao;
 
-        setTabDespesa(GeraDespesas(despesas, cartaoListagem, visaoSetada, itens));
+        setTabReceita(GeraReceitas(receitas, visaoSetada, itens));
 
-    }, [props.data, props.visao, props.cartao, itens])
+    }, [props.data, props.visao, itens])
 
     useEffect(() => {
-        ResumoDespesa()
-    }, [ResumoDespesa])
+        ResumoReceita()
+    }, [ResumoReceita])
 
     return (
         <div>
@@ -69,11 +63,11 @@ export default (props) => {
                     checked={itens}
                     onChange={(valor) => valor === true ?
                         setItens(true) : setItens(false)} />
-                {itens === true ? ' Despesas Contabilizadas' : ' Despesas Previstas'}
+                {itens === true ? ' Receitas Contabilizadas' : ' Receitas Previstas'}
             </div>
-            <Table name='Despesa' className='table table-action'
+            <Table name='Receita' className='table table-action'
                 columns={columns}
-                dataSource={tabDespesa}
+                dataSource={tabReceita}
                 rowKey="ROLID"
             />
         </div>

@@ -1,19 +1,80 @@
 import moment from 'moment';
+import { filtroData } from '../ResumoFiltroData'
+function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
 
+    const cartaoReal = cartaoRealizado(despesas, cartaoListagem, visaoSetada);
+    const cartaoPrev = cartaoPrevisto(despesas, cartaoListagem, visaoSetada);
+    const real = realizadas(despesas, visaoSetada);
+    const prev = previstas(despesas, visaoSetada);
+
+    const listGeradaReal = [...cartaoReal, ...real].map((geraId) => {
+        return {
+            ...geraId,
+
+            DT_REAL: geraId.DT_REAL ?
+                moment(geraId.DT_REAL).format("DD/MM/YYYY") : undefined,
+
+            DT_PREVISTO: geraId.DT_PREVISTO ?
+                moment(geraId.DT_PREVISTO).format("DD/MM/YYYY") : undefined,
+
+            VL_REAL: geraId.VL_REAL ?
+                geraId.VL_REAL.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }) : undefined,
+
+            VL_PREVISTO: geraId.VL_PREVISTO ?
+                geraId.VL_PREVISTO.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }) : undefined,
+
+            ROLID: Math.random().toString(10).substr(3, 5)
+        }
+    })
+
+    const listGeradaPrev = [...cartaoPrev, ...prev].map((geraId) => {
+        return {
+            ...geraId,
+
+            DT_REAL: geraId.DT_REAL ?
+                moment(geraId.DT_REAL).format("DD/MM/YYYY") : undefined,
+
+            DT_PREVISTO: geraId.DT_PREVISTO ?
+                moment(geraId.DT_PREVISTO).format("DD/MM/YYYY") : undefined,
+
+            VL_REAL: geraId.VL_REAL ?
+                geraId.VL_REAL.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }) : undefined,
+
+            VL_PREVISTO: geraId.VL_PREVISTO ?
+                geraId.VL_PREVISTO.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }) : undefined,
+
+            ROLID: Math.random().toString(10).substr(3, 5)
+        }
+    })
+
+    return itens === true ? listGeradaReal : listGeradaPrev
+}
 
 
 function cartaoRealizado(despesas, listagemCartao, visao) {
-    const rs =
+    let rs =
         visao.length > 0 ?
-            filtroData(despesas.filter((filtroCartao) =>
-                filtroCartao.STATUS === 'Fatura Paga').reduce((acum, dataCartao, i) => {
+            despesas.filter((filtroCartao) =>
+                filtroCartao.STATUS === 'Fatura Paga' ||
+                filtroCartao.STATUS === 'Fatura Economizada').reduce((acum, dataCartao, i) => {
                     const modelaData = moment(dataCartao.DT_CREDITO)
 
                     const MM = modelaData.get("month")
 
                     const YY = modelaData.get("year")
 
-                    console.log('MM', MM, '-', 'YY', YY)
                     const dataMelhorCompra = moment()
                     const diaCompra = listagemCartao.filter((listCartao) =>
                         dataCartao.ID_CARTAO === listCartao.ID).map((data) => data.DIA_COMPRA)
@@ -43,18 +104,81 @@ function cartaoRealizado(despesas, listagemCartao, visao) {
                         dataCartao.ID_CARTAO === listCartao.ID).map((listCartao) =>
                             novoArray[i] = { ...dataCartao, ...listCartao, dataMelhorCompra, dataVencimento, dataProxVencimento, dataFatura }
                         )
-                    console.log(novoArray)
                     return novoArray
-                }, []), 'cartaoRealizado', visao[0].DT_INICIO, visao[0].DT_FIM)
+                }, [])
             : [];
-    return rs
+
+    rs = rs.length > 0 ? filtroData(rs, 'cartaoRealizado', visao[0].DT_INICIO, visao[0].DT_FIM) : rs
+
+    return IdentificaCartao(rs)
 }
 
+function IdentificaCartao(dadosCartao) {
+    let vet = 0;
+
+    const modelaDados = dadosCartao.reduce((acum, atual, i) => {
+        let novo = acum
+
+        if (novo.filter((filtroNovo) => filtroNovo.ID_CARTAO === atual.ID_CARTAO).length === 0) {
+            const itemCartao = atual.CARTAO
+            novo[vet] = {
+                CARTAO: itemCartao + '-' + moment(atual.dataFatura).format("DD/MM/YYYY"),
+                VL_REAL: dadosCartao.filter((filtro) =>
+                    filtro.ID_CARTAO === atual.ID_CARTAO).reduce((acum, atual) => acum + atual.VL_REAL, 0),
+                VL_PREVISTO: dadosCartao.filter((filtro) =>
+                    filtro.ID_CARTAO === atual.ID_CARTAO).reduce((acum, atual) => acum + atual.VL_PREVISTO, 0),
+                ID_CARTAO: atual.ID_CARTAO,
+                IDFATURA: moment(atual.dataFatura).format("DD/MM/YYYY"),
+                dataFaturaAux: atual.dataFatura
+            }
+
+            vet = vet + 1
+        }
+        return novo
+    }, [])
+
+    const agregaDados = modelaDados.map((cartao, i) => {
+
+        const lancamentos = dadosCartao.filter((filterLancamento) =>
+            filterLancamento.ID_CARTAO === cartao.ID_CARTAO &&
+            moment(filterLancamento.dataFatura).format("DD/MM/YYYY") === cartao.IDFATURA)
+
+        cartao.children = lancamentos.map((trataData) => {
+            return {
+                ...trataData,
+                DT_REAL: trataData.DT_CREDITO ?
+                    moment(trataData.DT_CREDITO).format("DD/MM/YYYY") :
+                    trataData.DT_REAL ? moment(trataData.DT_REAL).format("DD/MM/YYYY") : undefined,
+
+                DT_PREVISTO: trataData.DT_PREVISTO ?
+                    moment(trataData.DT_PREVISTO).format("DD/MM/YYYY") : undefined,
+
+                VL_REAL: trataData.VL_REAL ?
+                    trataData.VL_REAL.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }) : undefined,
+
+
+                VL_PREVISTO: trataData.VL_PREVISTO ?
+                    trataData.VL_PREVISTO.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }) : undefined,
+
+                ROLID: Math.random().toString(10).substr(3, 5)
+            }
+        })
+        return cartao
+    })
+
+    return agregaDados;
+}
 
 function cartaoPrevisto(despesas, listagemCartao, visao) {
-    const rs =
+    let rs =
         visao.length > 0 ?
-            filtroData(despesas.filter((filtroCartao) =>
+            despesas.filter((filtroCartao) =>
                 filtroCartao.STATUS === 'Fatura Pronta Para Pagamento' ||
                 filtroCartao.STATUS === 'Fatura Pendente').reduce((acum, dataCartao, i) => {
                     const modelaData = moment(dataCartao.DT_REAL ?
@@ -65,7 +189,6 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
 
                     const YY = modelaData.get("year")
 
-                    console.log('MM', MM, '-', 'YY', YY)
                     const dataMelhorCompra = moment()
                     const diaCompra = listagemCartao.filter((listCartao) =>
                         dataCartao.ID_CARTAO === listCartao.ID).map((data) => data.DIA_COMPRA)
@@ -95,11 +218,14 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
                         dataCartao.ID_CARTAO === listCartao.ID).map((listCartao) =>
                             novoArray[i] = { ...dataCartao, ...listCartao, dataMelhorCompra, dataVencimento, dataProxVencimento, dataFatura }
                         )
-                    console.log(novoArray)
+
                     return novoArray
-                }, []), 'cartaoPrevisto', visao[0].DT_INICIO, visao[0].DT_FIM)
+                }, [])
             : [];
-    return rs
+
+    rs = rs.length > 0 ? filtroData(rs, 'cartaoPrevisto', visao[0].DT_INICIO, visao[0].DT_FIM) : rs
+
+    return IdentificaCartao(rs)
 }
 
 function realizadas(despesas, visao) {
@@ -120,35 +246,5 @@ function previstas(despesas, visao) {
     return rs
 }
 
-function filtroData(despesas, tipo, dtInicio, dtFim) {
 
-    const filtro = despesas.filter((filtroData) => {
-        let rs = [];
-        switch (tipo) {
-            case 'realizadas':
-                rs = filtroData.DT_REAL >= dtInicio &&
-                    filtroData.DT_REAL <= dtFim
-                break;
-            case 'previstas':
-                rs = filtroData.DT_PREVISTO >= dtInicio &&
-                    filtroData.DT_PREVISTO <= dtFim
-                break;
-            case 'cartaoRealizado':
-                rs = filtroData.dataFatura >= moment(dtInicio) &&
-                    filtroData.dataFatura <= moment(dtFim)
-                break;
-            case 'cartaoPrevisto':
-                rs = filtroData.dataFatura >= moment(dtInicio) &&
-                    filtroData.dataFatura <= moment(dtFim)
-                break;
-
-            default:
-                break;
-        }
-        return rs
-    })
-    return filtro
-}
-
-
-export { cartaoRealizado, cartaoPrevisto, realizadas, previstas }
+export { cartaoRealizado, cartaoPrevisto, realizadas, previstas, GeraDespesas }
