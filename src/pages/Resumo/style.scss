@@ -1,0 +1,16 @@
+// .ContainerResumo
+.FilterVision{
+    width: 30%;
+}
+
+// .FilterData
+.ContainerTabs{
+   height: 100%;
+   width: 100%;
+}
+
+@media (max-width:800px){
+        .FilterVision{
+            width: 100%;
+        }
+}

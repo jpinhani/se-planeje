@@ -1,47 +1,109 @@
-.homeLayout h1{
-    margin-top: 80px;
-    margin-bottom: 80px;
-    padding-left: 50px;
-    background: radial-gradient(#81d6f3, #b6bac5);
+.homeLayout {
+   width: 100% !important;
 }
 
-.homeLayout ul{
-    margin-left: 0 !important;
-    padding-left:  0 !important;
+.homeLayout .homeLayoutFlex{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2,3fr);
+    grid-gap: 15px !important;
+
+}
+
+.homeLayout .containerDiv1{
+   width: '100%' !important;
+}
+
+.homeLayout .containerDiv1 .containerDivData{
+   width: 100% !important;
+}
+
+.homeLayout .containerDiv1 h1{
+ font-size: 16px;
+ width: 100%;
+ font-weight: bold;
+ background: radial-gradient(#81d6f3, #b6bac5);
+}
+
+.containerDivDataTab li {
    display: grid;
-   grid-template-columns: repeat(2,2fr);
-   grid-gap: 10px !important;
-}
-
-.homeLayout ul li{
-   list-style: none;
    background-color: #FFF;
-   padding-left: 15px;
-   margin-bottom: 5px !important;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
 }
 
-.homeLayout ul li div{
+.containerDivDataTab li div {
+   display: grid;
+   grid-template-columns: repeat(4,1fr);  
+   grid-gap: 10px;
+}
+.containerDivDataTab div strong{
+   font-size: 12px;
+   padding-left: 10px;
+}
+
+.containerDivDataTab div p{
+   width: max-content;
+   font-size: 12px;
+   font-style: italic;
+}
+
+
+.containerDivDataCategoria li{
+   display: grid;
    background-color: #FFF;
-   padding: 1px 0 1px 0;
+   grid-template-columns: repeat(2,2fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
 }
 
-
-.homeLayout div{
-   border: 2px !important;
-   border-color: black;
-   border-radius: 20px;
+.containerDivDataCategoria li div{
+   display: grid;
+   grid-template-columns: repeat(4,1fr);  
+   grid-gap: 5px;
 }
+
+.containerDivDataCategoria div strong{
+   font-size: 12px;
+   padding-left: 10px;
+}
+
+.containerDivDataCategoria div p{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   width: max-content;
+   font-size: 12px;
+   font-style: italic;
+}
+
 
 .chartjs-render-monitor {
-    animation: chartjs-render-animation 0.001s;
+   //  animation: chartjs-render-animation 0.001s;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 /* Small Sizes */
 
   @media (max-width: 900px) { 
-        .homeLayout ul{
+
+         .homeLayout {
+         width: 100% !important;
+         }
+
+        .homeLayout .homeLayoutFlex{
         display: grid;
         grid-template-columns: repeat(1,1fr);
         }
+ 
+        .containerDivDataTab li{
+   display: grid;
+   grid-template-columns: repeat(1,1fr);  
+}
   }
 

@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+let vet = 0;
 
-const SaldoCategoria = useCallback((listaArray) => {
+const SaldoCategoria = (listaArray) => {
     return groupByCategoria(listaArray.reduce((acum, atual, i) => {
         let objeto = acum
         objeto[i] = {
@@ -15,7 +15,7 @@ const SaldoCategoria = useCallback((listaArray) => {
         dados.Status === 'Pagamento Realizado' ||
         dados.Status === 'Fatura Paga' ||
         dados.Status === 'Fatura Pronta Para Pagamento'))
-}, [])
+}
 
 function groupByCategoria(ArrayCategoria) {
     vet = 0;

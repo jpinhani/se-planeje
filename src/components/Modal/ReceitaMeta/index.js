@@ -73,6 +73,8 @@ function ReceitaMeta(props) {
                 type: 'LIST_REVENUE',
                 payload: receitas
             })
+
+            props.back("OK")
         }
     }
 
@@ -174,11 +176,11 @@ function ReceitaMeta(props) {
 
                     <Form.Item style={{ width: '100%' }}>
                         {getFieldDecorator('description', {
-                            rules: [{ required: true, message: 'Descreva a Despesa' }],
+                            rules: [{ required: true, message: 'Descreva a Receita' }],
                             initialValue: descricao
                         })(
                             <TextArea
-                                placeholder="Descreva a Despesa"
+                                placeholder="Descreva a Receita"
                                 style={{ width: '100%' }}
                                 rows={3}
                                 onChange={(event) => setDescricao(event.target.value)}
@@ -214,7 +216,7 @@ function ReceitaMeta(props) {
                         <Form.Item style={{ width: '50%' }}>
                             {getFieldDecorator('vlPrevito', {
                                 rules: [{ required: false, message: 'Por Favor, informe o Valor Recebido' }],
-                                initialValue: valorPrevistoInput
+                                initialValue: valorPrevistoInput !== props.data.VL_PREVISTO2 ? props.data.VL_PREVISTO2 : valorPrevistoInput
                             })(
                                 <InputNumber
                                     style={{ width: '100%' }}

@@ -175,7 +175,7 @@ class SiderDemo extends React.Component {
                             }
                         >
                             <Menu.Item key="13">
-                                <Link to='/grafico'>Fluxo de Caixa</Link></Menu.Item>
+                                <Link to='/Resumo'>Fluxo de Caixa</Link></Menu.Item>
                             <Menu.Item key="14">Real x Previsto</Menu.Item>
                             <Menu.Item key="15">Forecast</Menu.Item>
                         </SubMenu>

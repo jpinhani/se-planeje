@@ -21,7 +21,7 @@ import SelectTabDespesa from '../pages/SelectTabDespesa'
 import SelectFaturaContabilizada from '../pages/selectFaturasContabilizadas'
 import Navebar from '../pages/Navebar/index.js'
 import Header from '../pages/Header/index.js'
-import testGrafico from '../components/TestGrafico'
+import Resumo from '../pages/Resumo'
 import SelectReceitaMeta from '../pages/SelectReceitaMeta'
 import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 import SelectTransferencia from '../pages/SelectTransferencias'
@@ -53,7 +53,7 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/selectPagarMeta' component={SelectPagarMeta} />
                 <PrivateRoute exact path='/SelectFaturaPagar' component={SelectFaturaPagar} />
                 <PrivateRoute exact path='/SelectFaturaContabilizada' component={SelectFaturaContabilizada} />
-                <PrivateRoute exact path='/grafico' component={testGrafico} />
+                <PrivateRoute exact path='/Resumo' component={Resumo} />
                 <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
                 <PrivateRoute exact path='/selectReceitaMeta' component={SelectReceitaMeta} />
                 <PrivateRoute exact path='/visao' component={Visao} />

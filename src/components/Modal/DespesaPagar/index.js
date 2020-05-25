@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { Modal, Input, Select, DatePicker, InputNumber, Switch, Divider, Form } from 'antd'
-import { LikeTwoTone } from '@ant-design/icons';
+import { DislikeOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { userID } from '../../../routes/urlBackEnd'
 import { loadCategoria, loadCartaoReal, loadConta } from '../../ListagemCombo'
@@ -117,7 +117,7 @@ function DespesaPagar(props) {
             categoria: categoriaInput,
             cartao: valueCartao,
             parcela: parcelasInput,
-            valorPrevisto: valorPrevistoInput,
+            valorPrevisto: valorPrevistoInput !== props.data.VL_PREVISTO2 ? props.data.VL_PREVISTO2 : valorPrevistoInput,
             dataPrevista: dataPrevistaInput,
             descrDespesa: descrDespesaInput,
             idConta: valueConta,
@@ -144,10 +144,7 @@ function DespesaPagar(props) {
                 payload: despesa
             })
 
-            dispatch({
-                type: 'LIST_HOME',
-                payload: []
-            })
+            props.back("Ok")
         }
     }
 
@@ -155,9 +152,11 @@ function DespesaPagar(props) {
 
     return (
         <div>
-            <LikeTwoTone
+            <DislikeOutlined
                 title='Efetura Contabilização'
-                style={{ fontSize: '18px', color: '#08c' }}
+                style={{
+                    fontSize: '18px', color: 'red'
+                }}
                 onClick={showModal} />
 
             <form>
@@ -280,7 +279,7 @@ function DespesaPagar(props) {
                         precision={2}
                         min={0}
                         disabled
-                        value={valorPrevistoInput}
+                        value={valorPrevistoInput !== props.data.VL_PREVISTO2 ? props.data.VL_PREVISTO2 : valorPrevistoInput}
                     />
 
                     <DatePicker style={{ width: '49%' }}
