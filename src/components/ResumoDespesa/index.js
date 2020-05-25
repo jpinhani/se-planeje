@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { filtroData } from '../ResumoFiltroData'
+
 function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
 
     const cartaoReal = cartaoRealizado(despesas, cartaoListagem, visaoSetada);
