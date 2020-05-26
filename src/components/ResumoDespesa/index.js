@@ -120,14 +120,19 @@ function IdentificaCartao(dadosCartao) {
     const modelaDados = dadosCartao.reduce((acum, atual, i) => {
         let novo = acum
 
-        if (novo.filter((filtroNovo) => filtroNovo.ID_CARTAO === atual.ID_CARTAO).length === 0) {
+        if (novo.filter((filtroNovo) =>
+            filtroNovo.ID_CARTAO === atual.ID_CARTAO &&
+            filtroNovo.IDFATURA === moment(atual.dataFatura).format("DD/MM/YYYY")).length === 0) {
             const itemCartao = atual.CARTAO
+
             novo[vet] = {
                 CARTAO: itemCartao + '-' + moment(atual.dataFatura).format("DD/MM/YYYY"),
                 VL_REAL: dadosCartao.filter((filtro) =>
-                    filtro.ID_CARTAO === atual.ID_CARTAO).reduce((acum, atual) => acum + atual.VL_REAL, 0),
+                    filtro.ID_CARTAO === atual.ID_CARTAO &&
+                    moment(atual.dataFatura).format("DD/MM/YYYY") === moment(filtro.dataFatura).format("DD/MM/YYYY")).reduce((acum, atual) => acum + atual.VL_REAL, 0),
                 VL_PREVISTO: dadosCartao.filter((filtro) =>
-                    filtro.ID_CARTAO === atual.ID_CARTAO).reduce((acum, atual) => acum + atual.VL_PREVISTO, 0),
+                    filtro.ID_CARTAO === atual.ID_CARTAO &&
+                    moment(atual.dataFatura).format("DD/MM/YYYY") === moment(filtro.dataFatura).format("DD/MM/YYYY")).reduce((acum, atual) => acum + atual.VL_PREVISTO, 0),
                 ID_CARTAO: atual.ID_CARTAO,
                 IDFATURA: moment(atual.dataFatura).format("DD/MM/YYYY"),
                 dataFaturaAux: atual.dataFatura
@@ -138,6 +143,7 @@ function IdentificaCartao(dadosCartao) {
         return novo
     }, [])
 
+    console.log(modelaDados)
     const agregaDados = modelaDados.map((cartao, i) => {
 
         const lancamentos = dadosCartao.filter((filterLancamento) =>

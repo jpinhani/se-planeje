@@ -21,6 +21,10 @@ function filtroData(despesas, tipo, dtInicio, dtFim) {
                 rs = filtroData.dataFatura >= moment(dtInicio) &&
                     filtroData.dataFatura <= moment(dtFim)
                 break;
+            case 'transferencias':
+                rs = filtroData.DATA_TRANSFERENCIA >= dtInicio &&
+                    filtroData.DATA_TRANSFERENCIA <= dtFim
+                break;
 
             default:
                 break;
