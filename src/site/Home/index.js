@@ -2,7 +2,7 @@ import React from 'react';
 // import Carousel from '../Carousel/'
 
 
-// import ContaImg from '../../Imagens/Sados.png';
+// import ContaImg from '../../assets/fundo.mp4'
 // import CategoriaImg from '../../Imagens/Categoria.png';
 
 import './styles.scss'
@@ -10,7 +10,12 @@ import './styles.scss'
 export default () => {
 
     return (
-        <div className='ContainerHome'>
+        <header className='ContainerHome'>
+
+            <video autoPlay={true} loop={"true"} src='./../assets/fundo.mp4'>
+
+            </video>
+
             <div className='ContainerMarca'>
                 <h1>
                     <span>Se</span>
@@ -111,6 +116,6 @@ export default () => {
 
     Nosso sistema Gerenciador de Finanças consta ainda com um menu referente a ajuda, ajuda para você de como extrair o melhor com essa poderosa ferramenta. */}
 
-        </div >
+        </header>
     )
 }

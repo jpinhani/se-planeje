@@ -4,14 +4,20 @@
     justify-content: center;
     width: 100% !important;
     // height: 100% !important;
-    
-    background-image: url('../../assets/site3.jpg');
+    video{
+        top: 0;
+        left: 0;
+       position: absolute;
+       display: block;
+       width: 100%;
+    }
+    // background-image: url('../../assets/site3.jpg');
     // background-image: url('../../assets/site1.png');
     // background-image: url('../../assets/site.png');
-    background-repeat: no-repeat;
-    background-position: top;
-    background-size: cover;
-    background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+    // background-repeat: no-repeat;
+    // background-position: top;
+    // background-size: cover;
+    // background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
     // padding-left: 2%;
     // padding-right: 4%;
     
