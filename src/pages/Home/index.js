@@ -107,10 +107,10 @@ export default () => {
         const transferencias = await GetRequest('api/transferencia');
 
         /* Saldo Atual das Contas */
-        const SaldoDespesa = SaldoConta(despesas, 'Despesa');
-        const SaldoReceita = SaldoConta(receitas, 'Receita');
-        const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita');
-        const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa');
+        const SaldoDespesa = SaldoConta(despesas, 'Despesa', moment());
+        const SaldoReceita = SaldoConta(receitas, 'Receita', moment());
+        const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', moment());
+        const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa', moment());
         const SaldoFinal = groupByConta([...SaldoDespesa, ...SaldoTransfDebito, ...SaldoReceita, ...SaldoTransfCredito], 'Outro')
         setContaSaldoAtual(SaldoFinal);
 

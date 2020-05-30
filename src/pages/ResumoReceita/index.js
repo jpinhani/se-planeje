@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { GeraReceitas } from '../../components/ResumoReceita'
+import { GeraReceitas } from '../../components/ResumoReceita';
 import { Table, Switch } from 'antd';
 
 export default (props) => {

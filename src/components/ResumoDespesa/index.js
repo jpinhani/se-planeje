@@ -24,11 +24,21 @@ function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
                     currency: 'BRL'
                 }) : undefined,
 
+            VL_REAL_NUMBER: geraId.VL_REAL ?
+                geraId.VL_REAL : 0,
+
+
             VL_PREVISTO: geraId.VL_PREVISTO ?
                 geraId.VL_PREVISTO.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }) : undefined,
+
+            VL_PREVISTO_NUMBER: geraId.VL_PREVISTO ?
+                geraId.VL_PREVISTO : 0,
+
+            VL_FORECAST_NUMBER: geraId.CARTAO ? geraId.VL_FORECAST_NUMBER :
+                geraId.VL_REAL ? geraId.VL_REAL : geraId.VL_PREVISTO,
 
             ROLID: Math.random().toString(10).substr(3, 5)
         }
@@ -50,11 +60,20 @@ function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
                     currency: 'BRL'
                 }) : undefined,
 
+            VL_REAL_NUMBER: geraId.VL_REAL ?
+                geraId.VL_REAL : 0,
+
             VL_PREVISTO: geraId.VL_PREVISTO ?
                 geraId.VL_PREVISTO.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }) : undefined,
+
+            VL_PREVISTO_NUMBER: geraId.VL_PREVISTO ?
+                geraId.VL_PREVISTO : 0,
+
+            VL_FORECAST_NUMBER: geraId.CARTAO ? geraId.VL_FORECAST_NUMBER :
+                geraId.VL_REAL ? geraId.VL_REAL : geraId.VL_PREVISTO,
 
             ROLID: Math.random().toString(10).substr(3, 5)
         }
@@ -133,6 +152,13 @@ function IdentificaCartao(dadosCartao) {
                 VL_PREVISTO: dadosCartao.filter((filtro) =>
                     filtro.ID_CARTAO === atual.ID_CARTAO &&
                     moment(atual.dataFatura).format("DD/MM/YYYY") === moment(filtro.dataFatura).format("DD/MM/YYYY")).reduce((acum, atual) => acum + atual.VL_PREVISTO, 0),
+
+                VL_FORECAST_NUMBER: dadosCartao.filter((filtro) =>
+                    filtro.ID_CARTAO === atual.ID_CARTAO &&
+                    moment(atual.dataFatura).format("DD/MM/YYYY") === moment(filtro.dataFatura).format("DD/MM/YYYY")).reduce((acum, atual) => {
+                        return atual.VL_REAL ? acum + atual.VL_REAL : acum + atual.VL_PREVISTO
+                    }, 0),
+
                 ID_CARTAO: atual.ID_CARTAO,
                 IDFATURA: moment(atual.dataFatura).format("DD/MM/YYYY"),
                 dataFaturaAux: atual.dataFatura
@@ -143,7 +169,6 @@ function IdentificaCartao(dadosCartao) {
         return novo
     }, [])
 
-    console.log(modelaDados)
     const agregaDados = modelaDados.map((cartao, i) => {
 
         const lancamentos = dadosCartao.filter((filterLancamento) =>
@@ -166,12 +191,19 @@ function IdentificaCartao(dadosCartao) {
                         currency: 'BRL'
                     }) : undefined,
 
+                VL_REAL_NUMBER: trataData.VL_REAL ?
+                    trataData.VL_REAL : 0,
 
                 VL_PREVISTO: trataData.VL_PREVISTO ?
                     trataData.VL_PREVISTO.toLocaleString('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
                     }) : undefined,
+
+                VL_PREVISTO_NUMBER: trataData.VL_PREVISTO ?
+                    trataData.VL_PREVISTO : 0,
+
+                VL_FORECAST_NUMBER: trataData.VL_REAL ? trataData.VL_REAL : trataData.VL_PREVISTO,
 
                 ROLID: Math.random().toString(10).substr(3, 5)
             }

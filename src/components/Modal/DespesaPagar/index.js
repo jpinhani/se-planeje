@@ -144,7 +144,8 @@ function DespesaPagar(props) {
                 payload: despesa
             })
 
-            props.back("Ok")
+            if (props.back)
+                props.back("Ok")
         }
     }
 

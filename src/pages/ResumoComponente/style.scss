@@ -24,6 +24,34 @@
  background: radial-gradient(#81d6f3, #b6bac5);
 }
 
+.containerDiv1 .containerDivDataTabResumo h1{
+    background:#B0C4DE;
+    font-size: 14px;
+   //  color: blue;
+    font-style: italic;
+    font-weight: 100;
+}
+
+.containerDivDataTabResumo{
+   display: grid ;
+   grid-template-columns: repeat(3,3fr);
+   grid-gap: 3px;
+   background-color: white;
+}
+
+
+.containerDivDataTabResumo strong{
+  display: flex;
+  justify-content: center;
+}
+
+.containerDivDataTabResumo div li{
+  display: flex;
+  justify-content: center;
+  background: LightCyan;
+}
+
+
 .containerDivDataTab li {
    display: grid;
    background-color: #FFF;

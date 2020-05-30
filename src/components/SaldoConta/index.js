@@ -1,9 +1,10 @@
-
+import moment from 'moment';
 let vet = 0;
-const SaldoConta = (listaArray, tipo) => {
+const SaldoConta = (listaArray, tipo, dataLimite) => {
     return groupByConta(listaArray.filter((dados) =>
-        dados.STATUS === 'Pagamento Realizado' ||
-        dados.STATUS === 'Fatura Paga').reduce((acum, atual, i) => {
+        (dados.STATUS === 'Pagamento Realizado' ||
+            dados.STATUS === 'Fatura Paga') &&
+        moment(dados.DT_REAL) <= moment(dataLimite)).reduce((acum, atual, i) => {
             let objeto = acum
             objeto[i] = {
                 Conta: atual.DESCR_CONTA,

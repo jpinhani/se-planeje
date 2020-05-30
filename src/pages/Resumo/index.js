@@ -41,14 +41,20 @@ export default () => {
     const getvision = useCallback(async () => await GetRequest('api/visions'), [])
     const getcartao = useCallback(async () => await GetRequest('api/cartoes'), [])
 
-    function SaldoAtual(despesas, receitas, transferencias) {
-        const SaldoDespesa = SaldoConta(despesas, 'Despesa');
-        const SaldoReceita = SaldoConta(receitas, 'Receita');
-        const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita');
-        const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa');
-        const SaldoFinal = groupByConta([...SaldoDespesa, ...SaldoTransfDebito, ...SaldoReceita, ...SaldoTransfCredito], 'Outro')
+    const SaldoAtual = useCallback((despesas, receitas, transferencias) => {
+        console.log(visaoSetada)
+        const SaldoDespesa = SaldoConta(despesas, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+        const SaldoReceita = SaldoConta(receitas, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+        const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+        const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+
+        const SaldoFinal = groupByConta([...SaldoDespesa,
+        ...SaldoTransfDebito,
+        ...SaldoReceita,
+        ...SaldoTransfCredito], 'Outro')
         setContaSaldoAtual(SaldoFinal);
-    }
+
+    }, [visaoSetada])
 
     const requestApi = useCallback(async () => {
         const loadVision = await loadVisions();
@@ -71,7 +77,7 @@ export default () => {
         setListVision(listavisao);
         setListCartao(listacartao);
 
-    }, [getvision, getcartao])
+    }, [getvision, getcartao, SaldoAtual])
 
     useEffect(() => {
         requestApi();
@@ -147,6 +153,7 @@ export default () => {
                     <Resumo
                         saldo={contaSaldoAtual}
                         despesa={listDespesas}
+                        cartao={listCartao}
                         visao={visaoSetada}
                         receita={listReceitas}
                         transferencia={listTransferencias} />

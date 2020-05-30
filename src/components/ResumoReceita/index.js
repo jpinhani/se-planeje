@@ -22,11 +22,19 @@ function GeraReceitas(receitas, visaoSetada, itens) {
                     currency: 'BRL'
                 }) : undefined,
 
+            VL_REAL_NUMBER: geraId.VL_REAL ?
+                geraId.VL_REAL : 0,
+
             VL_PREVISTO: geraId.VL_PREVISTO ?
                 geraId.VL_PREVISTO.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }) : undefined,
+
+            VL_PREVISTO_NUMBER: geraId.VL_PREVISTO ?
+                geraId.VL_PREVISTO : 0,
+
+            VL_FORECAST_NUMBER: geraId.VL_REAL ? geraId.VL_REAL : geraId.VL_PREVISTO,
 
             ROLID: Math.random().toString(10).substr(3, 5)
         }
@@ -48,11 +56,19 @@ function GeraReceitas(receitas, visaoSetada, itens) {
                     currency: 'BRL'
                 }) : undefined,
 
+            VL_REAL_NUMBER: geraId.VL_REAL ?
+                geraId.VL_REAL : 0,
+
             VL_PREVISTO: geraId.VL_PREVISTO ?
                 geraId.VL_PREVISTO.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }) : undefined,
+
+            VL_PREVISTO_NUMBER: geraId.VL_PREVISTO ?
+                geraId.VL_PREVISTO : 0,
+
+            VL_FORECAST_NUMBER: geraId.VL_REAL ? geraId.VL_REAL : geraId.VL_PREVISTO,
 
             ROLID: Math.random().toString(10).substr(3, 5)
         }

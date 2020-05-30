@@ -89,7 +89,7 @@ function NovaDespesa(props) {
         const body = {
             idGrupo: ID(),
             idUser: userID(),
-            dataReal: dataRealInput,
+            dataReal: moment(dataRealInput, "DD/MM/YYYY"),
             valorReal: valorRealInput,
             cartao: cartaoInput,
             conta: contaInput,

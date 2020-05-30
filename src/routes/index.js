@@ -1,10 +1,12 @@
 import React from 'react'
-
+// import baseULR from '../services/api'
 import { BrowserRouter, Switch } from 'react-router-dom'
 import { Layout } from 'antd'
 
 import PublicRoute from './PublicRoutes'
 import PrivateRoute from './PrivateRoutes'
+
+import Site from '../site/Site/'
 
 import Home from '../pages/Home/'
 import Login from '../pages/Login/'
@@ -27,6 +29,7 @@ import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 import SelectTransferencia from '../pages/SelectTransferencias'
 
 
+
 const { Content } = Layout;
 
 class routesSePlaneje extends React.Component {
@@ -38,11 +41,10 @@ class routesSePlaneje extends React.Component {
           <Navebar />
           <Layout>
             <Header />
-
             <Content
               style={{ padding: '30px' }}>
-
               <Switch name='http://localhost:3000'>
+                <PublicRoute exact path='/site' component={Site} />
                 <PublicRoute exact path='/login' component={Login} />
                 <PrivateRoute exact path='/selectconta' component={SelectConta} />
                 <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
@@ -61,7 +63,6 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/SelectTransferencia' component={SelectTransferencia} />
                 <PrivateRoute component={Home} />
               </Switch>
-
             </Content>
           </Layout>
         </Layout >

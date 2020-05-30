@@ -19,6 +19,8 @@ function Login() {
   async function handleSubmit(e) {
 
     e.preventDefault()
+    // const teste = process.env.AMBIENTE
+    console.log('teste', process.env.AMBIENTE)
     const endpoint = `${urlBackend}api/authenticate`
 
     const body = {
@@ -46,7 +48,7 @@ function Login() {
     <div className='login'>
       <form onSubmit={handleSubmit}>
 
-        <h1><span className='logoheaderLogin'>Se</span>Planeje</h1>
+        {/* <h1><span className='logoheaderLogin'>Se</span>Planeje</h1> */}
 
         <div>
           <Input
@@ -58,7 +60,7 @@ function Login() {
             type='password' placeholder="Sua senha"
             onChange={e => setPassword(e.target.value)}
           />
-          <Button htmlType='submit'>Entrar</Button>
+          <Button className='blogar' htmlType='submit'><p> Entrar</p></Button>
         </div>
       </form>
     </div>

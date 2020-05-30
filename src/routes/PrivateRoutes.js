@@ -4,6 +4,6 @@ import { Route, Redirect } from 'react-router-dom'
 import { isLogged } from '../auth'
 
 const PrivateRoute = props =>
-  isLogged() ? <Route {...props} /> : <Redirect to='/login' />
+  isLogged() ? <Route {...props} /> : <Redirect to='/site' />
 
 export default PrivateRoute

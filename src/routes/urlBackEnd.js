@@ -1,6 +1,16 @@
 
 // const urlBackend = 'http://seplaneje-com.umbler.net/'
-const urlBackend = 'http://localhost:8082/'
+// process.env.REACT_APP_API_URL
+// process.env.REACT_APP_API_URL
+const urlBackend = 'http://localhost:8082/' || 'http://seplaneje-com.umbler.net/'
+// const urlBackend = process.env.AMBIENTE
+
+// require('dotenv/config');
+// const dot = require('dotenv/config')
+
+// const urlBackend = 'http://localhost/8082/'
+
+
 
 const userID = () => localStorage.getItem('userId');
 

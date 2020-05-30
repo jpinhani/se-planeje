@@ -8,6 +8,7 @@ export default (props) => {
     const [itens, setItens] = useState(true)
 
     const columns = [
+
         {
             title: 'CARTAO',
             dataIndex: 'CARTAO',
