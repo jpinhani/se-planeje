@@ -1,9 +1,5 @@
 import React from 'react';
-// import Carousel from '../Carousel/'
 
-
-// import ContaImg from '../../assets/fundo.mp4'
-// import CategoriaImg from '../../Imagens/Categoria.png';
 
 import './styles.scss'
 

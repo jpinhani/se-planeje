@@ -20,7 +20,7 @@ function Login() {
 
     e.preventDefault()
     // const teste = process.env.AMBIENTE
-    console.log('teste', process.env.AMBIENTE)
+    // console.log('teste', process.env.AMBIENTE)
     const endpoint = `${urlBackend}api/authenticate`
 
     const body = {
@@ -30,7 +30,7 @@ function Login() {
 
     const response = await axios.post(endpoint, body)
 
-    console.log('response.status', response.status)
+    // console.log('response.status', response.status)
 
     if (response.status === 200) {
 
