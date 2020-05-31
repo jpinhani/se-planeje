@@ -2,7 +2,8 @@
 // const urlBackend = 'http://seplaneje-com.umbler.net/'
 // process.env.REACT_APP_API_URL
 // process.env.REACT_APP_API_URL
-const urlBackend = 'http://localhost:8082/' || 'http://seplaneje-com.umbler.net/'
+// 'http://localhost:8082/' ||
+const urlBackend = 'http://seplaneje-com.umbler.net/'
 // const urlBackend = process.env.AMBIENTE
 
 // require('dotenv/config');
