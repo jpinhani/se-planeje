@@ -54,9 +54,10 @@ class ModalAcount extends React.Component {
             DT_INICIO: this.state.startDate,
             DT_FIM: this.state.finalDate
         }
-        console.log('body.DT_INICIO', body.DT_INICIO)
-        console.log('body.DT_FIM', body.DT_FIM)
 
+
+        var data_1 = new Date(body.DT_INICIO);
+        var data_2 = new Date(body.DT_FIM);
 
         const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
         body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
@@ -64,7 +65,7 @@ class ModalAcount extends React.Component {
         const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
         body.DT_FIM = dataFim.format("YYYY-MM-DD")
 
-        if (body.DT_INICIO > body.DT_FIM) {
+        if (data_1 < data_2) {
             await axios.post(endpointAPI, body, config())
 
             const userID = localStorage.getItem('userId')
