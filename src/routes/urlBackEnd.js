@@ -3,7 +3,7 @@
 // process.env.REACT_APP_API_URL
 // process.env.REACT_APP_API_URL
 // 'http://localhost:8082/' ||
-const urlBackend = 'http://seplaneje-com.umbler.net:3000/'
+const urlBackend = 'http://seplaneje-com.umbler.net/'
 
 // const urlBackend = process.env.AMBIENTE
 
