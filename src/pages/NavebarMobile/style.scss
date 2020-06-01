@@ -1,4 +1,24 @@
 
+.ant-drawer-wrapper-body {
+    height: 100%;
+    overflow: auto;
+   background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
+}
+
+.ant-drawer-header {
+    padding: 16px 24px;
+    color: rgba(0, 0, 0, 0.65);
+    background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
+    border-bottom: 1px solid #e8e8e8;
+    border-radius: 4px 4px 0 0;
+}
+
+.ant-drawer-body {
+    padding: 0px; 
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: normal;
+}
 
 .ant-layout-sider ant-layout-sider-dark{
     width: 50px !important;

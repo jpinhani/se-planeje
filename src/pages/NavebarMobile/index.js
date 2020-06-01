@@ -1,10 +1,8 @@
-import React from 'react'
+import React from 'react';
+
 import { Link } from 'react-router-dom'
 
-import 'antd/dist/antd.css';
-import './style.scss'
-
-import { Layout, Menu, Icon } from 'antd'
+import { Menu, Icon, Drawer } from 'antd'
 
 import {
     HomeOutlined,
@@ -16,16 +14,21 @@ import {
     FlagOutlined,
     SyncOutlined,
     UploadOutlined,
-    DownloadOutlined
+    DownloadOutlined,
+    MenuOutlined
 } from '@ant-design/icons'
 
-const { Sider } = Layout;
-const { SubMenu } = Menu;
+import 'antd/dist/antd.css';
+import './style.scss'
 
-class SiderDemo extends React.Component {
-    state = {
-        collapsed: false,
-        visible: false,
+const { SubMenu } = Menu;
+class App extends React.Component {
+    state = { visible: false };
+
+    showDrawer = () => {
+        this.setState({
+            visible: true,
+        });
     };
 
     onClose = () => {
@@ -36,15 +39,20 @@ class SiderDemo extends React.Component {
 
     render() {
         return (
-            <div>
-                <Sider
-                    collapsedWidth='0'
-                    collapsible
-                    breakpoint='sm'
-                >
+            <div className="site-drawer-render-in-current-wrapper">
+                <div style={{ marginTop: 16 }}>
+                    <MenuOutlined onClick={this.showDrawer} type="tool" theme="twoTone" style={{
+                        lineheight: 1,
+                        position: 'fixed',
+                        zIndex: '1',
+                        paddingLeft: '15px',
+                        paddingTop: '40px',
+                        fontSize: '32px', color: 'blue'
+                    }} />
 
-                    <div />
-                    <Link to='/home'>
+                </div>
+                <Drawer
+                    title={<Link to='/home'>
                         <div
                             style={{
                                 paddingTop: '10px',
@@ -68,7 +76,16 @@ class SiderDemo extends React.Component {
                             }}>Se</span>Planeje</p>
 
                         </div>
-                    </Link>
+                    </Link>}
+                    placement="left"
+                    closable={false}
+                    onClose={this.onClose}
+                    visible={this.state.visible}
+                    getContainer={true}
+                    width='80%'
+                    style={{ position: 'fixed', height: '100%' }}
+                >
+
                     <Menu defaultSelectedKeys={['0']} mode="inline">
                         <SubMenu
                             key="sub1"
@@ -81,19 +98,19 @@ class SiderDemo extends React.Component {
                         >
                             <Menu.Item key="3" >
                                 <FlagOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                <Link to='/selectcategoria' onClick={this.onCollapse}>  Categorias</Link></Menu.Item>
+                                <Link to='/selectcategoria' onClick={this.onClose}>  Categorias</Link></Menu.Item>
 
                             <Menu.Item key="4">
                                 <WalletOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                <Link to='/selectconta'> Contas</Link></Menu.Item>
+                                <Link to='/selectconta' onClick={this.onClose}> Contas</Link></Menu.Item>
 
                             <Menu.Item key="5">
                                 <CreditCardOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                <Link to='/selectcartao'>  Cartões</Link></Menu.Item>
+                                <Link to='/selectcartao' onClick={this.onClose}>  Cartões</Link></Menu.Item>
 
                             <Menu.Item key="6">
                                 <CalendarOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                <Link to='/visao'>   Visões</Link></Menu.Item>
+                                <Link to='/visao' onClick={this.onClose}>   Visões</Link></Menu.Item>
                         </SubMenu>
 
                         <SubMenu
@@ -107,12 +124,12 @@ class SiderDemo extends React.Component {
                         >
                             <Menu.Item key="7">
                                 <DislikeOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'red' }} />
-                                <Link to='/selectdespesaprevista'>  Planejar Despesas
+                                <Link to='/selectdespesaprevista' onClick={this.onClose}>  Planejar Despesas
                             </Link></Menu.Item>
 
                             <Menu.Item key="8">
                                 <LikeOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'blue' }} />
-                                <Link to='/selectreceitaprevista'>  Planejar Receitas</Link></Menu.Item>
+                                <Link to='/selectreceitaprevista' onClick={this.onClose}>  Planejar Receitas</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub3"
@@ -126,19 +143,19 @@ class SiderDemo extends React.Component {
 
                             <Menu.Item key="9">
                                 <DownloadOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'red' }} />
-                                <Link to='/selectPagarMeta'> Despesas</Link></Menu.Item>
+                                <Link to='/selectPagarMeta' onClick={this.onClose}> Despesas</Link></Menu.Item>
 
                             <Menu.Item key="10">
                                 <CreditCardOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'red' }} />
-                                <Link to='/SelectFaturaContabilizada'> Faturas</Link></Menu.Item>
+                                <Link to='/SelectFaturaContabilizada' onClick={this.onClose}> Faturas</Link></Menu.Item>
 
                             <Menu.Item key="11">
                                 <UploadOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'blue' }} />
-                                <Link to='/SelectReceitaMeta'>Receitas</Link></Menu.Item>
+                                <Link to='/SelectReceitaMeta' onClick={this.onClose}>Receitas</Link></Menu.Item>
 
                             <Menu.Item key="12">
                                 <SyncOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                <Link to='/SelectTransferencia'>Transferências</Link></Menu.Item>
+                                <Link to='/SelectTransferencia' onClick={this.onClose}>Transferências</Link></Menu.Item>
                         </SubMenu>
 
                         <SubMenu
@@ -151,7 +168,7 @@ class SiderDemo extends React.Component {
                             }
                         >
                             <Menu.Item key="13">
-                                <Link to='/Resumo'>Fluxo de Caixa</Link></Menu.Item>
+                                <Link to='/Resumo' onClick={this.onClose}>Fluxo de Caixa</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub5"
@@ -164,12 +181,10 @@ class SiderDemo extends React.Component {
                         >
                         </SubMenu>
                     </Menu>
-                </Sider >
-            </div >
+                </Drawer>
+            </div>
         );
     }
 }
 
-
-export default SiderDemo
-
+export default App;

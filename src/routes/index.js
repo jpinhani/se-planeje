@@ -21,6 +21,7 @@ import SelectFaturaPagar from '../pages/SelectFaturaPagar'
 import SelectTabDespesa from '../pages/SelectTabDespesa'
 import SelectFaturaContabilizada from '../pages/selectFaturasContabilizadas'
 import Navebar from '../pages/Navebar/index.js'
+import NavebarMObile from '../pages/NavebarMobile/index.js'
 import Header from '../pages/Header/index.js'
 import Resumo from '../pages/Resumo'
 import SelectReceitaMeta from '../pages/SelectReceitaMeta'
@@ -32,12 +33,28 @@ import SelectTransferencia from '../pages/SelectTransferencias'
 const { Content } = Layout;
 
 class routesSePlaneje extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      width: 0
+    }
+  }
+
+  resolucao() {
+    const width = window.screen.width;
+    this.setState({ ...this.state, width: width })
+  }
+
+  componentDidMount() {
+    this.resolucao()
+  }
 
   render() {
     return (
       <BrowserRouter>
         <Layout style={{ minHeight: '100vh' }} >
-          <Navebar />
+          {this.state.width <= 400 ? <NavebarMObile /> : <Navebar />}
           <Layout>
             <Header />
             <Content
@@ -65,7 +82,7 @@ class routesSePlaneje extends React.Component {
             </Content>
           </Layout>
         </Layout >
-      </BrowserRouter>)
+      </BrowserRouter >)
   }
 }
 

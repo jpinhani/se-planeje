@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { Input, Button } from 'antd'
+import { Input, Button, message } from 'antd'
 
 import axios from 'axios'
 
@@ -19,8 +19,7 @@ function Login() {
   async function handleSubmit(e) {
 
     e.preventDefault()
-    // const teste = process.env.AMBIENTE
-    // console.log('teste', process.env.AMBIENTE)
+
     const endpoint = `${urlBackend}api/authenticate`
 
     const body = {
@@ -30,17 +29,17 @@ function Login() {
 
     const response = await axios.post(endpoint, body)
 
-    // console.log('response.status', response.status)
-
-    if (response.status === 200) {
+    if (response.data.status !== 400) {
 
       const token = response.data.token
-      const userId = response.data.user.ID
+      const userId = response.data.user
 
       login(userId, token)
 
       history.push('/')
 
+    } else {
+      message.error('Usuário ou Senha não reconhecida', 5)
     }
   }
 

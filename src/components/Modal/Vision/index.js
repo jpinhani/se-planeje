@@ -55,7 +55,6 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-
         var data_1 = new Date(body.DT_INICIO);
         var data_2 = new Date(body.DT_FIM);
 
