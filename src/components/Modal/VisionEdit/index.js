@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment';
 import axios from 'axios'
 import { Icon, Modal, Input, message } from 'antd'
 import { listVisions } from '../../../store/actions/visionAction'
@@ -55,19 +56,26 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        await axios.put(endpointAPI, body, config())
+        var data_1 = moment(body.DT_INICIO).format("YYYY/MM/DD");
+        var data_2 = moment(body.DT_FIM).format("YYYY/MM/DD");
 
-        const userID = localStorage.getItem('userId')
-        const endpoint = `${urlBackend}api/visions/${userID}`
+        if (data_1 < data_2) {
+            await axios.put(endpointAPI, body, config())
 
-        const result = await axios.get(endpoint)
-        const visions = result.data
+            const userID = localStorage.getItem('userId')
+            const endpoint = `${urlBackend}api/visions/${userID}`
 
-        this.props.listVisions(visions)
+            const result = await axios.get(endpoint)
+            const visions = result.data
 
-        message.success('Visao editada com sucesso')
+            this.props.listVisions(visions)
 
-        this.handleCancel()
+            message.success('Visao editada com sucesso')
+
+            this.handleCancel()
+        } else {
+            message.error('Data Inicio não pode ser maior que Data Fim')
+        }
     }
 
     render() {
