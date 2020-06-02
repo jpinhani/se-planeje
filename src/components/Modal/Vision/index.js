@@ -55,8 +55,8 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        var data_1 = new Date(body.DT_INICIO);
-        var data_2 = new Date(body.DT_FIM);
+        var data_1 = moment(body.DT_INICIO).format("DD/MM/YYYY");
+        var data_2 = moment(body.DT_FIM).format("DD/MM/YYYY");
 
         const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
         body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
