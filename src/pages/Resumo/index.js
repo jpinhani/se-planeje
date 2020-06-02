@@ -42,7 +42,6 @@ export default () => {
     const getcartao = useCallback(async () => await GetRequest('api/cartoes'), [])
 
     const SaldoAtual = useCallback((despesas, receitas, transferencias) => {
-        console.log(visaoSetada)
         const SaldoDespesa = SaldoConta(despesas, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
         const SaldoReceita = SaldoConta(receitas, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
         const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
@@ -124,7 +123,7 @@ export default () => {
                 }}
                 checked={check}
             />
-            <span className='Label'>{check === true ? ' Analisar por Visão' : ' Analisar por período Personalizado'}</span>
+            <span className='Label'>{check === true ? '  Analisar por período Personalizado' : ' Analisar por Visão'}</span>
             <div className='FilterVision'>
                 <div className='containerVision'>
                     <Select

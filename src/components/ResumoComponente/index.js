@@ -1,6 +1,6 @@
 
 function SomarPeriodo(valores) {
-    console.log(valores)
+    // console.log(valores)
     const novoValor = valores.reduce((acum, atual) => {
 
         return {

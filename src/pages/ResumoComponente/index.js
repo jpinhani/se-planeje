@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+import GraficoComponent from '../ResumoGrafico';
 import { SomarPeriodo } from '../../components/ResumoComponente';
 
 import { GeraDespesas } from '../../components/ResumoDespesa';
@@ -181,6 +182,10 @@ export default (props) => {
                     </div>
                 </div>
             </ul>
+
+            <div>
+                <GraficoComponent data={resumo} />
+            </div>
         </div>
     )
 }
