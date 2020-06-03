@@ -5,6 +5,7 @@ import Despesas from '../ResumoDespesa';
 import Receitas from '../ResumoReceita';
 import Transferencias from '../ResumoTransferencia';
 import Resumo from '../ResumoComponente';
+import Categorias from '../ResumoCategorias';
 
 import { loadVisions } from '../../components/ListagemCombo';
 import { GetRequest } from '../../components/crudSendAxios/crud';
@@ -171,7 +172,7 @@ export default () => {
                 </TabPane>
 
                 <TabPane tab='Plano de Categorias' key='5'>
-                    Teste 5
+                    <Categorias data={listDespesas} visao={visaoSetada} />
                 </TabPane>
             </Tabs>
         </div>

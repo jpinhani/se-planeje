@@ -7,11 +7,16 @@ import Chart from "chart.js";
 import './styles.scss';
 
 // const { Option } = Select;
+// let count = 0;
+let newChartInstance = null;
 export default (props) => {
 
     const chartContainer = useRef(null);
+
+    // let newChartInstance = useCallback(() => useRef(null), []);
+
     const [grafico, setGrafico] = useState(null);
-    // const [tipoGrafico] = useState([]);
+    // const [tipoGrafico] = useState([])
 
     const ChartConfig = useCallback((valores) => {
 
@@ -31,35 +36,38 @@ export default (props) => {
 
 
         const labelsGrafico = ["DESPESA", "RECEITA", "LUCRO"]
+
         const rs = {
-            type: 'line',
+            type: 'horizontalBar',
 
             data: {
                 datasets: [{
                     // borderWidth: '100px',
                     lineTension: 0.5,
                     data: dataGrafico[0],
-                    borderColor: ['GREEN'],
-                    backgroundColor: ['#F5F5DC'],
-                    borderWidth: 5,
+                    borderColor: ['GREEN', 'GREEN', 'GREEN'],
+                    backgroundColor: ['#F5F5DC', '#F5F5DC', '#F5F5DC'],
+                    borderWidth: 1,
                     label: 'Previsto',
                 },
                 {
                     lineTension: 0.5,
                     // borderWidth: 10,
                     data: dataGrafico1[0],
-                    borderColor: ['RED'],
-                    backgroundColor: ['#FFDAB9'],
-                    borderWidth: 5,
+                    borderColor: ['RED', 'RED', 'RED'],
+                    backgroundColor: ['#FFDAB9', '#FFDAB9', '#FFDAB9'],
+                    // backgroundColor: ['#FFDAB9'],
+                    borderWidth: 1,
                     label: 'Real',
                 },
                 {
                     lineTension: 0.5,
                     data: dataGrafico2[0],
                     // borderWidth: 10,
-                    backgroundColor: ['#E0FFFF'],
-                    borderColor: ['BLUE'],
-                    borderWidth: 5,
+                    // backgroundColor: ['#E0FFFF'],
+                    backgroundColor: ['#E0FFFF', '#E0FFFF', '#E0FFFF'],
+                    borderColor: ['BLUE', 'BLUE', 'BLUE'],
+                    borderWidth: 1,
                     label: 'Forecast',
                 }],
                 labels: labelsGrafico
@@ -81,15 +89,25 @@ export default (props) => {
         return rs
     }, [])
 
+
+
     const requestApi = useCallback(() => {
+
         if (chartContainer && chartContainer.current) {
-            const newChartInstance = new Chart(chartContainer.current, ChartConfig(props.data));
+            if (newChartInstance) newChartInstance.destroy()
+
+            newChartInstance = new Chart(chartContainer.current, ChartConfig(props.data));
+
+
             setGrafico(newChartInstance)
         }
+
+
     }, [ChartConfig, props.data])
 
     useEffect(() => {
         requestApi();
+
     }, [requestApi])
 
 

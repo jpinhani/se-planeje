@@ -7,8 +7,8 @@ const SaldoCategoria = (listaArray) => {
             Conta: atual.DESCR_CONTA,
             Categoria: atual.DESCR_CATEGORIA,
             Valor: atual.VL_REAL,
-            Status: atual.STATUS,
-            Data: atual.DT_REAL
+            Data: atual.DT_REAL,
+            Status: atual.STATUS
         }
         return objeto
     }, []).filter((dados) =>
