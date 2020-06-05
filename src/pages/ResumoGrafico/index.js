@@ -23,15 +23,21 @@ export default (props) => {
         const dataNovo = [valores]
 
         const dataGrafico = dataNovo.map((novo) =>
-            [novo.D_PREVISTO * -1, novo.R_PREVISTO, novo.L_PREVISTO]
+            [parseFloat(novo.D_PREVISTO * -1).toFixed(2),
+            parseFloat(novo.R_PREVISTO).toFixed(2),
+            parseFloat(novo.L_PREVISTO).toFixed(2)]
         )
 
         const dataGrafico1 = dataNovo.map((novo) =>
-            [novo.D_REAL * -1, novo.R_REAL, novo.L_REAL]
+            [parseFloat(novo.D_REAL * -1).toFixed(2),
+            parseFloat(novo.R_REAL).toFixed(2),
+            parseFloat(novo.L_REAL).toFixed(2)]
         )
 
         const dataGrafico2 = dataNovo.map((novo) =>
-            [novo.D_FORECAST * -1, novo.R_FORECAST, novo.L_FORECAST]
+            [parseFloat(novo.D_FORECAST * -1).toFixed(2),
+            parseFloat(novo.R_FORECAST).toFixed(2),
+            parseFloat(novo.L_FORECAST).toFixed(2)]
         )
 
 

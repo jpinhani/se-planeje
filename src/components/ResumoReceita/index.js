@@ -75,8 +75,8 @@ function GeraReceitas(receitas, visaoSetada, itens) {
     })
 
     return itens === true ? listGeradaReal.sort(function (a, b) {
-        if (a.DT_PREVISTO > b.DT_PREVISTO) return -1;
-        if (a.DT_PREVISTO < b.DT_PREVISTO) return 1;
+        if (a.DT_REAL > b.DT_REAL) return -1;
+        if (a.DT_REAL < b.DT_REAL) return 1;
         return 0;
     }) : listGeradaPrev.sort(function (a, b) {
         if (a.DT_PREVISTO > b.DT_PREVISTO) return -1;
