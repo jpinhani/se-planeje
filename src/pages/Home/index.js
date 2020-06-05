@@ -120,7 +120,7 @@ export default () => {
         const LastLancamentos = [...lastDespesa, ...lastReceita]
         setLastLanc(LastLancamentos);
 
-        /* Proximos lançamentos com base nos ultimos 5 dias */
+        /* Proximos lançamentos com base nos Proximos 5 dias */
         const nextDespesa = proximosLancamentosDespesa(despesas)
         const nextReceita = proximosLancamentosReceita(receitas)
         const NextLancamentos = [...nextDespesa, ...nextReceita]
@@ -193,11 +193,15 @@ export default () => {
                                     checked={itens}
                                     onChange={(valor) => valor === true ?
                                         setItens(true) : setItens(false)} />
-                                    {itens === true ? '  Ultimos Realizados' : '  Metas Próximas'}
+                                    {itens === true ? '  Realizados (5 ultimos Dias)' : '  Metas (Próximos 5 dias)'}
                                 </h1>
                             </center>
                             <div className='containerDivDataCategoria'>
-                                {itens === true ? lastLanc.map((novo, i) =>
+                                {itens === true ? lastLanc.sort(function (a, b) {
+                                    if (a.Data > b.Data) return -1;
+                                    if (a.Data < b.Data) return 1;
+                                    return 0;
+                                }).map((novo, i) =>
                                     <li key={i}>
                                         <div className='resultData'>
                                             <strong>Data</strong>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import AddCategory from '../../components/Modal/Categoria/index'
 import EditCategory from '../../components/Modal/CategoriaEdit/index'
 
-import { urlBackend, userID } from '../../routes/urlBackEnd'
+import { urlBackend, userID } from '../../services/urlBackEnd'
 import { InsertRequest, GetRequest, DeleteRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
 

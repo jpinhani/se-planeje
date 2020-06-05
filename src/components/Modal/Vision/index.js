@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Icon, Modal, Input, message, DatePicker } from 'antd'
 import moment from 'moment'
 import { listVisions } from '../../../store/actions/visionAction'
-import { urlBackend, config } from '../../../routes/urlBackEnd'
+import { urlBackend, config } from '../../../services/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 

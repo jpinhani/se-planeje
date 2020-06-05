@@ -160,19 +160,29 @@ export default () => {
                 </TabPane>
 
                 <TabPane tab='Despesas' key='2'>
-                    <Despesas data={listDespesas} visao={visaoSetada} cartao={listCartao} />
+                    <Despesas
+                        data={listDespesas}
+                        visao={visaoSetada}
+                        cartao={listCartao} />
                 </TabPane>
 
                 <TabPane tab='Receitas' key='3'>
-                    <Receitas data={listReceitas} visao={visaoSetada} />
+                    <Receitas
+                        data={listReceitas}
+                        visao={visaoSetada} />
                 </TabPane>
 
                 <TabPane tab='Transferências' key='4'>
-                    <Transferencias data={listTransferencias} visao={visaoSetada} />
+                    <Transferencias
+                        data={listTransferencias}
+                        visao={visaoSetada} />
                 </TabPane>
 
                 <TabPane tab='Plano de Categorias' key='5'>
-                    <Categorias data={listDespesas} visao={visaoSetada} />
+                    <Categorias
+                        data={listDespesas}
+                        visao={visaoSetada}
+                        cartao={listCartao} />
                 </TabPane>
             </Tabs>
         </div>

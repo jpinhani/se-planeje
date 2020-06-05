@@ -79,7 +79,15 @@ function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
         }
     })
 
-    return itens === true ? listGeradaReal : listGeradaPrev
+    return itens === true ? listGeradaReal.sort(function (a, b) {
+        if (a.DT_REAL > b.DT_REAL) return -1;
+        if (a.DT_REAL < b.DT_REAL) return 1;
+        return 0;
+    }) : listGeradaPrev.sort(function (a, b) {
+        if (a.DT_PREVISTO > b.DT_PREVISTO) return -1;
+        if (a.DT_PREVISTO < b.DT_PREVISTO) return 1;
+        return 0;
+    })
 }
 
 
@@ -111,11 +119,17 @@ function cartaoRealizado(despesas, listagemCartao, visao) {
                     dataVencimento.set("month", MM)
                     dataVencimento.set("year", YY)
 
+                    if (diaVencimento[0] < diaCompra[0])
+                        dataVencimento.add(1, 'month')
+
                     const dataProxVencimento = moment()
                     dataProxVencimento.set("date", diaVencimento[0])
                     dataProxVencimento.set("month", MM)
                     dataProxVencimento.set("year", YY)
                     dataProxVencimento.add(1, 'months')
+
+                    if (diaVencimento[0] < diaCompra[0])
+                        dataProxVencimento.add(1, 'month')
 
                     const dataCompra = moment(dataCartao.DT_CREDITO)
                     const dataFatura = dataCompra >= dataMelhorCompra ? dataProxVencimento : dataVencimento
@@ -244,11 +258,17 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
                     dataVencimento.set("month", MM)
                     dataVencimento.set("year", YY)
 
+                    if (diaVencimento[0] < diaCompra[0])
+                        dataVencimento.add(1, 'month')
+
                     const dataProxVencimento = moment()
                     dataProxVencimento.set("date", diaVencimento[0])
                     dataProxVencimento.set("month", MM)
                     dataProxVencimento.set("year", YY)
                     dataProxVencimento.add(1, 'months')
+
+                    if (diaVencimento[0] < diaCompra[0])
+                        dataProxVencimento.add(1, 'month')
 
                     const dataCompra = dataCartao.DT_REAL ? moment(dataCartao.DT_REAL) : moment(dataCartao.DT_PREVISTO)
 

@@ -7,7 +7,7 @@ import { CreditCardOutlined } from '@ant-design/icons';
 import FaturaPagar from '../../../components/Modal/DespesaCartao'
 import { InsertRequest } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
-import { userID, urlBackend } from '../../../routes/urlBackEnd'
+import { userID, urlBackend } from '../../../services/urlBackEnd'
 
 import { listFaturaPaga } from '../../../store/actions/generalFaturaAction'
 import { listFaturadetalhe } from '../../../store/actions/generalFaturaDetalheAction'

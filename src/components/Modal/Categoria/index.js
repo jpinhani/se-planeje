@@ -7,7 +7,7 @@ import { Icon, Modal, Input, Select, notification, message } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import { InsertRequest, GetRequest } from '../../crudSendAxios/crud'
 
-import { urlBackend, userID } from '../../../routes/urlBackEnd'
+import { urlBackend, userID } from '../../../services/urlBackEnd'
 
 import 'antd/dist/antd.css';
 import './styles.scss'

@@ -54,7 +54,7 @@ class routesSePlaneje extends React.Component {
     return (
       <BrowserRouter>
         <Layout style={{ minHeight: '100vh' }} >
-          {this.state.width <= 800 ? <NavebarMObile /> : <Navebar />}
+          {this.state.width <= 850 ? <NavebarMObile /> : <Navebar />}
           <Layout>
             <Header />
             <Content

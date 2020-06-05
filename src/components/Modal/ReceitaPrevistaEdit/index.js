@@ -5,7 +5,7 @@ import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Radio, For
 import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
-import { userID } from '../../../routes/urlBackEnd'
+import { userID } from '../../../services/urlBackEnd'
 
 import { UpdateRequest, GetRequest } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'

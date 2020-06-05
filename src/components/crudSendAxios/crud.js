@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+import { urlBackend, config, userID } from '../../services/urlBackEnd'
 import { logout } from '../../auth/index'
 
 

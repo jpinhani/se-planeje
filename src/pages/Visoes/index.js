@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Table, Icon, Input, Popconfirm, message } from 'antd'
 import moment from 'moment'
 import axios from 'axios'
-import { urlBackend, config, userID } from '../../routes/urlBackEnd'
+import { urlBackend, config, userID } from '../../services/urlBackEnd'
 
 import AddVision from '../../components/Modal/Vision/index'
 import EditVision from '../../components/Modal/VisionEdit'
