@@ -5,8 +5,6 @@ import { Layout } from 'antd'
 import PublicRoute from './PublicRoutes'
 import PrivateRoute from './PrivateRoutes'
 
-import Site from '../site/Site/'
-
 import Home from '../pages/Home/'
 import Login from '../pages/Login/'
 import Visao from '../pages/Visoes'
@@ -18,7 +16,6 @@ import SelectDespesaRealizada from '../pages/SelectDespesaRealizada'
 import SelectReceitaPrevista from '../pages/SelectReceitaPrevista'
 import SelectPagarMeta from '../pages/SelectDespesaPagar'
 import SelectFaturaPagar from '../pages/SelectFaturaPagar'
-import SelectTabDespesa from '../pages/SelectTabDespesa'
 import SelectFaturaContabilizada from '../pages/selectFaturasContabilizadas'
 import Navebar from '../pages/Navebar/index.js'
 import NavebarMObile from '../pages/NavebarMobile/index.js'
@@ -27,8 +24,6 @@ import Resumo from '../pages/Resumo'
 import SelectReceitaMeta from '../pages/SelectReceitaMeta'
 import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 import SelectTransferencia from '../pages/SelectTransferencias'
-
-
 
 const { Content } = Layout;
 
@@ -60,7 +55,6 @@ class routesSePlaneje extends React.Component {
             <Content
               style={{ padding: '30px' }}>
               <Switch name='http://localhost:3000'>
-                <PublicRoute exact path='/site' component={Site} />
                 <PublicRoute exact path='/login' component={Login} />
                 <PrivateRoute exact path='/selectconta' component={SelectConta} />
                 <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
@@ -72,7 +66,6 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/SelectFaturaPagar' component={SelectFaturaPagar} />
                 <PrivateRoute exact path='/SelectFaturaContabilizada' component={SelectFaturaContabilizada} />
                 <PrivateRoute exact path='/Resumo' component={Resumo} />
-                <PrivateRoute exact path='/selecttabdespesa' component={SelectTabDespesa} />
                 <PrivateRoute exact path='/selectReceitaMeta' component={SelectReceitaMeta} />
                 <PrivateRoute exact path='/visao' component={Visao} />
                 <PrivateRoute exact path='/SelectReceitaReal' component={SelectReceitaReal} />
