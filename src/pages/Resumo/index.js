@@ -42,7 +42,32 @@ export default () => {
     const getvision = useCallback(async () => await GetRequest('api/visions'), [])
     const getcartao = useCallback(async () => await GetRequest('api/cartoes'), [])
 
+    const RequestGeneral = useCallback(async () => {
+        const loadVision = await loadVisions();
+        const despesas = await GetRequest('api/chartDespesa');
+        const receitas = await GetRequest('api/chartReceita');
+        const transferencias = await GetRequest('api/transferencia');
+        const listavisao = await getvision()
+        const listacartao = await getcartao();
+
+        loadVision.pop();
+        setVisions(loadVision);
+
+        setListDespesas(despesas);
+        setListReceitas(receitas);
+        setListTransferencias(transferencias)
+
+        setListVision(listavisao);
+        setListCartao(listacartao);
+
+    }, [getcartao, getvision])
+
+    useEffect(() => {
+        RequestGeneral();
+    }, [RequestGeneral])
+
     const SaldoAtual = useCallback((despesas, receitas, transferencias) => {
+
         const SaldoDespesa = SaldoConta(despesas, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
         const SaldoReceita = SaldoConta(receitas, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
         const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
@@ -57,27 +82,10 @@ export default () => {
     }, [visaoSetada])
 
     const requestApi = useCallback(async () => {
-        const loadVision = await loadVisions();
-        const despesas = await GetRequest('api/chartDespesa');
-        const receitas = await GetRequest('api/chartReceita');
-        const transferencias = await GetRequest('api/transferencia');
 
-        SaldoAtual(despesas, receitas, transferencias)
+        SaldoAtual(listDespesas, listReceitas, listTransferencias)
 
-        const listavisao = await getvision()
-        const listacartao = await getcartao();
-
-        loadVision.pop();
-        setVisions(loadVision);
-
-        setListDespesas(despesas);
-        setListReceitas(receitas);
-        setListTransferencias(transferencias)
-
-        setListVision(listavisao);
-        setListCartao(listacartao);
-
-    }, [getvision, getcartao, SaldoAtual])
+    }, [SaldoAtual, listDespesas, listReceitas, listTransferencias])
 
     useEffect(() => {
         requestApi();
@@ -88,6 +96,7 @@ export default () => {
         const visaoData = listVision.filter((filtroVisao) => filtroVisao.VISAO === visao);
         setVisionInput(visao);
         setVisaoSetada(visaoData);
+
     }
 
     function Tratadata(dataImportada) {

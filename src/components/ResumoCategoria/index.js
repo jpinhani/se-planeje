@@ -1,7 +1,7 @@
 import moment from 'moment';
 let vet = 0;
 
-const SaldoCategoria = (listaArray, visao, tipo, cartaoListagem) => {
+const SaldoCategoria = (listaArray, visao, tipo, cartaoListagem, categorias) => {
 
     const dados = listaArray.reduce((acum, atual, i) => {
         let objeto = acum
@@ -9,6 +9,7 @@ const SaldoCategoria = (listaArray, visao, tipo, cartaoListagem) => {
             Conta: atual.DESCR_CONTA,
             IdCartao: atual.ID_CARTAO,
             Cartao: atual.DESCR_CARTAO,
+            IdCategoria: atual.ID_CATEGORIA,
             Categoria: atual.DESCR_CATEGORIA,
             ValorReal: atual.VL_REAL,
             DataReal: atual.DT_REAL,
@@ -38,7 +39,20 @@ const SaldoCategoria = (listaArray, visao, tipo, cartaoListagem) => {
         }
     };
 
-    return rs
+
+
+    return preparadados(rs, categorias)
+}
+
+
+function preparadados(arrayCategoria, categorias) {
+    return arrayCategoria.map((dados) => {
+        const rs = categorias.filter((filtro) => dados.IdCategoria === filtro.ID)
+        if (rs.length > 0)
+            return { ...dados, Idpai: rs[0].IDPAI }
+
+        return { ...dados }
+    })
 }
 
 
@@ -53,7 +67,16 @@ function groupByCategoria(ArrayCategoria, tipo) {
                 const Categoria = gaveta.Categoria
                 const Saldo = dados.filter((ary) =>
                     ary.Categoria === gaveta.Categoria).reduce((acum, valores) => acum + valores.ValorReal, 0)
-                novoArray[vet] = { Categoria: Categoria, Valor: Saldo }
+                const idCategoria = gaveta.IdCategoria
+                novoArray[vet] = {
+                    IdCategoria: idCategoria,
+                    Categoria: Categoria,
+                    Valor: Saldo,
+                    ValorPersonalizado: Saldo.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })
+                }
                 vet = vet + 1
             }
             return novoArray
@@ -66,7 +89,16 @@ function groupByCategoria(ArrayCategoria, tipo) {
                 const Categoria = gaveta.Categoria
                 const Saldo = dados.filter((ary) =>
                     ary.Categoria === gaveta.Categoria).reduce((acum, valores) => acum + valores.ValorPrevisto, 0)
-                novoArray[vet] = { Categoria: Categoria, Valor: Saldo }
+                const idCategoria = gaveta.IdCategoria
+                novoArray[vet] = {
+                    IdCategoria: idCategoria,
+                    Categoria: Categoria,
+                    Valor: Saldo,
+                    ValorPersonalizado: Saldo.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })
+                }
                 vet = vet + 1
             }
             return novoArray
@@ -85,7 +117,16 @@ function groupByCategoria(ArrayCategoria, tipo) {
                     ary.Categoria === gaveta.Categoria).reduce((acum, valores) =>
                         acum + (valores.ValorReal ? valores.ValorReal : valores.ValorPrevisto), 0)
 
-                novoArray[vet] = { Categoria: Categoria, Valor: Saldo }
+                const idCategoria = gaveta.IdCategoria
+                novoArray[vet] = {
+                    IdCategoria: idCategoria,
+                    Categoria: Categoria,
+                    Valor: Saldo,
+                    ValorPersonalizado: Saldo.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })
+                }
                 vet = vet + 1
             }
             return novoArray
@@ -115,6 +156,7 @@ function cartaoPrevisto(dados, cartoes, dtInicio, dtFim) {
                 Conta: novoObjeto.Conta,
                 IdCartao: novoObjeto.IdCartao,
                 Cartao: novoObjeto.Cartao,
+                IdCategoria: novoObjeto.IdCategoria,
                 Categoria: novoObjeto.Categoria,
                 ValorReal: novoObjeto.ValorReal,
                 DataReal: novoObjeto.DataReal,
@@ -201,6 +243,7 @@ function cartaoReal(dados, cartoes, dtInicio, dtFim) {
                 Conta: novoObjeto.Conta,
                 IdCartao: novoObjeto.IdCartao,
                 Cartao: novoObjeto.Cartao,
+                IdCategoria: novoObjeto.IdCategoria,
                 Categoria: novoObjeto.Categoria,
                 ValorReal: novoObjeto.ValorReal,
                 DataReal: novoObjeto.DataReal,
@@ -279,6 +322,7 @@ function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
                 Conta: novoObjeto.Conta,
                 IdCartao: novoObjeto.IdCartao,
                 Cartao: novoObjeto.Cartao,
+                IdCategoria: novoObjeto.IdCategoria,
                 Categoria: novoObjeto.Categoria,
                 ValorReal: novoObjeto.ValorReal,
                 DataReal: novoObjeto.DataReal,
@@ -339,4 +383,132 @@ function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
     return [...conta, ...cartaoFinal]
 }
 
-export { SaldoCategoria }
+
+/* ############################################################################################# */
+
+function hierarquia(dados1, nivel3, nivel4, nivel5) {
+
+    const prepNivel5 = nivel5.map((n5) => {
+        const dadosnivel = dados1.filter(filtro => filtro.Idpai === n5.ID)
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        if (dadosnivel.length > 0)
+            return {
+                ...n5,
+                Valor: somanivel,
+                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }),
+                children: dadosnivel
+            }
+
+        return { ...n5, Valor: 0 }
+    })
+
+    const prepNivel4 = nivel4.map((n4) => {
+        const dadosnivel = dados1.filter(filtro => filtro.Idpai === n4.ID)
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        if (dadosnivel.length > 0)
+            return {
+                ...n4,
+                Valor: somanivel,
+                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }),
+                children: dadosnivel
+            }
+
+        return { ...n4, Valor: 0 }
+    })
+
+    const prepNivel3 = nivel3.map((n3) => {
+        const dadosnivel = dados1.filter(filtro => filtro.Idpai === n3.ID)
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        if (dadosnivel.length > 0)
+            return {
+                ...n3,
+                Valor: somanivel,
+                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }),
+                children: dadosnivel
+            }
+
+        return { ...n3, Valor: 0 }
+    })
+
+    const agrupa4 = prepNivel4.map((prep4) => {
+        const dadosnivel = prepNivel5.filter(filtro => filtro.IDPAI === prep4.ID)
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        if (dadosnivel.length > 0)
+            return {
+                ...prep4,
+                Valor: somanivel,
+                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }),
+                children: [...dadosnivel, prep4.children]
+            }
+
+        return { ...prep4 }
+    })
+
+    const agrupa3 = prepNivel3.map((prep3) => {
+        const dadosnivel = agrupa4.filter(filtro => filtro.IDPAI === prep3.ID)
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        if (dadosnivel.length > 0)
+            return {
+                ...prep3,
+                Valor: somanivel,
+                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }),
+                children: [...dadosnivel, prep3.children]
+            }
+
+        return { ...prep3 }
+    })
+
+    const filtraValor = agrupa3.filter((filtro) => {
+        return filtro.Valor > 0
+    })
+
+    const despesaInputNivel3 = dados1.filter(filtro => filtro.Idpai === 2)
+    const somaInputNivel3 = despesaInputNivel3.reduce((acum, atual) => acum + atual.Valor, 0)
+    const despesaInicial = [{
+        Categoria: 'DESPESA',
+        IdCategoria: 2,
+        Idpai: 1,
+        children: despesaInputNivel3,
+        Valor: somaInputNivel3,
+        ValorPersonalizado: somaInputNivel3.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        })
+    }]
+
+    const totalDespesa = despesaInicial.map((listExpense) => {
+        const dadosnivel = filtraValor.filter(filtro => filtro.IDPAI === listExpense.IdCategoria)
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        if (dadosnivel.length > 0)
+            return {
+                ...listExpense,
+                Valor: somanivel + listExpense.Valor,
+                ValorPersonalizado: (somanivel + listExpense.Valor).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }),
+                children: [...dadosnivel, ...listExpense.children]
+            }
+
+        return { ...listExpense }
+    })
+
+    return totalDespesa
+}
+
+export { SaldoCategoria, hierarquia }

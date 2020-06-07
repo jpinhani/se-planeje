@@ -52,7 +52,7 @@ class App extends React.Component {
 
                 </div>
                 <Drawer
-                    title={<Link to='/home'>
+                    title={<Link to='/home' onClick={this.onClose}>
                         <div
                             style={{
                                 paddingTop: '10px',
