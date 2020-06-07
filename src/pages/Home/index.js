@@ -214,7 +214,7 @@ export default () => {
                                                 currency: 'BRL'
                                             })}</p>
                                         </div>
-                                        <div className='resultCategoria'>
+                                        <div>
                                             <strong>Categoria</strong>
                                             <p>{novo.Categoria}</p>
                                         </div>
@@ -237,11 +237,10 @@ export default () => {
                                                     {novo.Categoria}
                                                 </p>
                                             </div>
-                                            <div>
-                                                {novo.Tipo === 'Despesa' ?
-                                                    < PagarDespesa back={back.bind(this)} data={novo} /> :
-                                                    < PagarReceita back={back.bind(this)} data={novo} />}
-                                            </div>
+
+                                            {novo.Tipo === 'Despesa' ?
+                                                < PagarDespesa back={back.bind(this)} data={novo} /> :
+                                                < PagarReceita back={back.bind(this)} data={novo} />}
                                         </li>)}
                             </div>
                         </div>

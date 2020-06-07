@@ -64,17 +64,20 @@
 
 .containerDivDataCategoria li div{
    display: grid;
-   grid-template-columns: repeat(4,1fr);  
+   grid-template-columns: repeat(2,1fr);  
    grid-gap: 5px;
 }
 
 .containerDivDataCategoria div strong{
    font-size: 12px;
+   // display: flex;
+   text-align: center !important;
    padding-left: 10px;
 }
 
 .containerDivDataCategoria div p{
    display: flex;
+   // text-align: right !important;
    flex-direction: row;
    justify-content: space-between;
    width: max-content;

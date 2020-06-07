@@ -92,17 +92,14 @@ function ReceitaMeta(props) {
 
     return (
         <div>
-            <LikeTwoTone
-                title='Efetura Contabilização'
-                style={{ fontSize: '18px', color: '#08c' }}
-                onClick={() => showModal()} />
-            <Modal
-                title="Cadastrar Novo Cartão de Crédito"
-                visible={visible}
-                onOk={() => handleSubmit()}
-                onCancel={() => setVisible(false)}
-            >
-                <Form>
+            <form>
+                <Modal
+                    title="Efetuar Pagamento Receita Prevista"
+                    visible={visible}
+                    onOk={() => handleSubmit()}
+                    onCancel={() => setVisible(false)}
+                >
+
                     <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -241,9 +238,14 @@ function ReceitaMeta(props) {
                                 />)}
                         </Form.Item>
                     </div>
-                </Form>
 
-            </Modal>
+
+                </Modal>
+            </form>
+            <LikeTwoTone
+                title='Efetura Contabilização'
+                style={{ fontSize: '18px', color: '#08c' }}
+                onClick={() => showModal()} />
         </div>
     )
 }

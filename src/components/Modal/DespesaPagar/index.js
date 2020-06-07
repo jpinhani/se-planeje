@@ -153,13 +153,6 @@ function DespesaPagar(props) {
 
     return (
         <div>
-            <DislikeOutlined
-                title='Efetura Contabilização'
-                style={{
-                    fontSize: '18px', color: 'red'
-                }}
-                onClick={showModal} />
-
             <form>
                 <Modal
                     title="Efetuar Pagamento Despesa Prevista"
@@ -315,6 +308,13 @@ function DespesaPagar(props) {
 
                 </Modal>
             </form>
+
+            <DislikeOutlined
+                title='Efetura Contabilização'
+                style={{
+                    fontSize: '18px', color: 'red'
+                }}
+                onClick={showModal} />
         </div >
     )
 }
