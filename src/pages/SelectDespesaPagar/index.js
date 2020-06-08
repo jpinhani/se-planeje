@@ -102,12 +102,13 @@ export default () => {
     return (
         <div>
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
+                <Link to='selectPagarMeta'><Button type='danger' key='rel'> Metas </Button></Link>
                 <Link to='selectdespesarealizada'><Button key='Lnc'>Lançamentos</Button></Link>
                 <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
             </div >
-            <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
+            {/* <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
                 Metas Cadastradas - Despesas
-            </div>
+            </div> */}
 
             <div className='ViewExpense'>
                 <Input name='despesa'

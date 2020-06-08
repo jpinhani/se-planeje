@@ -141,10 +141,11 @@ function ReceitaRealizada() {
         <div>
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='SelectReceitaMeta'><Button key='Lnc'>Metas - Receitas</Button></Link>
+                <Link to='SelectReceitaReal'><Button type='primary' key='Lnc'>Lançamentos</Button></Link>
             </div >
-            <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
+            {/* <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
                 Lançamentos de Receita - Não Previstos
-            </div>
+            </div> */}
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                 <NewRevenue />
                 <Input name='receita'

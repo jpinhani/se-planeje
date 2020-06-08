@@ -138,12 +138,13 @@ export default () => {
     return (
         <div>
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
-                <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
+                <Link to='selectPagarMeta'><Button key='Met'> Metas </Button></Link>
+                <Link to='selectdespesarealizada'><Button type='danger' key='rel'> Lançamentos </Button></Link>
                 <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
             </div >
-            <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
+            {/* <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
                 Novas Despesas - Imprevistos
-                </div>
+                </div> */}
             <div className='ViewExpense'>
                 <DespesaRealizada />
                 <Input

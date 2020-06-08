@@ -100,11 +100,12 @@ export default (props) => {
     return (
         <div>
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
-                <Link to='SelectReceitaReal'><Button key='Lnc'>Novos Lançamentos</Button></Link>
+                <Link to='SelectReceitaMeta'><Button type='primary' key='Lnc'>Metas - Receitas</Button></Link>
+                <Link to='SelectReceitaReal'><Button key='Lnc'>Lançamentos</Button></Link>
             </div >
-            <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
+            {/* <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
                 Metas Cadastradas - Receitas
-            </div>
+            </div> */}
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                 <Input name='receita'
                     style={{ width: '49%' }}

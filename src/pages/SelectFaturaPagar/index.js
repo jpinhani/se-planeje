@@ -123,14 +123,15 @@ export default (props) => {
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
                 <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>
+                <Link to='SelectFaturaPagar'><Button type='danger' key='rel'> Faturas </Button></Link>
             </div >
-            <div
+            {/* <div
                 style={{
                     padding: '15px',
                     fontSize: '16px',
                     background: '#FF6347'
                 }}>Resumo de Lançamentos no Cartão
-            </div>
+            </div> */}
             <div
                 className='cards'>
                 {fatura}
