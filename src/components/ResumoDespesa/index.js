@@ -132,7 +132,9 @@ function cartaoRealizado(despesas, listagemCartao, visao) {
                         dataProxVencimento.add(1, 'month')
 
                     const dataCompra = moment(dataCartao.DT_CREDITO)
-                    const dataFatura = dataCompra >= dataMelhorCompra ? dataProxVencimento : dataVencimento
+                    const dataFatura = moment(dataCompra).format("YYYY-MM-DD") >=
+                        moment(dataMelhorCompra).format("YYYY-MM-DD") ?
+                        dataProxVencimento : dataVencimento
                     let novoArray = acum
                     listagemCartao.filter((listCartao) =>
                         dataCartao.ID_CARTAO === listCartao.ID).map((listCartao) =>
@@ -234,9 +236,9 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
             despesas.filter((filtroCartao) =>
                 filtroCartao.STATUS === 'Fatura Pronta Para Pagamento' ||
                 filtroCartao.STATUS === 'Fatura Pendente').reduce((acum, dataCartao, i) => {
-                    const modelaData = moment(dataCartao.DT_REAL ?
-                        dataCartao.DT_REAL :
-                        dataCartao.DT_PREVISTO)
+                    const modelaData = dataCartao.DT_REAL ?
+                        moment(dataCartao.DT_REAL) :
+                        moment(dataCartao.DT_PREVISTO)
 
                     const MM = modelaData.get("month")
 
@@ -272,7 +274,8 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
 
                     const dataCompra = dataCartao.DT_REAL ? moment(dataCartao.DT_REAL) : moment(dataCartao.DT_PREVISTO)
 
-                    const dataFatura = dataCompra >= dataMelhorCompra ? dataProxVencimento : dataVencimento
+                    const dataFatura = moment(dataCompra).format("YYYY-MM-DD") >=
+                        moment(dataMelhorCompra).format("YYYY-MM-DD") ? dataProxVencimento : dataVencimento
 
                     let novoArray = acum
                     listagemCartao.filter((listCartao) =>
@@ -283,7 +286,7 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
                     return novoArray
                 }, [])
             : [];
-
+    console.log(rs)
     rs = rs.length > 0 ? filtroData(rs, 'cartaoPrevisto', visao[0].DT_INICIO, visao[0].DT_FIM) : rs
 
     return IdentificaCartao(rs)

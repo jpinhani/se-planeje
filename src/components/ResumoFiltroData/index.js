@@ -14,12 +14,14 @@ function filtroData(despesas, tipo, dtInicio, dtFim) {
                     filtroData.DT_PREVISTO <= dtFim
                 break;
             case 'cartaoRealizado':
-                rs = filtroData.dataFatura >= moment(dtInicio) &&
-                    filtroData.dataFatura <= moment(dtFim)
+                // console.log('filtroData.dataFatura', filtroData.dataFatura)
+                rs = moment(filtroData.dataFatura) >= moment(dtInicio) &&
+                    moment(filtroData.dataFatura) <= moment(dtFim)
                 break;
             case 'cartaoPrevisto':
-                rs = filtroData.dataFatura >= moment(dtInicio) &&
-                    filtroData.dataFatura <= moment(dtFim)
+                // console.log('filtroData.dataFatura', filtroData.dataFatura)
+                rs = moment(filtroData.dataFatura).format("YYYY-MM-DD") >= moment(dtInicio).format("YYYY-MM-DD") &&
+                    moment(filtroData.dataFatura).format("YYYY-MM-DD") <= moment(dtFim).format("YYYY-MM-DD")
                 break;
             case 'transferencias':
                 rs = filtroData.DATA_TRANSFERENCIA >= dtInicio &&
