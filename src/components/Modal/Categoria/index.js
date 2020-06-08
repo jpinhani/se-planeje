@@ -7,7 +7,7 @@ import { Icon, Modal, Input, Select, notification, message } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import { InsertRequest, GetRequest } from '../../crudSendAxios/crud'
 
-import { urlBackend, userID } from '../../../services/urlBackEnd'
+import { urlBackend, userID, config } from '../../../services/urlBackEnd'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -83,7 +83,7 @@ class ModalCategory extends React.Component {
 
         const endpoint = `${urlBackend}api/categorias/comboDependencia/${userID()}/${tipo}/${nivel}`
 
-        const result = await axios.get(endpoint)
+        const result = await axios.get(endpoint, config())
 
         const options = result.data.map((desc, i) =>
             <Option key={i} value={desc.ID}>

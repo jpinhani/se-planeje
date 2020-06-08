@@ -65,7 +65,7 @@ class ModalAcount extends React.Component {
             const userID = localStorage.getItem('userId')
             const endpoint = `${urlBackend}api/visions/${userID}`
 
-            const result = await axios.get(endpoint)
+            const result = await axios.get(endpoint, config())
             const visions = result.data
 
             this.props.listVisions(visions)

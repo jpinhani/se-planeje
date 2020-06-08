@@ -66,7 +66,7 @@ function Vision() {
 
     dispatch({
       type: 'LIST_VISION',
-      payload: (await axios.get(`${endpoint}/${userId}`)).data
+      payload: (await axios.get(`${endpoint}/${userId}`, config())).data
     })
   }
 
@@ -75,7 +75,7 @@ function Vision() {
     async function getVisions() {
       dispatch({
         type: 'LIST_VISION',
-        payload: (await axios.get(`${endpoint}/${userId}`)).data
+        payload: (await axios.get(`${endpoint}/${userId}`, config())).data
       })
     }
 

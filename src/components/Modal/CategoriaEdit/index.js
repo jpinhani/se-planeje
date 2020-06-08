@@ -87,7 +87,7 @@ class ModalCategory extends React.Component {
     async ComboDependencia(tipo, nivel) {
         const endpoint = `${urlBackend}api/categorias/comboDependencia/${userID()}/${tipo}/${nivel}`
 
-        const result = await axios.get(endpoint)
+        const result = await axios.get(endpoint, config())
 
         const options = result.data.map((desc, i) =>
             <Option key={i} value={desc.ID}>
