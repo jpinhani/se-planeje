@@ -117,7 +117,7 @@ export default (props) => {
                         <center><h1>Resumo SePlaneje</h1></center>
                         <div className='containerDivDataTabResumo'>
                             <div>
-                                <center><h1 style={{ background: 'Salmon' }}>Despesas</h1></center>
+                                <center><h1 style={{ background: 'Salmon', fontWeight: 'bold' }}>Despesas</h1></center>
                                 <strong>Meta: </strong>
                                 <li>{resumo.D_PREVISTO ?
                                     resumo.D_PREVISTO.toLocaleString('pt-BR', {
@@ -138,7 +138,7 @@ export default (props) => {
                                     }) : 'R$ 0,00'}</li>
                             </div>
                             <div>
-                                <center><h1 style={{ background: 'LightSkyBlue' }}>Receitas</h1></center>
+                                <center><h1 style={{ background: 'LightSkyBlue', fontWeight: 'bold' }}>Receitas</h1></center>
                                 <strong>Meta:</strong>
                                 <li>{resumo.R_PREVISTO ?
                                     resumo.R_PREVISTO.toLocaleString('pt-BR', {
@@ -158,7 +158,7 @@ export default (props) => {
                                     }) : 'R$ 0,00'}</li>
                             </div>
                             <div>
-                                <center><h1 style={{ background: 'grey21' }}>Lucro</h1></center>
+                                <center><h1 style={{ background: 'grey21', fontWeight: 'bold' }}>Lucro</h1></center>
                                 <strong>Meta:</strong>
                                 <li>{resumo.L_PREVISTO ?
                                     resumo.L_PREVISTO.toLocaleString('pt-BR', {
@@ -181,11 +181,47 @@ export default (props) => {
                         </div>
                     </div>
                 </div>
-            </ul>
+            </ul >
 
+            <div>
+                <ul className='homeLayoutFlex'>
+                    <div className='percentuais'>
+                        <li><strong>Saldo Total </strong>
+
+                            <p style={{ color: (contaSaldoAtual.reduce((acum, atual) => acum + atual.Valor, 0) > 0) ? 'blue' : 'red' }}>
+                                {contaSaldoAtual.reduce((acum, atual) => acum + atual.Valor, 0).toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                })}</p>
+                        </li>
+                        <li><strong>% do Lucro com Base na Despesa </strong>
+                            <p style={{ color: (resumo.L_FORECAST / (resumo.D_FORECAST * -1) > 0) ? 'red' : 'blue' }}>
+                                {resumo.L_FORECAST / (resumo.D_FORECAST * -1) * 100 ?
+                                    parseFloat(resumo.L_FORECAST / (resumo.D_FORECAST * -1) * 100).toFixed(2) + ' %' :
+                                    0 + ' %'}</p>
+                        </li>
+                    </div>
+                    <div className='percentuais'>
+                        <li><strong>% da Meta Atingida </strong>
+
+
+                            <p style={{ color: (resumo.L_FORECAST / resumo.L_PREVISTO > 0) ? 'blue' : 'red' }}>
+                                {resumo.L_FORECAST / resumo.L_PREVISTO ?
+                                    parseFloat(resumo.L_FORECAST / resumo.L_PREVISTO * 100).toFixed(2) + ' %' :
+                                    0 + ' %'}</p>
+                        </li>
+                        <li><strong>% do Lucro com Base na Receita </strong>
+                            <p style={{ color: (resumo.L_FORECAST / resumo.R_FORECAST > 0) ? 'blue' : 'red' }}>
+                                {resumo.L_FORECAST / resumo.R_FORECAST * 100 ?
+                                    parseFloat(resumo.L_FORECAST / resumo.R_FORECAST * 100).toFixed(2) + ' %' :
+                                    0 + ' %'}</p>
+                        </li>
+                    </div>
+                </ul>
+            </div>
             <div>
                 <GraficoComponent data={resumo} />
             </div>
-        </div>
+        </div >
     )
 }

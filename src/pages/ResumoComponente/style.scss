@@ -26,7 +26,7 @@
 
 .containerDiv1 .containerDivDataTabResumo h1{
     background:#B0C4DE;
-    font-size: 14px;
+    font-size: 16px;
    //  color: blue;
     font-style: italic;
     font-weight: 100;
@@ -66,14 +66,35 @@
    grid-gap: 10px;
 }
 .containerDivDataTab div strong{
-   font-size: 12px;
+   font-size: 16px;
    padding-left: 10px;
 }
 
 .containerDivDataTab div p{
    width: max-content;
-   font-size: 12px;
+   font-size: 16px !important;
    font-style: italic;
+}
+
+.percentuais{
+   margin-top: 20px !important;
+
+   li{
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between;
+      margin-bottom: 10px !important;
+      background-color: white;
+     align-items: center;
+      strong{
+         padding-left: 15px;
+         font-size:16px ;
+      }
+
+      p{
+         font-size: 24px;
+      }
+   }
 }
 
 
