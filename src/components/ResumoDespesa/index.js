@@ -289,7 +289,7 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
                     return novoArray
                 }, [])
             : [];
-    console.log(rs)
+
     rs = rs.length > 0 ? filtroData(rs, 'cartaoPrevisto', visao[0].DT_INICIO, visao[0].DT_FIM) : rs
 
     return IdentificaCartao(rs)

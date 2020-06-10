@@ -2,10 +2,11 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { GetRequest } from '../../components/crudSendAxios/crud';
 import { SaldoCategoria, hierarquia } from '../../components/ResumoCategoriaDespesa'
 import { SaldoCategoriaReceita, hierarquiaReceita } from '../../components/ResumoCategoriaReceita'
-import { Table } from 'antd';
+import { Table, Select } from 'antd';
 
-// const { TreeNode } = Tree;
+import './styles.scss'
 
+const { Option } = Select;
 export default (props) => {
 
 
@@ -16,6 +17,7 @@ export default (props) => {
     const [categorias, setCategoria] = useState([]);
     const [treeExpense, setTreeExpense] = useState([]);
     const [treeRevenue, setTreeRevenue] = useState([]);
+    const [cenario, setCenario] = useState([])
 
     const columns = [
         {
@@ -73,15 +75,15 @@ export default (props) => {
                 return { ...data, Categoria: data.DESCR_CATEGORIA }
             })
 
-        const dados1 = SaldoCategoria(data, visao, 'PREVISTO', cartao, categorias);
+        const dados1 = SaldoCategoria(data, visao, cenario, cartao, categorias);
         const treeCategoryExpense = hierarquia(dados1, nivel3, nivel4, nivel5)
         setTreeExpense(treeCategoryExpense)
 
-        const dados2 = SaldoCategoriaReceita(dataRevenue, visao, 'PREVISTO', categorias);
+        const dados2 = SaldoCategoriaReceita(dataRevenue, visao, cenario, categorias);
         const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
         setTreeRevenue(treeCategoryRevenue)
 
-    }, [data, dataRevenue, visao, cartao, categorias])
+    }, [data, dataRevenue, visao, cartao, categorias, cenario])
 
     useEffect(() => {
         requestApi()
@@ -90,6 +92,24 @@ export default (props) => {
 
     return (
         <div>
+            <div className='Cenario'>
+                <Select
+                    className='SelectCenario'
+                    showSearch
+                    // style={{ width: '90%', marginBottom: '3px', marginTop: '3px' }}
+                    placeholder="Selecione o Cenário Desejado"
+                    optionFilterProp="children"
+                    filterOption={(input, option) => (
+                        option.props.children.toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                    )}
+                    onSelect={valor => setCenario(valor)}
+                >
+                    <Option value='PREVISTO'>Previsto</Option>
+                    <Option value='REAL'>Real</Option>
+                    <Option value='FORECAST'>Forecast</Option>
+                </Select>
+            </div>
             <Table name='CategoryTable' className='table table-action'
                 columns={columns}
                 dataSource={[...treeExpense, ...treeRevenue]}

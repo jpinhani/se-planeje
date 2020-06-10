@@ -254,48 +254,7 @@ function cartaoReal(dados, cartoes, dtInicio, dtFim) {
                 DataReal: novoObjeto.DataReal,
                 ValorPrevisto: novoObjeto.ValorPrevisto,
                 DataPrevisto: novoObjeto.DataPrevisto,
-                Status: novoObjeto.Status,
-                melhorDiaCompra: cartoes.filter((listaCartao) =>
-                    listaCartao.ID === novoObjeto.IdCartao).map((diacompra) => {
-
-                        const modelaData = moment(novoObjeto.DataReal)
-
-                        const MM = modelaData.get("month")
-                        const YY = modelaData.get("year")
-
-                        const dataMelhorCompra = moment()
-                        dataMelhorCompra.set("date", diacompra.DIA_COMPRA)
-                        dataMelhorCompra.set("month", MM)
-                        dataMelhorCompra.set("year", YY)
-
-                        return dataMelhorCompra
-                    })[0],
-                VencimentoCartao: cartoes.filter((listaCartao) =>
-                    listaCartao.ID === novoObjeto.IdCartao).map((diacompra) => {
-
-
-                        const modelaData = moment(novoObjeto.DataReal)
-
-                        const MM = modelaData.get("month")
-                        const YY = modelaData.get("year")
-
-                        const dataVencimento = moment()
-                        dataVencimento.set("date", diacompra.DT_VENCIMENTO)
-                        dataVencimento.set("month", MM)
-                        dataVencimento.set("year", YY)
-                        if (diacompra.DT_VENCIMENTO < diacompra.DIA_COMPRA)
-                            dataVencimento.add(1, 'month')
-
-                        const dataMelhorCompra = moment()
-                        dataMelhorCompra.set("date", diacompra.DIA_COMPRA)
-                        dataMelhorCompra.set("month", MM)
-                        dataMelhorCompra.set("year", YY)
-
-                        if (modelaData > dataMelhorCompra)
-                            dataVencimento.add(1, 'month')
-
-                        return dataVencimento
-                    })[0]
+                Status: novoObjeto.Status
             }
         })
 
@@ -306,16 +265,6 @@ function cartaoReal(dados, cartoes, dtInicio, dtFim) {
     return [...conta, ...cartaoFinal]
 }
 
-// function forecast(array, dtInicio, dtFim) {
-//     return array.filter((dados) =>
-//         ((dados.Status === 'Esperando Pagamento' ||
-//             dados.Status === 'Pagamento Realizado') &&
-//             ((dados.DataPrevisto >= dtInicio &&
-//                 dados.DataPrevisto <= dtFim) ||
-//                 (dados.DataReal >= dtInicio &&
-//                     dados.DataReal <= dtFim)))
-//     )
-// }
 
 function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
 
@@ -374,7 +323,7 @@ function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
                         dataMelhorCompra.set("month", MM)
                         dataMelhorCompra.set("year", YY)
 
-                        if (modelaData > dataMelhorCompra)
+                        if (moment(modelaData).format("YYYY/MM/DD") >= moment(dataMelhorCompra).format("YYYY/MM/DD"))
                             dataVencimento.add(1, 'month')
 
                         return dataVencimento
@@ -382,11 +331,16 @@ function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
             }
         })
 
-    const cartaoFinal = cartao.filter((dados) =>
-        (moment(dados.VencimentoCartao) >= moment(dtInicio) &&
-            moment(dados.VencimentoCartao) <= moment(dtFim)))
+    const cartaoFinalPrevisto = cartao.filter(filtro => filtro.Status !== 'Fatura Paga').filter((dados) =>
+        (moment(dados.VencimentoCartao).format("YYYY/MM/DD") >= moment(dtInicio).format("YYYY/MM/DD") &&
+            moment(dados.VencimentoCartao).format("YYYY/MM/DD") <= moment(dtFim).format("YYYY/MM/DD")))
 
-    return [...conta, ...contaReal, ...cartaoFinal]
+    const cartaoFinalReal = cartao.filter(filtro => filtro.Status === 'Fatura Paga').filter((dados) =>
+        (moment(dados.DataReal).format("YYYY/MM/DD") >= moment(dtInicio).format("YYYY/MM/DD") &&
+            moment(dados.DataReal).format("YYYY/MM/DD") <= moment(dtFim).format("YYYY/MM/DD")))
+
+
+    return [...conta, ...contaReal, ...cartaoFinalPrevisto, ...cartaoFinalReal]
 }
 
 

@@ -187,7 +187,7 @@ function TrataForecast(dados, dtInicio, dtFim) {
 /* ############################################################################################# */
 
 function hierarquiaReceita(dados1, nivel3, nivel4, nivel5) {
-    console.log('dados1', dados1)
+
     const prepNivel5 = nivel5.map((n5) => {
         const dadosnivel = dados1.filter(filtro => filtro.Idpai === n5.ID)
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)

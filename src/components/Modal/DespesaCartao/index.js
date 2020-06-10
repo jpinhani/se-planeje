@@ -7,7 +7,7 @@ import { CreditCardOutlined } from '@ant-design/icons';
 import FaturaPagar from '../../../components/Modal/DespesaCartao'
 import { InsertRequest } from '../../crudSendAxios/crud'
 import { verifySend } from '../../verifySendAxios/index'
-import { userID, urlBackend } from '../../../services/urlBackEnd'
+import { userID, urlBackend, config } from '../../../services/urlBackEnd'
 
 import { listFaturaPaga } from '../../../store/actions/generalFaturaAction'
 import { listFaturadetalhe } from '../../../store/actions/generalFaturaDetalheAction'
@@ -23,6 +23,7 @@ import './styles.scss'
 
 const dateFormat = 'DD/MM/YYYY'
 const { TabPane } = Tabs;
+
 class ModalExpense extends React.Component {
     constructor(props) {
         super(props)
@@ -173,11 +174,11 @@ class ModalExpense extends React.Component {
     async requestAPI() {
 
         const endpointAPI = `${urlBackend}api/despesas/fatura/${userID()}`
-        const result = await axios.get(endpointAPI)
+        const result = await axios.get(endpointAPI, config())
         const fatura = result.data
 
         const endpointAPIDetalhe = `${urlBackend}api/despesas/faturadetalhe/${userID()}`
-        const resultDetalhe = await axios.get(endpointAPIDetalhe)
+        const resultDetalhe = await axios.get(endpointAPIDetalhe, config())
         const detalhe = resultDetalhe.data
 
         const unique = new Set(fatura.map((DATA) => DATA.CARTAO))

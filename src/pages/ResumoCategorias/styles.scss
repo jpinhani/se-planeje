@@ -1,0 +1,22 @@
+
+.Cenario{
+    background: radial-gradient(#81d6f3, #b6bac5) !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    width: 100%;
+
+    .SelectCenario{
+        width: 50% !important;
+    }
+}
+
+  @media (max-width: 900px) { 
+.Cenario{
+    background: radial-gradient(#81d6f3, #b6bac5) !important;
+    width: 100%;
+
+        .SelectCenario{
+        width: 100% !important;
+    }
+}
+  }
