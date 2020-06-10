@@ -4,7 +4,7 @@ const SaldoConta = (listaArray, tipo, dataLimite) => {
     return groupByConta(listaArray.filter((dados) =>
         (dados.STATUS === 'Pagamento Realizado' ||
             dados.STATUS === 'Fatura Paga') &&
-        moment(dados.DT_REAL) <= moment(dataLimite)).reduce((acum, atual, i) => {
+        moment(dados.DT_REAL).format("YYYY-MM-DD") <= moment(dataLimite).format("YYYY-MM-DD")).reduce((acum, atual, i) => {
             let objeto = acum
             objeto[i] = {
                 Conta: atual.DESCR_CONTA,

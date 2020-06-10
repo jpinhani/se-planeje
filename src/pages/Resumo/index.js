@@ -190,6 +190,7 @@ export default () => {
                 <TabPane tab='Plano de Categorias' key='5'>
                     <Categorias
                         data={listDespesas}
+                        dataRevenue={listReceitas}
                         visao={visaoSetada}
                         cartao={listCartao} />
                 </TabPane>

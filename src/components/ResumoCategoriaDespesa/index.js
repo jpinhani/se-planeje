@@ -139,96 +139,101 @@ function groupByCategoria(ArrayCategoria, tipo) {
 
 function previsto(array, dtInicio, dtFim) {
     return array.filter((dados) =>
-        (dados.Status === 'Esperando Pagamento' ||
-            dados.Status === 'Pagamento Realizado') &&
-        (dados.DataPrevisto >= dtInicio &&
-            dados.DataPrevisto <= dtFim))
+        (dados.Status === 'Esperando Pagamento') &&
+        (moment(dados.DataPrevisto).format("YYYY/MM/DD") >= moment(dtInicio).format("YYYY/MM/DD") &&
+            moment(dados.DataPrevisto).format("YYYY/MM/DD") <= moment(dtFim).format("YYYY/MM/DD")))
 }
 
 function cartaoPrevisto(dados, cartoes, dtInicio, dtFim) {
 
     const conta = previsto(dados.filter((filtro) => filtro.Cartao === null), dtInicio, dtFim)
+    const contaReal = real(dados.filter((filtro) => filtro.Cartao === null), dtInicio, dtFim)
 
     /*Adiciona o dia da Melhor Compra com o dia do Vencimento do Cartão*/
     const cartao = dados.filter((filtro) =>
-        filtro.Cartao !== null).map((novoObjeto) => {
-            return {
-                Conta: novoObjeto.Conta,
-                IdCartao: novoObjeto.IdCartao,
-                Cartao: novoObjeto.Cartao,
-                IdCategoria: novoObjeto.IdCategoria,
-                Categoria: novoObjeto.Categoria,
-                ValorReal: novoObjeto.ValorReal,
-                DataReal: novoObjeto.DataReal,
-                ValorPrevisto: novoObjeto.ValorPrevisto,
-                DataPrevisto: novoObjeto.DataPrevisto,
-                Status: novoObjeto.Status,
-                melhorDiaCompra: cartoes.filter((listaCartao) =>
-                    listaCartao.ID === novoObjeto.IdCartao).map((diacompra) => {
+        filtro.Cartao !== null
+    ).map((novoObjeto) => {
+        return {
+            Conta: novoObjeto.Conta,
+            IdCartao: novoObjeto.IdCartao,
+            Cartao: novoObjeto.Cartao,
+            IdCategoria: novoObjeto.IdCategoria,
+            Categoria: novoObjeto.Categoria,
+            ValorReal: novoObjeto.ValorReal,
+            DataReal: novoObjeto.DataReal,
+            ValorPrevisto: novoObjeto.ValorPrevisto,
+            DataPrevisto: novoObjeto.DataPrevisto,
+            Status: novoObjeto.Status,
+            melhorDiaCompra: cartoes.filter((listaCartao) =>
+                listaCartao.ID === novoObjeto.IdCartao).map((diacompra) => {
 
-                        const modelaData = novoObjeto.DataPrevisto ?
-                            novoObjeto.DataReal ?
-                                moment(novoObjeto.DataReal) :
-                                moment(novoObjeto.DataPrevisto) :
-                            moment(novoObjeto.DataPrevisto)
+                    const modelaData = novoObjeto.DataPrevisto ?
+                        novoObjeto.DataReal ?
+                            moment(novoObjeto.DataReal) :
+                            moment(novoObjeto.DataPrevisto) :
+                        moment(novoObjeto.DataPrevisto)
 
-                        const MM = modelaData.get("month")
-                        const YY = modelaData.get("year")
+                    const MM = modelaData.get("month")
+                    const YY = modelaData.get("year")
 
-                        const dataMelhorCompra = moment()
-                        dataMelhorCompra.set("date", diacompra.DIA_COMPRA)
-                        dataMelhorCompra.set("month", MM)
-                        dataMelhorCompra.set("year", YY)
+                    const dataMelhorCompra = moment()
+                    dataMelhorCompra.set("date", diacompra.DIA_COMPRA)
+                    dataMelhorCompra.set("month", MM)
+                    dataMelhorCompra.set("year", YY)
 
-                        return dataMelhorCompra
-                    })[0],
-                VencimentoCartao: cartoes.filter((listaCartao) =>
-                    listaCartao.ID === novoObjeto.IdCartao).map((diacompra) => {
-
-
-                        const modelaData = novoObjeto.DataPrevisto ?
-                            novoObjeto.DataReal ?
-                                moment(novoObjeto.DataReal) :
-                                moment(novoObjeto.DataPrevisto) :
-                            moment(novoObjeto.DataPrevisto)
+                    return dataMelhorCompra
+                })[0],
+            VencimentoCartao: cartoes.filter((listaCartao) =>
+                listaCartao.ID === novoObjeto.IdCartao).map((diacompra) => {
 
 
-                        const MM = modelaData.get("month")
-                        const YY = modelaData.get("year")
+                    const modelaData = novoObjeto.DataPrevisto ?
+                        novoObjeto.DataReal ?
+                            moment(novoObjeto.DataReal) :
+                            moment(novoObjeto.DataPrevisto) :
+                        moment(novoObjeto.DataPrevisto)
 
-                        const dataVencimento = moment()
-                        dataVencimento.set("date", diacompra.DT_VENCIMENTO)
-                        dataVencimento.set("month", MM)
-                        dataVencimento.set("year", YY)
-                        if (diacompra.DT_VENCIMENTO < diacompra.DIA_COMPRA)
-                            dataVencimento.add(1, 'month')
 
-                        const dataMelhorCompra = moment()
-                        dataMelhorCompra.set("date", diacompra.DIA_COMPRA)
-                        dataMelhorCompra.set("month", MM)
-                        dataMelhorCompra.set("year", YY)
+                    const MM = modelaData.get("month")
+                    const YY = modelaData.get("year")
 
-                        if (modelaData > dataMelhorCompra)
-                            dataVencimento.add(1, 'month')
+                    const dataVencimento = moment()
+                    dataVencimento.set("date", diacompra.DT_VENCIMENTO)
+                    dataVencimento.set("month", MM)
+                    dataVencimento.set("year", YY)
+                    if (diacompra.DT_VENCIMENTO < diacompra.DIA_COMPRA)
+                        dataVencimento.add(1, 'month')
 
-                        return dataVencimento
-                    })[0]
-            }
-        })
+                    const dataMelhorCompra = moment()
+                    dataMelhorCompra.set("date", diacompra.DIA_COMPRA)
+                    dataMelhorCompra.set("month", MM)
+                    dataMelhorCompra.set("year", YY)
 
-    const cartaoFinal = cartao.filter((dados) =>
-        (moment(dados.VencimentoCartao) >= moment(dtInicio) &&
-            moment(dados.VencimentoCartao) <= moment(dtFim)))
+                    if (moment(modelaData).format("YYYY/MM/DD") >= moment(dataMelhorCompra).format("YYYY/MM/DD"))
+                        dataVencimento.add(1, 'month')
 
-    return [...conta, ...cartaoFinal]
+                    return dataVencimento
+                })[0]
+        }
+    })
+
+    const cartaoFinalPrevisto = cartao.filter(filtro => filtro.Status !== 'Fatura Paga').filter((dados) =>
+        (moment(dados.VencimentoCartao).format("YYYY/MM/DD") >= moment(dtInicio).format("YYYY/MM/DD") &&
+            moment(dados.VencimentoCartao).format("YYYY/MM/DD") <= moment(dtFim).format("YYYY/MM/DD")))
+
+    const cartaoFinalReal = cartao.filter(filtro => filtro.Status === 'Fatura Paga').filter((dados) =>
+        (moment(dados.DataReal).format("YYYY/MM/DD") >= moment(dtInicio).format("YYYY/MM/DD") &&
+            moment(dados.DataReal).format("YYYY/MM/DD") <= moment(dtFim).format("YYYY/MM/DD")))
+
+
+    return [...conta, ...contaReal, ...cartaoFinalPrevisto, ...cartaoFinalReal]
 }
 
 function real(array, dtInicio, dtFim) {
     return array.filter((dados) =>
-        (dados.Status === 'Esperando Pagamento' ||
-            dados.Status === 'Pagamento Realizado') &&
-        (dados.DataReal >= dtInicio &&
-            dados.DataReal <= dtFim))
+        (dados.Status === 'Pagamento Realizado') &&
+        (moment(dados.DataReal).format("YYYY/MM/DD") >= moment(dtInicio).format("YYYY/MM/DD") &&
+            moment(dados.DataReal).format("YYYY/MM/DD") <= moment(dtFim).format("YYYY/MM/DD")))
 }
 
 function cartaoReal(dados, cartoes, dtInicio, dtFim) {
@@ -295,26 +300,27 @@ function cartaoReal(dados, cartoes, dtInicio, dtFim) {
         })
 
     const cartaoFinal = cartao.filter((dados) =>
-        (moment(dados.VencimentoCartao) >= moment(dtInicio) &&
-            moment(dados.VencimentoCartao) <= moment(dtFim)))
+        (moment(dados.DataReal) >= moment(dtInicio) &&
+            moment(dados.DataReal) <= moment(dtFim)))
 
     return [...conta, ...cartaoFinal]
 }
 
-function forecast(array, dtInicio, dtFim) {
-    return array.filter((dados) =>
-        ((dados.Status === 'Esperando Pagamento' ||
-            dados.Status === 'Pagamento Realizado') &&
-            ((dados.DataPrevisto >= dtInicio &&
-                dados.DataPrevisto <= dtFim) ||
-                (dados.DataReal >= dtInicio &&
-                    dados.DataReal <= dtFim)))
-    )
-}
+// function forecast(array, dtInicio, dtFim) {
+//     return array.filter((dados) =>
+//         ((dados.Status === 'Esperando Pagamento' ||
+//             dados.Status === 'Pagamento Realizado') &&
+//             ((dados.DataPrevisto >= dtInicio &&
+//                 dados.DataPrevisto <= dtFim) ||
+//                 (dados.DataReal >= dtInicio &&
+//                     dados.DataReal <= dtFim)))
+//     )
+// }
 
 function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
 
-    const conta = forecast(dados.filter((filtro) => filtro.Cartao === null), dtInicio, dtFim)
+    const conta = previsto(dados.filter((filtro) => filtro.Cartao === null), dtInicio, dtFim)
+    const contaReal = real(dados.filter((filtro) => filtro.Cartao === null), dtInicio, dtFim)
 
     const cartao = dados.filter((filtro) =>
         filtro.Cartao !== null).map((novoObjeto) => {
@@ -380,7 +386,7 @@ function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
         (moment(dados.VencimentoCartao) >= moment(dtInicio) &&
             moment(dados.VencimentoCartao) <= moment(dtFim)))
 
-    return [...conta, ...cartaoFinal]
+    return [...conta, ...contaReal, ...cartaoFinal]
 }
 
 

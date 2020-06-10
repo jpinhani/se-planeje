@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { GetRequest } from '../../components/crudSendAxios/crud';
-import { SaldoCategoria, hierarquia } from '../../components/ResumoCategoria/'
+import { SaldoCategoria, hierarquia } from '../../components/ResumoCategoriaDespesa'
+import { SaldoCategoriaReceita, hierarquiaReceita } from '../../components/ResumoCategoriaReceita'
 import { Table } from 'antd';
 
 // const { TreeNode } = Tree;
@@ -9,10 +10,12 @@ export default (props) => {
 
 
     const [data, setData] = useState([]);
+    const [dataRevenue, setDataRevenue] = useState([]);
     const [visao, setVisao] = useState([]);
     const [cartao, setCartao] = useState([]);
     const [categorias, setCategoria] = useState([]);
-    const [tree, setTree] = useState([]);
+    const [treeExpense, setTreeExpense] = useState([]);
+    const [treeRevenue, setTreeRevenue] = useState([]);
 
     const columns = [
         {
@@ -37,6 +40,10 @@ export default (props) => {
     useEffect(() => {
         setCartao(props.cartao)
     }, [props.cartao])
+
+    useEffect(() => {
+        setDataRevenue(props.dataRevenue)
+    }, [props.dataRevenue])
 
     const novosDados = useCallback(async () => {
         const cat = await GetRequest('api/categorias')
@@ -67,11 +74,14 @@ export default (props) => {
             })
 
         const dados1 = SaldoCategoria(data, visao, 'PREVISTO', cartao, categorias);
-        const treeCategory = hierarquia(dados1, nivel3, nivel4, nivel5)
-        setTree(treeCategory)
-        // console.log('treeCategory', treeCategory)
+        const treeCategoryExpense = hierarquia(dados1, nivel3, nivel4, nivel5)
+        setTreeExpense(treeCategoryExpense)
 
-    }, [data, visao, cartao, categorias])
+        const dados2 = SaldoCategoriaReceita(dataRevenue, visao, 'PREVISTO', categorias);
+        const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
+        setTreeRevenue(treeCategoryRevenue)
+
+    }, [data, dataRevenue, visao, cartao, categorias])
 
     useEffect(() => {
         requestApi()
@@ -82,7 +92,7 @@ export default (props) => {
         <div>
             <Table name='CategoryTable' className='table table-action'
                 columns={columns}
-                dataSource={tree}
+                dataSource={[...treeExpense, ...treeRevenue]}
                 rowKey="Categoria"
             />
         </div>

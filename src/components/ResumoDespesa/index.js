@@ -132,9 +132,11 @@ function cartaoRealizado(despesas, listagemCartao, visao) {
                         dataProxVencimento.add(1, 'month')
 
                     const dataCompra = moment(dataCartao.DT_CREDITO)
-                    const dataFatura = moment(dataCompra).format("YYYY-MM-DD") >=
+
+                    const dataFatura = dataCartao.DT_REAL ? moment(dataCartao.DT_REAL) : moment(dataCompra).format("YYYY-MM-DD") >=
                         moment(dataMelhorCompra).format("YYYY-MM-DD") ?
                         dataProxVencimento : dataVencimento
+
                     let novoArray = acum
                     listagemCartao.filter((listCartao) =>
                         dataCartao.ID_CARTAO === listCartao.ID).map((listCartao) =>
@@ -251,6 +253,7 @@ function cartaoPrevisto(despesas, listagemCartao, visao) {
                     dataMelhorCompra.set("date", diaCompra[0])
                     dataMelhorCompra.set("month", MM)
                     dataMelhorCompra.set("year", YY)
+
 
                     const dataVencimento = moment()
                     const diaVencimento = listagemCartao.filter((listCartao) =>
