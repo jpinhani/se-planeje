@@ -15,8 +15,8 @@ export default (props) => {
     const [visao, setVisao] = useState([]);
     const [cartao, setCartao] = useState([]);
     const [categorias, setCategoria] = useState([]);
-    const [treeExpense, setTreeExpense] = useState([]);
-    const [treeRevenue, setTreeRevenue] = useState([]);
+    const [tree, setTree] = useState([]);
+    // const [treeRevenue, setTreeRevenue] = useState([]);
     const [cenario, setCenario] = useState([])
 
     const columns = [
@@ -77,11 +77,26 @@ export default (props) => {
 
         const dados1 = SaldoCategoria(data, visao, cenario, cartao, categorias);
         const treeCategoryExpense = hierarquia(dados1, nivel3, nivel4, nivel5)
-        setTreeExpense(treeCategoryExpense)
 
         const dados2 = SaldoCategoriaReceita(dataRevenue, visao, cenario, categorias);
         const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
-        setTreeRevenue(treeCategoryRevenue)
+        // setTreeRevenue(treeCategoryRevenue)
+
+        const Lucro = [...treeCategoryExpense, ...treeCategoryRevenue].filter(filtro => filtro.Idpai === 1)
+        const SomaLucro = Lucro.reduce((acum, atual) => acum + (atual.Categoria === 'DESPESA' ? atual.Valor * (-1) : atual.Valor), 0)
+        const LucroInicial = [{
+            Categoria: 'LUCRO - PREJUIZO',
+            IdCategoria: 1,
+            Idpai: 0,
+            children: Lucro,
+            Valor: SomaLucro,
+            ValorPersonalizado: SomaLucro.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            })
+        }]
+
+        setTree(LucroInicial)
 
     }, [data, dataRevenue, visao, cartao, categorias, cenario])
 
@@ -112,7 +127,7 @@ export default (props) => {
             </div>
             <Table name='CategoryTable' className='table table-action'
                 columns={columns}
-                dataSource={[...treeExpense, ...treeRevenue]}
+                dataSource={[...tree]}
                 rowKey="Categoria"
             />
         </div>
