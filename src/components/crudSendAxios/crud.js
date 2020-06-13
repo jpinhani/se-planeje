@@ -5,7 +5,7 @@ import { logout } from '../../auth/index'
 
 
 function redirect() {
-    window.location.href = 'http://localhost:3000/login'
+    window.location.href = 'https://sys.seplaneje.com/login'
 }
 
 async function GetRequest(rota) {
