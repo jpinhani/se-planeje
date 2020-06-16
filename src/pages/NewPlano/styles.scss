@@ -1,0 +1,656 @@
+
+.newPlan{
+position: absolute;
+ background: radial-gradient(#81d6f3, #b6bac5);
+  // left: 0;
+//   height: 100% !important;
+//   width: 98% !important;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  top: 0 !important ;
+  left: 0 !important;
+//   min-height: 100% !important;
+//   min-width: 100% !important;
+  z-index: 1;
+
+         .detailsFornecedor{
+            //  padding-top: 30px;
+       h1{
+           padding-left: 25px;
+           font-size: 50px;
+           color: red;
+       }
+       span{
+           color: white;
+       }
+       p{
+           padding-left: 25px;
+           color:black
+       }
+       }
+
+  .ContainerEstrutura{
+      padding-top: 35px;
+       background-color:white;
+       background: transparentize($color: #000000, $amount: 0.9);
+       padding-bottom: 45px !important;
+
+       .btenviar{
+             width: 100%;
+             display: flex;
+             justify-content: center;
+
+             .bt{
+                color: white;
+                background-color: blue;
+                border-radius: 20px;
+                width: 150px;
+                height: 50px;
+             }
+       }
+
+        .DadosFinanceiro{
+            padding-left: 10%;
+            
+            // padding-top: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around !important;       
+            align-items: center;    
+
+            .cardImage{
+              width: 40% !important;
+              padding-left: 100px;
+              display: flex;
+              justify-content: center;
+            }
+
+            .cardDetails{ 
+                // background-color: ;
+                width: 60% !important;
+                           padding-left: 10%;
+
+                .cardNumber{
+                     width: 70%;
+                }
+
+                .cardName{
+                     width: 70%;
+                }
+
+                .cardExpire{
+                     width: 30%;
+                }            
+                
+               .cardCvc{
+                     width: 20%;
+                }            
+            }
+        }
+            .SelectPlano{
+            padding-left: 10%;
+            display: flex;
+            justify-content: center;
+            // background-color: red;
+               width: 55%;
+             }
+
+        .DadosCadastrais{
+            padding-left: 10%;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            // justify-content: space-around !important;     
+            align-items: center;      
+
+
+
+
+            .DadosCliente{
+                width: 40% !important;
+
+
+                .emailUser{
+                    width: 98% !important;
+                }
+
+                .nameUser{
+                    width: 98% !important;
+                }
+
+                .Dtnasci{
+                    width: 49% !important;
+                }
+
+                .sex{
+                width: 99% !important;
+                   }
+
+                .cpf{
+                    width: 48% !important;
+                }
+
+                .endereco{
+                    width: 98%;
+                }
+                .numero{
+                    width: 20%;
+                }
+                .complemento{
+                    width: 77%;
+                }
+                .bairro{
+                    width: 48% !important;
+                }
+                .cep{
+                    width: 49% !important;
+                }
+                .Contato{
+                    display: flex;
+                    flex-direction: row;
+
+                    .DDD{
+                        width: 20%;
+                    }
+
+                    .fone{
+                        width: 78%;
+                    }
+                }
+            }
+            .PlanoContainer{
+                  padding-right: 45px;
+                  width: 50%;
+                  display: flex;
+                  justify-content: center;
+                //   background-color: yellow;
+                  .PlanoDetails{
+                       width: 100%;
+                       display: flex;
+                       flex-direction: column;
+                       justify-content: center;
+
+                       .PlanoName{
+                           width: 100%;
+                           text-align: center;
+                           font-size: 32px;
+                           h1{
+                           color:red;
+                           }
+                           span{
+                               font-size: 32px;
+                               color: white;
+                           }
+                       }
+
+                       .PlanoRecorrencia{
+                           padding-top: 0 !important;
+                           width: 100%;
+                           text-align: center;
+                           font-size: 32px;
+                        span{
+                               color: red;
+                           }
+                       }
+                       .PlanoObs{
+                           text-align: center;
+                           font-style: italic;
+                       }
+
+                       .PlanoValue{
+                           text-align: center;
+                           font-size: 70px;
+                           font-weight: bold;
+                       }
+
+                       .PlanoDescription{
+                        text-align: center;
+                        color: white;
+                       }
+                  }
+            }
+        }
+  }
+}
+
+@media(max-width:1125px){
+
+.newPlan{
+position: absolute;
+ background: radial-gradient(#81d6f3, #b6bac5);
+  // left: 0;
+//   height: 100% !important;
+//   width: 98% !important;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  top: 0 !important ;
+  left: 0 !important;
+//   min-height: 100% !important;
+//   min-width: 100% !important;
+  z-index: 1;
+
+         .detailsFornecedor{
+            //  padding-top: 30px;
+       h1{
+           padding-left: 25px;
+           font-size: 50px;
+           color: red;
+       }
+       span{
+           color: white;
+       }
+       p{
+           padding-left: 25px;
+           color:black
+       }
+       }
+
+  .ContainerEstrutura{
+      padding-top: 35px;
+       background-color:white;
+       background: transparentize($color: #000000, $amount: 0.9);
+       padding-bottom: 45px !important;
+
+       .btenviar{
+             width: 100%;
+             display: flex;
+             justify-content: center;
+
+             .bt{
+                color: white;
+                background-color: blue;
+                border-radius: 20px;
+                width: 150px;
+                height: 50px;
+             }
+       }
+
+        .DadosFinanceiro{
+            padding-left: 10%;
+            
+            // padding-top: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around !important;       
+            align-items: center;    
+
+            .cardImage{
+              width: 40% !important;
+              padding-left: 100px;
+              display: flex;
+              justify-content: center;
+            }
+
+            .cardDetails{ 
+                // background-color: ;
+                width: 60% !important;
+                           padding-left: 10%;
+
+                .cardNumber{
+                     width: 82%;
+                }
+
+                .cardName{
+                     width: 82%;
+                }
+
+                .cardExpire{
+                     width: 40%;
+                }            
+                
+               .cardCvc{
+                     width: 30%;
+                }            
+            }
+        }
+            .SelectPlano{
+            padding-left: 10% !important;
+            display: flex;
+            justify-content: center;
+            // background-color: red;
+               width: 55%;
+             }
+
+        .DadosCadastrais{
+            padding-left: 10%;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            // justify-content: space-around !important;     
+            align-items: center;      
+
+
+
+
+            .DadosCliente{
+                width: 45% !important;
+
+
+                .emailUser{
+                    width: 90% !important;
+                }
+
+                .nameUser{
+                    width: 90% !important;
+                }
+
+                .Dtnasci{
+                    width: 40% !important;
+                }
+
+                .cpf{
+                    width: 49% !important;
+                }
+                .sex{
+                    width: 91% !important;
+                }
+
+                .endereco{
+                    width: 91%;
+                }
+                .numero{
+                    width: 30%;
+                }
+                .complemento{
+                    width: 60%;
+                }
+                .bairro{
+                    width: 40% !important;
+                }
+                .cep{
+                    width: 50% !important;
+                }
+                .Contato{
+                    display: flex;
+                    flex-direction: row;
+
+                    .DDD{
+                        width: 20%;
+                    }
+
+                    .fone{
+                        width: 70%;
+                    }
+                }
+            }
+            .PlanoContainer{
+                  padding-right: 45px;
+                  width: 50%;
+                  display: flex;
+                  justify-content: center;
+                //   background-color: yellow;
+                  .PlanoDetails{
+                       width: 100%;
+                       display: flex;
+                       flex-direction: column;
+                       justify-content: center;
+
+                       .PlanoName{
+                           width: 100%;
+                           text-align: center;
+                           font-size: 32px;
+                           h1{
+                           color:red;
+                           }
+                           span{
+                               font-size: 32px;
+                               color: white;
+                           }
+                       }
+
+                       .PlanoRecorrencia{
+                           padding-top: 0 !important;
+                           width: 100%;
+                           text-align: center;
+                           font-size: 32px;
+                        span{
+                               color: red;
+                           }
+                       }
+                       .PlanoObs{
+                           text-align: center;
+                           font-style: italic;
+                       }
+
+                       .PlanoValue{
+                           text-align: center;
+                           font-size: 70px;
+                           font-weight: bold;
+                       }
+
+                       .PlanoDescription{
+                        text-align: center;
+                        color: white;
+                       }
+                  }
+            }
+        }
+  }
+}
+}
+
+ @media(max-width:907px){
+
+.newPlan{
+ position: absolute;
+ background: radial-gradient(#81d6f3, #b6bac5);
+  // left: 0;
+//   height: 100% !important;
+//   width: 98% !important;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  top: 0 !important ;
+  left: 0 !important;
+//   min-height: 100% !important;
+//   min-width: 100% !important;
+  z-index: 1;
+
+         .detailsFornecedor{
+            //  padding-top: 30px;
+       h1{
+           padding-left: 25px;
+           font-size: 50px;
+           color: red;
+       }
+       span{
+           color: white;
+       }
+       p{
+           padding-left: 25px;
+           color:black
+       }
+       }
+
+  .ContainerEstrutura{
+      padding-top: 35px;
+      padding-left: 5%;
+      padding-right: 5%;
+    //    background-color:white;
+    //    text-align: center;
+       background: transparentize($color: #000000, $amount: 0.9);
+       padding-bottom: 45px !important;
+
+       .btenviar{
+             width: 100%;
+             display: block;
+            //  text-align: center;
+            //  justify-content: center;
+
+             .bt{
+                color: white;
+                background-color: blue;
+                border-radius: 20px;
+                width: 150px;
+                height: 50px;
+             }
+       }
+
+        .DadosFinanceiro{
+            padding-left: 0 !important;
+            
+            // padding-top: 10px;
+            width: 100%;
+            display: block;
+            // flex-direction: row;
+            // justify-content: space-around !important;       
+            // align-items: center;    
+
+            .cardImage{
+              width: 100% !important;
+              display: flex !important;
+              justify-content: center !important;
+            //   padding-left: 100px;
+               padding: 0 !important;
+               padding-top: 15px !important;
+            display: block;
+            //   justify-content: center;
+            }
+
+            .cardDetails{ 
+                // background-color: ;
+                width: 100% !important;
+                padding-left: 0 !important;
+                padding-top: 15px !important;
+
+                .cardNumber{
+                     width: 98%;
+                }
+
+                .cardName{
+                     width: 98%;
+                }
+
+                .cardExpire{
+                     width: 60%;
+                }            
+                
+               .cardCvc{
+                     width: 37%;
+                }            
+            }
+        }
+            .SelectPlano{
+            padding-left: 0 !important;
+            display: block;
+            // justify-content: center;
+            // background-color: red;
+               width: 100%;
+             }
+
+        .DadosCadastrais{
+            padding-left: 0 !important;
+            width: 100%;
+            display: block !important;
+   
+
+            .DadosCliente{
+                width: 98% !important;
+
+
+                .emailUser{
+                    width: 98% !important;
+                }
+
+                .nameUser{
+                    width: 98% !important;
+                }
+
+                .Dtnasci{
+                    width: 98% !important;
+                }
+                .sex{
+                width: 99% !important;
+                   }
+                .cpf{
+                    width: 98% !important;
+                }
+
+                .endereco{
+                    width: 98%;
+                }
+                .numero{
+                    width: 20%;
+                }
+                .complemento{
+                    width: 77%;
+                }
+                .bairro{
+                    width: 98% !important;
+                }
+                .cep{
+                    width: 98% !important;
+                }
+                .Contato{
+                    // display: flex;
+                    // flex-direction: row;
+
+                    .DDD{
+                        width: 20%;
+                    }
+
+                    .fone{
+                        width: 77%;
+                    }
+                }
+            }
+            .PlanoContainer{
+                  padding-right: 0px !important;
+                  
+                  width: 100% !important;
+                  display: block !important;
+                //   justify-content: center;
+                //   background-color: yellow;
+                  .PlanoDetails{
+                       width: 100%;
+                    display: block;
+                    //    flex-direction: column;
+                    //    justify-content: center;
+
+                       .PlanoName{
+                           width: 100%;
+                           text-align: center;
+                           font-size: 32px;
+                           h1{
+                           color:red;
+                           }
+                           span{
+                               font-size: 32px;
+                               color: white;
+                           }
+                       }
+
+                       .PlanoRecorrencia{
+                           padding-top: 0 !important;
+                           width: 100%;
+                           text-align: center;
+                           font-size: 32px;
+                        span{
+                               color: red;
+                           }
+                       }
+                       .PlanoObs{
+                           text-align: center;
+                           font-style: italic;
+                       }
+
+                       .PlanoValue{
+                           text-align: center;
+                           font-size: 70px;
+                           font-weight: bold;
+                       }
+
+                       .PlanoDescription{
+                        text-align: center;
+                        color: white;
+                       }
+                  }
+            }
+        }
+  }
+}
+}

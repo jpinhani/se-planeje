@@ -18,10 +18,10 @@ const menu = (
             <UserOutlined />
         Configurações
       </Menu.Item>
-        <Menu.Item key="2">
+        <Link to='/novoPlano'>   <Menu.Item key="2">
             <UserOutlined />
-        Plano
-      </Menu.Item>
+            Plano
+        </Menu.Item> </Link>
         <Menu.Item key="3">
             <UserOutlined />
         Perfil

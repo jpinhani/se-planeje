@@ -138,7 +138,7 @@ class SiderDemo extends React.Component {
 
                             <Menu.Item key="12">
                                 <SyncOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
-                                <Link to='/SelectTransferencia'>Transferências</Link></Menu.Item>
+                                <Link to='/novoPlano'>Transferências</Link></Menu.Item>
                         </SubMenu>
 
                         <SubMenu

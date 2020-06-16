@@ -142,7 +142,7 @@ class ModalCategory extends React.Component {
 
             const endpoint = `${urlBackend}api/categorias/${userID()}`
 
-            const novosDados = await axios.get(endpoint)
+            const novosDados = await axios.get(endpoint, config())
 
             if (novosDados.status === 200) {
                 message.success(" Categoria Editada Com Sucesso", 5);

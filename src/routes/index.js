@@ -24,6 +24,7 @@ import Resumo from '../pages/Resumo'
 import SelectReceitaMeta from '../pages/SelectReceitaMeta'
 import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 import SelectTransferencia from '../pages/SelectTransferencias'
+import NewPlano from '../pages/NewPlano'
 
 const { Content } = Layout;
 
@@ -56,6 +57,7 @@ class routesSePlaneje extends React.Component {
               style={{ padding: '30px' }}>
               <Switch name='http://localhost:3000'>
                 <PublicRoute exact path='/login' component={Login} />
+                <PublicRoute exact path='/novoPlano' component={NewPlano} />
                 <PrivateRoute exact path='/selectconta' component={SelectConta} />
                 <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
                 <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
