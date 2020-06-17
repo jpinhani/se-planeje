@@ -239,8 +239,8 @@ export default () => {
                                             </div>
 
                                             {novo.Tipo === 'Despesa' ?
-                                                < PagarDespesa back={back.bind(this)} data={novo} /> :
-                                                < PagarReceita back={back.bind(this)} data={novo} />}
+                                                <PagarDespesa back={back.bind(this)} data={novo} /> :
+                                                <PagarReceita back={back.bind(this)} data={novo} />}
                                         </li>)}
                             </div>
                         </div>

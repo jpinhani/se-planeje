@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Cards from 'react-credit-cards';
-import { Input, Button, Select } from 'antd';
+import { Input, Button, Select, Result } from 'antd';
 // import { InsertRequest } from '../../components/crudSendAxios/crud'
 import { urlBackend } from '../../services/urlBackEnd'
 import axios from 'axios'
@@ -84,6 +84,24 @@ export default () => {
 
 
 
+    const resultgod = <Result
+        status="success"
+        title="Sua Transação foi concluida com Sucesso!"
+        subTitle="Em minutos você receberá detalhes da assinatura + credenciais para primeiro acesso"
+        extra={
+            <Button type="primary" key="console" onClick={() => window.open("https://sys.seplaneje.com")}>
+                Ir para Login
+        </Button>
+        }
+    />
+
+    const resultbad = <Result
+        status="warning"
+        title="Sua Transação NÃO foi concluida!"
+        subTitle="Verifique suas informações, em caso de duvida entre em contato com contato@seplaneje.com"
+
+    />
+
     const handleInputChange = (e) => {
 
         if (!isNaN(e.target.value) === true) {
@@ -118,6 +136,27 @@ export default () => {
         // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
     }
 
+    function resultTransaction() {
+        setPlano(resultgod)
+        setCvc('');
+        setExpiry('');
+        setFocus('');
+        setName('');
+        setNumber('');
+        setCustomerEmail('');
+        setCustomerName('');
+        setCustomerNumber('');
+        setCustomerAddresStreet('');
+        setCustomerAddresStreetNUmber('');
+        setCustomerAddresComplementary('');
+        setCustomerAddresNeighborhood('');
+        setCustomerAddresZipCode('');
+        setCustomerPhoneDDD('');
+        setCustomerPhoneNumber('');
+        setCustomerSex('');
+        setCustomerBornAt('');
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -144,8 +183,13 @@ export default () => {
         const endpointAPI = `${urlBackend}api/pagarme/assinatura`
         const result = await axios.post(endpointAPI, body)
 
-        console.log(result)
+        if (result.data.StatusTransac === 200) {
+            resultTransaction()
+        } else {
+            setPlano(resultbad)
+        }
     }
+
 
 
     return (
@@ -186,6 +230,7 @@ export default () => {
                             type="email"
                             required
                             name="name"
+                            value={CustomerEmail}
                             className="emailUser"
                             placeholder="Informe o E-mail ex: fulano@seplaneje.com"
                             onChange={(valor) => setCustomerEmail(valor.target.value)}
@@ -195,6 +240,7 @@ export default () => {
                             type="text"
                             required
                             name="nameUser"
+                            value={CustomerName}
                             className="nameUser"
                             placeholder="Informe seu Nome"
                             onChange={(valor) => setCustomerName(valor.target.value)}
@@ -205,6 +251,7 @@ export default () => {
                             required
                             title='Somente numeros'
                             name="cpf"
+                            value={CustomerNumber}
                             className="cpf"
                             placeholder="Informe o CPF"
                             onChange={(valor) => setCustomerNumber(valor.target.value)}
@@ -215,6 +262,7 @@ export default () => {
                             type="date"
                             required
                             name="Dtnasci"
+                            value={CustomerBornAt}
                             className="Dtnasci"
                             placeholder="Data Nascimento"
                             onChange={(valor) => setCustomerBornAt(valor.target.value)}
@@ -237,6 +285,7 @@ export default () => {
                             required
                             type="text"
                             name="Endereco"
+                            value={CustomerAddresStreet}
                             placeholder="Informe o seu endereço"
                             onChange={(valor) => setCustomerAddresStreet(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -246,6 +295,7 @@ export default () => {
                             required
                             type="text"
                             name="numEndereco"
+                            value={CustomerAddresStreetNumber}
                             placeholder="nº"
                             onChange={(valor) => setCustomerAddresStreetNUmber(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -255,6 +305,7 @@ export default () => {
                             required
                             type="text"
                             name="complemento"
+                            value={CustomerAddresComplementary}
                             placeholder="Complemento"
                             onChange={(valor) => setCustomerAddresComplementary(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -264,6 +315,7 @@ export default () => {
                             required
                             type="text"
                             name="Bairro"
+                            value={CustomerAddresNeighborhood}
                             placeholder="Bairro"
                             onChange={(valor) => setCustomerAddresNeighborhood(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -273,6 +325,7 @@ export default () => {
                             required
                             type="text"
                             name="Cep"
+                            value={CustomerAddresZipCode}
                             placeholder="Cep"
                             onChange={(valor) => setCustomerAddresZipCode(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -282,6 +335,7 @@ export default () => {
                                 required
                                 type="tel"
                                 name="ddd"
+                                value={CustomerPhoneDDD}
                                 placeholder="DDD"
                                 onChange={(valor) => setCustomerPhoneDDD(valor.target.value)}
                                 onFocus={(vlr) => handleInputFocus(vlr)}
@@ -290,6 +344,7 @@ export default () => {
                                 required
                                 type="tel"
                                 name="telefone"
+                                value={CustomerPhoneNumber}
                                 placeholder="Informe o telefone"
                                 onChange={(valor) => setCustomerPhoneNumber(valor.target.value)}
                                 onFocus={(vlr) => handleInputFocus(vlr)}
@@ -317,6 +372,7 @@ export default () => {
                             maxLength={16}
                             type="text"
                             name="number"
+                            value={number}
                             placeholder="Card Number"
                             onChange={valor => handleInputChange(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -327,6 +383,7 @@ export default () => {
                             required
                             type="name"
                             name="name"
+                            value={name}
                             placeholder="Name on card"
                             onChange={(valor) => handleInputChangeName(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -339,6 +396,7 @@ export default () => {
                             maxLength={4}
                             type="tel"
                             name="expiry"
+                            value={expiry}
                             placeholder="Card expiry date"
                             onChange={(valor) => handleInputChangeValid(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
@@ -351,7 +409,8 @@ export default () => {
                             maxLength={3}
                             type="tel"
                             name="cvc"
-                            placeholder="cvc"
+                            value={cvc}
+                            placeholder="cvv"
                             onChange={(valor) => handleInputChangeCvv(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
