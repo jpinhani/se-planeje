@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Cards from 'react-credit-cards';
 import { Input, Button, Select } from 'antd';
-import { InsertRequest } from '../../components/crudSendAxios/crud'
+// import { InsertRequest } from '../../components/crudSendAxios/crud'
+import { urlBackend } from '../../services/urlBackEnd'
+import axios from 'axios'
 
 import 'react-credit-cards/es/styles-compiled.css';
 import './styles.scss';
@@ -83,8 +85,6 @@ export default () => {
 
 
     const handleInputChange = (e) => {
-        console.log(e.target.value)
-        console.log(!isNaN(e.target.value))
 
         if (!isNaN(e.target.value) === true) {
             const { value } = e.target;
@@ -141,8 +141,10 @@ export default () => {
             CustomerBornAt: FormataStringData(CustomerBornAt)
         }
 
-        const result = await InsertRequest(body, 'api/pagarme/assinatura')
-        console.log(result.status)
+        const endpointAPI = `${urlBackend}api/pagarme/assinatura`
+        const result = await axios.post(endpointAPI, body)
+
+        console.log(result)
     }
 
 
