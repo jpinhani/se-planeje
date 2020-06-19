@@ -59,6 +59,13 @@ class ModalAcount extends React.Component {
         var data_1 = moment(body.DT_INICIO).format("YYYY/MM/DD");
         var data_2 = moment(body.DT_FIM).format("YYYY/MM/DD");
 
+        const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
+        body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
+
+        const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
+        body.DT_FIM = dataFim.format("YYYY-MM-DD")
+
+
         if (data_1 < data_2) {
             await axios.put(endpointAPI, body, config())
 
