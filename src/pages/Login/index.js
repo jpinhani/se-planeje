@@ -34,6 +34,7 @@ function Login() {
     }
 
     const response = await axios.post(endpoint, body)
+    console.log(response)
 
     if (response.data.status !== 400 && response.data.status !== 401) {
 
@@ -45,7 +46,7 @@ function Login() {
       history.push('/')
 
     } else {
-      response.data.status !== 401 ?
+      response.data.status === 401 ?
         message.error('Parece haver um problema com seu pagamento', 5) :
         message.error('Usuário ou Senha não reconhecida', 5)
     }
