@@ -183,7 +183,7 @@ class ModalCategory extends React.Component {
                     }
                 }
 
-                console.log(nivel)
+
                 this.props.listCategorys(nivel)
 
                 this.handleCancel()

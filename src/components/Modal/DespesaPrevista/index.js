@@ -70,7 +70,7 @@ class ModalExpense extends React.Component {
 
     handleDataPrevisto(date, dateString) {
         this.setState({ ...this.state, dataPrevistaInput: dateString })
-        console.log(dateString)
+
     }
 
     handleCartao(card) {
@@ -79,12 +79,10 @@ class ModalExpense extends React.Component {
 
     handleParcelas(num) {
         this.setState({ ...this.state, parcelasInput: num })
-        console.log('Parcela Inserida', num)
     }
 
     handleCategoria(Categorys) {
         this.setState({ ...this.state, categoriaInput: Categorys })
-        console.log('Categoria Inserida', Categorys)
     }
 
     handledescricaoDespesa(despesa) {

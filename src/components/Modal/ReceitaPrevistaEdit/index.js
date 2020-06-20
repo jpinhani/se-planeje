@@ -74,17 +74,14 @@ class ModalRevenue extends React.Component {
 
     handleDataPrevisto(date, dateString) {
         this.setState({ ...this.state, dataPrevistaInput: dateString })
-        console.log(dateString)
     }
 
     handleParcelas(num) {
         this.setState({ ...this.state, parcelasInput: num })
-        console.log('Parcela Inserida', num)
     }
 
     handleCategoria(Categorys) {
         this.setState({ ...this.state, categoriaInput: Categorys })
-        console.log('Categoria Inserida', Categorys)
     }
 
     handledescricaoReceita(receita) {
@@ -144,7 +141,6 @@ class ModalRevenue extends React.Component {
         } else {
             const data = moment(body.dataPrevista, "DD/MM/YYYY");
             body.dataPrevista = data.format("YYYY-MM-DD")
-            console.log('body.dataPrevista', body.dataPrevista)
         }
 
 

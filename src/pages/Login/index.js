@@ -34,7 +34,7 @@ function Login() {
     }
 
     const response = await axios.post(endpoint, body)
-    console.log(response)
+
 
     if (response.data.status !== 400 && response.data.status !== 401) {
 

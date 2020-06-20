@@ -14,12 +14,12 @@ function filtroData(despesas, tipo, dtInicio, dtFim) {
                     filtroData.DT_PREVISTO <= dtFim
                 break;
             case 'cartaoRealizado':
-                // console.log('filtroData.dataFatura', filtroData.dataFatura)
+
                 rs = moment(filtroData.dataFatura) >= moment(dtInicio) &&
                     moment(filtroData.dataFatura) <= moment(dtFim)
                 break;
             case 'cartaoPrevisto':
-                // console.log('filtroData.dataFatura', filtroData.dataFatura)
+
                 rs = moment(filtroData.dataFatura).format("YYYY-MM-DD") >= moment(dtInicio).format("YYYY-MM-DD") &&
                     moment(filtroData.dataFatura).format("YYYY-MM-DD") <= moment(dtFim).format("YYYY-MM-DD")
                 break;

@@ -5,8 +5,6 @@ const addRevenue = revenue => ({
 
 const listRevenues = revenues => {
 
-    console.log('action', revenues)
-
     return ({
         type: 'LIST_REVENUE',
         payload: revenues

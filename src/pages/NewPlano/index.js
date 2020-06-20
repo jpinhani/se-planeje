@@ -78,7 +78,7 @@ export default () => {
 
 
     const handleInputFocus = (e) => {
-        // console.log(e.target.name)
+
         setFocus(e.target.name);
     }
 

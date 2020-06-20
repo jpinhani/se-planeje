@@ -5,8 +5,6 @@ const addExpense = expenseReal => ({
 
 const listExpensesPaga = expenseReals => {
 
-    console.log('action', expenseReals)
-
     return ({
         type: 'LIST_EXPENSEREAL',
         payload: expenseReals

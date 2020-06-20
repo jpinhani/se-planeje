@@ -17,7 +17,6 @@ export default (props) => {
         e ? setDeleteDespesa('Deletar Todas Despesas do grupo a partir da Selecionada') :
             setDeleteDespesa('Deletar Despesa Selecionada');
 
-        console.log(deleteDespesa)
     }
 
     async function handleDelete() {

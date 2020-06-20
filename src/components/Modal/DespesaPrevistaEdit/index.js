@@ -54,7 +54,7 @@ class ModalExpense extends React.Component {
         this.handleDayValue = this.handleDayValue.bind(this)
     }
 
-    async  showModal() {
+    async showModal() {
 
         const resultCategoria = await loadCategoria()
         const resultCartao = await loadCartao()
@@ -87,7 +87,6 @@ class ModalExpense extends React.Component {
 
     handleDataPrevisto(date, dateString) {
         this.setState({ ...this.state, dataPrevistaInput: dateString })
-        console.log(dateString)
     }
 
     handleCartao(card) {
@@ -96,12 +95,10 @@ class ModalExpense extends React.Component {
 
     handleParcelas(num) {
         this.setState({ ...this.state, parcelasInput: num })
-        console.log('Parcela Inserida', num)
     }
 
     handleCategoria(Categorys) {
         this.setState({ ...this.state, categoriaInput: Categorys })
-        console.log('Categoria Inserida', Categorys)
     }
 
     handledescricaoDespesa(despesa) {
@@ -165,7 +162,6 @@ class ModalExpense extends React.Component {
         } else {
             const data = moment(body.dataPrevista, "DD/MM/YYYY");
             body.dataPrevista = data.format("YYYY-MM-DD")
-            console.log('body.dataPrevista', body.dataPrevista)
         }
 
 

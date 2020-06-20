@@ -29,7 +29,7 @@ class SelectCategoria extends React.Component {
 
     async deleteAcount(categoriaId) {
         const verify = await DeleteRequest(categoriaId, 'api/categorias')
-        console.log(verify)
+
         verifySend(verify, 'DELETE', 'Categoria')
 
         if (verify === 200)

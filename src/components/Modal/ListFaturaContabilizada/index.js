@@ -35,12 +35,7 @@ class listCard extends React.Component {
     async requestApi() {
         const list = await GetRequest('api/fatura/detalhe')
 
-
-        console.log('list', list)
-        console.log('cartao atual', this.state.fatura)
         const listNova = list.filter((data) => data.ID_FATURA === this.state.fatura)
-
-        console.log('listNova', listNova)
 
         const timeline = listNova.map((data, i) =>
             <Timeline.Item key={i} >{data.DT_CREDITO2 + ' - ' + data.DESCR_DESPESA + ' - ' + data.VL_REAL2}</Timeline.Item>

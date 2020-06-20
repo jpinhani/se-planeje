@@ -64,7 +64,6 @@ function EditarReceita(props) {
             status: 'Pagamento Realizado',
         }
 
-        console.log('body', body)
 
         const data = moment(body.dataReal, "DD/MM/YYYY");
         body.dataReal = data.format("YYYY-MM-DD")

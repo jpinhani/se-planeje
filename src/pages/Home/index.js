@@ -1,9 +1,8 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import Chart from "chart.js";
-// import { useDispatch, useSelector } from 'react-redux';
 import { GetRequest } from '../../components/crudSendAxios/crud';
 import { SaldoConta, groupByConta } from '../../components/SaldoConta';
-import { SaldoCategoria } from '../../components/SaldoCategoria';
+import { SaldoCategoria, hierarquia } from '../../components/SaldoCategoria';
 
 import { proximosLancamentosDespesa, proximosLancamentosReceita } from '../../components/ProximosLancamentos';
 
@@ -27,6 +26,7 @@ export default () => {
     const [itens, setItens] = useState(false)
 
     const chartContainer = useRef(null);
+    const [categorias, setCategoria] = useState([]);
     const chartContainer1 = useRef(null);
     const [grafico, setGrafico] = useState(null);
 
@@ -69,7 +69,7 @@ export default () => {
     }, [])
 
     const ChartConfig1 = useCallback((dadosGrafico) => {
-        console.log(dadosGrafico)
+
         const dataGrafico = dadosGrafico.map((valor) => valor.Valor)
         const corGrafico = dadosGrafico.map((valor) => gera_cor())
         const labelsGrafico = dadosGrafico.map((valor) => valor.Conta)
@@ -101,10 +101,46 @@ export default () => {
         return rs
     }, [])
 
+    const novosDados = useCallback(async () => {
+        const cat = await GetRequest('api/categorias')
+        setCategoria(cat);
+    }, [])
+
+
+    useEffect(() => {
+        novosDados()
+    }, [novosDados])
+
+    const getcartao = useCallback(async () => await GetRequest('api/cartoes'), [])
+
     const requestApi = useCallback(async () => {
         const despesas = await GetRequest('api/chartDespesa');
         const receitas = await GetRequest('api/chartReceita');
         const transferencias = await GetRequest('api/transferencia');
+        const cartao = await getcartao();
+
+        // yy + '-' + mm + '-' + dd + 'T03:00:00.000Z'
+        const visaoData = [{
+            DT_INICIO: '2020-05-01T03:00:00.000Z',
+            DT_FIM: '2020-06-20T03:00:00.000Z'
+        }]
+
+        const dados1 = SaldoCategoria(despesas, visaoData, 'REAL', cartao, categorias);
+        const nivel3 = categorias.filter(filtro => filtro.NIVEL === 3 &&
+            filtro.ENTRADA === 1).map((data) => {
+                return { ...data, Categoria: data.DESCR_CATEGORIA }
+            })
+
+        const nivel4 = categorias.filter(filtro => filtro.NIVEL === 4 &&
+            filtro.ENTRADA === 1).map((data) => {
+                return { ...data, Categoria: data.DESCR_CATEGORIA }
+            })
+
+        const nivel5 = categorias.filter(filtro => filtro.NIVEL === 5 &&
+            filtro.ENTRADA === 1).map((data) => {
+                return { ...data, Categoria: data.DESCR_CATEGORIA }
+            })
+        const dadosGrafico = hierarquia(dados1, nivel3, nivel4, nivel5)
 
         /* Saldo Atual das Contas */
         const SaldoDespesa = SaldoConta(despesas, 'Despesa', moment());
@@ -126,7 +162,7 @@ export default () => {
         const NextLancamentos = [...nextDespesa, ...nextReceita]
         setNextLanc(NextLancamentos);
 
-        const dadosGrafico = SaldoCategoria(despesas)
+        // const dadosGrafico = SaldoCategoria(despesas)
 
         if (chartContainer && chartContainer.current) {
             const newChartInstance = new Chart(chartContainer.current, ChartConfig(dadosGrafico));
@@ -137,7 +173,7 @@ export default () => {
             const newChartInstance = new Chart(chartContainer1.current, ChartConfig1(SaldoFinal));
             setGrafico(newChartInstance)
         }
-    }, [chartContainer, ChartConfig, ChartConfig1])
+    }, [chartContainer, ChartConfig, ChartConfig1, getcartao, categorias])
 
     useEffect(() => {
         requestApi()
@@ -247,7 +283,7 @@ export default () => {
                     </div>
 
                     <div className='containerDiv1'>
-                        <center> <h1 title='Exibe o valor % Realizado conforme utiliação do sistema'>Comportamento de Gastos</h1></center>
+                        <center> <h1 title='Exibe o valor % Realizado conforme utiliação do sistema'>% Comportamento de Gastos</h1></center>
                         <div>
                             <canvas
                                 id={grafico}

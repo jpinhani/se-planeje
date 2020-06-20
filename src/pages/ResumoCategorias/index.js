@@ -16,7 +16,6 @@ export default (props) => {
     const [cartao, setCartao] = useState([]);
     const [categorias, setCategoria] = useState([]);
     const [tree, setTree] = useState([]);
-    // const [treeRevenue, setTreeRevenue] = useState([]);
     const [cenario, setCenario] = useState([])
 
     const columns = [
