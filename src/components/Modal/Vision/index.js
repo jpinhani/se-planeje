@@ -55,8 +55,8 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        var data_1 = moment(body.DT_INICIO).format("YYYY/MM/DD");
-        var data_2 = moment(body.DT_FIM).format("YYYY/MM/DD");
+        var data_1 = moment(body.DT_INICIO).format("YYYY-MM-DD");
+        var data_2 = moment(body.DT_FIM).format("YYYY-MM-DD");
 
         const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
         body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
@@ -64,7 +64,7 @@ class ModalAcount extends React.Component {
         const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
         body.DT_FIM = dataFim.format("YYYY-MM-DD")
 
-        if (data_1 < data_2) {
+        if (moment(data_1) < moment(data_2)) {
             await axios.post(endpointAPI, body, config())
 
             const userID = localStorage.getItem('userId')
@@ -97,13 +97,13 @@ class ModalAcount extends React.Component {
                     >
                         <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
                         <DatePicker style={{ width: '100%' }}
-                            onChange={(date, dateString) => this.setState({ ...this.state, startDate: dateString })}
+                            onChange={(date) => this.setState({ ...this.state, startDate: date })}
                             placeholder="Data Executada"
                             defaultValue={moment(new Date(), dateFormat)}
                             format={dateFormat}
                         />
                         <DatePicker style={{ width: '100%' }}
-                            onChange={(date, dateString) => this.setState({ ...this.state, finalDate: dateString })}
+                            onChange={(date) => this.setState({ ...this.state, finalDate: date })}
                             placeholder="Data Executada"
                             defaultValue={moment(new Date(), dateFormat)}
                             format={dateFormat}
