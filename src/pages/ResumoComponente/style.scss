@@ -51,6 +51,15 @@
   background: LightCyan;
 }
 
+.containerSaldoPeriodo{
+   margin-top: 15px !important;
+   display: flex !important;
+   flex-direction: row !important;
+   justify-content: space-between !important;
+   padding-left: 20px !important;
+   padding-right: 20px !important;
+   background-color: white;
+}
 
 .containerDivDataTab li {
    display: grid;

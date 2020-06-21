@@ -6,6 +6,7 @@ const SaldoTransferencia = (listaArray, tipo, dataLimite) => {
         moment(filtro.DATA_TRANSFERENCIA) <= moment(dataLimite)).reduce((acum, atual, i) => {
             let objeto = acum
             objeto[i] = {
+                idConta: tipo === 'Receita' ? atual.ID_CONTACREDITO : atual.ID_CONTADEBITO,
                 Conta: tipo === 'Receita' ? atual.CONTA_CREDITO : atual.CONTA_DEBITO,
                 Valor: atual.VALOR
             }

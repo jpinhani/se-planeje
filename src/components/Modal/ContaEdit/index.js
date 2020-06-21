@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Form } from 'antd'
+import moment from 'moment';
+import { Icon, Modal, Input, Form, InputNumber, DatePicker } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../services/urlBackEnd'
 
@@ -11,6 +12,8 @@ import { verifySend } from '../../verifySendAxios/index.js'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+const dateFormat = 'DD/MM/YYYY'
+
 class ModalAcount extends React.Component {
 
     constructor(props) {
@@ -18,11 +21,14 @@ class ModalAcount extends React.Component {
 
         this.state = {
             visible: false,
-            descrConta: this.props.data.DESCR_CONTA
+            descrConta: this.props.data.DESCR_CONTA,
+            dataSaldo: this.props.data.DTSALDO ? moment(this.props.data.DTSALDO) : '',
+            saldo: this.props.data.SALDO
         }
 
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
+        this.handleData = this.handleData.bind(this)
         this.handleDescrConta = this.handleDescrConta.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -37,6 +43,11 @@ class ModalAcount extends React.Component {
 
     handleDescrConta(event) {
         this.setState({ ...this.state, descrConta: event.target.value })
+    }
+
+    handleData(date, dateString) {
+        this.setState({ ...this.state, dataSaldo: dateString })
+
     }
 
     handleSubmit = e => {
@@ -54,8 +65,14 @@ class ModalAcount extends React.Component {
             id: this.props.data.ID,
             idUser: userID(),
             descrConta: this.state.descrConta,
+            data: this.state.dataSaldo,
+            saldo: this.state.saldo,
             status: "Ativo"
         }
+
+
+        const data = moment(body.data, "DD/MM/YYYY").format("YYYY-MM-DD");
+        body.data = data
 
         const resultStatus = await UpdateRequest(body, 'api/contas')
 
@@ -66,7 +83,6 @@ class ModalAcount extends React.Component {
         this.props.listAcounts(Data)
 
         this.handleCancel()
-        // this.props.form.resetFields()
     }
 
     render() {
@@ -90,8 +106,35 @@ class ModalAcount extends React.Component {
                                 rules: [{ required: true, message: 'Por Favor, Informe a Conta!' }],
                                 initialValue: this.state.descrConta
                             })(
-                                <Input placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />)}
+                                <Input autoFocus placeholder="Informe o nome da Conta ou Fonte de Entrada e Saída" />)}
                         </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('saldo', {
+                                rules: [{ required: true, message: 'Saldo Inicial, caso não tenha informe 0' }],
+                                initialValue: this.state.saldo
+                            })(
+                                <InputNumber
+                                    style={{ width: '100%' }}
+                                    placeholder="Informe o Saldo Inicial da Conta, positivo ou negativo"
+                                    decimalSeparator=','
+                                    precision={2}
+                                    onChange={valor => this.setState({ ...this.state, saldo: valor })}
+                                />)}
+                        </Form.Item>
+                        <Form.Item style={{ width: '50%' }}
+                            onChange={this.handleData}
+                        >{getFieldDecorator('dtSaldo', {
+                            rules: [{ required: true, message: 'Por Favor, Informe a Data do Saldo!' }],
+                            initialValue: this.state.dataSaldo
+                        })(
+                            <DatePicker
+                                style={{ width: '100%' }}
+                                onChange={this.handleData}
+                                placeholder="Data Prevista"
+                                format={dateFormat}
+                            />)}
+                        </Form.Item>
+
                     </Form>
                 </Modal>
             </div >

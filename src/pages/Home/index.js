@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import Chart from "chart.js";
 import { GetRequest } from '../../components/crudSendAxios/crud';
-import { SaldoConta, groupByConta } from '../../components/SaldoConta';
+import { SaldoConta, groupByConta, SaldoInicial } from '../../components/SaldoConta';
 import { SaldoCategoria, hierarquia } from '../../components/SaldoCategoria';
 
 import { proximosLancamentosDespesa, proximosLancamentosReceita } from '../../components/ProximosLancamentos';
@@ -27,6 +27,7 @@ export default () => {
 
     const chartContainer = useRef(null);
     const [categorias, setCategoria] = useState([]);
+    const [conta, setConta] = useState([]);
     const chartContainer1 = useRef(null);
     const [grafico, setGrafico] = useState(null);
 
@@ -113,6 +114,18 @@ export default () => {
 
     const getcartao = useCallback(async () => await GetRequest('api/cartoes'), [])
 
+    const getConta = useCallback(async () => {
+        const acount = await GetRequest('api/contas')
+        setConta(acount);
+    }, [])
+
+
+    useEffect(() => {
+        getConta()
+    }, [getConta])
+
+
+
     const requestApi = useCallback(async () => {
         const despesas = await GetRequest('api/chartDespesa');
         const receitas = await GetRequest('api/chartReceita');
@@ -121,8 +134,8 @@ export default () => {
 
         // yy + '-' + mm + '-' + dd + 'T03:00:00.000Z'
         const visaoData = [{
-            DT_INICIO: '2020-05-01T03:00:00.000Z',
-            DT_FIM: '2020-06-20T03:00:00.000Z'
+            DT_INICIO: '2000-05-01T03:00:00.000Z',
+            DT_FIM: moment(new Date())
         }]
 
         const dados1 = SaldoCategoria(despesas, visaoData, 'REAL', cartao, categorias);
@@ -147,7 +160,10 @@ export default () => {
         const SaldoReceita = SaldoConta(receitas, 'Receita', moment());
         const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', moment());
         const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa', moment());
-        const SaldoFinal = groupByConta([...SaldoDespesa, ...SaldoTransfDebito, ...SaldoReceita, ...SaldoTransfCredito], 'Outro')
+        const SaldoInicialConta = SaldoInicial(conta, visaoData);
+        console.log(SaldoInicialConta)
+
+        const SaldoFinal = groupByConta([...SaldoDespesa, ...SaldoTransfDebito, ...SaldoReceita, ...SaldoTransfCredito, ...SaldoInicialConta], 'Outro')
         setContaSaldoAtual(SaldoFinal);
 
         /* Ultimos lançamentos com base nos ultimos 5 dias */
@@ -173,7 +189,7 @@ export default () => {
             const newChartInstance = new Chart(chartContainer1.current, ChartConfig1(SaldoFinal));
             setGrafico(newChartInstance)
         }
-    }, [chartContainer, ChartConfig, ChartConfig1, getcartao, categorias])
+    }, [chartContainer, ChartConfig, ChartConfig1, getcartao, categorias, conta])
 
     useEffect(() => {
         requestApi()

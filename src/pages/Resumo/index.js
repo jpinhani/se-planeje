@@ -10,7 +10,7 @@ import Categorias from '../ResumoCategorias';
 import { loadVisions } from '../../components/ListagemCombo';
 import { GetRequest } from '../../components/crudSendAxios/crud';
 
-import { SaldoConta, groupByConta } from '../../components/SaldoConta';
+import { SaldoConta, groupByConta, SaldoInicial } from '../../components/SaldoConta';
 import { SaldoTransferencia } from '../../components/SaldoTransferencias';
 
 import { Tabs, Select, DatePicker, Switch } from 'antd';
@@ -29,6 +29,7 @@ export default () => {
 
     const [listVision, setListVision] = useState([]);
     const [listCartao, setListCartao] = useState([]);
+    const [listConta, setListConta] = useState([]);
 
     const [visionInput, setVisionInput] = useState([]);
     const [visaoSetada, setVisaoSetada] = useState([]);
@@ -38,9 +39,11 @@ export default () => {
     const [listTransferencias, setListTransferencias] = useState([]);
 
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
+    const [contaSaldoPeriodo, setContaSaldoPeriodo] = useState([]);
 
     const getvision = useCallback(async () => await GetRequest('api/visions'), [])
     const getcartao = useCallback(async () => await GetRequest('api/cartoes'), [])
+    const getconta = useCallback(async () => await GetRequest('api/contas'), [])
 
     const RequestGeneral = useCallback(async () => {
         const loadVision = await loadVisions();
@@ -49,6 +52,7 @@ export default () => {
         const transferencias = await GetRequest('api/transferencia');
         const listavisao = await getvision()
         const listacartao = await getcartao();
+        const listaconta = await getconta();
 
         loadVision.pop();
         setVisions(loadVision);
@@ -59,8 +63,9 @@ export default () => {
 
         setListVision(listavisao);
         setListCartao(listacartao);
+        setListConta(listaconta);
 
-    }, [getcartao, getvision])
+    }, [getcartao, getvision, getconta])
 
     useEffect(() => {
         RequestGeneral();
@@ -73,13 +78,29 @@ export default () => {
         const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
         const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
 
+        const visaoData = [{
+            DT_INICIO: '2000-05-01T03:00:00.000Z',
+            DT_FIM: visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment()
+        }]
+
+        const SaldoInicialConta = SaldoInicial(listConta, visaoData);
+
+        const visaoDataPeriodo = [{
+            DT_INICIO: visaoSetada.length > 0 ? visaoSetada[0].DT_INICIO : moment(),
+            DT_FIM: visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment()
+        }]
+
+        const SaldoPer = SaldoInicial(listConta, visaoDataPeriodo).reduce((acum, atual) => acum + atual.Valor, 0);
+        setContaSaldoPeriodo(SaldoPer)
+
         const SaldoFinal = groupByConta([...SaldoDespesa,
         ...SaldoTransfDebito,
         ...SaldoReceita,
-        ...SaldoTransfCredito], 'Outro')
+        ...SaldoTransfCredito,
+        ...SaldoInicialConta], 'Outro')
         setContaSaldoAtual(SaldoFinal);
 
-    }, [visaoSetada])
+    }, [visaoSetada, listConta])
 
     const requestApi = useCallback(async () => {
 
@@ -165,7 +186,8 @@ export default () => {
                         cartao={listCartao}
                         visao={visaoSetada}
                         receita={listReceitas}
-                        transferencia={listTransferencias} />
+                        transferencia={listTransferencias}
+                        saldoPeriodo={contaSaldoPeriodo} />
                 </TabPane>
 
                 <TabPane tab='Despesas' key='2'>
@@ -192,7 +214,8 @@ export default () => {
                         data={listDespesas}
                         dataRevenue={listReceitas}
                         visao={visaoSetada}
-                        cartao={listCartao} />
+                        cartao={listCartao}
+                        saldoPeriodo={contaSaldoPeriodo} />
                 </TabPane>
             </Tabs>
         </div>

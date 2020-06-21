@@ -15,6 +15,7 @@ export default (props) => {
     const [visao, setVisao] = useState([]);
     const [cartao, setCartao] = useState([]);
     const [categorias, setCategoria] = useState([]);
+    const [saldoInicial, setSaldoInicial] = useState([]);
     const [tree, setTree] = useState([]);
     const [cenario, setCenario] = useState([])
 
@@ -45,6 +46,10 @@ export default (props) => {
     useEffect(() => {
         setDataRevenue(props.dataRevenue)
     }, [props.dataRevenue])
+
+    useEffect(() => {
+        setSaldoInicial(props.saldoPeriodo)
+    }, [props.saldoPeriodo])
 
     const novosDados = useCallback(async () => {
         const cat = await GetRequest('api/categorias')
@@ -81,7 +86,19 @@ export default (props) => {
         const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
         // setTreeRevenue(treeCategoryRevenue)
 
-        const Lucro = [...treeCategoryExpense, ...treeCategoryRevenue].filter(filtro => filtro.Idpai === 1)
+        const SaldoInicialPersonalizado = [{
+            Categoria: 'SALDO INICIAL',
+            // IdCategoria: ,
+            Idpai: 1,
+            // children: Lucro,
+            Valor: saldoInicial,
+            ValorPersonalizado: saldoInicial.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            })
+        }]
+
+        const Lucro = [...treeCategoryExpense, ...treeCategoryRevenue, ...SaldoInicialPersonalizado].filter(filtro => filtro.Idpai === 1)
         const SomaLucro = Lucro.reduce((acum, atual) => acum + (atual.Categoria === 'DESPESA' ? atual.Valor * (-1) : atual.Valor), 0)
         const LucroInicial = [{
             Categoria: 'LUCRO - PREJUIZO',
@@ -97,7 +114,7 @@ export default (props) => {
 
         setTree(LucroInicial)
 
-    }, [data, dataRevenue, visao, cartao, categorias, cenario])
+    }, [data, dataRevenue, visao, cartao, categorias, cenario, saldoInicial])
 
     useEffect(() => {
         requestApi()

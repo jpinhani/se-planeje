@@ -25,11 +25,13 @@ export default (props) => {
         requestApi();
     }, [requestApi])
 
+
     const ResumoSePlaneje = useCallback(async () => {
 
         const visaoSetada = props.visao;
         const despesas = props.despesa;
         const cartaoListagem = props.cartao;
+        const saldoPeriodo = props.saldoPeriodo;
 
         const despesaReal = SomarPeriodo(GeraDespesas(despesas, cartaoListagem, visaoSetada, true));
         const despesaPrevista = SomarPeriodo(GeraDespesas(despesas, cartaoListagem, visaoSetada, false));
@@ -74,13 +76,16 @@ export default (props) => {
             L_REAL: ACUM_RECEITA_REAL - ACUM_DESPESA_REAL,
             L_FORECAST: ACUM_RECEITA_FORECAST - ACUM_DESPESA_FORECAST,
             S_DESPESA: ACUM_DESPESA_FORECAST - ACUM_DESPESA_REAL,
-            S_RECEITA: ACUM_RECEITA_FORECAST - ACUM_RECEITA_REAL
+            S_RECEITA: ACUM_RECEITA_FORECAST - ACUM_RECEITA_REAL,
+            F_PREVISTO: ACUM_RECEITA_PREVISTA - ACUM_DESPESA_PREVISTA + saldoPeriodo,
+            F_REAL: ACUM_RECEITA_REAL - ACUM_DESPESA_REAL + saldoPeriodo,
+            F_FORECAST: ACUM_RECEITA_FORECAST - ACUM_DESPESA_FORECAST + saldoPeriodo,
+            SALDO_INICIAL: saldoPeriodo
         }
 
         setResumo(ResumoFinal)
 
-    }, [props.visao, props.despesa, props.cartao, props.receita])
-
+    }, [props.visao, props.despesa, props.cartao, props.receita, props.saldoPeriodo])
 
     useEffect(() => {
         ResumoSePlaneje();
@@ -179,6 +184,38 @@ export default (props) => {
                                     }) : 'R$ 0,00'}</li>
                             </div>
                         </div>
+                        {resumo.SALDO_INICIAL ? <div className="containerSaldoPeriodo">
+                            <div><strong>Saldo Existente no Período:</strong></div>
+                            <div>{resumo.SALDO_INICIAL ? resumo.SALDO_INICIAL.toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }) : 'R$ 0,00'}</div>
+                        </div> : <p />}
+
+                        {resumo.SALDO_INICIAL ? <div className="containerSaldoPeriodo">
+                            <div style={{ textAlign: 'right' }}><strong>Final Previsto:</strong></div>
+                            <div>{resumo.F_PREVISTO ? resumo.F_PREVISTO.toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }) : 'R$ 0,00'}</div>
+                        </div> : <p />}
+
+                        {resumo.SALDO_INICIAL ? <div className="containerSaldoPeriodo">
+                            <div style={{ textAlign: 'right' }}><strong>Final Real:</strong></div>
+                            <div>{resumo.F_REAL ? resumo.F_REAL.toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }) : 'R$ 0,00'}</div>
+                        </div> : <p />}
+
+                        {resumo.SALDO_INICIAL ? <div className="containerSaldoPeriodo">
+                            <div style={{ textAlign: 'right' }}><strong>Final Forecast:</strong></div>
+                            <div>{resumo.F_FORECAST ? resumo.F_FORECAST.toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }) : 'R$ 0,00'}</div>
+                        </div> : <p />}
+
                     </div>
                 </div>
             </ul >
