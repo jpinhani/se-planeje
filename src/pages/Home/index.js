@@ -17,7 +17,8 @@ import PagarReceita from '../../components/Modal/ReceitaMeta'
 
 import './styles.scss'
 
-
+let newChartInstance = null;
+let newChartInstance2 = null;
 export default () => {
 
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
@@ -83,7 +84,7 @@ export default () => {
                     backgroundColor: corGrafico,
                     borderColor: corGrafico,
                     borderWidth: 1,
-                    label: ['Categorias'],
+                    label: ['SALDO EM CONTAS'],
                 }],
                 labels: labelsGrafico
             }, options: {
@@ -179,15 +180,16 @@ export default () => {
         setNextLanc(NextLancamentos);
 
         // const dadosGrafico = SaldoCategoria(despesas)
-
         if (chartContainer && chartContainer.current) {
-            const newChartInstance = new Chart(chartContainer.current, ChartConfig(dadosGrafico));
+            if (newChartInstance) newChartInstance.destroy()
+            newChartInstance = new Chart(chartContainer.current, ChartConfig(dadosGrafico));
             setGrafico(newChartInstance)
         }
 
         if (chartContainer1 && chartContainer1.current) {
-            const newChartInstance = new Chart(chartContainer1.current, ChartConfig1(SaldoFinal));
-            setGrafico(newChartInstance)
+            if (newChartInstance2) newChartInstance2.destroy()
+            newChartInstance2 = new Chart(chartContainer1.current, ChartConfig1(SaldoFinal));
+            setGrafico(newChartInstance2)
         }
     }, [chartContainer, ChartConfig, ChartConfig1, getcartao, categorias, conta])
 
