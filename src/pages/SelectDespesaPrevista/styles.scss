@@ -6,7 +6,15 @@
     // background-color: red !important;
 }
 
+.DetalhesBotoes{
+  // background-color: red;
+  width: 60px;
+}
 
+.DetalhesBotoesGrid{
+    display: flex;
+    justify-content: space-between;   
+}
 /* Table Base */
 
 table {

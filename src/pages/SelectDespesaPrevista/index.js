@@ -62,8 +62,8 @@ class SelectDespesaPrevista extends React.Component {
                 key: 'ACÃO',
 
                 render: expense => (
-                    <div>
-                        <span >
+                    <div className="DetalhesBotoes">
+                        <span className="DetalhesBotoesGrid">
                             <EditDespesa data={expense} />
 
                             <Popover

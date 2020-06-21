@@ -58,7 +58,7 @@ export default (props) => {
 
     return (
         <div>
-            <div>
+            <div className="SelectOption">
                 <Switch
                     checked={itens}
                     onChange={(valor) => valor === true ?

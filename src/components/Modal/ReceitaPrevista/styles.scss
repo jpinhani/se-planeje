@@ -6,6 +6,53 @@
 }
 
 
+.ModalReceita{
+    .ant-modal-body {
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+    // background: #87CEFA;
+    word-wrap: break-word;
+ }
+
+  .ant-modal-header {
+    padding: 16px 24px;
+    color: rgba(0, 0, 0, 0.65);
+     background: radial-gradient(#81d6f3, #b6bac5);
+    border-bottom: 1px solid #e8e8e8;
+    border-radius: 4px 4px 0 0;
+}
+
+.ant-modal-title {
+    margin: 0;
+    // color: rgba(0, 0, 0, 0.85);
+    font-weight: bold;
+    color: white !important;
+    font-size: 26px;
+    line-height: 22px;
+    word-wrap: break-word;
+}
+.ant-modal-footer {
+    padding: 10px 16px;
+    text-align: right;
+    background: #4F4F4F;
+    border-top: 1px solid #e8e8e8;
+    border-radius: 0 0 4px 4px;
+}
+.ant-btn {
+    margin: 5px !important;
+}
+}
+
+// .ant-modal-body {
+//     padding: 24px;
+//     font-size: 14px;
+//     line-height: 1.5;
+//     background: #E0FFFF;
+//     word-wrap: break-word;
+// }
+
+
 
 // .ant-calendar-picker-input{
 //     // background-color: green;

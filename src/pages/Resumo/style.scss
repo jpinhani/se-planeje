@@ -6,6 +6,32 @@
     justify-content: space-between;
 }
 
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+    height: 40px;
+    // color: #1890ff;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    background: #FA8072	 !important;
+    border-color: #e8e8e8;
+    border-bottom: 1px solid #fff;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    height: 40px;
+    margin: 0;
+        color: white;
+    font-size: 20px;
+    margin-right: 2px;
+    padding: 0 16px;
+    line-height: 38px;
+    background: #00BFFF	;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px 4px 0 0;
+    -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
 .containerVision{
     width: 50%;
 }

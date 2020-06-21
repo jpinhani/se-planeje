@@ -159,6 +159,7 @@ function DespesaPagar(props) {
                     visible={visible}
                     onOk={handleSubmit}
                     onCancel={() => setVisible(false)}
+                    className="ModalDespesa"
                 >
 
                     <div style={{ width: '99%', textAlign: 'initial' }}>

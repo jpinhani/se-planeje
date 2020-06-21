@@ -155,7 +155,7 @@ class ModalExpense extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div>
+            <div className="despesatipo">
                 <Icon type="plus-circle" style={{ fontSize: '36px', color: '#08c' }} title='Adicionar nova Despesa Prevista' theme="twoTone" onClick={this.showModal} />
 
 
@@ -164,6 +164,7 @@ class ModalExpense extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleSubmit}
                     onCancel={this.handleCancel}
+                    className="ModalDespesa"
                 >
                     <Form>
                         <Radio.Group

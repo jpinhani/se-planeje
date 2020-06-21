@@ -86,6 +86,7 @@ function EditarTransferencia(props) {
                 visible={visible}
                 onOk={handleSubmit}
                 onCancel={() => setVisible(false)}
+                className="ModalCadastro"
             >
                 <div style={{
                     display: 'flex',

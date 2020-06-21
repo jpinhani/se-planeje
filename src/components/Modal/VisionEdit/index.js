@@ -56,9 +56,6 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        // var data_1 = moment(body.DT_INICIO).format("YYYY/MM/DD");
-        // var data_2 = moment(body.DT_FIM).format("YYYY/MM/DD");
-
         const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
         body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
 
@@ -95,6 +92,7 @@ class ModalAcount extends React.Component {
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
+                        className="ModalCadastro"
                     >
                         <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
                         <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({ ...this.state, startDate: e.target.value })} placeholder="Inicio" />

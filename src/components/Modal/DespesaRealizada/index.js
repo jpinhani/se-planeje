@@ -136,6 +136,7 @@ function NovaDespesa(props) {
                     visible={visible}
                     onOk={handleSubmit}
                     onCancel={() => handleCancel()}
+                    className="ModalDespesa"
                 >
                     <div style={{ width: '100%', textAlign: 'initial' }}>
                         <Switch

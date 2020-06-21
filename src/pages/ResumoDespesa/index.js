@@ -2,6 +2,8 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { GeraDespesas } from '../../components/ResumoDespesa'
 import { Table, Switch } from 'antd';
 
+import './styles.scss';
+
 export default (props) => {
 
     const [tabDespesa, setTabDespesa] = useState([]);
@@ -65,7 +67,7 @@ export default (props) => {
 
     return (
         <div>
-            <div>
+            <div className="SelectOption">
                 <Switch
                     checked={itens}
                     onChange={(valor) => valor === true ?

@@ -46,7 +46,7 @@ class App extends React.Component {
                         position: 'fixed',
                         zIndex: '1',
                         paddingLeft: '15px',
-                        paddingTop: '40px',
+                        paddingTop: '80px',
                         fontSize: '32px', color: 'blue'
                     }} />
 

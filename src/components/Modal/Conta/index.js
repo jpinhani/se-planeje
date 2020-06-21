@@ -102,6 +102,7 @@ class ModalAcount extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleSubmit}
                     onCancel={this.handleCancel}
+                    className="ModalCadastro"
                 >
                     <Form >
 

@@ -167,6 +167,7 @@ class ModalRevenue extends React.Component {
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
+                        className="ModalReceita"
                     >
                         <div className='SwitchAjust'>
                             <Switch

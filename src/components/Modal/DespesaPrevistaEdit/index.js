@@ -180,7 +180,7 @@ class ModalExpense extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div>
+            <div className="despesatipo">
                 <Icon type="edit" style={{ fontSize: '18px', color: '#08c' }} title='Editar Despesa Prevista' theme="twoTone" onClick={this.showModal} />
 
                 <Form onSubmit={this.handleSubmit}>
@@ -189,6 +189,7 @@ class ModalExpense extends React.Component {
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
+                        className="ModalDespesa"
                     >
                         <div className='SwitchAjust'>
                             <Switch

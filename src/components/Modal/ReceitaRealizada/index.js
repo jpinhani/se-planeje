@@ -96,7 +96,8 @@ function NovaReceita(props) {
                     title='Inserir Nova Receita'
                     visible={visibleModal}
                     onOk={handleSubmit}
-                    onCancel={() => setVisibleModal(false)}>
+                    onCancel={() => setVisibleModal(false)}
+                    className="ModalReceita">
 
                     <div style={{ width: '100%', display: 'flex' }}>
                         <Form.Item style={{ width: '50%' }}>

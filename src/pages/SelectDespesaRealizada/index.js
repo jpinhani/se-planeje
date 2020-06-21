@@ -90,8 +90,8 @@ export default () => {
             key: 'ACÃOR',
 
             render: expenseReal => (
-                <div>
-                    <span >
+                <div className="DetalhesBotoes">
+                    <span className="DetalhesBotoesGrid">
                         <EditDespesa data={expenseReal} />
 
                         <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => deleteReal(expenseReal)}>

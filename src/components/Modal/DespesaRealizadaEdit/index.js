@@ -133,6 +133,7 @@ function ModalExpenseEdit(props) {
                     visible={visible}
                     onOk={handleSubmit}
                     onCancel={() => setVisible(false)}
+                    className="ModalDespesa"
                 >
                     <div style={{ width: '100%', textAlign: 'initial' }}>
                         <Switch

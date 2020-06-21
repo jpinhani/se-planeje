@@ -94,6 +94,7 @@ class ModalAcount extends React.Component {
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleCancel}
+                        className="ModalCadastro"
                     >
                         <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
                         <DatePicker style={{ width: '100%' }}

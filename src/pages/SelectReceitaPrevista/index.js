@@ -59,8 +59,8 @@ class SelectReceitaPrevista extends React.Component {
                 key: 'ACÃO',
 
                 render: revenue => (
-                    <div>
-                        <span >
+                    <div className="DetalhesBotoes">
+                        <span className="DetalhesBotoesGrid">
                             <EditReceita data={revenue} />
 
                             <Popover

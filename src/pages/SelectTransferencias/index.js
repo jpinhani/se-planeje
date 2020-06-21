@@ -79,16 +79,18 @@ export default () => {
             title: 'action',
             key: 'action',
             render: transferencia => (
-                <div>
-                    <EditTransferencia dados={transferencia} />
-                    <Popconfirm
-                        title="Excluir Lançamento Realizado?"
-                        onConfirm={() => deleteReal(transferencia)}>
-                        <Icon
-                            type="delete"
-                            title='Excluir Transferência'
-                            style={{ fontSize: '18px', color: '#08c' }} />
-                    </Popconfirm>
+                <div className="DetalhesBotoes">
+                    <span className="DetalhesBotoesGrid">
+                        <EditTransferencia dados={transferencia} />
+                        <Popconfirm
+                            title="Excluir Lançamento Realizado?"
+                            onConfirm={() => deleteReal(transferencia)}>
+                            <Icon
+                                type="delete"
+                                title='Excluir Transferência'
+                                style={{ fontSize: '18px', color: '#08c' }} />
+                        </Popconfirm>
+                    </span>
                 </div>
             )
         }

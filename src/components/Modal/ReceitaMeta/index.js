@@ -98,6 +98,7 @@ function ReceitaMeta(props) {
                     visible={visible}
                     onOk={() => handleSubmit()}
                     onCancel={() => setVisible(false)}
+                    className="ModalReceita"
                 >
 
                     <div style={{

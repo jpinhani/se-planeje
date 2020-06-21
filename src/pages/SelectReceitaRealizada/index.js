@@ -83,16 +83,18 @@ function ReceitaRealizada() {
             title: 'Action',
             key: 'action',
             render: receitaReal => (
-                <div>
-                    <ReceitaEdit data={receitaReal} />
-                    <Popconfirm
-                        title="Excluir Lançamento Realizado?"
-                        onConfirm={() => deleteReal(receitaReal)}>
-                        <Icon
-                            type="delete"
-                            title='Excluir Receita'
-                            style={{ fontSize: '18px', color: '#08c' }} />
-                    </Popconfirm>
+                <div className="DetalhesBotoes">
+                    <span className="DetalhesBotoesGrid">
+                        <ReceitaEdit data={receitaReal} />
+                        <Popconfirm
+                            title="Excluir Lançamento Realizado?"
+                            onConfirm={() => deleteReal(receitaReal)}>
+                            <Icon
+                                type="delete"
+                                title='Excluir Receita'
+                                style={{ fontSize: '18px', color: '#08c' }} />
+                        </Popconfirm>
+                    </span>
                 </div>
             )
         }

@@ -20,7 +20,7 @@
 
 
 table {
-    font-family: arial;
+    // font-family: fantasy !important;
     max-width: 100%;
     background-color: transparent;
     border-collapse: collapse;
@@ -40,17 +40,20 @@ table {
     line-height: 20px;
     text-align: left;
     vertical-align: middle;
-    border-top: 1px solid #dddddd;
+    // border-top: 1px solid #dddddd;
+    border-top: 1px solid #00BFFF	 !important;
+
   }
   .table thead th {
-    background: #eeeeee;
-    // background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+    // background: #eeeeee;
+    background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197)) !important;
     vertical-align: bottom;
   }   
+  // .table tbody > tr:nth-child(odd) > td,
   .table tbody > tr:nth-child(odd) > td,
   .table tbody > tr:nth-child(odd) > th {
-    background-color: #fafafa;
-    // background-color: #d8edf7;
+    // background-color: #fafafa;
+    background-color:white !important;
   }    
   .table .t-small {
     width: 5%;

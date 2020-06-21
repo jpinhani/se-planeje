@@ -79,10 +79,11 @@ function NewTransferencia(props) {
                 theme="twoTone" onClick={showModal} />
 
             <Modal
-                title='Nova Tranasação'
+                title='Nova Transação'
                 onOk={handleSubmit}
                 onCancel={() => setVisible(false)}
                 visible={visible}
+                className="ModalCadastro"
             >
                 <div style={{
                     display: 'flex',

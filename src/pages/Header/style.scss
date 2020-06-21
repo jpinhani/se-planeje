@@ -25,3 +25,13 @@
     color:red;
     font-size: 70px !important;
 }
+
+  @media (max-width: 900px) { 
+.ant-layout-header {
+    // height: 64px;
+    padding: 5px !important;
+    // line-height: 64px;
+    // background: #001529;
+}
+  }
+

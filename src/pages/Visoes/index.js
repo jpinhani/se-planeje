@@ -8,8 +8,8 @@ import { urlBackend, config, userID } from '../../services/urlBackEnd'
 import AddVision from '../../components/Modal/Vision/index'
 import EditVision from '../../components/Modal/VisionEdit'
 
-import 'antd/dist/antd.css'
-import './styles.scss'
+// import 'antd/dist/antd.css'
+import './style.scss'
 
 function Vision() {
   const userId = userID()
@@ -95,9 +95,11 @@ function Vision() {
           })
         )
       }
-      name='conta' placeholder="Procureeee aqui a visao especifica"
+      name='conta' placeholder="Procure aqui a visao especifica"
     />
-    <Table columns={columns} dataSource={formatDate(visions)} rowKey='ID' />
+    <div>
+      <Table className='table table-action2' columns={columns} dataSource={formatDate(visions)} rowKey='ID' />
+    </div>
   </>
 }
 

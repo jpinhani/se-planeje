@@ -178,7 +178,8 @@ export default () => {
             </div>
             <Tabs className='ContainerTabs'
                 defaultActiveKey="1"
-                tabPosition={mode}>
+                tabPosition={mode}
+                type="card">
                 <TabPane tab='Resumo' key='1'>
                     <Resumo
                         saldo={contaSaldoAtual}
