@@ -63,6 +63,19 @@ class ModalCard extends React.Component {
 
             const resultStatus = await InsertRequest(body, 'api/cartoes')
 
+            if (resultStatus.status === 402)
+                return notification.open({
+                    message: 'SePlaneje - Problemas Pagamento',
+                    duration: 20,
+                    description:
+                        `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                    style: {
+                        width: '100%',
+                        marginLeft: 335 - 600,
+                    },
+                });
+
             verifySend(resultStatus, 'INSERT', body.cartao)
 
             const cardData = resultStatus === 200 ? await GetRequest('api/cartoes') : {}
@@ -92,6 +105,8 @@ class ModalCard extends React.Component {
                         onCancel={this.handleCancel}
                         className="ModalCadastro"
                     >
+
+
                         <Input name='cartao' value={this.state.cartao} onChange={this.handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
                         <Input type='number' value={this.state.dtVencimento} onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
                         <Input type='number' value={this.state.diacompra} onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />

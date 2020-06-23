@@ -6,6 +6,8 @@ import { SomarPeriodo } from '../../components/ResumoComponente';
 import { GeraDespesas } from '../../components/ResumoDespesa';
 import { GeraReceitas } from '../../components/ResumoReceita';
 
+import { Progress } from 'antd';
+
 import './style.scss';
 
 export default (props) => {
@@ -231,27 +233,34 @@ export default (props) => {
                                     currency: 'BRL'
                                 })}</p>
                         </li>
-                        <li><strong>% do Lucro com Base na Despesa </strong>
-                            <p style={{ color: (resumo.L_FORECAST / (resumo.D_FORECAST * -1) > 0) ? 'red' : 'blue' }}>
-                                {resumo.L_FORECAST / (resumo.D_FORECAST * -1) * 100 ?
-                                    parseFloat(resumo.L_FORECAST / (resumo.D_FORECAST * -1) * 100).toFixed(2) + ' %' :
-                                    0 + ' %'}</p>
+
+                        <li><strong>% do Lucro com Base na Receita </strong>
+
+                            <Progress
+                                strokeColor={{
+                                    '0%': '#A52A2A',
+                                    '30%': '#00BFFF',
+                                }}
+                                percent={resumo.L_FORECAST / resumo.R_FORECAST * 100 ?
+                                    parseFloat(resumo.L_FORECAST / resumo.R_FORECAST * 100).toFixed(2) : 0}
+                            />
+
                         </li>
                     </div>
                     <div className='percentuais'>
                         <li><strong>% da Meta Atingida </strong>
 
-
-                            <p style={{ color: (resumo.L_FORECAST / resumo.L_PREVISTO > 0) ? 'blue' : 'red' }}>
-                                {resumo.L_FORECAST / resumo.L_PREVISTO ?
-                                    parseFloat(resumo.L_FORECAST / resumo.L_PREVISTO * 100).toFixed(2) + ' %' :
-                                    0 + ' %'}</p>
-                        </li>
-                        <li><strong>% do Lucro com Base na Receita </strong>
-                            <p style={{ color: (resumo.L_FORECAST / resumo.R_FORECAST > 0) ? 'blue' : 'red' }}>
-                                {resumo.L_FORECAST / resumo.R_FORECAST * 100 ?
-                                    parseFloat(resumo.L_FORECAST / resumo.R_FORECAST * 100).toFixed(2) + ' %' :
-                                    0 + ' %'}</p>
+                            <Progress
+                                type="circle"
+                                strokeColor={{
+                                    '0%': '#A52A2A',
+                                    '100%': '#00BFFF',
+                                }}
+                                percent={
+                                    resumo.L_FORECAST / resumo.L_PREVISTO ?
+                                        parseFloat(resumo.L_FORECAST / resumo.L_PREVISTO * 100).toFixed(2) : 0}
+                                status="active"
+                            />
                         </li>
                     </div>
                 </ul>

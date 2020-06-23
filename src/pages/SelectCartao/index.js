@@ -6,7 +6,7 @@ import EditCartao from '../../components/Modal/CartaoEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
 
 import { listCards } from '../../store/actions/generalCardAction.js'
-import { Table, Divider, Icon, Input, Popconfirm } from 'antd'
+import { Table, Divider, Icon, Input, Popconfirm, notification } from 'antd'
 
 import { DeleteRequest, GetRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
@@ -75,6 +75,18 @@ class SelectCartao extends React.Component {
   async requestAPI() {
 
     const cartao = await GetRequest('api/cartoes')
+    if (cartao.status === 402)
+      return notification.open({
+        message: 'SePlaneje - Problemas Pagamento',
+        duration: 20,
+        description:
+          `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+        style: {
+          width: '100%',
+          marginLeft: 335 - 600,
+        },
+      });
     this.props.listCards(cartao)
   }
 

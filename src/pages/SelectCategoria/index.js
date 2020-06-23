@@ -78,7 +78,18 @@ class SelectCategoria extends React.Component {
     async requestAPI() {
 
         const novosDados = await GetRequest('api/categorias')
-
+        if (novosDados.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         const nivel3 = novosDados.filter((DATA) => DATA.NIVEL === 3)
         const nivel4 = novosDados.filter((DATA) => DATA.NIVEL === 4)
         const nivel5 = novosDados.filter((DATA) => DATA.NIVEL === 5)

@@ -88,18 +88,23 @@ async function loadConta() {
 
 
 async function loadVisions() {
+    try {
 
-    const endpoint = `${urlBackend}api/visions/${userID()}`
-    const result = await axios.get(endpoint, config())
+        const endpoint = `${urlBackend}api/visions/${userID()}`
+        const result = await axios.get(endpoint, config())
 
-    const options = result.data.map((desc, i) =>
-        <Option key={i} value={desc.VISAO}>
-            {desc.VISAO}
-        </Option>
-    )
-    options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
+        const options = result.data.map((desc, i) =>
+            <Option key={i} value={desc.VISAO}>
+                {desc.VISAO}
+            </Option>
+        )
+        options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
 
-    return options
+        return options
+
+    } catch (error) {
+        return
+    }
 }
 
 

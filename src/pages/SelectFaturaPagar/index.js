@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import FaturaPagar from '../../components/Modal/DespesaCartao';
 
-import { Tabs, Table, Button } from 'antd';
+import { Tabs, Table, Button, notification } from 'antd';
 
 import { Link } from 'react-router-dom'
 import { GetRequest } from '../../components/crudSendAxios/crud';
@@ -95,6 +95,20 @@ export default (props) => {
 
         const fatura = await GetRequest('api/despesas/fatura')
         const detalhe = await GetRequest('api/despesas/faturadetalhe');
+
+
+        if (fatura.status === 402 || detalhe.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         const unique = new Set(fatura.map((DATA) => DATA.CARTAO))
         const cardNew = Array.from(unique).map((DATA, i) => <Button value={i}

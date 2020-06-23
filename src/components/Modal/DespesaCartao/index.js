@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Modal, Select, DatePicker, Form, Tabs, Table, Button } from 'antd'
+import { Modal, Select, DatePicker, Form, Tabs, Table, Button, notification } from 'antd'
 import { CreditCardOutlined } from '@ant-design/icons';
 
 import FaturaPagar from '../../../components/Modal/DespesaCartao'
@@ -128,6 +128,20 @@ class ModalExpense extends React.Component {
 
 
         const result = await InsertRequest(body, 'api/despesas/fatura')
+
+        if (result.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
+
         verifySend(result, 'INSERT', `Pagamento de Fatura ${body.id}`)
 
         if (result === 200) {

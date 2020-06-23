@@ -25,6 +25,7 @@ import SelectReceitaMeta from '../pages/SelectReceitaMeta'
 import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 import SelectTransferencia from '../pages/SelectTransferencias'
 import NewPlano from '../pages/NewPlano'
+// import ResultPlano from '../pages/ResultPlano'
 
 const { Content } = Layout;
 

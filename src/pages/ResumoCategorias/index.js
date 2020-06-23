@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { GetRequest } from '../../components/crudSendAxios/crud';
 import { SaldoCategoria, hierarquia } from '../../components/ResumoCategoriaDespesa'
 import { SaldoCategoriaReceita, hierarquiaReceita } from '../../components/ResumoCategoriaReceita'
-import { Table, Select } from 'antd';
+import { Table, Select, notification } from 'antd';
 
 import './styles.scss'
 
@@ -53,6 +53,18 @@ export default (props) => {
 
     const novosDados = useCallback(async () => {
         const cat = await GetRequest('api/categorias')
+        if (cat.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         setCategoria(cat);
     }, [])
 

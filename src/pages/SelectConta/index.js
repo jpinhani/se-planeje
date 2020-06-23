@@ -10,7 +10,7 @@ import { listAcounts } from '../../store/actions/generalAcountAction'
 import { GetRequest, DeleteRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios'
 
-import { Table, Icon, Input, Popconfirm } from 'antd'
+import { Table, Icon, Input, Popconfirm, notification } from 'antd'
 
 import 'antd/dist/antd.css';
 import '../SelectConta/styles.scss'
@@ -68,6 +68,18 @@ class SelectConta extends React.Component {
   async requestAPI() {
 
     const Data = await GetRequest('api/contas')
+    if (Data.status === 402)
+      return notification.open({
+        message: 'SePlaneje - Problemas Pagamento',
+        duration: 20,
+        description:
+          `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+        style: {
+          width: '100%',
+          marginLeft: 335 - 600,
+        },
+      });
 
     this.props.listAcounts(Data)
   }

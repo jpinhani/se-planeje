@@ -7,7 +7,7 @@ import SearchFilter from '../../components/searchFilterTable/index'
 import NewRevenue from '../../components/Modal/ReceitaRealizada'
 import ReceitaEdit from '../../components/Modal/ReceitaRealizadaEdit'
 
-import { Table, Button, Input, Select, Popconfirm, Icon } from 'antd';
+import { Table, Button, Input, Select, Popconfirm, Icon, notification } from 'antd';
 
 import { verifySend } from '../../components/verifySendAxios/index'
 
@@ -111,6 +111,18 @@ function ReceitaRealizada() {
 
     const listaVisao = useCallback(async () => {
         const resultVision = await getvision();
+        if (resultVision.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         const options = resultVision.map((desc, i) =>
             <Option key={i} value={desc.VISAO}>

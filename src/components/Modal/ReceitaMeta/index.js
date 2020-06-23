@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Input, Modal, Form, InputNumber, Select, DatePicker, Switch, Divider } from 'antd'
+import { Input, Modal, Form, InputNumber, Select, DatePicker, Switch, Divider, notification } from 'antd'
 import { LikeTwoTone } from '@ant-design/icons';
 
 import { loadConta, loadCategoriaReceita } from '../../ListagemCombo'
@@ -60,6 +60,19 @@ function ReceitaMeta(props) {
         body.dataPrevista = dataPrev.format("YYYY-MM-DD")
 
         const resulStatus = await UpdateRequest(body, 'api/receitas/pagar')
+
+        if (resulStatus.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 

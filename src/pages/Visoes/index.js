@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Table, Icon, Input, Popconfirm, message } from 'antd'
+import { Table, Icon, Input, Popconfirm, message, notification } from 'antd'
 import moment from 'moment'
 import axios from 'axios'
 import { urlBackend, config, userID } from '../../services/urlBackEnd'
@@ -12,21 +12,40 @@ import EditVision from '../../components/Modal/VisionEdit'
 import './style.scss'
 
 function Vision() {
+
+
   const userId = userID()
   const endpoint = `${urlBackend}api/visions`
 
   const dispatch = useDispatch()
   const visions = useSelector(state => state.vision)
 
-  const formatDate = visions => visions.map(vision => {
-    const date1 = moment(vision.DT_INICIO, "YYYY/MM/DD");
-    vision.DT_INICIO = date1.format("DD/MM/YYYY")
+  const formatDate = (visions) => {
+    if (visions.status === 402)
+      return notification.open({
+        message: 'SePlaneje - Problemas Pagamento',
+        duration: 20,
+        description:
+          `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+        style: {
+          width: '100%',
+          marginLeft: 335 - 600,
+        },
+      });
 
-    const date2 = moment(vision.DT_FIM, "YYYY/MM/DD");
-    vision.DT_FIM = date2.format("DD/MM/YYYY")
+    return visions.map(vision => {
 
-    return vision
-  })
+      const date1 = moment(vision.DT_INICIO, "YYYY/MM/DD");
+      vision.DT_INICIO = date1.format("DD/MM/YYYY")
+
+      const date2 = moment(vision.DT_FIM, "YYYY/MM/DD");
+      vision.DT_FIM = date2.format("DD/MM/YYYY")
+
+      return vision
+
+    })
+  }
 
   const columns = [
     {
@@ -72,10 +91,24 @@ function Vision() {
 
 
   useEffect(() => {
+
     async function getVisions() {
+      const resulStatus = await axios.get(`${endpoint}/${userId}`, config())
+      if (resulStatus.status === 402)
+        return notification.open({
+          message: 'SePlaneje - Problemas Pagamento',
+          duration: 20,
+          description:
+            `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+          style: {
+            width: '100%',
+            marginLeft: 335 - 600,
+          },
+        });
       dispatch({
         type: 'LIST_VISION',
-        payload: (await axios.get(`${endpoint}/${userId}`, config())).data
+        payload: (resulStatus).data
       })
     }
 

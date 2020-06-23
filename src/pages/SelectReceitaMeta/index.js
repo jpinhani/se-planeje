@@ -6,7 +6,7 @@ import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud
 import ReceitaMetaComponente from '../../components/Modal/ReceitaMeta'
 import SearchFilter from '../../components/searchFilterTable/index'
 
-import { Table, Button, Input, Select } from 'antd'
+import { Table, Button, Input, Select, notification } from 'antd'
 
 const { Option } = Select;
 
@@ -72,6 +72,18 @@ export default (props) => {
 
     const listaVisao = useCallback(async () => {
         const resultVision = await getvision();
+        if (resultVision.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         const options = resultVision.map((desc, i) =>
             <Option key={i} value={desc.VISAO}>

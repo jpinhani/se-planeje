@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import moment from 'moment';
-import { Icon, Modal, Input, Form, InputNumber, DatePicker } from 'antd'
+import { Icon, Modal, Input, Form, InputNumber, DatePicker, notification } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../services/urlBackEnd'
 
@@ -81,6 +81,19 @@ class ModalAcount extends React.Component {
         body.data = data
 
         const resultStatus = await InsertRequest(body, 'api/contas')
+
+        if (resultStatus.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         verifySend(resultStatus, 'INSERT', body.descrConta)
 

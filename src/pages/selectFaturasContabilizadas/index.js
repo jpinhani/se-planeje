@@ -8,7 +8,7 @@ import SearchFilter from '../../components/searchFilterTable'
 import { GetRequest, UpdateRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios'
 
-import { Table, Input, Popconfirm, Icon } from 'antd';
+import { Table, Input, Popconfirm, Icon, notification } from 'antd';
 
 import 'antd/dist/antd.css';
 
@@ -84,6 +84,18 @@ export default () => {
 
     const requestAPI = useCallback(async () => {
         const faturas = await GetRequest('api/fatura')
+        if (faturas.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         dispatch({
             type: 'LIST_FATURACONTABILIZADA',
             payload: faturas

@@ -13,7 +13,7 @@ import { GetRequest } from '../../components/crudSendAxios/crud';
 import { SaldoConta, groupByConta, SaldoInicial } from '../../components/SaldoConta';
 import { SaldoTransferencia } from '../../components/SaldoTransferencias';
 
-import { Tabs, Select, DatePicker, Switch } from 'antd';
+import { Tabs, Select, DatePicker, Switch, notification } from 'antd';
 
 import './style.scss';
 
@@ -48,6 +48,18 @@ export default () => {
     const RequestGeneral = useCallback(async () => {
         const loadVision = await loadVisions();
         const despesas = await GetRequest('api/chartDespesa');
+        if (despesas.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         const receitas = await GetRequest('api/chartReceita');
         const transferencias = await GetRequest('api/transferencia');
         const listavisao = await getvision()
@@ -72,34 +84,36 @@ export default () => {
     }, [RequestGeneral])
 
     const SaldoAtual = useCallback((despesas, receitas, transferencias) => {
+        try {
+            const SaldoDespesa = SaldoConta(despesas, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+            const SaldoReceita = SaldoConta(receitas, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+            const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+            const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
 
-        const SaldoDespesa = SaldoConta(despesas, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
-        const SaldoReceita = SaldoConta(receitas, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
-        const SaldoTransfCredito = SaldoTransferencia(transferencias, 'Receita', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
-        const SaldoTransfDebito = SaldoTransferencia(transferencias, 'Despesa', visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment());
+            const visaoData = [{
+                DT_INICIO: '2000-05-01T03:00:00.000Z',
+                DT_FIM: visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment()
+            }]
 
-        const visaoData = [{
-            DT_INICIO: '2000-05-01T03:00:00.000Z',
-            DT_FIM: visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment()
-        }]
+            const SaldoInicialConta = SaldoInicial(listConta, visaoData);
 
-        const SaldoInicialConta = SaldoInicial(listConta, visaoData);
+            const visaoDataPeriodo = [{
+                DT_INICIO: visaoSetada.length > 0 ? visaoSetada[0].DT_INICIO : moment(),
+                DT_FIM: visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment()
+            }]
 
-        const visaoDataPeriodo = [{
-            DT_INICIO: visaoSetada.length > 0 ? visaoSetada[0].DT_INICIO : moment(),
-            DT_FIM: visaoSetada.length > 0 ? visaoSetada[0].DT_FIM : moment()
-        }]
+            const SaldoPer = SaldoInicial(listConta, visaoDataPeriodo).reduce((acum, atual) => acum + atual.Valor, 0);
+            setContaSaldoPeriodo(SaldoPer)
 
-        const SaldoPer = SaldoInicial(listConta, visaoDataPeriodo).reduce((acum, atual) => acum + atual.Valor, 0);
-        setContaSaldoPeriodo(SaldoPer)
-
-        const SaldoFinal = groupByConta([...SaldoDespesa,
-        ...SaldoTransfDebito,
-        ...SaldoReceita,
-        ...SaldoTransfCredito,
-        ...SaldoInicialConta], 'Outro')
-        setContaSaldoAtual(SaldoFinal);
-
+            const SaldoFinal = groupByConta([...SaldoDespesa,
+            ...SaldoTransfDebito,
+            ...SaldoReceita,
+            ...SaldoTransfCredito,
+            ...SaldoInicialConta], 'Outro')
+            setContaSaldoAtual(SaldoFinal);
+        } catch (error) {
+            return
+        }
     }, [visaoSetada, listConta])
 
     const requestApi = useCallback(async () => {

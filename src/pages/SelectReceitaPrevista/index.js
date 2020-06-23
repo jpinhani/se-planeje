@@ -11,7 +11,7 @@ import SearchFilter from '../../components/searchFilterTable'
 
 import { GetRequest } from '../../components/crudSendAxios/crud'
 
-import { Table, Icon, Popover, Input } from 'antd'
+import { Table, Icon, Popover, Input, notification } from 'antd'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -80,6 +80,18 @@ class SelectReceitaPrevista extends React.Component {
     async requestAPI() {
 
         const Data = await GetRequest('api/receitas')
+        if (Data.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         await this.props.listRevenues(Data)
     }
 

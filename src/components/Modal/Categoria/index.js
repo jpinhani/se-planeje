@@ -126,6 +126,19 @@ class ModalCategory extends React.Component {
             notification.open(args);
         } else {
             const insertCategoria = await InsertRequest(body, 'api/categorias/')
+
+            if (insertCategoria.status === 402)
+                return notification.open({
+                    message: 'SePlaneje - Problemas Pagamento',
+                    duration: 20,
+                    description:
+                        `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                    style: {
+                        width: '100%',
+                        marginLeft: 335 - 600,
+                    },
+                });
             const novosDados = await GetRequest('api/categorias')
 
             if (insertCategoria === 200) {

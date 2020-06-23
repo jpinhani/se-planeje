@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetRequest, DeleteRequest, visionSerchTransferencia } from '../../components/crudSendAxios/crud';
 import NovaTransferencia from '../../components/Modal/Transferencia'
 
-import { Input, Table, Popconfirm, Icon, Select } from 'antd';
+import { Input, Table, Popconfirm, Icon, Select, notification } from 'antd';
 import SearchFilter from '../../components/searchFilterTable'
 import EditTransferencia from '../../components/Modal/TransferenciaEdit'
 
@@ -101,6 +101,19 @@ export default () => {
     const requestApi = useCallback(async () => {
         const transferencias = await GetRequest('api/transferencia')
         const resultVision = await getvision();
+
+        if (resultVision.status === 402 || transferencias.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         const options = resultVision.map((desc, i) =>
             <Option key={i} value={desc.VISAO}>

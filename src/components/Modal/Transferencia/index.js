@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { userID } from '../../../services/urlBackEnd'
 
-import { Modal, Icon, Select, InputNumber, DatePicker, Input, Form } from 'antd';
+import { Modal, Icon, Select, InputNumber, DatePicker, Input, Form, notification } from 'antd';
 import { loadConta } from '../../ListagemCombo/index';
 import { GetRequest, InsertRequest } from '../../crudSendAxios/crud';
 import { verifySend } from '../../verifySendAxios';
@@ -47,6 +47,20 @@ function NewTransferencia(props) {
         }
 
         const novaTransf = await InsertRequest(body, 'api/transferencia');
+
+        if (novaTransf.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
+
         verifySend(novaTransf, 'INSERT', body.descrTransferencia)
 
         if (novaTransf === 200) {

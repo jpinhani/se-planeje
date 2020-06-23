@@ -1,7 +1,7 @@
 import React from 'react'
 import { GetRequest } from '../../crudSendAxios/crud'
 
-import { Timeline, Modal } from 'antd';
+import { Timeline, Modal, notification } from 'antd';
 
 import { OrderedListOutlined } from '@ant-design/icons';
 
@@ -34,7 +34,18 @@ class listCard extends React.Component {
 
     async requestApi() {
         const list = await GetRequest('api/fatura/detalhe')
-
+        if (list.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         const listNova = list.filter((data) => data.ID_FATURA === this.state.fatura)
 
         const timeline = listNova.map((data, i) =>

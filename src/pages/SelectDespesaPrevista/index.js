@@ -7,7 +7,7 @@ import Menu from '../../components/MenuDespesaPrevista'
 import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
 
 import SearchFilter from '../../components/searchFilterTable'
-import { Table, Icon, Popover, Input } from 'antd'
+import { Table, Icon, Popover, Input, notification } from 'antd'
 
 import { GetRequest } from '../../components/crudSendAxios/crud'
 
@@ -83,6 +83,18 @@ class SelectDespesaPrevista extends React.Component {
     async requestAPI() {
 
         const despesa = await GetRequest('api/despesas')
+        if (despesa.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         this.props.listExpenses(despesa)
     }
 

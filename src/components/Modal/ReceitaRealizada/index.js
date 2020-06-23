@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select } from 'antd';
+import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select, notification } from 'antd';
 import moment from 'moment';
 
 import { loadConta, loadCategoriaReceita } from '../../ListagemCombo'
@@ -67,6 +67,19 @@ function NovaReceita(props) {
         body.dataReal = data.format("YYYY-MM-DD")
 
         const resulStatus = await InsertRequest(body, 'api/receitas/real')
+
+        if (resulStatus.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
         verifySend(resulStatus, 'INSERT', body.descrDespesa)
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form, notification } from 'antd'
 import moment from 'moment';
 
 import { userID } from '../../../services/urlBackEnd'
@@ -101,6 +101,18 @@ function ModalExpenseEdit(props) {
         body.dataReal = data.format("YYYY-MM-DD")
 
         const resulStatus = await UpdateRequest(body, 'api/despesas/real')
+        if (resulStatus.status === 402)
+            return notification.open({
+                message: 'SePlaneje - Problemas Pagamento',
+                duration: 20,
+                description:
+                    `Poxa!!! 
+                        Foram identificados problemas com o pagamento da sua assinatura, acesse a página de Pagamento ou entre em contato conosco...`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
         verifySend(resulStatus, 'UPDATE', body.descrDespesa)
 
 
