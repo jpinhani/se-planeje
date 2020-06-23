@@ -10,7 +10,7 @@ import { listAcounts } from '../../store/actions/generalAcountAction'
 import { GetRequest, DeleteRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios'
 
-import { Table, Icon, Input, Popconfirm, notification } from 'antd'
+import { Table, Icon, Input, Popconfirm, notification, Spin } from 'antd'
 
 import 'antd/dist/antd.css';
 import '../SelectConta/styles.scss'
@@ -20,7 +20,8 @@ class SelectConta extends React.Component {
     super(props)
 
     this.state = {
-      search: ''
+      search: '',
+      spin: true
     }
 
     this.searchAcount = this.searchAcount.bind(this)
@@ -81,6 +82,7 @@ class SelectConta extends React.Component {
         },
       });
 
+    this.setState({ ...this.state, spin: false })
     this.props.listAcounts(Data)
   }
 
@@ -95,6 +97,7 @@ class SelectConta extends React.Component {
   render() {
     return (
       <div>
+        <Spin size="large" spinning={this.state.spin} />
         <div className='headerConta'>
           <AddAcount />
           <Input name='conta' value={this.state.search} onChange={this.searchAcount} placeholder="Procure aqui a conta especifica" />

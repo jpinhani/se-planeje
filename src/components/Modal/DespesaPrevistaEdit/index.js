@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Radio, Form } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Radio, Form, Spin } from 'antd'
 import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
@@ -38,6 +38,7 @@ class ModalExpense extends React.Component {
             parcelasInput: this.props.data.NUM_PARCELA,
             categoriaInput: this.props.data.ID_CATEGORIA,
             descrDespesaInput: this.props.data.DESCR_DESPESA,
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -126,7 +127,7 @@ class ModalExpense extends React.Component {
     }
 
     async handleSubmitok() {
-
+        this.setState({ ...this.state, spin: true })
         const body = {
             id: this.props.data.ID,
             idUser: userID(),
@@ -171,6 +172,7 @@ class ModalExpense extends React.Component {
 
         const Data = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
+        this.setState({ ...this.state, spin: false })
         this.props.listExpenses(Data)
         this.handleCancel()
 
@@ -317,6 +319,7 @@ class ModalExpense extends React.Component {
 
                                 />)}
                         </Form.Item>
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </Form>
             </div >

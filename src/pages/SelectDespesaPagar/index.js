@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import SearchFilter from '../../components/searchFilterTable/index';
 
-import { Table, Input, Select, Button, notification } from 'antd'
+import { Table, Input, Select, Button, notification, Spin } from 'antd'
 import DespesaPagarMeta from '../../components/Modal/DespesaPagar'
 import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud'
 
@@ -21,6 +21,7 @@ export default () => {
     const [search, setSearch] = useState('');
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
+    const [spin, setSpin] = useState(true)
 
     const columns = [
         {
@@ -103,7 +104,7 @@ export default () => {
             type: 'LIST_EXPENSE',
             payload: despesas
         })
-
+        setSpin(false)
         setMapVision(resultVision)
     }, [getvision, dispatch])
 
@@ -113,6 +114,7 @@ export default () => {
 
     return (
         <div>
+            <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button type='danger' key='rel'> Metas </Button></Link>
                 <Link to='selectdespesarealizada'><Button key='Lnc'>Lançamentos</Button></Link>

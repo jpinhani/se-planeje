@@ -7,7 +7,7 @@ import SearchFilter from '../../components/searchFilterTable/index'
 import NewRevenue from '../../components/Modal/ReceitaRealizada'
 import ReceitaEdit from '../../components/Modal/ReceitaRealizadaEdit'
 
-import { Table, Button, Input, Select, Popconfirm, Icon, notification } from 'antd';
+import { Table, Button, Input, Select, Popconfirm, Icon, notification, Spin } from 'antd';
 
 import { verifySend } from '../../components/verifySendAxios/index'
 
@@ -23,6 +23,7 @@ function ReceitaRealizada() {
     const [search, setSearch] = useState('');
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
+    const [spin, setSpin] = useState(true)
 
     async function deleteReal(receitaReal) {
 
@@ -142,6 +143,7 @@ function ReceitaRealizada() {
         })
 
         // setVision(visionControler)
+        setSpin(false)
         setMapVision(resultVision)
     }, [getvision, dispatch])
 
@@ -153,6 +155,7 @@ function ReceitaRealizada() {
 
     return (
         <div>
+            <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='SelectReceitaMeta'><Button key='Lnc'>Metas - Receitas</Button></Link>
                 <Link to='SelectReceitaReal'><Button type='primary' key='Lnc'>Lançamentos</Button></Link>

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Table, Icon, Input, Popconfirm, message, notification } from 'antd'
+import { Table, Icon, Input, Popconfirm, message, notification, Spin } from 'antd'
 import moment from 'moment'
 import axios from 'axios'
 import { urlBackend, config, userID } from '../../services/urlBackEnd'
@@ -13,7 +13,7 @@ import './style.scss'
 
 function Vision() {
 
-
+  const [spin] = useState(false);
   const userId = userID()
   const endpoint = `${urlBackend}api/visions`
 
@@ -34,7 +34,8 @@ function Vision() {
         },
       });
 
-    return visions.map(vision => {
+
+    const vis = visions.map(vision => {
 
       const date1 = moment(vision.DT_INICIO, "YYYY/MM/DD");
       vision.DT_INICIO = date1.format("DD/MM/YYYY")
@@ -45,6 +46,9 @@ function Vision() {
       return vision
 
     })
+
+    // setSpin(false);
+    return vis
   }
 
   const columns = [
@@ -116,20 +120,23 @@ function Vision() {
   }, [dispatch, endpoint, userId])
 
   return <>
-    <AddVision />
-    <Input
-      onChange={
-        async e => (
-          dispatch({
-            type: 'LIST_VISION',
-            payload: (
-              await axios.get(`${endpoint}/${userId}/${e.target.value}`)
-            ).data
-          })
-        )
-      }
-      name='conta' placeholder="Procure aqui a visao especifica"
-    />
+    <Spin size="large" spinning={spin} />
+    <div style={{ display: 'flex' }}>
+      <AddVision />
+      <Input
+        onChange={
+          async e => (
+            dispatch({
+              type: 'LIST_VISION',
+              payload: (
+                await axios.get(`${endpoint}/${userId}/${e.target.value}`)
+              ).data
+            })
+          )
+        }
+        name='conta' placeholder="Procure aqui a visao especifica"
+      />
+    </div>
     <div>
       <Table className='table table-action2' columns={columns} dataSource={formatDate(visions)} rowKey='ID' />
     </div>

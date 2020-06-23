@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input, Select, notification, message } from 'antd'
+import { Icon, Modal, Input, Select, notification, message, Spin } from 'antd'
 import { listCategorys } from '../../../store/actions/generalCategoryAction'
 import { urlBackend, config, userID } from '../../../services/urlBackEnd'
 import 'antd/dist/antd.css';
@@ -16,6 +16,7 @@ class ModalCategory extends React.Component {
 
         this.state = {
             visible: false, //Controla a Visibilidade do Formulário
+            spin: false,
 
             dependenciaInput: this.props.data.PAI,// Controla o Input da Combo quando Seleciona manualmente pelo usuário
             dependencia: [],//Controla o estado de carregamento da combo => recebe <Option>,
@@ -100,6 +101,7 @@ class ModalCategory extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
+        this.setState({ ...this.state, spin: true })
         const endpointAPI = `${urlBackend}api/categorias/`
 
 
@@ -128,6 +130,7 @@ class ModalCategory extends React.Component {
                 duration: 5,
             };
             notification.open(args);
+            this.setState({ ...this.state, spin: false })
         } else if (body.entrada === '1' && body.nivel === '6') {
             const args = {
                 message: 'Erro de Entrada de Dados',
@@ -136,6 +139,7 @@ class ModalCategory extends React.Component {
                 duration: 10,
             };
             notification.open(args);
+            this.setState({ ...this.state, spin: false })
         } else {
 
             await axios.put(endpointAPI, body, config())
@@ -200,12 +204,13 @@ class ModalCategory extends React.Component {
                 }
 
 
-
+                this.setState({ ...this.state, spin: false })
                 this.props.listCategorys(nivel)
 
                 this.handleCancel()
             } else {
                 message.error(" Erro ao Editar Registo, Erro " + novosDados.status, 5);
+                this.setState({ ...this.state, spin: false })
             }
         }
     }
@@ -244,6 +249,7 @@ class ModalCategory extends React.Component {
                             <Option value="1">Conta Consolidacao</Option>
                             <Option value="0">Conta Input</Option>
                         </Select>
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

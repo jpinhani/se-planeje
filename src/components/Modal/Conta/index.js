@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import moment from 'moment';
-import { Icon, Modal, Input, Form, InputNumber, DatePicker, notification } from 'antd'
+import { Icon, Modal, Input, Form, InputNumber, DatePicker, notification, Spin } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../services/urlBackEnd'
 
@@ -24,7 +24,8 @@ class ModalAcount extends React.Component {
             visible: false,
             descrConta: '',
             dataSaldo: moment(new Date(), dateFormat),
-            saldo: 0
+            saldo: 0,
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -68,7 +69,7 @@ class ModalAcount extends React.Component {
     }
 
     async handleSubmitok() {
-
+        this.setState({ ...this.state, spin: true })
         const body = {
             idUser: userID(),
             descrConta: this.state.descrConta,
@@ -99,6 +100,7 @@ class ModalAcount extends React.Component {
 
         const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
 
+        this.setState({ ...this.state, spin: false })
         this.props.listAcounts(Data)
         this.handleCancel()
         this.props.form.resetFields()
@@ -156,6 +158,7 @@ class ModalAcount extends React.Component {
                             />)}
                         </Form.Item>
                     </Form>
+                    <Spin size="large" spinning={this.state.spin} />
                 </Modal>
 
             </div >

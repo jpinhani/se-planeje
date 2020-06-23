@@ -28,6 +28,11 @@ position: absolute;
            padding-left: 25px;
            color:black
        }
+
+       .ant-btn {
+                margin: 10px !important;
+            }
+
        }
 
   .ContainerEstrutura{
@@ -95,6 +100,9 @@ position: absolute;
             justify-content: center;
             // background-color: red;
                width: 55%;
+            .ant-btn {
+                margin: 10px !important;
+            }
              }
 
         .DadosCadastrais{

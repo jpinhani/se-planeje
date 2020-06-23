@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 
 
-import { Input, Button, message } from 'antd'
+import { Input, Button, message, Spin } from 'antd'
 
 import axios from 'axios'
 
@@ -20,12 +20,11 @@ function Login() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [spin, setSpin] = useState(false);
 
   async function handleSubmit(e) {
-
     e.preventDefault()
-
-
+    setSpin(true)
     const endpoint = `${urlBackend}api/authenticate`
 
     const body = {
@@ -42,11 +41,12 @@ function Login() {
       const userId = response.data.user
 
       login(userId, token)
-
+      setSpin(false)
       history.push('/')
 
     } else {
       message.error('Usuário ou Senha não reconhecida', 5)
+      setSpin(false)
     }
   }
 
@@ -67,6 +67,7 @@ function Login() {
             onChange={e => setPassword(e.target.value)}
           />
           <Button className='blogar' htmlType='submit'><p> Entrar</p></Button>
+          <Spin size="large" spinning={spin} />
         </div>
       </form>
     </div>

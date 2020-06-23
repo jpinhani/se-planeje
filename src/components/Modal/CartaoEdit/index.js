@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, notification } from 'antd'
+import { Icon, Modal, Input, notification, Spin } from 'antd'
 import { listCards } from '../../../store/actions/generalCardAction.js'
 import { userID } from '../../../services/urlBackEnd'
 
@@ -19,7 +19,8 @@ class ModalCard extends React.Component {
             visible: false,
             cartao: this.props.data.CARTAO,
             dtVencimento: this.props.data.DT_VENCIMENTO,
-            diacompra: this.props.data.DIA_COMPRA
+            diacompra: this.props.data.DIA_COMPRA,
+            spin: false
         }
 
 
@@ -54,6 +55,7 @@ class ModalCard extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
+        this.setState({ ...this.state, spin: true })
         const body = {
             id: this.props.data.ID,
             idUser: userID(),
@@ -71,6 +73,7 @@ class ModalCard extends React.Component {
 
             const cardData = resultStatus === 200 ? await GetRequest('api/cartoes') : {}
 
+            this.setState({ ...this.state, spin: false })
             this.props.listCards(cardData)
 
             this.handleCancel()
@@ -86,6 +89,7 @@ class ModalCard extends React.Component {
                 duration: 5,
             };
             notification.open(args);
+            this.setState({ ...this.state, spin: false })
         }
 
     }
@@ -105,6 +109,7 @@ class ModalCard extends React.Component {
                         <Input name='cartao' value={this.state.cartao} onChange={this.handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
                         <Input type='number' value={this.state.dtVencimento} onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
                         <Input type='number' value={this.state.diacompra} onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

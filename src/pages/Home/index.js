@@ -10,7 +10,7 @@ import { ultimasLançamentosDespesa, ultimasLançamentosReceita } from '../../co
 import { SaldoTransferencia } from '../../components/SaldoTransferencias';
 import { gera_cor } from '../../components/GeraCor'
 
-import { Switch, notification } from 'antd';
+import { Switch, notification, Spin } from 'antd';
 import moment from 'moment';
 import PagarDespesa from '../../components/Modal/DespesaPagar'
 import PagarReceita from '../../components/Modal/ReceitaMeta'
@@ -25,6 +25,7 @@ export default () => {
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
     const [itens, setItens] = useState(false)
+    const [spin, setSpin] = useState(true)
 
     const chartContainer = useRef(null);
     const chartContainer1 = useRef(null);
@@ -41,7 +42,7 @@ export default () => {
         const corGrafico = dadosGrafico.map((valor) => gera_cor())
         const labelsGrafico = dadosGrafico.map((valor) => valor.Categoria)
         const rs = {
-            type: 'doughnut',
+            type: 'bar',
             data: {
                 datasets: [{
                     barPercentage: 0.5,
@@ -75,7 +76,7 @@ export default () => {
         const corGrafico = dadosGrafico.map((valor) => gera_cor())
         const labelsGrafico = dadosGrafico.map((valor) => valor.Conta)
         const rs = {
-            type: 'bar',
+            type: 'pie',
             data: {
                 datasets: [{
                     barPercentage: 0.3,
@@ -188,6 +189,7 @@ export default () => {
                 newChartInstance2 = new Chart(chartContainer1.current, ChartConfig1(SaldoFinal));
                 setGrafico(newChartInstance2)
             }
+            setSpin(false)
 
         } catch (error) {
             console.log(error)
@@ -207,6 +209,7 @@ export default () => {
 
     return (
         <div className='homeLayout'>
+            <Spin size="large" spinning={spin} />
             <div>
                 <ul className='homeLayoutFlex'>
 

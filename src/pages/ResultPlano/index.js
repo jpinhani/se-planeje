@@ -1,14 +1,22 @@
-import React from 'react';
-import { Result } from 'antd';
+import React, { useState } from 'react';
+import { Input } from 'antd';
 
-export default () => {
+export default (props) => {
 
+    const [password, setPassword] = useState('');
 
     return (
-        <Result
-            status="success"
-            title="Sua Transação foi concluida com Sucesso!"
-            subTitle="Em minutos você receberá detalhes da assinatura + credenciais para primeiro acesso"
-        />
+        <div>
+            <div className="ContainerNovaSenha">
+                <Input
+                    type='password' placeholder="Nova Senha"
+                    onChange={e => setPassword(e.target.value)}
+                />
+                <Input
+                    type='password' placeholder="Confirmar Nova Senha"
+                    onChange={e => setPassword(e.target.value)}
+                />
+            </div>
+        </div>
     )
 }

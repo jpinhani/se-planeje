@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import AddCategory from '../../components/Modal/Categoria/index'
 import EditCategory from '../../components/Modal/CategoriaEdit/index'
 
-import { urlBackend, userID } from '../../services/urlBackEnd'
+import { urlBackend, userID, config } from '../../services/urlBackEnd'
 import { InsertRequest, GetRequest, DeleteRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
 
 import { listCategorys } from '../../store/actions/generalCategoryAction'
-import { Table, Input, Popconfirm, Icon, message, notification } from 'antd'
+import { Table, Input, Popconfirm, Icon, message, notification, Spin } from 'antd'
 
 import axios from 'axios'
 
@@ -22,7 +22,8 @@ class SelectCategoria extends React.Component {
         super(props)
 
         this.state = {
-            search: ''
+            search: '',
+            spin: true
         }
         this.searchCategory = this.searchCategory.bind(this)
     }
@@ -113,6 +114,7 @@ class SelectCategoria extends React.Component {
             return novo
         }, nivel3)
 
+        this.setState({ ...this.state, spin: false })
         this.props.listCategorys(nivel)
     }
 
@@ -166,7 +168,7 @@ class SelectCategoria extends React.Component {
 
             default:
                 const endpoint = `${urlBackend}api/categorias/search/${evento}/${userID()}`
-                const result = await axios.get(endpoint)
+                const result = await axios.get(endpoint, config())
                 const categoria = result.data
                 this.props.listCategorys(categoria)
                 break;
@@ -176,6 +178,7 @@ class SelectCategoria extends React.Component {
 
     render() {
         return (<div>
+            <Spin size="large" spinning={this.state.spin} />
             <div className='headerCategory'>
                 <AddCategory />
                 <Popconfirm title="Deseja Importar o Plano de Categorias do SePlaneje?" onConfirm={() => this.ImportCategoryDefault()}>

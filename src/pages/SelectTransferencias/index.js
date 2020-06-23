@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetRequest, DeleteRequest, visionSerchTransferencia } from '../../components/crudSendAxios/crud';
 import NovaTransferencia from '../../components/Modal/Transferencia'
 
-import { Input, Table, Popconfirm, Icon, Select, notification } from 'antd';
+import { Input, Table, Popconfirm, Icon, Select, notification, Spin } from 'antd';
 import SearchFilter from '../../components/searchFilterTable'
 import EditTransferencia from '../../components/Modal/TransferenciaEdit'
 
@@ -24,6 +24,7 @@ export default () => {
     const [search, setSearch] = useState('');
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
+    const [spin, setSpin] = useState(true);
 
     async function deleteReal(transferencia) {
         const body = transferencia
@@ -129,6 +130,7 @@ export default () => {
             payload: transferencias
         })
 
+        setSpin(false)
         setMapVision(resultVision)
 
     }, [dispatch, getvision])
@@ -139,7 +141,7 @@ export default () => {
 
     return (
         <div>
-
+            <Spin size="large" spinning={spin} />
             <div style={{
                 width: '100%',
                 display: 'flex',

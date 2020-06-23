@@ -6,7 +6,7 @@ import EditCartao from '../../components/Modal/CartaoEdit/index'
 import SearchFilter from '../../components/searchFilterTable'
 
 import { listCards } from '../../store/actions/generalCardAction.js'
-import { Table, Divider, Icon, Input, Popconfirm, notification } from 'antd'
+import { Table, Divider, Icon, Input, Popconfirm, notification, Spin } from 'antd'
 
 import { DeleteRequest, GetRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
@@ -19,7 +19,8 @@ class SelectCartao extends React.Component {
     super(props)
 
     this.state = {
-      search: ''
+      search: '',
+      spin: true
     }
 
     this.searchCard = this.searchCard.bind(this)
@@ -87,6 +88,7 @@ class SelectCartao extends React.Component {
           marginLeft: 335 - 600,
         },
       });
+    this.setState({ ...this.state, spin: false })
     this.props.listCards(cartao)
   }
 
@@ -102,6 +104,7 @@ class SelectCartao extends React.Component {
   render() {
     return (
       <div>
+        <Spin size="large" spinning={this.state.spin} />
         <div className='ViewCartao'>
           <AddCartao />
           <Input name='cartao' value={this.state.search} onChange={this.searchCard} placeholder="Procure aqui o cartão especifico" />

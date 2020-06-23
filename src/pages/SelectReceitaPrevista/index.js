@@ -11,7 +11,7 @@ import SearchFilter from '../../components/searchFilterTable'
 
 import { GetRequest } from '../../components/crudSendAxios/crud'
 
-import { Table, Icon, Popover, Input, notification } from 'antd'
+import { Table, Icon, Popover, Input, notification, Spin } from 'antd'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
@@ -22,7 +22,8 @@ class SelectReceitaPrevista extends React.Component {
 
         this.state = {
             search: '',
-            filter: ''
+            filter: '',
+            spin: true
         }
         this.searchRevenue = this.searchRevenue.bind(this)
     }
@@ -92,7 +93,9 @@ class SelectReceitaPrevista extends React.Component {
                     marginLeft: 335 - 600,
                 },
             });
-        await this.props.listRevenues(Data)
+
+        this.setState({ ...this.state, spin: false })
+        this.props.listRevenues(Data)
     }
 
     searchRevenue(event) {
@@ -106,6 +109,7 @@ class SelectReceitaPrevista extends React.Component {
     render() {
         return (
             <div>
+                <Spin size="large" spinning={this.state.spin} />
                 <div className='ViewExpense'>
                     <ReceitaPrevista />
                     <Input name='receita' value={this.state.search} onChange={this.searchRevenue} placeholder="Procure aqui a receita especifica" />

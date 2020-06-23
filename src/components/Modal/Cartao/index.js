@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, notification } from 'antd'
+import { Icon, Modal, Input, notification, Spin } from 'antd'
 
 import { listCards } from '../../../store/actions/generalCardAction.js'
 import { userID } from '../../../services/urlBackEnd'
@@ -20,7 +20,8 @@ class ModalCard extends React.Component {
             visible: false,
             cartao: '',
             dtVencimento: '',
-            diacompra: ''
+            diacompra: '',
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -51,7 +52,7 @@ class ModalCard extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
-
+        this.setState({ ...this.state, spin: true })
         const body = {
             idUser: userID(),
             cartao: this.state.cartao,
@@ -79,7 +80,7 @@ class ModalCard extends React.Component {
             verifySend(resultStatus, 'INSERT', body.cartao)
 
             const cardData = resultStatus === 200 ? await GetRequest('api/cartoes') : {}
-
+            this.setState({ ...this.state, spin: false })
             this.props.listCards(cardData)
             this.handleCancel()
         } else {
@@ -90,6 +91,7 @@ class ModalCard extends React.Component {
                 duration: 5,
             };
             notification.open(args);
+            this.setState({ ...this.state, spin: false })
         }
     }
 
@@ -110,6 +112,7 @@ class ModalCard extends React.Component {
                         <Input name='cartao' value={this.state.cartao} onChange={this.handleCartao} placeholder="Informe o nome do Cartão de Crédito" />
                         <Input type='number' value={this.state.dtVencimento} onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
                         <Input type='number' value={this.state.diacompra} onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

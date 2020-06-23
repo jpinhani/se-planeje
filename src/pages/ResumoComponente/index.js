@@ -242,7 +242,7 @@ export default (props) => {
                                     '30%': '#00BFFF',
                                 }}
                                 percent={resumo.L_FORECAST / resumo.R_FORECAST * 100 ?
-                                    parseFloat(resumo.L_FORECAST / resumo.R_FORECAST * 100).toFixed(2) : 0}
+                                    parseFloat(resumo.L_FORECAST / resumo.R_FORECAST * 100).toFixed(3) : 0}
                             />
 
                         </li>
@@ -258,7 +258,7 @@ export default (props) => {
                                 }}
                                 percent={
                                     resumo.L_FORECAST / resumo.L_PREVISTO ?
-                                        parseFloat(resumo.L_FORECAST / resumo.L_PREVISTO * 100).toFixed(2) : 0}
+                                        parseFloat(resumo.L_FORECAST / resumo.L_PREVISTO * 100).toFixed(3) : 0}
                                 status="active"
                             />
                         </li>

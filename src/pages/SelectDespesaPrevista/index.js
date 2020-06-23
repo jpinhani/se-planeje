@@ -7,7 +7,7 @@ import Menu from '../../components/MenuDespesaPrevista'
 import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
 
 import SearchFilter from '../../components/searchFilterTable'
-import { Table, Icon, Popover, Input, notification } from 'antd'
+import { Table, Icon, Popover, Input, notification, Spin } from 'antd'
 
 import { GetRequest } from '../../components/crudSendAxios/crud'
 
@@ -20,7 +20,8 @@ class SelectDespesaPrevista extends React.Component {
 
         this.state = {
             search: '',
-            filter: ''
+            filter: '',
+            spin: true
         }
         this.searchExpense = this.searchExpense.bind(this)
     }
@@ -95,6 +96,8 @@ class SelectDespesaPrevista extends React.Component {
                     marginLeft: 335 - 600,
                 },
             });
+
+        this.setState({ ...this.state, spin: false })
         this.props.listExpenses(despesa)
     }
 
@@ -109,6 +112,7 @@ class SelectDespesaPrevista extends React.Component {
     render() {
         return (
             <div>
+                <Spin size="large" spinning={this.state.spin} />
                 <div className='ViewExpense'>
                     <DespesaPrevista />
                     <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />

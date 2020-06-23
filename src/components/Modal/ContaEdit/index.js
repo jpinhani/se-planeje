@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import moment from 'moment';
-import { Icon, Modal, Input, Form, InputNumber, DatePicker } from 'antd'
+import { Icon, Modal, Input, Form, InputNumber, DatePicker, Spin } from 'antd'
 import { listAcounts } from '../../../store/actions/generalAcountAction'
 import { userID } from '../../../services/urlBackEnd'
 
@@ -23,7 +23,8 @@ class ModalAcount extends React.Component {
             visible: false,
             descrConta: this.props.data.DESCR_CONTA,
             dataSaldo: this.props.data.DTSALDO ? moment(this.props.data.DTSALDO) : '',
-            saldo: this.props.data.SALDO
+            saldo: this.props.data.SALDO,
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -59,7 +60,7 @@ class ModalAcount extends React.Component {
     }
 
     async handleSubmitok() {
-
+        this.setState({ ...this.state, spin: true })
 
         const body = {
             id: this.props.data.ID,
@@ -80,6 +81,7 @@ class ModalAcount extends React.Component {
 
         const Data = resultStatus === 200 ? await GetRequest('api/contas') : {}
 
+        this.setState({ ...this.state, spin: false })
         this.props.listAcounts(Data)
 
         this.handleCancel()
@@ -137,6 +139,7 @@ class ModalAcount extends React.Component {
                         </Form.Item>
 
                     </Form>
+                    <Spin size="large" spinning={this.state.spin} />
                 </Modal>
             </div >
         )

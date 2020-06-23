@@ -13,7 +13,7 @@ import { GetRequest } from '../../components/crudSendAxios/crud';
 import { SaldoConta, groupByConta, SaldoInicial } from '../../components/SaldoConta';
 import { SaldoTransferencia } from '../../components/SaldoTransferencias';
 
-import { Tabs, Select, DatePicker, Switch, notification } from 'antd';
+import { Tabs, Select, DatePicker, Switch, notification, Spin } from 'antd';
 
 import './style.scss';
 
@@ -23,6 +23,7 @@ const { RangePicker } = DatePicker;
 
 export default () => {
     const [mode] = useState('top');
+    const [spin, setSpin] = useState(true);
 
     const [check, setCheck] = useState(false)
     const [visions, setVisions] = useState([]);
@@ -76,6 +77,7 @@ export default () => {
         setListVision(listavisao);
         setListCartao(listacartao);
         setListConta(listaconta);
+        setSpin(false)
 
     }, [getcartao, getvision, getconta])
 
@@ -110,6 +112,7 @@ export default () => {
             ...SaldoReceita,
             ...SaldoTransfCredito,
             ...SaldoInicialConta], 'Outro')
+
             setContaSaldoAtual(SaldoFinal);
         } catch (error) {
             return
@@ -159,6 +162,7 @@ export default () => {
 
     return (
         <div className='ContainerResumo'>
+            <Spin size="large" spinning={spin} />
             <Switch
                 onChange={valor => {
                     if (valor === true)

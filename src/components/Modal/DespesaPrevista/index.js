@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Radio, Form, notification } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Radio, Form, notification, Spin } from 'antd'
 import moment from 'moment';
 
 import { listExpenses } from '../../../store/actions/generalExpenseAction'
@@ -35,6 +35,7 @@ class ModalExpense extends React.Component {
             parcelasInput: 1,
             categoriaInput: [],
             descrDespesaInput: '',
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -110,7 +111,7 @@ class ModalExpense extends React.Component {
     }
 
     async handleSubmitok() {
-
+        this.setState({ ...this.state, spin: true })
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
         const dataPrevistaNova = this.state.dataPrevistaInput ? this.state.dataPrevistaInput : moment(new Date(), dateFormat)
@@ -157,8 +158,10 @@ class ModalExpense extends React.Component {
 
         verifySend(resultStatus, 'INSERT', body.descrDespesa)
 
+
         const Data = resultStatus === 200 ? await GetRequest('api/despesas') : {}
 
+        this.setState({ ...this.state, spin: false })
         this.props.listExpenses(Data)
         this.handleCancel()
         this.props.form.resetFields()
@@ -298,6 +301,7 @@ class ModalExpense extends React.Component {
                                 />)}
                         </Form.Item>
                     </Form>
+                    <Spin size="large" spinning={this.state.spin} />
                 </Modal>
 
             </div >

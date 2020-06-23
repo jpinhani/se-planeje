@@ -6,7 +6,7 @@ import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud
 import ReceitaMetaComponente from '../../components/Modal/ReceitaMeta'
 import SearchFilter from '../../components/searchFilterTable/index'
 
-import { Table, Button, Input, Select, notification } from 'antd'
+import { Table, Button, Input, Select, notification, Spin } from 'antd'
 
 const { Option } = Select;
 
@@ -20,6 +20,7 @@ export default (props) => {
     // const [vision, setVision] = useState([]);
     const [mapvision, setMapVision] = useState([]);
     const [visions, setVisions] = useState([]);
+    const [spin, setSpin] = useState(true);
 
     const Collumns = [
         {
@@ -100,7 +101,7 @@ export default (props) => {
             type: 'LIST_REVENUE',
             payload: receitas
         })
-
+        setSpin(false)
         setMapVision(resultVision)
     }, [getvision, dispatch])
 
@@ -111,6 +112,7 @@ export default (props) => {
 
     return (
         <div>
+            <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='SelectReceitaMeta'><Button type='primary' key='Lnc'>Metas - Receitas</Button></Link>
                 <Link to='SelectReceitaReal'><Button key='Lnc'>Lançamentos</Button></Link>

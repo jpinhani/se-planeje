@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import FaturaPagar from '../../components/Modal/DespesaCartao';
 
-import { Tabs, Table, Button, notification } from 'antd';
+import { Tabs, Table, Button, notification, Spin } from 'antd';
 
 import { Link } from 'react-router-dom'
 import { GetRequest } from '../../components/crudSendAxios/crud';
@@ -18,6 +18,7 @@ export default (props) => {
     const dispatch = useDispatch();
     const fatura = useSelector(state => state.fatura);
     const detalheFatura = useSelector(state => state.detalheFatura);
+    const [spin, setSpin] = useState(true)
 
     const [mode] = useState('top');
 
@@ -126,6 +127,8 @@ export default (props) => {
             type: 'LIST_FATURADETALHE',
             payload: []
         })
+
+        setSpin(false)
     }, [dispatch, listCardItens])
 
     useEffect(() => {
@@ -134,6 +137,7 @@ export default (props) => {
 
     return (
         <div>
+            <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
                 <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>

@@ -7,7 +7,7 @@ import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
 
-import { Table, Icon, Popconfirm, Input, Select, Button, notification } from 'antd'
+import { Table, Icon, Popconfirm, Input, Select, Button, notification, Spin } from 'antd'
 
 import { GetRequest, UpdateRequest, visionSerch } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios/index'
@@ -26,6 +26,8 @@ export default () => {
     const [search, setSearch] = useState('');
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
+
+    const [spin, setSpin] = useState(true);
 
     async function deleteReal(expenseReal) {
 
@@ -140,6 +142,7 @@ export default () => {
             payload: receitas
         })
 
+        setSpin(false)
         setMapVision(resultVision)
     }, [getvision, dispatch])
 
@@ -149,6 +152,7 @@ export default () => {
 
     return (
         <div>
+            <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button key='Met'> Metas </Button></Link>
                 <Link to='selectdespesarealizada'><Button type='danger' key='rel'> Lançamentos </Button></Link>

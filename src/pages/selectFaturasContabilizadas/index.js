@@ -8,12 +8,13 @@ import SearchFilter from '../../components/searchFilterTable'
 import { GetRequest, UpdateRequest } from '../../components/crudSendAxios/crud'
 import { verifySend } from '../../components/verifySendAxios'
 
-import { Table, Input, Popconfirm, Icon, notification } from 'antd';
+import { Table, Input, Popconfirm, Icon, notification, Spin } from 'antd';
 
 import 'antd/dist/antd.css';
 
 export default () => {
 
+    const [spin, setSpin] = useState(true);
     const dispatch = useDispatch();
     const faturaPaga = useSelector(state => state.faturaPaga);
 
@@ -100,6 +101,7 @@ export default () => {
             type: 'LIST_FATURACONTABILIZADA',
             payload: faturas
         });
+        setSpin(false)
     }, [dispatch])
 
     useEffect(() => {
@@ -108,6 +110,7 @@ export default () => {
 
     return (
         <div>
+            <Spin size="large" spinning={spin} />
             <div>
                 <Input
                     name='despesa'
