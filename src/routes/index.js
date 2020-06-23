@@ -56,8 +56,8 @@ class routesSePlaneje extends React.Component {
             <Content
               style={{ padding: '30px' }}>
               <Switch name='http://localhost:3000'>
-                <PublicRoute exact path='/login' component={Login} />
-                <PublicRoute exact path='/novoPlano' component={NewPlano} />
+                <PublicRoute restricted={true} exact path='/login' component={Login} />
+                <PublicRoute restricted={false} exact path='/novoPlano' component={NewPlano} />
                 <PrivateRoute exact path='/selectconta' component={SelectConta} />
                 <PrivateRoute exact path='/selectcartao' component={SelectCartao} />
                 <PrivateRoute exact path='/selectcategoria' component={SelectCategory} />
