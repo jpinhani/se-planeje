@@ -41,7 +41,7 @@ class SelectDespesaPrevista extends React.Component {
             {
                 title: 'DATA PREVISTA',
                 dataIndex: 'DATANOVA',
-                key: 'DATANOVA'
+                key: 'DATANOVA',
             },
             {
                 title: 'DESPESA',

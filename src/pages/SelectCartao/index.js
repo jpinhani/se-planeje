@@ -51,7 +51,7 @@ class SelectCartao extends React.Component {
       {
         title: 'MELHOR DIA COMPRA',
         dataIndex: 'DIA_COMPRA',
-        key: 'DIA_COMPRA'
+        key: 'DIA_COMPRA',
       },
       {
         title: 'AÇÃO',
