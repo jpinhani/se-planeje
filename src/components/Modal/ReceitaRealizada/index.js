@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select, notification } from 'antd';
+import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select, notification, Spin } from 'antd';
 import moment from 'moment';
 
 import { loadConta, loadCategoriaReceita } from '../../ListagemCombo'
@@ -14,6 +14,7 @@ const dateFormat = 'DD/MM/YYYY'
 const { TextArea } = Input;
 
 function NovaReceita(props) {
+    const [spin, setSpin] = useState(false);
     const [visibleModal, setVisibleModal] = useState(false);
     const [valorRealInput, setValorRealInput] = useState('');
     const [dataReal, setDataReal] = useState(moment(new Date(), dateFormat))
@@ -47,7 +48,7 @@ function NovaReceita(props) {
     }
 
     async function handleSubmitok() {
-
+        setSpin(true);
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
         const body = {
@@ -83,7 +84,7 @@ function NovaReceita(props) {
 
         verifySend(resulStatus, 'INSERT', body.descrDespesa)
 
-
+        setSpin(false);
         if (resulStatus === 200) {
             const receitas = await GetRequest('api/receitas/paga')
 
@@ -196,6 +197,7 @@ function NovaReceita(props) {
                                 onChange={(event) => setDescricao(event.target.value)}
                             />)}
                     </Form.Item>
+                    <Spin size="large" spinning={spin} />
                 </Modal>
             </Form>
         </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Radio, Form } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Radio, Form, Spin } from 'antd'
 import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
@@ -35,6 +35,7 @@ class ModalRevenue extends React.Component {
             parcelasInput: this.props.data.NUM_PARCELA,
             categoriaInput: this.props.data.ID_CATEGORIA,
             descrReceitaInput: this.props.data.DESCR_RECEITA,
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -110,7 +111,7 @@ class ModalRevenue extends React.Component {
     }
 
     async handleSubmitok() {
-
+        this.setState({ ...this.state, spin: true });
         const body = {
             id: this.props.data.ID,
             idUser: userID(),
@@ -140,17 +141,18 @@ class ModalRevenue extends React.Component {
 
         } else {
             const data = moment(body.dataPrevista, "DD/MM/YYYY");
-            body.dataPrevista = data.format("YYYY-MM-DD")
+            body.dataPrevista = data.format("YYYY-MM-DD");
         }
 
 
-        const resultStatus = await UpdateRequest(body, 'api/receitas')
-        verifySend(resultStatus, 'UPDATE', body.descrReceita)
+        const resultStatus = await UpdateRequest(body, 'api/receitas');
+        verifySend(resultStatus, 'UPDATE', body.descrReceita);
 
-        const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
+        const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {};
 
-        this.handleCancel()
-        this.props.listRevenues(Data)
+        this.setState({ ...this.state, spin: false });
+        this.handleCancel();
+        this.props.listRevenues(Data);
 
 
     }
@@ -270,6 +272,7 @@ class ModalRevenue extends React.Component {
                                     onChange={(event) => this.handledescricaoReceita(event.target.value)}
                                 />)}
                         </Form.Item>
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

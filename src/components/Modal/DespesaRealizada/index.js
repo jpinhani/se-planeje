@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, } from 'react-redux';
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form, notification } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form, notification, Spin } from 'antd'
 import moment from 'moment';
 
 import { userID } from '../../../services/urlBackEnd'
@@ -20,6 +20,7 @@ function NovaDespesa(props) {
 
     const dispatch = useDispatch();
 
+    const [spin, setSpin] = useState(false)
     const [visible, setVisible] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState("A VISTA");
     const [stateConta, setStateConta] = useState(false);
@@ -83,7 +84,7 @@ function NovaDespesa(props) {
     }
 
     async function handleSubmitok() {
-
+        setSpin(true)
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
 
         const body = {
@@ -123,11 +124,13 @@ function NovaDespesa(props) {
         if (resulStatus === 200) {
             const despesa = await GetRequest('api/despesas/paga')
 
+
             dispatch({
                 type: 'LIST_EXPENSEREAL',
                 payload: despesa
             })
 
+            setSpin(false)
             handleCancel()
         }
     }
@@ -265,6 +268,7 @@ function NovaDespesa(props) {
                                 onChange={(event) => setDescrDespesaInput(event.target.value)}
                             />)}
                     </Form.Item>
+                    <Spin size="large" spinning={spin} />
                 </Modal>
             </form>
         </div >

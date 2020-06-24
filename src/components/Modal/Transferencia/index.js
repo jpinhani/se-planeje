@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { userID } from '../../../services/urlBackEnd'
 
-import { Modal, Icon, Select, InputNumber, DatePicker, Input, Form, notification } from 'antd';
+import { Modal, Icon, Select, InputNumber, DatePicker, Input, Form, notification, Spin } from 'antd';
 import { loadConta } from '../../ListagemCombo/index';
 import { GetRequest, InsertRequest } from '../../crudSendAxios/crud';
 import { verifySend } from '../../verifySendAxios';
@@ -15,7 +15,7 @@ const dateFormat = 'DD/MM/YYYY';
 function NewTransferencia(props) {
 
     const dispatch = useDispatch();
-
+    const [spin, setSpin] = useState(false);
     const [visible, setVisible] = useState(false);
     const [listDebito, setlistDebito] = useState([]);
     const [contaDebito, setContaDebito] = useState([]);
@@ -35,7 +35,7 @@ function NewTransferencia(props) {
     }
 
     async function handleSubmitOk() {
-
+        setSpin(true);
         const body = {
             idUser: userID(),
             idContaDebito: contaDebito,
@@ -63,6 +63,7 @@ function NewTransferencia(props) {
 
         verifySend(novaTransf, 'INSERT', body.descrTransferencia)
 
+        setSpin(false);
         if (novaTransf === 200) {
             const transferencias = await GetRequest('api/transferencia')
 
@@ -113,7 +114,7 @@ function NewTransferencia(props) {
                         })(
                             <Select
                                 style={{ width: '100%' }}
-                                // value={contaDebito}
+                                placeholder="Informe a Conta ou fonte a Ser Debitada"
                                 onSelect={valor => {
                                     if (valor === contaCredito) {
                                         props.form.resetFields('contadebito')
@@ -133,7 +134,7 @@ function NewTransferencia(props) {
                         })(
                             <Select
                                 style={{ width: '100%' }}
-                                // value={contaCredito}
+                                placeholder="Informe a Conta ou fonte a Ser Creditada"
                                 onSelect={valor => {
                                     if (valor === contaDebito) {
                                         props.form.resetFields('contacredito')
@@ -192,6 +193,7 @@ function NewTransferencia(props) {
                             onChange={(event) => setDescricao(event.target.value)}
                         />)}
                 </Form.Item>
+                <Spin size="large" spinning={spin} />
             </Modal>
         </div >
     )

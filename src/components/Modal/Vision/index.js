@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Icon, Modal, Input, message, DatePicker, notification } from 'antd'
+import { Icon, Modal, Input, message, DatePicker, notification, Spin } from 'antd'
 import moment from 'moment'
 import { listVisions } from '../../../store/actions/visionAction'
 import { urlBackend, config } from '../../../services/urlBackEnd'
@@ -18,7 +18,8 @@ class ModalAcount extends React.Component {
             visible: false,
             vision: '',
             startDate: '',
-            finalDate: ''
+            finalDate: '',
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -44,6 +45,7 @@ class ModalAcount extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault()
+        this.setState({ ...this.state, spin: true });
 
         const endpointAPI = `${urlBackend}api/visions`
 
@@ -86,6 +88,7 @@ class ModalAcount extends React.Component {
             const result = await axios.get(endpoint, config())
             const visions = result.data
 
+            this.setState({ ...this.state, spin: false });
             this.props.listVisions(visions)
 
             this.setState({ ...this.state, vision: '' })
@@ -122,6 +125,7 @@ class ModalAcount extends React.Component {
                             defaultValue={moment(new Date(), dateFormat)}
                             format={dateFormat}
                         />
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

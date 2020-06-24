@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment';
 import axios from 'axios'
-import { Icon, Modal, Input, message } from 'antd'
+import { Icon, Modal, Input, message, Spin } from 'antd'
 import { listVisions } from '../../../store/actions/visionAction'
 import { urlBackend, config } from '../../../services/urlBackEnd'
 import 'antd/dist/antd.css';
@@ -16,9 +16,10 @@ class ModalAcount extends React.Component {
             id: this.props.data.ID,
             visible: false,
             vision: this.props.data.VISAO,
-            startDate: this.props.data.DT_INICIO,
-            finalDate: this.props.data.DT_FIM,
-            status: this.props.data.STATUS
+            startDate: moment(this.props.data.DT_INICIO).format("YYYY-MM-DD"), //.format("YYYY-DD-MM"),
+            finalDate: moment(this.props.data.DT_FIM).format("YYYY-MM-DD"), //.format("YYYY-DD-MM"),
+            status: this.props.data.STATUS,
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -45,6 +46,7 @@ class ModalAcount extends React.Component {
     async handleSubmit(event) {
         event.preventDefault()
 
+        this.setState({ ...this.state, spin: true });
         const endpointAPI = `${urlBackend}api/visions`
 
         const body = {
@@ -56,14 +58,8 @@ class ModalAcount extends React.Component {
             DT_FIM: this.state.finalDate
         }
 
-        const dataInicio = moment(body.DT_INICIO, "DD/MM/YYYY");
-        body.DT_INICIO = dataInicio.format("YYYY-MM-DD")
 
-        const dataFim = moment(body.DT_FIM, "DD/MM/YYYY");
-        body.DT_FIM = dataFim.format("YYYY-MM-DD")
-
-
-        if (body.DT_INICIO < body.DT_FIM) {
+        if (moment(body.DT_INICIO) < moment(body.DT_FIM)) {
             await axios.put(endpointAPI, body, config())
 
             const userID = localStorage.getItem('userId')
@@ -76,9 +72,11 @@ class ModalAcount extends React.Component {
 
             message.success('Visao editada com sucesso')
 
+            this.setState({ ...this.state, spin: false });
             this.handleCancel()
         } else {
             message.error('Data Inicio não pode ser maior que Data Fim')
+            this.setState({ ...this.state, spin: false });
         }
     }
 
@@ -95,8 +93,9 @@ class ModalAcount extends React.Component {
                         className="ModalCadastro"
                     >
                         <Input name='vision' value={this.state.vision} onChange={e => this.setState({ ...this.state, vision: e.target.value })} placeholder="Visao" />
-                        <Input name='startDate' value={this.state.startDate} onChange={e => this.setState({ ...this.state, startDate: e.target.value })} placeholder="Inicio" />
-                        <Input name='finalDate' value={this.state.finalDate} onChange={e => this.setState({ ...this.state, finalDate: e.target.value })} placeholder="Fim" />
+                        <Input type="date" name='startDate' value={this.state.startDate} onChange={e => this.setState({ ...this.state, startDate: e.target.value })} placeholder="Inicio" />
+                        <Input type="date" name='finalDate' value={this.state.finalDate} onChange={e => this.setState({ ...this.state, finalDate: e.target.value })} placeholder="Fim" />
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

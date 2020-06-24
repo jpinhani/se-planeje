@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form, notification } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form, notification, Spin } from 'antd'
 import moment from 'moment';
 
 import { userID } from '../../../services/urlBackEnd'
@@ -21,6 +21,7 @@ function ModalExpenseEdit(props) {
 
     const dispatch = useDispatch();
 
+    const [spin, setSpin] = useState(false);
     const [visible, setVisible] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState(props.data.DESCR_CONTA === null ? 'CRÉDITO' : 'A VISTA');
     const [check, setCheck] = useState(props.data.DESCR_CONTA === null ? true : false);
@@ -78,7 +79,7 @@ function ModalExpenseEdit(props) {
     }
 
     async function handleSubmitok() {
-
+        setSpin(true);
         const body = {
             id: props.data.ID,
             idGrupo: props.data.ID_GRUPO,
@@ -123,7 +124,7 @@ function ModalExpenseEdit(props) {
                 type: 'LIST_EXPENSEREAL',
                 payload: despesareal
             })
-
+            setSpin(false);
             setVisible(false)
         }
 
@@ -266,6 +267,7 @@ function ModalExpenseEdit(props) {
                                 onChange={(event) => setDescrDespesaInput(event.target.value)}
                             />)}
                     </Form.Item>
+                    <Spin size="large" spinning={spin} />
                 </Modal>
             </form>
         </div >

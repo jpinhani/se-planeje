@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Input, Modal, Form, InputNumber, Select, DatePicker, Switch, Divider, notification } from 'antd'
+import { Input, Modal, Form, InputNumber, Select, DatePicker, Switch, Divider, notification, Spin } from 'antd'
 import { LikeTwoTone } from '@ant-design/icons';
 
 import { loadConta, loadCategoriaReceita } from '../../ListagemCombo'
@@ -19,6 +19,7 @@ function ReceitaMeta(props) {
 
     const dispatch = useDispatch();
 
+    const [spin, setSpin] = useState(false);
     const [visible, setVisible] = useState(false);
 
     const [categoria, setCategoria] = useState('');
@@ -37,6 +38,7 @@ function ReceitaMeta(props) {
 
 
     async function handleSubmit() {
+        setSpin(true);
         const body = {
             id: props.data.ID,
             idUser: userID(),
@@ -74,6 +76,7 @@ function ReceitaMeta(props) {
                 },
             });
 
+        setSpin(false);
         verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 
 
@@ -252,7 +255,7 @@ function ReceitaMeta(props) {
                                 />)}
                         </Form.Item>
                     </div>
-
+                    <Spin size="large" spinning={spin} />
 
                 </Modal>
             </form>

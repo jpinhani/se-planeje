@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Icon, Modal, Input, Select, DatePicker, InputNumber, Radio, Form, notification } from 'antd'
+import { Icon, Modal, Input, Select, DatePicker, InputNumber, Radio, Form, notification, Spin } from 'antd'
 import moment from 'moment';
 
 import { listRevenues } from '../../../store/actions/generalRevenueAction'
@@ -33,6 +33,7 @@ class ModalRevenue extends React.Component {
             parcelasInput: 1,
             categoriaInput: [],
             descrReceitaInput: '',
+            spin: false
         }
 
         this.showModal = this.showModal.bind(this)
@@ -103,6 +104,7 @@ class ModalRevenue extends React.Component {
 
     async handleSubmitok() {
 
+        this.setState({ ...this.state, spin: true })
         const ID = () => '_' + Math.random().toString(36).substr(2, 9);
         const body = {
             idGrupo: ID(),
@@ -151,7 +153,7 @@ class ModalRevenue extends React.Component {
         verifySend(resultStatus, 'INSERT', body.descrReceita)
         const Data = resultStatus === 200 ? await GetRequest('api/receitas') : {}
 
-
+        this.setState({ ...this.state, spin: false })
         this.props.listRevenues(Data)
         this.handleCancel()
         this.props.form.resetFields()
@@ -263,6 +265,7 @@ class ModalRevenue extends React.Component {
                                     onChange={(event) => this.handledescricaoReceita(event.target.value)}
                                 />)}
                         </Form.Item>
+                        <Spin size="large" spinning={this.state.spin} />
                     </Modal>
                 </form>
             </div >

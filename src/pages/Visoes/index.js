@@ -38,10 +38,10 @@ function Vision() {
     const vis = visions.map(vision => {
 
       const date1 = moment(vision.DT_INICIO, "YYYY/MM/DD");
-      vision.DT_INICIO = date1.format("DD/MM/YYYY")
+      vision.DT_INICIO2 = date1.format("DD/MM/YYYY")
 
       const date2 = moment(vision.DT_FIM, "YYYY/MM/DD");
-      vision.DT_FIM = date2.format("DD/MM/YYYY")
+      vision.DT_FIM2 = date2.format("DD/MM/YYYY")
 
       return vision
 
@@ -59,13 +59,13 @@ function Vision() {
     },
     {
       title: 'Inicio',
-      dataIndex: 'DT_INICIO',
-      key: 'DT_INICIO'
+      dataIndex: 'DT_INICIO2',
+      key: 'DT_INICIO2'
     },
     {
       title: 'Final',
-      dataIndex: 'DT_FIM',
-      key: 'DT_FIM'
+      dataIndex: 'DT_FIM2',
+      key: 'DT_FIM2'
     },
     {
       title: 'Action',

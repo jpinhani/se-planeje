@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select } from 'antd';
+import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select, Spin } from 'antd';
 import moment from 'moment';
 
 import { loadConta, loadCategoriaReceita } from '../../ListagemCombo'
@@ -15,6 +15,7 @@ const { TextArea } = Input;
 
 function EditarReceita(props) {
     const [visibleModal, setVisibleModal] = useState(false);
+    const [spin, setSpin] = useState(false);
 
     const [valorRealInput, setValorRealInput] = useState(props.data.VL_REAL2);
     const [dataReal, setDataReal] = useState(props.data.DATANOVAREAL)
@@ -48,7 +49,7 @@ function EditarReceita(props) {
     }
 
     async function handleSubmitok() {
-
+        setSpin(true);
         const body = {
             id: props.data.ID,
             idGrupo: props.data.ID_GRUPO,
@@ -72,7 +73,7 @@ function EditarReceita(props) {
 
         verifySend(resulStatus, 'UPDATE', body.descrDespesa)
 
-
+        setSpin(false);
         if (resulStatus === 200) {
             const receitas = await GetRequest('api/receitas/paga')
 
@@ -187,6 +188,7 @@ function EditarReceita(props) {
                             />)}
                     </Form.Item>
                 </Modal>
+                <Spin size="large" spinning={spin} />
             </Form>
         </div>
     )
