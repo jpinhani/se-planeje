@@ -69,6 +69,7 @@ export default (props) => {
                 columns={columns}
                 dataSource={tabReceita}
                 rowKey="ROLID"
+                pagination={{ pageSize: 100 }}
             />
         </div>
     )

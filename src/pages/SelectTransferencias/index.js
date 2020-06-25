@@ -172,6 +172,7 @@ export default () => {
                         'CONTA_CREDITO',
                         'CONTA_DEBITO'], search)}
                 rowKey='ID'
+                pagination={{ pageSize: 100 }}
             />
         </div>
     )

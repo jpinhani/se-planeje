@@ -118,7 +118,9 @@ class SelectReceitaPrevista extends React.Component {
                     <Table className='table table-action'
                         columns={this.columns()}
                         dataSource={SearchFilter(this.props.revenue, ['DESCR_RECEITA', 'DESCR_RECEITA'], this.state.filter)}
-                        rowKey='ID' />
+                        rowKey='ID'
+                        pagination={{ pageSize: 100 }} />
+
                 </div>
 
             </div>

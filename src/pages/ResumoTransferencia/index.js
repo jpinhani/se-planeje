@@ -51,6 +51,7 @@ export default (props) => {
                 columns={columns}
                 dataSource={tabTransferencia}
                 rowKey="ROLID"
+                pagination={{ pageSize: 100 }}
             />
         </div>
     )

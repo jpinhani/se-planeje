@@ -186,6 +186,7 @@ function ReceitaRealizada() {
                     visionSerchReceita(mapvision, receitaReal, visionControler),
                     ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
                 rowKey='ID'
+                pagination={{ pageSize: 100 }}
             />
         </div>
 

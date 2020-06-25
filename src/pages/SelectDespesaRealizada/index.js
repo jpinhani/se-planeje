@@ -183,6 +183,7 @@ export default () => {
                         visionSerch(mapvision, expenseReal, visionControler),
                         ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search)}
                     rowKey='ID'
+                    pagination={{ pageSize: 100 }}
                 />
             </div>
         </div>

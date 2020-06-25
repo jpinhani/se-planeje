@@ -187,7 +187,8 @@ class SelectCategoria extends React.Component {
                 <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
             </div>
             <div>
-                <Table className='table table-action' columns={this.columns()} dataSource={this.props.category} rowKey='ID' />
+                <Table className='table table-action' columns={this.columns()} dataSource={this.props.category} rowKey='ID'
+                    pagination={{ pageSize: 100 }} />
             </div>
         </div >
         )

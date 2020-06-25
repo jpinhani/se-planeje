@@ -17,7 +17,7 @@ export default (props) => {
     const [categorias, setCategoria] = useState([]);
     const [saldoInicial, setSaldoInicial] = useState([]);
     const [tree, setTree] = useState([]);
-    const [cenario, setCenario] = useState([])
+    const [cenario, setCenario] = useState('FORECAST')
 
     const columns = [
         {
@@ -98,14 +98,6 @@ export default (props) => {
         const dados2 = SaldoCategoriaReceita(dataRevenue, visao, cenario, categorias);
         const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
 
-        // /*Forecast*/
-        // const dados3 = SaldoCategoria(data, visao, "FORECAST", cartao, categorias);
-        // const treeCategoryExpenseFORE = hierarquia(dados1, nivel3, nivel4, nivel5)
-
-        // const dados4 = SaldoCategoriaReceita(dataRevenue, visao, "FORECAST", categorias);
-        // const treeCategoryRevenueFORE = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
-
-
         const SaldoInicialPersonalizado = [{
             Categoria: 'SALDO INICIAL',
             // IdCategoria: ,
@@ -150,6 +142,7 @@ export default (props) => {
                     // style={{ width: '90%', marginBottom: '3px', marginTop: '3px' }}
                     placeholder="Selecione o Cenário Desejado"
                     optionFilterProp="children"
+                    value={cenario}
                     filterOption={(input, option) => (
                         option.props.children.toLowerCase()
                             .indexOf(input.toLowerCase()) >= 0

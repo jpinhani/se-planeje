@@ -141,7 +141,8 @@ export default (props) => {
                     visionSerchMeta(mapvision, receitaMeta, visionControler),
                     ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
 
-                rowKey={receitaMeta => receitaMeta.ID} />
+                rowKey={receitaMeta => receitaMeta.ID}
+                pagination={{ pageSize: 100 }} />
         </div>
     )
 

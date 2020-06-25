@@ -121,7 +121,8 @@ class SelectDespesaPrevista extends React.Component {
                     <Table className='table table-action'
                         columns={this.columns()}
                         dataSource={SearchFilter(this.props.expense, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
-                        rowKey='ID' />
+                        rowKey='ID'
+                        pagination={{ pageSize: 100 }} />
                 </div>
 
             </div>

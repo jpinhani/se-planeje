@@ -122,7 +122,9 @@ export default () => {
                 <Table className='table table-action'
                     columns={columns}
                     dataSource={SearchFilter(faturaPaga, ['ID_FATURA'], search)}
-                    rowKey='ID_FATURA' />
+                    rowKey='ID_FATURA'
+                    pagination={{ pageSize: 100 }} />
+
             </div>
         </div>
     )

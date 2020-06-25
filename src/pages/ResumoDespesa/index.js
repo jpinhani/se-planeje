@@ -116,6 +116,7 @@ export default (props) => {
                 title={() => `Lançamentos no débito ou dinheiro`}
                 columns={columnsLancamentos}
                 dataSource={tabDespesa.filter(filtro => filtro.CARTAO === undefined)}
+                pagination={{ pageSize: 100 }}
                 rowKey="ROLID"
             />
         </div>

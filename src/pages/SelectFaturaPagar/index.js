@@ -82,6 +82,7 @@ export default (props) => {
                         DATA.ID === ID.ID
                     ))}
                     rowKey={ID => ID.ID_DESPESA}
+                    pagination={{ pageSize: 100 }}
                 />
             </TabPane >
         ))
