@@ -9,7 +9,40 @@ export default (props) => {
     const [tabDespesa, setTabDespesa] = useState([]);
     const [itens, setItens] = useState(true)
 
-    const columns = [
+    const columnsLancamentos = [
+
+        {
+            title: 'CATEGORIA',
+            dataIndex: 'DESCR_CATEGORIA',
+            key: 'DESCR_CATEGORIA'
+        },
+        {
+            title: 'R$ PREVISTO',
+            dataIndex: 'VL_PREVISTO',
+            key: 'VL_PREVISTO'
+        },
+        {
+            title: 'R$ REAL',
+            dataIndex: 'VL_REAL',
+            key: 'VL_REAL'
+        },
+        {
+            title: 'DATA PREVISTA',
+            dataIndex: 'DT_PREVISTO',
+            key: 'DT_PREVISTO'
+        },
+        {
+            title: 'DATA REAL',
+            dataIndex: 'DT_REAL',
+            key: 'DT_REAL'
+        },
+        {
+            title: 'DESPESA',
+            dataIndex: 'DESCR_DESPESA',
+            key: 'DESCR_DESPESA'
+        }];
+
+    const columnsCartao = [
 
         {
             title: 'CARTAO',
@@ -45,11 +78,6 @@ export default (props) => {
             title: 'DESPESA',
             dataIndex: 'DESCR_DESPESA',
             key: 'DESCR_DESPESA'
-        },
-        {
-            title: 'PARCELA',
-            dataIndex: 'NUM_PARCELA',
-            key: 'NUM_PARCELA'
         }];
 
     const ResumoDespesa = useCallback(() => {
@@ -74,9 +102,20 @@ export default (props) => {
                         setItens(true) : setItens(false)} />
                 {itens === true ? ' Despesas Contabilizadas' : ' Despesas Previstas'}
             </div>
+
+            <Table name='CDespesa' className='table table-action'
+                // onHeaderRow="Lançamentos no Cartão de Crédito"
+                title={() => `Lançamentos no cartão de Crédito`}
+                columns={columnsCartao}
+                pagination={{ position: ["none", "none"] }}
+                dataSource={tabDespesa.filter(filtro => filtro.CARTAO)}
+                rowKey="ROLID"
+            />
+
             <Table name='Despesa' className='table table-action'
-                columns={columns}
-                dataSource={tabDespesa}
+                title={() => `Lançamentos no débito ou dinheiro`}
+                columns={columnsLancamentos}
+                dataSource={tabDespesa.filter(filtro => filtro.CARTAO === undefined)}
                 rowKey="ROLID"
             />
         </div>

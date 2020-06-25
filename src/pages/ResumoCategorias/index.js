@@ -91,12 +91,20 @@ export default (props) => {
                 return { ...data, Categoria: data.DESCR_CATEGORIA }
             })
 
+        /*Previsto*/
         const dados1 = SaldoCategoria(data, visao, cenario, cartao, categorias);
         const treeCategoryExpense = hierarquia(dados1, nivel3, nivel4, nivel5)
 
         const dados2 = SaldoCategoriaReceita(dataRevenue, visao, cenario, categorias);
         const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
-        // setTreeRevenue(treeCategoryRevenue)
+
+        // /*Forecast*/
+        // const dados3 = SaldoCategoria(data, visao, "FORECAST", cartao, categorias);
+        // const treeCategoryExpenseFORE = hierarquia(dados1, nivel3, nivel4, nivel5)
+
+        // const dados4 = SaldoCategoriaReceita(dataRevenue, visao, "FORECAST", categorias);
+        // const treeCategoryRevenueFORE = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)
+
 
         const SaldoInicialPersonalizado = [{
             Categoria: 'SALDO INICIAL',

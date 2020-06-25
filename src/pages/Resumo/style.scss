@@ -7,10 +7,10 @@
 }
 
 .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
-    height: 40px;
+    height: 30px !important;
     // color: #1890ff;
     color: white;
-    font-size: 20px;
+    font-size: 0px;
     font-weight: bold;
     background: #FA8072	 !important;
     border-color: #e8e8e8;
@@ -18,10 +18,10 @@
 }
 
 .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
-    height: 40px;
+    height: 30px ;
     margin: 0;
         color: white;
-    font-size: 20px;
+    font-size: 15px;
     margin-right: 2px;
     padding: 0 16px;
     line-height: 38px;
