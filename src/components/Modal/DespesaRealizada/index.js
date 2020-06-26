@@ -34,6 +34,7 @@ function NovaDespesa(props) {
     const [categoriaInput, setCategoriaInput] = useState([]);
     const [contaInput, setContaInput] = useState([]);
     const [descrDespesaInput, setDescrDespesaInput] = useState('');
+    const [parcelaInput, setParcelaInput] = useState(1)
 
     async function showModal() {
         const resultCategoria = await loadCategoria()
@@ -95,7 +96,7 @@ function NovaDespesa(props) {
             cartao: cartaoInput,
             conta: contaInput,
             categoria: categoriaInput,
-            parcela: '1',
+            parcela: parcelaInput,
             descrDespesa: descrDespesaInput,
             status: visibleEdit === 'A VISTA'
                 ? 'Pagamento Realizado'
@@ -236,26 +237,39 @@ function NovaDespesa(props) {
                                 </Select>)}
                         </Form.Item>
                     </div>
-                    <Form.Item style={{ width: '100%' }}>
-                        {getFieldDecorator('categoria', {
-                            rules: [{ required: true, message: 'Informe a Categoria!' }],
-                            initialValue: categoriaInput
-                        })(
-                            <Select
-                                showSearch
-                                optionFilterProp="children"
-                                filterOption={(input, option) => (
-                                    option.props.children.toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                )}
-                                style={{ width: '100%' }}
-                                placeholder="Informe a Categoria"
-                                onSelect={valor => setCategoriaInput(valor)}
-                            >
-                                {categoria}
-                            </Select>)}
-                    </Form.Item>
-
+                    <div style={{ width: '100%', display: 'flex' }}>
+                        <Form.Item style={{ width: '80%' }}>
+                            {getFieldDecorator('categoria', {
+                                rules: [{ required: true, message: 'Informe a Categoria!' }],
+                                initialValue: categoriaInput
+                            })(
+                                <Select
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) => (
+                                        option.props.children.toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    )}
+                                    style={{ width: '100%' }}
+                                    placeholder="Informe a Categoria"
+                                    onSelect={valor => setCategoriaInput(valor)}
+                                >
+                                    {categoria}
+                                </Select>)}
+                        </Form.Item>
+                        <Form.Item style={{ width: '20%' }}>
+                            {getFieldDecorator('Parcelas', {
+                                rules: [{ required: true, message: 'Informe a Qauntidade de Parcelas!' }],
+                                initialValue: parcelaInput
+                            })(
+                                <InputNumber
+                                    min={1}
+                                    style={{ width: '100%' }}
+                                    placeholder="Nº de Parcelas"
+                                    onChange={valor => setParcelaInput(valor)}
+                                />)}
+                        </Form.Item>
+                    </div>
                     <Form.Item style={{ width: '100%' }}>
                         {getFieldDecorator('description', {
                             rules: [{ required: true, message: 'Descreva a Despesa' }],
