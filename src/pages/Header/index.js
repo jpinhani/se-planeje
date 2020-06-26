@@ -1,25 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './style.scss'
-import { Menu, Dropdown, message, Layout } from 'antd';
+import { Menu, Dropdown, Layout } from 'antd';
 import { UserOutlined, SettingOutlined, CommentOutlined } from '@ant-design/icons';
 import { logout } from '../../auth/index'
 
 const { Header } = Layout;
 
-function handleMenuClick(e) {
-    message.info('Click on menu item.');
-}
+// function handleMenuClick(e) {
+//     message.info('Click on menu item.');
+// }
 
 const menu = (
-    <Menu onClick={handleMenuClick} >
+    <Menu /* onClick={handleMenuClick}  */>
         <Menu.Item key="1">
             <SettingOutlined />
             <i style={{ paddingLeft: '2px' }}>Pagamento</i>
         </Menu.Item>
         <Menu.Item key="2">
-            <UserOutlined />
-            <i style={{ paddingLeft: '2px' }}>Perfil</i>
+            <Link to='/detailsPlano'>
+                <UserOutlined />
+                <i style={{ paddingLeft: '2px' }}>Senha</i>
+            </Link>
         </Menu.Item>
         <Menu.Item key="3">
             <CommentOutlined />
