@@ -2,18 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { listExpenses } from '../../store/actions/generalExpenseAction'
+import { listVisionsControler } from '../../store/actions/controlerVisionAction'
+
 import DespesaPrevista from '../../components/Modal/DespesaPrevista'
 import Menu from '../../components/MenuDespesaPrevista'
 import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
 
 import SearchFilter from '../../components/searchFilterTable'
-import { Table, Icon, Popover, Input, notification, Spin } from 'antd'
+import { Table, Icon, Popover, Input, notification, Spin, Select } from 'antd'
 
-import { GetRequest } from '../../components/crudSendAxios/crud'
+import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud'
 
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+const { Option } = Select;
 class SelectDespesaPrevista extends React.Component {
     constructor(props) {
         super(props)
@@ -21,7 +24,9 @@ class SelectDespesaPrevista extends React.Component {
         this.state = {
             search: '',
             filter: '',
-            spin: true
+            spin: true,
+            visions: [],
+            mapvision: []
         }
         this.searchExpense = this.searchExpense.bind(this)
     }
@@ -97,6 +102,18 @@ class SelectDespesaPrevista extends React.Component {
                 },
             });
 
+        const visions = await GetRequest('api/visions')
+
+        const options = visions.map((desc, i) =>
+            <Option key={i} value={desc.VISAO}>
+                {desc.VISAO}
+            </Option>
+        )
+
+        options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
+
+        this.setState({ ...this.state, visions: options, mapvision: visions })
+
         this.setState({ ...this.state, spin: false })
         this.props.listExpenses(despesa)
     }
@@ -104,6 +121,13 @@ class SelectDespesaPrevista extends React.Component {
     searchExpense(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
+
+    filterVision(selectVisao) {
+
+        this.props.listVisionsControler(selectVisao);
+        // dispatch({ type: 'LIST_VISIONCONTROLER', payload: selectVisao })
+    }
+
 
     componentDidMount() {
         this.requestAPI()
@@ -116,11 +140,20 @@ class SelectDespesaPrevista extends React.Component {
                 <div className='ViewExpense'>
                     <DespesaPrevista />
                     <Input name='despesa' value={this.state.search} onChange={this.searchExpense} placeholder="Procure aqui a despesa especifica" />
+                    <Select style={{ width: '50%' }}
+                        placeholder="Filtrar por Visão"
+                        value={this.props.visionControler}
+                        onSelect={(valor) => this.filterVision(valor)}
+                    >
+                        {this.state.visions}
+                    </Select>
                 </div>
                 <div>
                     <Table className='table table-action'
                         columns={this.columns()}
-                        dataSource={SearchFilter(this.props.expense, ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
+                        dataSource={SearchFilter(
+                            visionSerchMeta(this.state.mapvision, this.props.expense, this.props.visionControler),
+                            ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter)}
                         rowKey='ID'
                         pagination={{ pageSize: 100 }} />
                 </div>
@@ -132,11 +165,12 @@ class SelectDespesaPrevista extends React.Component {
 
 const mapStateToProps = (state /*, ownProps*/) => {
     return {
-        expense: state.expense
+        expense: state.expense,
+        visionControler: state.visionControler
     }
 }
 
-const mapDispatchToProps = { listExpenses }
+const mapDispatchToProps = { listExpenses, listVisionsControler }
 
 export default connect(
     mapStateToProps,
