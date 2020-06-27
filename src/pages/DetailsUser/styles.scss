@@ -1,0 +1,32 @@
+.PaymentContainer{
+    div{
+        width: 100%;
+        border: 1px solid white;
+    
+                div{
+                        padding-left: 20px;
+                        display: flex;
+                        align-items: center;
+                        width: 100% !important;
+                        font-size: 18px;
+                        font-weight: bold;
+                        height: 30px !important;
+                        background: radial-gradient(rgb(129, 214, 243), rgb(182, 186, 197));
+                }
+
+                p{
+                    display: flex;
+                    align-items: center;
+                    font-size: 18px;
+                    padding-left: 20px;
+                    background-color: white;
+                    height: 25px;
+
+                    .ant-btn-block {
+                    text-align: left;
+                     width: 100%; 
+                   }
+                }
+        }
+    
+}

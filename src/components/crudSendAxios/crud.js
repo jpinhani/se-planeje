@@ -10,8 +10,6 @@ function redirect() {
 
 async function GetRequest(rota) {
     try {
-
-
         const endpoint = `${urlBackend}${rota}/${userID()}`
 
         const result = await axios.get(endpoint, config())

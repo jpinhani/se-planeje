@@ -14,8 +14,10 @@ const { Header } = Layout;
 const menu = (
     <Menu /* onClick={handleMenuClick}  */>
         <Menu.Item key="1">
-            <SettingOutlined />
-            <i style={{ paddingLeft: '2px' }}>Pagamento</i>
+            <Link to='/detailsUser'>
+                <SettingOutlined />
+                <i style={{ paddingLeft: '2px' }}>Pagamento</i>
+            </Link>
         </Menu.Item>
         <Menu.Item key="2">
             <Link to='/detailsPlano'>
