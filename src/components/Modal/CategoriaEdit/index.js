@@ -151,58 +151,29 @@ class ModalCategory extends React.Component {
             if (novosDados.status === 200) {
                 message.success(" Categoria Editada Com Sucesso", 5);
 
-                let nivel = []
-                let n3 = 0
-                for (let x = 0; x < novosDados.data.length; x++) {
-                    if (novosDados.data[x].NIVEL === 3) {
-                        nivel[n3] = novosDados.data[x]
+                // console.log(novosDados)
+                const nivel3 = novosDados.data.filter((DATA) => DATA.NIVEL === 3)
+                const nivel4 = novosDados.data.filter((DATA) => DATA.NIVEL === 4)
+                const nivel5 = novosDados.data.filter((DATA) => DATA.NIVEL === 5)
+                const nivel6 = novosDados.data.filter((DATA) => DATA.NIVEL === 6)
 
-                        let col = []
-                        for (let y = 0; y < novosDados.data.length; y++) {
-                            if (novosDados.data[y].IDPAI === nivel[n3].ID
-                                && novosDados.data[y].NIVEL === 4) {
-                                col.push(novosDados.data[y])
+                const gera5 = nivel5.reduce((novo, n6, i) => {
+                    if (nivel6.filter((data) => n6.ID === data.IDPAI).length > 0)
+                        novo[i].children = nivel6.filter((data) => n6.ID === data.IDPAI)
+                    return novo
+                }, nivel5)
 
-                                // let n4 = 0
+                const gera4 = nivel4.reduce((novo, n5, i) => {
+                    if (gera5.filter((data) => n5.ID === data.IDPAI).length > 0)
+                        novo[i].children = gera5.filter((data) => n5.ID === data.IDPAI)
+                    return novo
+                }, nivel4)
 
-                                for (let n4 = 0; n4 < col.length; n4++) {
-                                    let col2 = []
-                                    for (let z = 0; z < novosDados.data.length; z++) {
-
-                                        if (novosDados.data[z].IDPAI === col[n4].ID
-                                            && novosDados.data[z].NIVEL === 5) {
-                                            col2.push(novosDados.data[z])
-
-
-                                            // let n5 = 0
-
-                                            for (let n5 = 0; n5 < col2.length; n5++) {
-                                                let col3 = []
-                                                for (let u = 0; u < novosDados.data.length; u++) {
-
-                                                    if (novosDados.data[u].IDPAI === col2[n5].ID
-                                                        && novosDados.data[u].NIVEL === 6) {
-
-                                                        col3.push(novosDados.data[u])
-                                                        col2[n5].children = col3
-                                                    }
-                                                }
-                                            }
-
-                                            col[n4].children = col2
-                                        }
-
-                                    }
-                                }
-
-                                nivel[n3].children = col
-                            }
-
-                        }
-                        n3 = n3 + 1
-                    }
-                }
-
+                const nivel = nivel3.reduce((novo, n4, i) => {
+                    if (gera4.filter((data) => n4.ID === data.IDPAI).length > 0)
+                        novo[i].children = gera4.filter((data) => n4.ID === data.IDPAI)
+                    return novo
+                }, nivel3)
 
                 this.setState({ ...this.state, spin: false })
                 this.props.listCategorys(nivel)
