@@ -31,7 +31,8 @@ export default (props) => {
         const dataGrafico1 = dataNovo.map((novo) =>
             [parseFloat(novo.D_REAL * -1).toFixed(2),
             parseFloat(novo.R_REAL).toFixed(2),
-            parseFloat(novo.L_REAL).toFixed(2)]
+            parseFloat(novo.L_REAL).toFixed(2)
+            ]
         )
 
         const dataGrafico2 = dataNovo.map((novo) =>
@@ -45,25 +46,27 @@ export default (props) => {
 
         const rs = {
             type: 'horizontalBar',
+            // type: 'doughnut',
+            // type: 'bar',
 
             data: {
                 datasets: [{
                     // borderWidth: '100px',
                     lineTension: 0.5,
                     data: dataGrafico[0],
-                    borderColor: ['GREEN', 'GREEN', 'GREEN'],
-                    backgroundColor: ['#F5F5DC', '#F5F5DC', '#F5F5DC'],
-                    borderWidth: 1,
+                    backgroundColor: ['#FFFF00', '#FFFF00', '#FFFF00'],
+                    borderColor: ['YELLOW', 'YELLOW', 'YELLOW'],
+                    borderWidth: 3,
                     label: 'Previsto',
                 },
                 {
                     lineTension: 0.5,
                     // borderWidth: 10,
                     data: dataGrafico1[0],
+                    backgroundColor: ['#FA8072', '#FA8072', '#FA8072'],
                     borderColor: ['RED', 'RED', 'RED'],
-                    backgroundColor: ['#FFDAB9', '#FFDAB9', '#FFDAB9'],
                     // backgroundColor: ['#FFDAB9'],
-                    borderWidth: 1,
+                    borderWidth: 3,
                     label: 'Real',
                 },
                 {
@@ -71,9 +74,9 @@ export default (props) => {
                     data: dataGrafico2[0],
                     // borderWidth: 10,
                     // backgroundColor: ['#E0FFFF'],
-                    backgroundColor: ['#E0FFFF', '#E0FFFF', '#E0FFFF'],
+                    backgroundColor: ['#00FFFF', '#00FFFF', '#00FFFF'],
                     borderColor: ['BLUE', 'BLUE', 'BLUE'],
-                    borderWidth: 1,
+                    borderWidth: 3,
                     label: 'Forecast',
                 }],
                 labels: labelsGrafico
