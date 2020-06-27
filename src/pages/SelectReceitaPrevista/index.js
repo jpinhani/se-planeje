@@ -1,21 +1,23 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
 
-import { listRevenues } from '../../store/actions/generalRevenueAction'
-import ReceitaPrevista from '../../components/Modal/ReceitaPrevista'
-import Menu from '../../components/MenuReceitaPrevista'
+import { listRevenues } from '../../store/actions/generalRevenueAction';
+import ReceitaPrevista from '../../components/Modal/ReceitaPrevista';
+import Menu from '../../components/MenuReceitaPrevista';
 
+import { listVisionsControler } from '../../store/actions/controlerVisionAction';
 
-import EditReceita from '../../components/Modal/ReceitaPrevistaEdit'
-import SearchFilter from '../../components/searchFilterTable'
+import EditReceita from '../../components/Modal/ReceitaPrevistaEdit';
+import SearchFilter from '../../components/searchFilterTable';
 
-import { GetRequest } from '../../components/crudSendAxios/crud'
+import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud';
 
-import { Table, Icon, Popover, Input, notification, Spin } from 'antd'
+import { Table, Icon, Popover, Input, notification, Spin, Select } from 'antd';
 
 import 'antd/dist/antd.css';
-import './styles.scss'
+import './styles.scss';
 
+const { Option } = Select;
 class SelectReceitaPrevista extends React.Component {
     constructor(props) {
         super(props)
@@ -23,7 +25,9 @@ class SelectReceitaPrevista extends React.Component {
         this.state = {
             search: '',
             filter: '',
-            spin: true
+            spin: true,
+            visions: [],
+            mapvision: []
         }
         this.searchRevenue = this.searchRevenue.bind(this)
     }
@@ -94,13 +98,31 @@ class SelectReceitaPrevista extends React.Component {
                 },
             });
 
-        this.setState({ ...this.state, spin: false })
+        const visions = await GetRequest('api/visions')
+
+        const options = visions.map((desc, i) =>
+            <Option key={i} value={desc.VISAO}>
+                {desc.VISAO}
+            </Option>
+        )
+
+        options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
+
+        this.setState({ ...this.state, visions: options, mapvision: visions, spin: false })
+
         this.props.listRevenues(Data)
     }
 
     searchRevenue(event) {
         this.setState({ ...this.state, search: event.target.value, filter: event.target.value })
     }
+
+
+    filterVision(selectVisao) {
+
+        this.props.listVisionsControler(selectVisao);
+    }
+
 
     componentDidMount() {
         this.requestAPI()
@@ -113,11 +135,20 @@ class SelectReceitaPrevista extends React.Component {
                 <div className='ViewExpense'>
                     <ReceitaPrevista />
                     <Input name='receita' value={this.state.search} onChange={this.searchRevenue} placeholder="Procure aqui a receita especifica" />
+                    <Select style={{ width: '50%' }}
+                        placeholder="Filtrar por Visão"
+                        value={this.props.visionControler}
+                        onSelect={(valor) => this.filterVision(valor)}
+                    >
+                        {this.state.visions}
+                    </Select>
                 </div>
                 <div>
                     <Table className='table table-action'
                         columns={this.columns()}
-                        dataSource={SearchFilter(this.props.revenue, ['DESCR_RECEITA', 'DESCR_RECEITA'], this.state.filter)}
+                        dataSource={SearchFilter(
+                            visionSerchMeta(this.state.mapvision, this.props.revenue, this.props.visionControler),
+                            ['DESCR_RECEITA', 'DESCR_RECEITA'], this.state.filter)}
                         rowKey='ID'
                         pagination={{ pageSize: 100 }} />
 
@@ -130,11 +161,12 @@ class SelectReceitaPrevista extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        revenue: state.revenue
+        revenue: state.revenue,
+        visionControler: state.visionControler
     }
 }
 
-const mapDispatchToProps = { listRevenues }
+const mapDispatchToProps = { listRevenues, listVisionsControler }
 
 export default connect(
     mapStateToProps,
