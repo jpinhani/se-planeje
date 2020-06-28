@@ -34,8 +34,12 @@ class ModalCategory extends React.Component {
             alterTipo: this.props.data.TIPO,
             alterEntrada: this.props.data.ENTRADA,
             alterDependencia: this.props.data.IDPAI,
-            alterId: this.props.data.ID
+            alterId: this.props.data.ID,
+            enableEntrada: this.props.data.children ? this.props.data.children.length > 0 ? true : false : false
+
+
         }
+        console.log(this.props.data)
 
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
@@ -43,7 +47,6 @@ class ModalCategory extends React.Component {
         this.handleDependencia = this.handleDependencia.bind(this)
         this.handleDescrCategoria = this.handleDescrCategoria.bind(this)
         this.handleNivel = this.handleNivel.bind(this)
-        this.handleTipo = this.handleTipo.bind(this)
         this.handleEntrada = this.handleEntrada.bind(this)
     }
 
@@ -72,15 +75,7 @@ class ModalCategory extends React.Component {
             this.ComboDependencia(tipoSelecionado(), nivelSelecionado)
         }
     }
-    handleTipo(evento) {
-        this.setState({ ...this.state, entradaInput: [], dependenciaInput: [], tipo: evento })
-        const tipoSelecionado = evento
-        const nivelSelecionado = this.state.nivelInput
 
-        if ((nivelSelecionado.length > 0)) {
-            this.ComboDependencia(tipoSelecionado, nivelSelecionado)
-        }
-    }
     handleEntrada(evento) {
         this.setState({ ...this.state, entradaInput: evento })
     }
@@ -135,7 +130,7 @@ class ModalCategory extends React.Component {
             const args = {
                 message: 'Erro de Entrada de Dados',
                 description:
-                    'Ao escolher o nivel 6 o campo entrada passa a ser obrigatório ser de Input',
+                    'Ao escolher o nivel 6 o campo entrada deve ser obrigatoriamente de Input',
                 duration: 10,
             };
             notification.open(args);
@@ -175,8 +170,38 @@ class ModalCategory extends React.Component {
                     return novo
                 }, nivel3)
 
+                const nivelMaxDespesa = [{
+                    DESCR_CATEGORIA: 'DESPESA',
+                    NIVEL: 2,
+                    TIPO: 1,
+                    TIPODESCR: 'DESPESA',
+                    ENTRADA: 1,
+                    ENTRADADESCR: 'Categoria de Consolidação',
+                    AGREGACAO: "+",
+                    DEPENDENCIA: 1,
+                    ID: 2,
+                    IDPAI: 1,
+                    STATUS: "Ativo",
+                    children: nivel.filter(filtro => filtro.TIPO === 1)
+                }]
+
+                const nivelMaxReceita = [{
+                    DESCR_CATEGORIA: 'RECEITA',
+                    NIVEL: 2,
+                    TIPO: 2,
+                    TIPODESCR: 'RECEITA',
+                    ENTRADA: 1,
+                    ENTRADADESCR: 'Categoria de Consolidação',
+                    AGREGACAO: "+",
+                    DEPENDENCIA: 1,
+                    ID: 3,
+                    IDPAI: 1,
+                    STATUS: "Ativo",
+                    children: nivel.filter(filtro => filtro.TIPO === 2)
+                }]
+
                 this.setState({ ...this.state, spin: false })
-                this.props.listCategorys(nivel)
+                this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
 
                 this.handleCancel()
             } else {
@@ -200,25 +225,20 @@ class ModalCategory extends React.Component {
                     >
                         <Input name='categoria' value={this.state.descrCategoria} onChange={this.handleDescrCategoria} placeholder="Informe o nome da Categoria" />
 
-                        <Select style={{ width: '80%' }} placeholder="Informe o Tipo de Categoria" onSelect={this.handleTipo} value={this.state.tipo}>
-                            <Option value="1">Despesa</Option>
-                            <Option value="2">Receita</Option>
-                        </Select>
-
-                        <Select style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onSelect={this.handleNivel} value={this.state.nivelInput}>
+                        <Select disabled={this.state.enableEntrada} style={{ width: '20%' }} placeholder="Informe o Nivel de Categoria" onSelect={this.handleNivel} value={this.state.nivelInput}>
                             <Option value="3">3</Option>
                             <Option value="4">4</Option>
                             <Option value="5">5</Option>
                             <Option value="6">6</Option>
                         </Select>
 
-                        <Select style={{ width: '100%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
+                        <Select disabled={this.state.enableEntrada} style={{ width: '80%' }} placeholder="Esta Categoria devera agregar em qual?" value={this.state.dependenciaInput} onSelect={this.handleDependencia}>
                             {this.state.dependencia}
                         </Select>
 
-                        <Select value={this.state.entradaInput} style={{ width: '100%' }} placeholder="Esta conta deverá ser de consolidação ou Input?" onSelect={this.handleEntrada}>
-                            <Option value="1">Conta Consolidacao</Option>
-                            <Option value="0">Conta Input</Option>
+                        <Select disabled={this.state.enableEntrada} value={this.state.entradaInput} style={{ width: '100%' }} placeholder="Esta conta deverá ser de consolidação ou Input?" onSelect={this.handleEntrada}>
+                            <Option value="1">Categoria de Consolidação</Option>
+                            <Option value="0">Categoria de Input</Option>
                         </Select>
                         <Spin size="large" spinning={this.state.spin} />
                     </Modal>
@@ -228,7 +248,7 @@ class ModalCategory extends React.Component {
     }
 }
 
-const mapStateToProps = (state/*, ownProps*/) => {
+const mapStateToProps = (state) => {
     return {
         category: state.category,
     }

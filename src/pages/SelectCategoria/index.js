@@ -9,7 +9,11 @@ import { InsertRequest, GetRequest, DeleteRequest } from '../../components/crudS
 import { verifySend } from '../../components/verifySendAxios/index'
 
 import { listCategorys } from '../../store/actions/generalCategoryAction'
-import { Table, Input, Popconfirm, Icon, message, notification, Spin } from 'antd'
+import { Table, Input, Popconfirm, Icon, message, notification, Spin } from 'antd';
+
+// import SortableTree from 'react-sortable-tree';
+
+// import 'react-sortable-tree/style.css'; // This only needs to be imported once in your app
 
 import axios from 'axios'
 
@@ -23,7 +27,14 @@ class SelectCategoria extends React.Component {
 
         this.state = {
             search: '',
-            spin: true
+            spin: true,
+
+
+            treeData: [
+                // { title: 'Chicken', children: [{ title: 'Egg' }, { title: 'teste' }, { title: 'Teste2' }] },
+                // { title: 'Fish', children: [{ title: 'fingerline' }, { title: 'Teste3' }] }
+            ]
+
         }
         this.searchCategory = this.searchCategory.bind(this)
     }
@@ -62,13 +73,20 @@ class SelectCategoria extends React.Component {
             {
                 title: 'AÇÃO',
                 key: 'action',
+                width: '140px',
                 render: category => (
                     <div className='ModeloBotoesGrid'>
                         <span className='ModeloBotoesGridDetalhes' >
-                            <EditCategory data={category} />
-                            <Popconfirm title="Deseja Realmente Excluir essa Categoria?" onConfirm={() => this.deleteAcount(category.ID)}>
-                                <Icon type="delete" title='Excluir Categoria' style={{ fontSize: '18px', color: '#08c' }} />
-                            </Popconfirm>
+
+                            {(category.ENTRADA === 1) ? <AddCategory data={category} /> : <Icon type="plus-circle" style={{ fontSize: '18px', color: 'grey' }} title='Não é Possivel Adicionar nesse Item' />}
+                            {(category.ID !== 2 && category.ID !== 3) ? <EditCategory data={category} /> : <Icon type="edit" style={{ fontSize: '18px', color: 'grey' }} title='Não é possivel Editar essse item' />}
+                            {(category.ID !== 2 && category.ID !== 3) ?
+                                (!category.children) ?
+                                    <Popconfirm title="Deseja Realmente Excluir essa Categoria?" onConfirm={() => this.deleteAcount(category.ID)}>
+                                        <Icon type="delete" title='Excluir Categoria' style={{ fontSize: '18px', color: '#08c' }} />
+                                    </Popconfirm> :
+                                    <Icon type="delete" title='Não é possivel Excluir esse Item' style={{ fontSize: '18px', color: 'grey' }} /> :
+                                <Icon type="delete" title='Não é possivel Excluir esse Item' style={{ fontSize: '18px', color: 'grey' }} />}
                         </span>
                     </div>
                 ),
@@ -78,8 +96,9 @@ class SelectCategoria extends React.Component {
 
     async requestAPI() {
 
-        const novosDados = await GetRequest('api/categorias')
-        if (novosDados.status === 402)
+        const Dados = await GetRequest('api/categorias')
+
+        if (Dados.status === 402)
             return notification.open({
                 message: 'SePlaneje - Problemas Pagamento',
                 duration: 20,
@@ -91,6 +110,11 @@ class SelectCategoria extends React.Component {
                     marginLeft: 335 - 600,
                 },
             });
+
+        const novosDados = Dados.map((data) => {
+            return { ...data, title: data.DESCR_CATEGORIA, key: data.ID }
+        })
+
         const nivel3 = novosDados.filter((DATA) => DATA.NIVEL === 3)
         const nivel4 = novosDados.filter((DATA) => DATA.NIVEL === 4)
         const nivel5 = novosDados.filter((DATA) => DATA.NIVEL === 5)
@@ -114,8 +138,40 @@ class SelectCategoria extends React.Component {
             return novo
         }, nivel3)
 
-        this.setState({ ...this.state, spin: false })
-        this.props.listCategorys(nivel)
+        const nivelMaxDespesa = [{
+            DESCR_CATEGORIA: 'DESPESA',
+            NIVEL: 2,
+            TIPO: 1,
+            TIPODESCR: 'DESPESA',
+            ENTRADA: 1,
+            ENTRADADESCR: 'Categoria de Consolidação',
+            AGREGACAO: "+",
+            DEPENDENCIA: 1,
+            ID: 2,
+            IDPAI: 1,
+            STATUS: "Ativo",
+            children: nivel.filter(filtro => filtro.TIPO === 1)
+        }]
+
+        const nivelMaxReceita = [{
+            DESCR_CATEGORIA: 'RECEITA',
+            NIVEL: 2,
+            TIPO: 2,
+            TIPODESCR: 'RECEITA',
+            ENTRADA: 1,
+            ENTRADADESCR: 'Categoria de Consolidação',
+            AGREGACAO: "+",
+            DEPENDENCIA: 1,
+            ID: 3,
+            IDPAI: 1,
+            STATUS: "Ativo",
+            children: nivel.filter(filtro => filtro.TIPO === 2)
+        }]
+
+        // console.log('nivelMax', nivelMax)
+
+        this.setState({ ...this.state, spin: false, treeData: [...nivelMaxDespesa, ...nivelMaxReceita] })
+        this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
     }
 
     async ImportCategoryDefault() {
@@ -176,20 +232,42 @@ class SelectCategoria extends React.Component {
     }
 
 
+
+
     render() {
+
         return (<div>
             <Spin size="large" spinning={this.state.spin} />
             <div className='headerCategory'>
-                <AddCategory />
+                {/* <AddCategory /> */}
                 <Popconfirm title="Deseja Importar o Plano de Categorias do SePlaneje?" onConfirm={() => this.ImportCategoryDefault()}>
                     <Icon type="copy" style={{ fontSize: '36px', color: '#08c' }} title='Importar Plano de Categorias Default do SePlaneje' theme="twoTone" />
                 </Popconfirm>
                 <Input name='categoria' value={this.state.search} onChange={this.searchCategory} placeholder='Procure Aqui a Categoria Especifica' />
             </div>
+
             <div>
                 <Table className='table table-action' columns={this.columns()} dataSource={this.props.category} rowKey='ID'
                     pagination={{ pageSize: 100 }} />
             </div>
+
+            {/* <div style={{ height: '500px' }} >
+                <SortableTree
+                    treeData={this.state.treeData}
+                    
+                    onChange={treeData => this.setState({ ...this.state, treeData: treeData })}
+                    generateNodeProps={rowInfo => ({
+                        buttons: [
+
+                            < EditCategory data={rowInfo.node} />
+
+                        ]
+                    }
+                    )}
+                    // nodeContentRenderer={rowInfo => < EditCategory data={rowInfo} />}
+                    maxDepth={5}
+                />
+            </div> */}
         </div >
         )
     }
