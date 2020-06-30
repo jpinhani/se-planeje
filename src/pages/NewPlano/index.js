@@ -108,8 +108,50 @@ export default () => {
             const { value } = e.target;
             setNumber(value)
         }
-
     }
+
+    const handleInputChangeFones = (e) => {
+
+        if (!isNaN(e.target.value) === true) {
+            const { value } = e.target;
+            setCustomerPhoneNumber(value)
+        }
+    }
+
+    const handleInputChangeFonesDDD = (e) => {
+
+        if (!isNaN(e.target.value) === true) {
+            const { value } = e.target;
+            setCustomerPhoneDDD(value)
+        }
+    }
+
+    const handleInputChangeCEP = (e) => {
+
+        if (!isNaN(e.target.value) === true) {
+            const { value } = e.target;
+            setCustomerAddresZipCode(value)
+        }
+    }
+
+    const handleInputChangeNUMENDERECO = (e) => {
+
+        if (!isNaN(e.target.value) === true) {
+            const { value } = e.target;
+            setCustomerAddresStreetNUmber(value)
+        }
+    }
+
+    const handleInputChangeCPF = (e) => {
+
+        if (!isNaN(e.target.value) === true) {
+            const { value } = e.target;
+            setCustomerNumber(value)
+        }
+    }
+    //setCustomerNumber
+
+    //setCustomerAddresStreetNUmber
 
     const handleInputChangeName = (e) => {
         const { value } = e.target;
@@ -226,6 +268,7 @@ export default () => {
 
                     <div className='DadosCliente'>
                         <h2>Dados Cadastrais</h2>
+
                         <Input
                             type="email"
                             required
@@ -236,6 +279,7 @@ export default () => {
                             onChange={(valor) => setCustomerEmail(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Input
                             type="text"
                             required
@@ -246,15 +290,18 @@ export default () => {
                             onChange={(valor) => setCustomerName(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Input
-                            type="text"
+                            data-ls-module="charCounter"
                             required
+                            type="text"
+                            maxLength={11}
                             title='Somente numeros'
                             name="cpf"
                             value={CustomerNumber}
                             className="cpf"
                             placeholder="Informe o CPF"
-                            onChange={(valor) => setCustomerNumber(valor.target.value)}
+                            onChange={(valor) => handleInputChangeCPF(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
 
@@ -268,6 +315,7 @@ export default () => {
                             onChange={(valor) => setCustomerBornAt(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Select
                             // style={{ width: '100%' }}
                             className="sex"
@@ -280,6 +328,7 @@ export default () => {
                         </Select>
 
                         <h2> Dados para Contato</h2>
+
                         <Input
                             className="endereco"
                             required
@@ -290,16 +339,20 @@ export default () => {
                             onChange={(valor) => setCustomerAddresStreet(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Input
                             className="numero"
+                            data-ls-module="charCounter"
                             required
                             type="text"
                             name="numEndereco"
+                            // maxLength={8}
                             value={CustomerAddresStreetNumber}
                             placeholder="nº"
-                            onChange={(valor) => setCustomerAddresStreetNUmber(valor.target.value)}
+                            onChange={(valor) => handleInputChangeNUMENDERECO(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Input
                             className="complemento"
                             required
@@ -310,6 +363,7 @@ export default () => {
                             onChange={(valor) => setCustomerAddresComplementary(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Input
                             className="bairro"
                             required
@@ -320,33 +374,43 @@ export default () => {
                             onChange={(valor) => setCustomerAddresNeighborhood(valor.target.value)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <Input
                             className="cep"
+                            data-ls-module="charCounter"
                             required
                             type="text"
                             name="Cep"
+                            maxLength={8}
                             value={CustomerAddresZipCode}
-                            placeholder="Cep"
-                            onChange={(valor) => setCustomerAddresZipCode(valor.target.value)}
+                            placeholder="Cep Somente Números"
+                            onChange={(valor) => handleInputChangeCEP(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
+
                         <div className='Contato'>
                             <Input className="DDD"
+                                data-ls-module="charCounter"
                                 required
-                                type="tel"
+                                type="text"
                                 name="ddd"
+                                maxLength={3}
                                 value={CustomerPhoneDDD}
                                 placeholder="DDD"
-                                onChange={(valor) => setCustomerPhoneDDD(valor.target.value)}
+                                onChange={(valor) => handleInputChangeFonesDDD(valor)}
                                 onFocus={(vlr) => handleInputFocus(vlr)}
                             />
-                            <Input className="fone"
+
+                            <Input
+                                className='fone'
+                                data-ls-module="charCounter"
                                 required
-                                type="tel"
-                                name="telefone"
+                                maxLength={9}
+                                type="text"
+                                name="fone"
                                 value={CustomerPhoneNumber}
                                 placeholder="Informe o telefone"
-                                onChange={(valor) => setCustomerPhoneNumber(valor.target.value)}
+                                onChange={valor => handleInputChangeFones(valor)}
                                 onFocus={(vlr) => handleInputFocus(vlr)}
                             />
                         </div >
@@ -373,7 +437,7 @@ export default () => {
                             type="text"
                             name="number"
                             value={number}
-                            placeholder="Card Number"
+                            placeholder="Número do Cartão de Crédito"
                             onChange={valor => handleInputChange(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
@@ -384,7 +448,7 @@ export default () => {
                             type="name"
                             name="name"
                             value={name}
-                            placeholder="Name on card"
+                            placeholder="Nome Igual ao do Cartão de Crédito"
                             onChange={(valor) => handleInputChangeName(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />
@@ -397,7 +461,7 @@ export default () => {
                             type="tel"
                             name="expiry"
                             value={expiry}
-                            placeholder="Card expiry date"
+                            placeholder="Validade do Cartão"
                             onChange={(valor) => handleInputChangeValid(valor)}
                             onFocus={(vlr) => handleInputFocus(vlr)}
                         />

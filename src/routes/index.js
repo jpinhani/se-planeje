@@ -26,6 +26,7 @@ import SelectReceitaMeta from '../pages/SelectReceitaMeta'
 import SelectReceitaReal from '../pages/SelectReceitaRealizada'
 import SelectTransferencia from '../pages/SelectTransferencias'
 import NewPlano from '../pages/NewPlano'
+// import NewUser from '../pages/NewDataUser'
 import Alterpsw from '../pages/AlterPsw'
 import DetailsUser from '../pages/DetailsUser'
 
@@ -61,6 +62,7 @@ class routesSePlaneje extends React.Component {
               <Switch name='http://localhost:3000'>
                 <PublicRoute restricted={true} exact path='/login' component={Login} />
                 <PublicRoute restricted={false} exact path='/novoPlano' component={NewPlano} />
+                {/* <PublicRoute restricted={false} exact path='/novoPlano' component={NewUser} /> */}
                 <PrivateRoute exact path='/detailsPlano' component={Alterpsw} />
                 <PrivateRoute exact path='/detailsUser' component={DetailsUser} />
                 <PrivateRoute exact path='/selectconta' component={SelectConta} />
