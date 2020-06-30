@@ -21,15 +21,6 @@ export default () => {
     }, [details]);
 
 
-    // EMAIL: "jp@seplaneje.com.br"
-    // ID: 6
-    // PAYSTATUS: "trialing"
-    // STATUS: "Ativo"
-    // date_Created: null
-    // idtrans: 1
-    // manage_url: null
-    // namePlan: null
-    // old_status: null
     return (
         <div className="PaymentContainer">
             <div>
@@ -42,7 +33,7 @@ export default () => {
             </div>
             <div>
                 <div>Status do Usuário</div>
-                <p>{detailsUsers.STATUS}</p>
+                <p>{detailsUsers.STATUSUSER}</p>
             </div>
             <div>
                 <div>Data de Criação</div>
@@ -63,12 +54,12 @@ export default () => {
                 <p>{detailsUsers.namePlan}</p >
             </div>
             <div>
-                <div>Status Antigo</div>
-                <p>{detailsUsers.old_status}</p >
+                <div>Plano valido até</div>
+                <p>{detailsUsers.periodo_end}</p >
             </div>
             <div>
                 <div>Status de Pagamento Atual</div>
-                <p>{detailsUsers.PAYSTATUS}</p>
+                <p>{detailsUsers.status}</p>
             </div>
         </div>
     )
