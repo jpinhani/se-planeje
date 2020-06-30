@@ -30,7 +30,7 @@ class SelectConta extends React.Component {
   async deleteAcount(conta) {
     const resultStatus = await DeleteRequest(conta.ID, 'api/contas')
 
-    verifySend(resultStatus, 'DELETE', conta.DESCR_CONTA)
+    verifySend(resultStatus.status, 'DELETE', conta.DESCR_CONTA)
 
     this.requestAPI()
   }

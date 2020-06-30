@@ -30,7 +30,7 @@ class SelectCartao extends React.Component {
 
     const resultStatus = await DeleteRequest(card.ID, 'api/cartoes')
 
-    verifySend(resultStatus, 'DELETE', card.CARTAO)
+    verifySend(resultStatus.status, 'DELETE', card.CARTAO)
 
     this.requestAPI()
 

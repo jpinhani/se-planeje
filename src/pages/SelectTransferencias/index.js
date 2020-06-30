@@ -31,7 +31,7 @@ export default () => {
         // body.id = receitaReal.ID
 
         const resultStatus = await DeleteRequest(body.ID, 'api/transferencia')
-        verifySend(resultStatus, 'DELETE', body.DESCR_TRANSFERENCIA)
+        verifySend(resultStatus.status, 'DELETE', body.DESCR_TRANSFERENCIA)
 
         if (resultStatus === 200) {
 

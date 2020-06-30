@@ -30,10 +30,7 @@ class SelectCategoria extends React.Component {
             spin: true,
 
 
-            treeData: [
-                // { title: 'Chicken', children: [{ title: 'Egg' }, { title: 'teste' }, { title: 'Teste2' }] },
-                // { title: 'Fish', children: [{ title: 'fingerline' }, { title: 'Teste3' }] }
-            ]
+            treeData: []
 
         }
         this.searchCategory = this.searchCategory.bind(this)
@@ -42,11 +39,24 @@ class SelectCategoria extends React.Component {
     async deleteAcount(categoriaId) {
         const verify = await DeleteRequest(categoriaId, 'api/categorias')
 
-        verifySend(verify, 'DELETE', 'Categoria')
+        if (verify.data === 401)
+            return notification.open({
+                message: 'SePlaneje - Problemas Exclusão',
+                duration: 20,
+                description:
+                    `Sua Transação não será salva, você não pode excluir uma categoria que esta vinculada a lançamentos, seja despesa ou receita`,
+                style: {
+                    width: '100%',
+                    marginLeft: 335 - 600,
+                },
+            });
 
-        if (verify === 200)
+        verifySend(verify.status, 'DELETE', 'Categoria')
+
+        if (verify.status === 200)
             this.requestAPI()
     }
+
 
     columns() {
         return [
@@ -79,7 +89,7 @@ class SelectCategoria extends React.Component {
                         <span className='ModeloBotoesGridDetalhes' >
 
                             {(category.ENTRADA === 1) ? <AddCategory data={category} /> : <Icon type="plus-circle" style={{ fontSize: '18px', color: 'grey' }} title='Não é Possivel Adicionar nesse Item' />}
-                            {(category.ID !== 2 && category.ID !== 3) ? <EditCategory data={category} /> : <Icon type="edit" style={{ fontSize: '18px', color: 'grey' }} title='Não é possivel Editar essse item' />}
+                            {(category.ID !== 2 && category.ID !== 3) ? <EditCategory data={category} /* back={this.back.bind(this)}  */ /> : <Icon type="edit" style={{ fontSize: '18px', color: 'grey' }} title='Não é possivel Editar essse item' />}
                             {(category.ID !== 2 && category.ID !== 3) ?
                                 (!category.children) ?
                                     <Popconfirm title="Deseja Realmente Excluir essa Categoria?" onConfirm={() => this.deleteAcount(category.ID)}>
@@ -168,7 +178,7 @@ class SelectCategoria extends React.Component {
             children: nivel.filter(filtro => filtro.TIPO === 2)
         }]
 
-        // console.log('nivelMax', nivelMax)
+
 
         this.setState({ ...this.state, spin: false, treeData: [...nivelMaxDespesa, ...nivelMaxReceita] })
         this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
@@ -208,6 +218,7 @@ class SelectCategoria extends React.Component {
     componentDidMount() {
         this.requestAPI()
     }
+
 
     searchCategory(event) {
         this.setState({ ...this.state, search: event.target.value })

@@ -7,6 +7,7 @@ import { urlBackend, config, userID } from '../../../services/urlBackEnd'
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+
 const { Option } = Select;
 
 class ModalCategory extends React.Component {
@@ -35,11 +36,9 @@ class ModalCategory extends React.Component {
             alterEntrada: this.props.data.ENTRADA,
             alterDependencia: this.props.data.IDPAI,
             alterId: this.props.data.ID,
-            enableEntrada: this.props.data.children ? this.props.data.children.length > 0 ? true : false : false
-
+            enableEntrada: this.props.data.children ? true : false
 
         }
-        console.log(this.props.data)
 
         this.showModal = this.showModal.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
@@ -50,7 +49,7 @@ class ModalCategory extends React.Component {
         this.handleEntrada = this.handleEntrada.bind(this)
     }
 
-    showModal() { this.setState({ ...this.state, visible: true }) };
+    showModal() { this.setState({ ...this.state, visible: true, enableEntrada: this.props.data.children ? true : false }) };
 
     handleCancel() {
         this.setState({
@@ -86,7 +85,7 @@ class ModalCategory extends React.Component {
         const result = await axios.get(endpoint, config())
 
         const options = result.data.map((desc, i) =>
-            <Option key={i} value={desc.ID}>
+            <Option disabled={desc.ID === this.props.data.ID ? true : false} key={i} value={desc.ID}>
                 {desc.DESCR_CATEGORIA}
             </Option>
         )
@@ -146,7 +145,6 @@ class ModalCategory extends React.Component {
             if (novosDados.status === 200) {
                 message.success(" Categoria Editada Com Sucesso", 5);
 
-                // console.log(novosDados)
                 const nivel3 = novosDados.data.filter((DATA) => DATA.NIVEL === 3)
                 const nivel4 = novosDados.data.filter((DATA) => DATA.NIVEL === 4)
                 const nivel5 = novosDados.data.filter((DATA) => DATA.NIVEL === 5)
@@ -201,9 +199,14 @@ class ModalCategory extends React.Component {
                 }]
 
                 this.setState({ ...this.state, spin: false })
-                this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
 
+                this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
                 this.handleCancel()
+
+                // if (this.props.back)
+                //     this.props.back("Ok")
+
+
             } else {
                 message.error(" Erro ao Editar Registo, Erro " + novosDados.status, 5);
                 this.setState({ ...this.state, spin: false })

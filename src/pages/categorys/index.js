@@ -15,7 +15,7 @@ export default class Tree extends Component {
     }
 
     handlechange(treeData) {
-        console.log(treeData)
+
         this.setState({ treeData })
     }
 

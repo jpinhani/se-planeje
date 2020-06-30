@@ -52,7 +52,7 @@ async function DeleteRequest(body, rota) {
     try {
         const endpoint = `${urlBackend}${rota}/${body}`
         const ResultStatus = await axios.delete(endpoint, config())
-        return ResultStatus.data.error === undefined ? ResultStatus.status : '400'
+        return ResultStatus.data.error === undefined ? ResultStatus : '400'
     } catch (error) {
         logout();
         redirect();

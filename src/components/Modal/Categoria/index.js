@@ -31,23 +31,13 @@ class ModalCategory extends React.Component {
             disabled: this.props.data ? ((this.props.data.NIVEL + 1) === 6) ? true : false : false,
         }
 
-        console.log('teste', this.props.data)
         this.showModal = this.showModal.bind(this)
-        this.handleCancel = this.handleCancel.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleDescrCategoria = this.handleDescrCategoria.bind(this)
         this.handleEntrada = this.handleEntrada.bind(this)
     }
 
     showModal() { this.setState({ ...this.state, visible: true }) };
-
-    handleCancel() {
-        this.setState({
-            ...this.state, dependenciaInput: [], descrCategoria: '', nivelInput: [],
-            nivel: [], tipo: [], entrada: [], entradaInput: [], visible: false
-        })
-
-    };
 
     handleDescrCategoria(event) {
         this.setState({ ...this.state, descrCategoria: event.target.value })
@@ -71,7 +61,6 @@ class ModalCategory extends React.Component {
             status: "Ativo"
         }
 
-        console.log('body', body)
         if (body.dependencia.length === 0 | body.descrCategoria.length === 0 | body.nivel.length === 0 | body.tipo.length === 0 | body.entrada.length === 0) {
 
             const args = {
@@ -166,11 +155,11 @@ class ModalCategory extends React.Component {
 
                 this.setState({ ...this.state, spin: false })
 
+                this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
+
                 this.setState({
                     ...this.state, visible: false
                 })
-
-                this.props.listCategorys([...nivelMaxDespesa, ...nivelMaxReceita])
 
 
             } else {
@@ -192,7 +181,7 @@ class ModalCategory extends React.Component {
                         title="Cadastrar Nova Categoria"
                         visible={this.state.visible}
                         onOk={this.handleSubmit}
-                        onCancel={this.handleCancel}
+                        onCancel={() => this.setState({ ...this.state, visible: false })}
                         className="ModalCadastro"
                     >
                         <Input name='categoria' value={this.state.descrCategoria} onChange={this.handleDescrCategoria} placeholder="Informe o nome da Categoria" />
