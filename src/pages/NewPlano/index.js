@@ -102,6 +102,23 @@ export default () => {
 
     />
 
+    const resultContaExistente = <Result
+        status="warning"
+        title="Sua Transação NÃO foi concluida!"
+        subTitle="Essa Conta Ja existe no sistema SEPLANEJE, sua transação não sera salva.
+                     Caso tenha esquecido a senha, recupere a mesma no link da tela de Login ou entre em contato conosco!"
+
+    />
+
+
+    const resultContaExistenteInativa = <Result
+        status="warning"
+        title="Sua Transação NÃO foi concluida!"
+        subTitle="Essa Conta Consta como Cancelada no sistema Seplaneje'.
+                     Um E-mail foi disparado para você com detalhes de recuperação para ativação da sua conta, após será possivel configurar uma
+                     nova assinatura."
+    />
+
     const handleInputChange = (e) => {
 
         if (!isNaN(e.target.value) === true) {
@@ -224,6 +241,11 @@ export default () => {
 
         const endpointAPI = `${urlBackend}api/pagarme/assinatura`
         const result = await axios.post(endpointAPI, body)
+
+        if (result.data.StatusTransac === 401)
+            return setPlano(resultContaExistente)
+        if (result.data.StatusTransac === 402)
+            return setPlano(resultContaExistenteInativa)
 
         if (result.data.StatusTransac === 200) {
             resultTransaction()
