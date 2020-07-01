@@ -139,20 +139,23 @@ export default () => {
 
             const dados1 = SaldoCategoria(despesas, visaoData, 'REAL', cartao, categorias);
             const nivel3 = categorias.filter(filtro => filtro.NIVEL === 3 &&
-                filtro.ENTRADA === 1).map((data) => {
+                filtro.ENTRADA === 1 && filtro.TIPO === 1).map((data) => {
                     return { ...data, Categoria: data.DESCR_CATEGORIA }
                 })
 
             const nivel4 = categorias.filter(filtro => filtro.NIVEL === 4 &&
-                filtro.ENTRADA === 1).map((data) => {
+                filtro.ENTRADA === 1 && filtro.TIPO === 1).map((data) => {
                     return { ...data, Categoria: data.DESCR_CATEGORIA }
                 })
 
             const nivel5 = categorias.filter(filtro => filtro.NIVEL === 5 &&
-                filtro.ENTRADA === 1).map((data) => {
+                filtro.ENTRADA === 1 && filtro.TIPO === 1).map((data) => {
                     return { ...data, Categoria: data.DESCR_CATEGORIA }
                 })
-            const dadosGrafico = hierarquia(dados1, nivel3, nivel4, nivel5)
+
+            const dadosGrafico = [...hierarquia(dados1, nivel3, nivel4, nivel5),
+            ...dados1.filter(filtro => filtro.Idpai === 2)]
+
 
             /* Saldo Atual das Contas */
             const SaldoDespesa = SaldoConta(despesas, 'Despesa', moment());
