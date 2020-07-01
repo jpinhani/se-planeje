@@ -11,19 +11,19 @@ const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('date')
 }
+
+
 const isLogged = () => {
 
     if (localStorage.getItem('date')) {
         const DataUltimoLogin = localStorage.getItem('date')
 
-        let Limite = moment(moment(DataUltimoLogin, "DD/MM/YYYY HH:mm:ss").add(1, 'hour')).format("DD/MM/YYYY HH:mm:ss")
+        let Limite = moment(moment(DataUltimoLogin, "YYYY/MM/DD HH:mm:ss").add(1, 'hour')).format("DD/MM/YYYY HH:mm:ss")
 
+        let Agora = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+        const res = (Agora <= Limite) ? !!localStorage.getItem('token') : logout()
 
-        let Agora = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
-
-        const state = Agora < Limite ? !!localStorage.getItem('token') : logout()
-
-        return state
+        return res
 
     } else {
         return false

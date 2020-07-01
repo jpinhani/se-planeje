@@ -34,12 +34,12 @@ function Login() {
 
     const response = await axios.post(endpoint, body)
 
-
+    console.log('responseTeste', response)
     if (response.data.status !== 400) {
 
       const token = response.data.token
       const userId = response.data.user
-
+      console.log("Entrou")
       login(userId, token)
       setSpin(false)
       history.push('/')
