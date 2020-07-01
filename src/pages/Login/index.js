@@ -1,14 +1,9 @@
-
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
-
 
 import { Input, Button, message, Spin } from 'antd'
 
 import axios from 'axios'
-
-
 
 import { login } from '../../auth'
 import { urlBackend } from '../../services/urlBackEnd'
@@ -34,12 +29,14 @@ function Login() {
 
     const response = await axios.post(endpoint, body)
 
-    console.log('responseTeste', response)
-    if (response.data.status !== 400) {
+    if (response.data.status === 401)
+      message.error('Conta Cancelada', 10)
+
+    else if (response.data.status !== 400) {
 
       const token = response.data.token
       const userId = response.data.user
-      console.log("Entrou")
+
       login(userId, token)
       setSpin(false)
       history.push('/')
