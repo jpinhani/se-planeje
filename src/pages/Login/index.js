@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Input, Button, message, Spin } from 'antd'
-
+import Remember from './../RecuperarPsw'
 import axios from 'axios'
 
 import { login } from '../../auth'
@@ -63,7 +63,15 @@ function Login() {
             type='password' placeholder="Sua senha"
             onChange={e => setPassword(e.target.value)}
           />
-          <Button className='blogar' htmlType='submit'><p> Entrar</p></Button>
+          <div style={{ display: 'flex', alignItems: "center" }}>
+            <div className="CustomLinks">
+              <Remember />
+              <Button type='link' >Reativar Conta</Button>
+
+            </div>
+            <Button className='blogar' htmlType='submit'><p> Entrar</p></Button>
+          </div>
+          {/* <Button className='blogar' htmlType='submit'><p> Entrar</p></Button> */}
           <Spin size="large" spinning={spin} />
         </div>
       </form>

@@ -139,7 +139,15 @@ export default () => {
                     {visions}
                 </Select>
             </div >
-
+            <div style={{ padding: '10px' }}>
+                <strong>Total Previsto (Meta): </strong>
+                {SearchFilter(
+                    visionSerchMeta(mapvision, expenseMeta, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })}
+            </div>
             <div>
                 <Table className='table table-action'
                     columns={columns}

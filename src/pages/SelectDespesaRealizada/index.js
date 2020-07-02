@@ -94,11 +94,16 @@ export default () => {
             render: expenseReal => (
                 <div className="DetalhesBotoes">
                     <span className="DetalhesBotoesGrid">
-                        <EditDespesa data={expenseReal} />
+                        {expenseReal.STATUS !== 'Fatura Paga' ? <EditDespesa data={expenseReal} /> : <Icon
+                            type="edit"
+                            style={{ fontSize: '18px', color: 'grey' }}
+                            title='Adicionar nova Despesa Prevista'
+                        />}
 
-                        <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => deleteReal(expenseReal)}>
-                            <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
-                        </Popconfirm>
+                        {expenseReal.STATUS !== 'Fatura Paga' ?
+                            <Popconfirm title="Excluir Lançamento Realizado?" onConfirm={() => deleteReal(expenseReal)}>
+                                <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
+                            </Popconfirm> : <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: 'grey' }} />}
                     </span>
                 </div>
             ),
@@ -135,11 +140,16 @@ export default () => {
         options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
 
         setVisions(options)
-        const receitas = await GetRequest('api/despesas/paga')
+        const despesas = await GetRequest('api/despesas/paga')
+
+        const despesaAjust = despesas.map((dados) => {
+
+            return { ...dados, DT_VISAO: (dados.STATUS === 'Fatura Paga') ? dados.DT_REAL : dados.DT_VISAO }
+        })
 
         dispatch({
             type: 'LIST_EXPENSEREAL',
-            payload: receitas
+            payload: despesaAjust
         })
 
         setSpin(false)
@@ -175,6 +185,15 @@ export default () => {
                 >
                     {visions}
                 </Select>
+            </div>
+            <div style={{ padding: '10px' }}>
+                <strong>Total Gasto: </strong>
+                {SearchFilter(
+                    visionSerch(mapvision, expenseReal, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })}
             </div>
             <div>
                 <Table name='Despesa' className='table table-action'

@@ -123,12 +123,16 @@ function NovaDespesa(props) {
         verifySend(resulStatus, 'METAPAGA', body.descrDespesa)
 
         if (resulStatus === 200) {
-            const despesa = await GetRequest('api/despesas/paga')
+            const despesas = await GetRequest('api/despesas/paga')
 
+            const despesaAjust = despesas.map((dados) => {
+
+                return { ...dados, DT_VISAO: (dados.STATUS === 'Fatura Paga') ? dados.DT_REAL : dados.DT_VISAO }
+            })
 
             dispatch({
                 type: 'LIST_EXPENSEREAL',
-                payload: despesa
+                payload: despesaAjust
             })
 
             setSpin(false)

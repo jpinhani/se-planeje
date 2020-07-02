@@ -114,9 +114,9 @@ export default () => {
     const resultContaExistenteInativa = <Result
         status="warning"
         title="Sua Transação NÃO foi concluida!"
-        subTitle="Essa Conta Consta como Cancelada no sistema Seplaneje'.
-                     Um E-mail foi disparado para você com detalhes de recuperação para ativação da sua conta, após será possivel configurar uma
-                     nova assinatura."
+        subTitle="Essa Conta Ja existe no sistema SEPLANEJE, sua transação não sera salva.
+                  No entanto percebemos que a mesma encontra-se cancelada,acesse o Link reativar conta na tela de login e siga os procedimentos
+                  sugeridos pelo SEPLANEJE."
     />
 
     const handleInputChange = (e) => {

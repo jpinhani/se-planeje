@@ -45,6 +45,20 @@
   }
 }
 
+.CustomLinks{
+  display: flex;
+  border-bottom: white 2px solid;
+  border-left: white 2px solid;
+  width: 80% !important;
+  margin-right: 9px!important;
+  // background: transparentize($color: white, $amount: 0.5);
+  Button{
+    color: 	#800000;
+    font-weight: bold;
+    font-size: 14px;
+  }
+}
+
 .logoheaderLogin{
     color:red;
     font-size: 80px !important;
@@ -61,6 +75,17 @@
    .login { form {
     width: 50%;
     }}
+
+    
+.CustomLinks{
+  display: block;
+  border-bottom: white 2px solid;
+  border-left: white 2px solid;
+  width: 80% !important;
+  // margin-right: 9px!important;
+  // text-align: left !important;
+  // background: transparentize($color: white, $amount: 0.5);
+}
 }
 
 @media(max-width:650px){

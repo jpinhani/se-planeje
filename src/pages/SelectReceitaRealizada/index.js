@@ -179,6 +179,15 @@ function ReceitaRealizada() {
                     {visions}
                 </Select>
             </div >
+            <div style={{ padding: '10px' }}>
+                <strong>Total Recebido: </strong>
+                {SearchFilter(
+                    visionSerchReceita(mapvision, receitaReal, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })}
+            </div>
             <Table
                 className='table table-action'
                 columns={Collumns}

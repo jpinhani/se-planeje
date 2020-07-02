@@ -118,11 +118,16 @@ function ModalExpenseEdit(props) {
 
 
         if (resulStatus === 200) {
-            const despesareal = await GetRequest('api/despesas/paga')
+            const despesas = await GetRequest('api/despesas/paga')
+
+            const despesaAjust = despesas.map((dados) => {
+
+                return { ...dados, DT_VISAO: (dados.STATUS === 'Fatura Paga') ? dados.DT_REAL : dados.DT_VISAO }
+            })
 
             dispatch({
                 type: 'LIST_EXPENSEREAL',
-                payload: despesareal
+                payload: despesaAjust
             })
             setSpin(false);
             setVisible(false)

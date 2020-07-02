@@ -143,12 +143,21 @@ class SelectReceitaPrevista extends React.Component {
                         {this.state.visions}
                     </Select>
                 </div>
+                <div style={{ padding: '10px' }}>
+                    <strong>Total Previsto (Meta): </strong>
+                    {SearchFilter(
+                        visionSerchMeta(this.state.mapvision, this.props.revenue, this.props.visionControler),
+                        ['DESCR_RECEITA', 'DESCR_CATEGORIA'], this.state.filter).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
+                </div>
                 <div>
                     <Table className='table table-action'
                         columns={this.columns()}
                         dataSource={SearchFilter(
                             visionSerchMeta(this.state.mapvision, this.props.revenue, this.props.visionControler),
-                            ['DESCR_RECEITA', 'DESCR_RECEITA'], this.state.filter)}
+                            ['DESCR_RECEITA', 'DESCR_CATEGORIA'], this.state.filter)}
                         rowKey='ID'
                         pagination={{ pageSize: 100 }} />
 
