@@ -211,7 +211,7 @@ export default () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        if (spin === false)
+        if (spin === true)
             return setSpin(true);
 
         setSpin(true)
