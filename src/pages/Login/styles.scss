@@ -44,12 +44,15 @@
     }
   }
 }
-
+.CustomLinksHeader{
+  display: flex;
+}
 .CustomLinks{
   display: flex;
   border-bottom: white 2px solid;
   border-left: white 2px solid;
   width: 80% !important;
+  opacity: initial;
   margin-right: 9px!important;
   // background: transparentize($color: white, $amount: 0.5);
   Button{
@@ -76,9 +79,22 @@
     width: 50%;
     }}
 
-    
+.CustomLinksHeader{    
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+
+  // div{
+  //   text-align: center !important;
+  // }
+  // text-align: center;
+}
+
 .CustomLinks{
-  display: block;
+  padding-top: 30px;
+  display: flex;
+  // text-align: left !important;
+  flex-direction: row-reverse;
   border-bottom: white 2px solid;
   border-left: white 2px solid;
   width: 80% !important;

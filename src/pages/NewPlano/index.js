@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Cards from 'react-credit-cards';
-import { Input, Button, Select, Result } from 'antd';
+import { Input, Button, Select, Result, Spin } from 'antd';
 // import { InsertRequest } from '../../components/crudSendAxios/crud'
 import { urlBackend } from '../../services/urlBackEnd'
 import axios from 'axios'
@@ -61,6 +61,7 @@ export default () => {
     const [plano, setPlano] = useState(mensal);
     const [selectPlanoButton, setSelectPlanoButton] = useState('mensal');
 
+    const [spin, setSpin] = useState(false);
 
     const [CustomerEmail, setCustomerEmail] = useState('')
     const [CustomerName, setCustomerName] = useState('')
@@ -110,14 +111,6 @@ export default () => {
 
     />
 
-
-    const resultContaExistenteInativa = <Result
-        status="warning"
-        title="Sua Transação NÃO foi concluida!"
-        subTitle="Essa Conta Ja existe no sistema SEPLANEJE, sua transação não sera salva.
-                  No entanto percebemos que a mesma encontra-se cancelada,acesse o Link reativar conta na tela de login e siga os procedimentos
-                  sugeridos pelo SEPLANEJE."
-    />
 
     const handleInputChange = (e) => {
 
@@ -218,7 +211,10 @@ export default () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (spin === false)
+            return setSpin(true);
 
+        setSpin(true)
         const body = {
             PlanId: selectPlanoButton,
             CardNumber: number,
@@ -244,14 +240,14 @@ export default () => {
 
         if (result.data.StatusTransac === 401)
             return setPlano(resultContaExistente)
-        if (result.data.StatusTransac === 402)
-            return setPlano(resultContaExistenteInativa)
 
         if (result.data.StatusTransac === 200) {
             resultTransaction()
         } else {
             setPlano(resultbad)
         }
+
+        setSpin(false)
     }
 
 
@@ -283,7 +279,7 @@ export default () => {
 
                 <div className='DadosCadastrais'>
 
-
+                    <Spin size="large" spinning={spin} />
                     <div className='PlanoContainer'>
                         {plano}
                     </div>

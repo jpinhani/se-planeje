@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 import { Input, Button, message, Spin } from 'antd'
 import Remember from './../RecuperarPsw'
@@ -63,13 +63,16 @@ function Login() {
             type='password' placeholder="Sua senha"
             onChange={e => setPassword(e.target.value)}
           />
-          <div style={{ display: 'flex', alignItems: "center" }}>
+          <div className="CustomLinksHeader">
+            <div className="CustomLinks">
+              <Button type="link"><Link style={{ color: '#800000', fontWeight: 'bold' }} to='/novoPlano'>Assinar Plano</Link></Button>
+            </div>
             <div className="CustomLinks">
               <Remember />
-              <Button type='link' >Reativar Conta</Button>
-
             </div>
-            <Button className='blogar' htmlType='submit'><p> Entrar</p></Button>
+            <div>
+              <Button className='blogar' htmlType='submit'><p> Entrar</p></Button>
+            </div>
           </div>
           {/* <Button className='blogar' htmlType='submit'><p> Entrar</p></Button> */}
           <Spin size="large" spinning={spin} />
