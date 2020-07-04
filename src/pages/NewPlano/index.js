@@ -37,7 +37,7 @@ const Semestral = <div className='PlanoDetails'>
     <div className='PlanoName'><h1>Se<span>Planeje - Semestral</span></h1></div>
     <div className='PlanoRecorrencia'>A Cada 6 Meses - <span>7 dias grátis</span></div>
     <div className='PlanoObs'>Para você que já se acostumou com o melhor do planejamento.</div>
-    <div className='PlanoValue'>R$ 72,50</div>
+    <div className='PlanoValue'>R$ 76,50</div>
     <div className='PlanoDescription'>Avaliação Gratuita por 7 dias, após será cobrado o valor do Plano  até o final do período contratado de 180 dias.
 Ao final do período contratado o plano será cobrado novamente e será valido por mais 180 dias, caso o usuário não queira mais o plano o mesmo deverá cancelar antes da nova cobrança</div>
 </div>
@@ -46,7 +46,7 @@ const Anual = <div className='PlanoDetails'>
     <div className='PlanoName'><h1>Se<span>Planeje - Anual</span></h1></div>
     <div className='PlanoRecorrencia'>De Ano em Ano - <span>7 dias grátis</span></div>
     <div className='PlanoObs'>Para você que planeja o Longo Prazo da sua vida financeira.</div>
-    <div className='PlanoValue'>R$ 126,00</div>
+    <div className='PlanoValue'>R$ 120,00</div>
     <div className='PlanoDescription'>Avaliação Gratuita por 7 dias, após será cobrado o valor do Plano  até o final do período contratado de 365 dias.
 Ao final do período contratado o plano será cobrado novamente e será valido por mais 365 dias, caso o usuário não queira mais o plano o mesmo deve cancelar antes da nova cobrança</div>
 </div>
@@ -211,6 +211,7 @@ export default () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
         if (spin === true)
             return setSpin(true);
 

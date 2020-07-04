@@ -17,6 +17,9 @@ export default (props) => {
         if (password !== consPassword)
             return message.error(`As senhas não são identicas`)
 
+        if (password === undefined || password === '')
+            return message.error(`Por Favor informar nova senha.`)
+
         const body = {
             id: userID(),
             password: password
@@ -29,6 +32,7 @@ export default (props) => {
 
     return (
         <div className="ContainerNovaSenha">
+            <div><strong>Informar Nova Senha SEPLANEJE</strong></div>
             <Form onSubmit={handleSubmit}>
                 <Input
                     type='password' placeholder="Nova Senha"
