@@ -2,8 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import { Menu, Dropdown, Layout } from 'antd';
-import { UserOutlined, SettingOutlined, CommentOutlined } from '@ant-design/icons';
+import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import { logout } from '../../auth/index'
+// import {} from '../../docs/'
 
 const { Header } = Layout;
 
@@ -24,11 +25,6 @@ const menu = (
                 <UserOutlined />
                 <i style={{ paddingLeft: '2px' }}>Senha</i>
             </Link>
-        </Menu.Item>
-        <Menu.Item key="3">
-            <CommentOutlined />
-            <a href="./../../docs/Manual_Site_Seplaneje - Cadastro v1.0.pdf" download="Manual_Site_Seplaneje - Cadastro v1.0.pdf">Download Documentação</a>
-            {/* <i style={{ paddingLeft: '2px' }}>Fale Conosco</i> */}
         </Menu.Item>
     </Menu>
 );

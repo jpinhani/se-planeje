@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import 'antd/dist/antd.css';
 import './style.scss'
 
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu, Icon, Button } from 'antd'
 
 import {
     HomeOutlined,
@@ -157,11 +157,20 @@ class SiderDemo extends React.Component {
                             key="sub5"
                             title={
                                 <span>
-                                    <Icon type="file" theme="twoTone" style={{ fontSize: '28px' }} />
-                                    <span style={{ paddingLeft: '10px' }}>Manual</span>
-                                </span>
-                            }
-                        >
+                                    <Icon type="file"
+                                        theme="twoTone" style={{ fontSize: '28px' }}
+                                    />
+                                    <span style={{ paddingLeft: '10px' }}>
+                                        Manual
+                                    </span>
+                                </span>}>
+                            <Menu.Item key="13">
+                                <Button type="link" style={{ color: "black", fontWeigh: "bold" }}
+                                    onClick={() => window.open("https://f0ffb9f7-b449-47df-a56a-517da13c82dc.filesusr.com/ugd/dc5b01_82cb2bc2d31c48d180731e350c3f3dd4.pdf", '_blank')} >
+                                    SEPLANEJE_USO.pdf</Button>
+                            </Menu.Item>
+
+
                         </SubMenu>
                     </Menu>
                 </Sider >
