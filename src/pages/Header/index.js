@@ -27,7 +27,8 @@ const menu = (
         </Menu.Item>
         <Menu.Item key="3">
             <CommentOutlined />
-            <i style={{ paddingLeft: '2px' }}>Fale Conosco</i>
+            <a href="./../../docs/Manual_Site_Seplaneje - Cadastro v1.0.pdf" download="Manual_Site_Seplaneje - Cadastro v1.0.pdf">Download Documentação</a>
+            {/* <i style={{ paddingLeft: '2px' }}>Fale Conosco</i> */}
         </Menu.Item>
     </Menu>
 );
