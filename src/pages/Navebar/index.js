@@ -16,7 +16,9 @@ import {
     FlagOutlined,
     SyncOutlined,
     UploadOutlined,
-    DownloadOutlined
+    DownloadOutlined,
+    PlaySquareOutlined,
+    LineChartOutlined,
 } from '@ant-design/icons'
 
 const { Sider } = Layout;
@@ -151,6 +153,7 @@ class SiderDemo extends React.Component {
                             }
                         >
                             <Menu.Item key="13">
+                                <LineChartOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
                                 <Link to='/Resumo'>Fluxo de Caixa</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
@@ -164,13 +167,14 @@ class SiderDemo extends React.Component {
                                         Manual
                                     </span>
                                 </span>}>
-                            <Menu.Item key="13">
+                            <Menu.Item key="14">
+                                <DownloadOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
                                 <Button type="link" style={{ color: "black", fontWeigh: "bold" }}
                                     onClick={() => window.open("https://f0ffb9f7-b449-47df-a56a-517da13c82dc.filesusr.com/ugd/dc5b01_82cb2bc2d31c48d180731e350c3f3dd4.pdf", '_blank')} >
-                                    SEPLANEJE_USO.pdf</Button>
-                            </Menu.Item>
-
-
+                                    SePlaneje_Uso.PDF</Button></Menu.Item>
+                            <Menu.Item key="15">
+                                <PlaySquareOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
+                                <Link to='/manualVisual'>Manual Visual</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider >
