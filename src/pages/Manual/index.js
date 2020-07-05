@@ -83,7 +83,7 @@ export default () => {
                     // style={{ width: '49%' }}
                     value={search}
                     onChange={valor => setSearch(valor.target.value)}
-                    placeholder="Procure aqui a receita especifica" />
+                    placeholder="Procure aqui um video manual" />
             </div>
             <Table
                 className='table table-action'
