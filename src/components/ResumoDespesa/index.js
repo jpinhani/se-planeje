@@ -72,8 +72,10 @@ function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
             VL_PREVISTO_NUMBER: geraId.VL_PREVISTO ?
                 geraId.VL_PREVISTO : 0,
 
-            VL_FORECAST_NUMBER: geraId.CARTAO ? geraId.VL_FORECAST_NUMBER :
-                geraId.VL_REAL ? geraId.VL_REAL : geraId.VL_PREVISTO,
+            VL_FORECAST_NUMBER: geraId.CARTAO ?
+                geraId.VL_FORECAST_NUMBER :
+                geraId.VL_REAL ?
+                    geraId.VL_REAL : geraId.VL_PREVISTO,
 
             ROLID: Math.random().toString(10).substr(3, 5)
         }

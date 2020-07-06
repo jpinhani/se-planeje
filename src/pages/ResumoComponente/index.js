@@ -38,7 +38,6 @@ export default (props) => {
         const despesaReal = SomarPeriodo(GeraDespesas(despesas, cartaoListagem, visaoSetada, true));
         const despesaPrevista = SomarPeriodo(GeraDespesas(despesas, cartaoListagem, visaoSetada, false));
 
-
         const ACUM_DESPESA_PREVISTA =
             (despesaPrevista.VL_PREVISTO_NUMBER ? despesaPrevista.VL_PREVISTO_NUMBER : 0) +
             (despesaReal.VL_PREVISTO_NUMBER ? despesaReal.VL_PREVISTO_NUMBER : 0)
