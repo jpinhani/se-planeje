@@ -60,7 +60,7 @@ export default (props) => {
             key: 'VL_PREVISTO'
         },
         {
-            title: 'R$ REAL',
+            title: 'R$ GASTO ATÉ O MOMENTO',
             dataIndex: 'VL_REAL',
             key: 'VL_REAL'
         },
