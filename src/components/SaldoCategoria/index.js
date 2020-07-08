@@ -386,7 +386,6 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
     })
 
 
-
     const prepNivel3 = nivel3.map((n3) => {
         const dadosnivel = dados1.filter(filtro => filtro.Idpai === n3.ID)
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
@@ -409,15 +408,21 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
     const agrupa4 = prepNivel4.map((prep4) => {
         const dadosnivel = prepNivel5.filter(filtro => filtro.IDPAI === prep4.ID)
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        const sn = prep4.children ? prep4.children.reduce((acum, atual) => acum + atual.Valor, 0) : 0
+
+        let child = []
+        if (prep4.children)
+            child = prep4.children
+
         if (dadosnivel.length > 0)
             return {
                 ...prep4,
-                Valor: somanivel,
-                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                Valor: somanivel + sn,
+                ValorPersonalizado: (somanivel + sn).toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: [...dadosnivel, prep4.children]
+                children: [...dadosnivel, ...child]
             }
 
         return { ...prep4 }
@@ -428,20 +433,24 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
     const agrupa3 = prepNivel3.map((prep3) => {
         const dadosnivel = agrupa4.filter(filtro => filtro.IDPAI === prep3.ID)
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        const sn = prep3.children ? prep3.children.reduce((acum, atual) => acum + atual.Valor, 0) : 0
+
+        let child = []
+        if (prep3.children)
+            child = prep3.children
         if (dadosnivel.length > 0)
             return {
                 ...prep3,
-                Valor: somanivel,
-                ValorPersonalizado: somanivel.toLocaleString('pt-BR', {
+                Valor: somanivel + sn,
+                ValorPersonalizado: (somanivel + sn).toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: [...dadosnivel, prep3.children]
+                children: [...dadosnivel, ...child]
             }
 
         return { ...prep3 }
     })
-
 
     return agrupa3
 }

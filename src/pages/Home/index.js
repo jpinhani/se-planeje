@@ -40,8 +40,7 @@ export default () => {
             return ((valor.Valor / valorTotal) * 100).toFixed(2)
         });
 
-        console.log('dataGrafico', dataGrafico)
-        console.log('valorTotal', valorTotal)
+
         const corGrafico = dadosGrafico.map((valor) => gera_cor())
         const labelsGrafico = dadosGrafico.map((valor) => valor.Categoria)
         const rs = {
@@ -49,6 +48,7 @@ export default () => {
             data: {
                 datasets: [{
                     barPercentage: 0.7,
+                    minBarLength: 5,
                     data: dataGrafico,
                     backgroundColor: corGrafico,
                     borderColor: corGrafico,
