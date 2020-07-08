@@ -112,12 +112,14 @@ export default (props) => {
                 },
             });
 
+
         const unique = new Set(fatura.map((DATA) => DATA.CARTAO))
         const cardNew = Array.from(unique).map((DATA, i) => <Button value={i}
             key={i}
             ghost
             type='primary'
             onClick={() => listCardItens(fatura.filter((DADOS) => DADOS.CARTAO === DATA), detalhe)} > {DATA}</Button>)
+
 
         dispatch({
             type: 'LIST_FATURAREAL',
