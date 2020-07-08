@@ -240,7 +240,7 @@ function real(array, dtInicio, dtFim) {
 function cartaoReal(dados, cartoes, dtInicio, dtFim) {
 
     const conta = real(dados.filter((filtro) => filtro.Cartao === null), dtInicio, dtFim)
-
+    console.log("DIGAO", conta)
     /*Adiciona o dia da Melhor Compra com o dia do Vencimento do Cartão*/
     const cartao = dados.filter((filtro) =>
         filtro.Cartao !== null &&
