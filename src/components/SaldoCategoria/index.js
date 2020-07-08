@@ -366,6 +366,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
         return { ...n5, Valor: 0 }
     })
 
+    console.log("DIG1", prepNivel5)
+
     const prepNivel4 = nivel4.map((n4) => {
         const dadosnivel = dados1.filter(filtro => filtro.Idpai === n4.ID)
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
@@ -382,6 +384,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
 
         return { ...n4, Valor: 0 }
     })
+
+    console.log("DIG2", prepNivel4)
 
     const prepNivel3 = nivel3.map((n3) => {
         const dadosnivel = dados1.filter(filtro => filtro.Idpai === n3.ID)
@@ -400,6 +404,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
         return { ...n3, Valor: 0 }
     })
 
+    console.log("DIG3", prepNivel3)
+
     const agrupa4 = prepNivel4.map((prep4) => {
         const dadosnivel = prepNivel5.filter(filtro => filtro.IDPAI === prep4.ID)
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
@@ -416,6 +422,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
 
         return { ...prep4 }
     })
+
+    console.log("DIG4", prepNivel4)
 
     const agrupa3 = prepNivel3.map((prep3) => {
         const dadosnivel = agrupa4.filter(filtro => filtro.IDPAI === prep3.ID)
@@ -434,6 +442,7 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
         return { ...prep3 }
     })
 
+    console.log("DIG5", agrupa3)
     return agrupa3
 }
 

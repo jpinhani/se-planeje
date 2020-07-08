@@ -156,6 +156,7 @@ export default () => {
             const dadosGrafico = [...hierarquia(dados1, nivel3, nivel4, nivel5),
             ...dados1.filter(filtro => filtro.Idpai === 2)]
 
+            console.log('DIGAO2', hierarquia(dados1, nivel3, nivel4, nivel5))
 
             /* Saldo Atual das Contas */
             const SaldoDespesa = SaldoConta(despesas, 'Despesa', moment());
