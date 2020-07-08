@@ -35,17 +35,20 @@ export default () => {
 
     const ChartConfig = useCallback((dadosGrafico) => {
         const valorTotal = dadosGrafico.reduce((acum, atual) => acum + atual.Valor, 0)
+
         const dataGrafico = dadosGrafico.map((valor) => {
-            const rs = Math.round(valor.Valor / valorTotal * 100)
-            return rs
-        })
+            return ((valor.Valor / valorTotal) * 100).toFixed(2)
+        });
+
+        console.log('dataGrafico', dataGrafico)
+        console.log('valorTotal', valorTotal)
         const corGrafico = dadosGrafico.map((valor) => gera_cor())
         const labelsGrafico = dadosGrafico.map((valor) => valor.Categoria)
         const rs = {
             type: 'bar',
             data: {
                 datasets: [{
-                    barPercentage: 0.5,
+                    barPercentage: 0.7,
                     data: dataGrafico,
                     backgroundColor: corGrafico,
                     borderColor: corGrafico,
@@ -156,7 +159,8 @@ export default () => {
             const dadosGrafico = [...hierarquia(dados1, nivel3, nivel4, nivel5),
             ...dados1.filter(filtro => filtro.Idpai === 2)]
 
-            console.log('DIGAO2', hierarquia(dados1, nivel3, nivel4, nivel5))
+            // const dadosGrafico = [...hierarquia(dados1, nivel3, nivel4, nivel5)]
+            // console.log('DIGAO2', hierarquia(dados1, nivel3, nivel4, nivel5))
 
             /* Saldo Atual das Contas */
             const SaldoDespesa = SaldoConta(despesas, 'Despesa', moment());
