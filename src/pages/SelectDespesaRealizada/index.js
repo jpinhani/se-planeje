@@ -200,7 +200,11 @@ export default () => {
                     columns={columns}
                     dataSource={SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search)}
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).sort(function (a, b) {
+                            if (a.DT_REAL > b.DT_REAL) return -1;
+                            if (a.DT_REAL < b.DT_REAL) return 1;
+                            return 0;
+                        })}
                     rowKey='ID'
                     pagination={{ pageSize: 100 }}
                 />

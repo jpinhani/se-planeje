@@ -154,7 +154,11 @@ export default () => {
 
                     dataSource={SearchFilter(
                         visionSerchMeta(mapvision, expenseMeta, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search)}
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).sort(function (a, b) {
+                            if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
+                            if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
+                            return 0;
+                        })}
                     rowKey='ID'
                     pagination={{ pageSize: 100 }}
                 />

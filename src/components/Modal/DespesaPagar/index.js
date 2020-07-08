@@ -26,6 +26,7 @@ function DespesaPagar(props) {
     const [visibleTipoPagamento, setVisibleTipoPagamento] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? `A VISTA` : `CRÉDITO`);
     const [check, setCheck] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? false : true);
     const [visibleEdit, setVisibleEdit] = useState('Essa Despesa Esta Sendo Contabilizada');
+    const [enableSaldo, setEnableSaldo] = useState(false);
     const [categoria, setCategoria] = useState(props.data.ID_CATEGORIA);
     const [cartao, setCartao] = useState(props.data.ID_CARTAO);
     const [conta, setConta] = useState([]);
@@ -52,9 +53,14 @@ function DespesaPagar(props) {
     };
 
     function handleEdit(valor) {
-        valor === true ?
-            setVisibleEdit(`Essa Despesa esta sendo Amortizada`) :
-            setVisibleEdit(`Essa Despesa Esta sendo Contabilizada`);
+
+        setEnableSaldo(valor);
+        if (valor === true)
+            return setVisibleEdit(`Essa Despesa Esta Sendo Amortizada`);
+
+
+        return setVisibleEdit(`Essa Despesa Esta Sendo Contabilizada`);
+
     }
 
     function handletipoPagamento(tipo) {
@@ -109,10 +115,12 @@ function DespesaPagar(props) {
         const valueCartao = cartaoInput === 'DÉBITO OU DINHEIRO' ? null : cartaoInput;
         const valueConta = cartaoInput === 'DÉBITO OU DINHEIRO' ? contaInput : null;
 
+        console.log("enableSaldo", enableSaldo)
+
         const body = {
             id: props.data.ID,
             idUser: userID(),
-            valueEdit: visibleEdit,
+            valueEdit: enableSaldo === true ? `Essa Despesa Esta Sendo Amortizada` : `Essa Despesa Esta Sendo Contabilizada`,
             idGrupo: props.data.ID_GRUPO,
             categoria: categoriaInput,
             cartao: valueCartao,

@@ -157,7 +157,11 @@ class SelectReceitaPrevista extends React.Component {
                         columns={this.columns()}
                         dataSource={SearchFilter(
                             visionSerchMeta(this.state.mapvision, this.props.revenue, this.props.visionControler),
-                            ['DESCR_RECEITA', 'DESCR_CATEGORIA'], this.state.filter)}
+                            ['DESCR_RECEITA', 'DESCR_CATEGORIA'], this.state.filter).sort(function (a, b) {
+                                if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
+                                if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
+                                return 0;
+                            })}
                         rowKey='ID'
                         pagination={{ pageSize: 100 }} />
 

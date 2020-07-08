@@ -149,7 +149,11 @@ export default (props) => {
                 columns={Collumns}
                 dataSource={SearchFilter(
                     visionSerchMeta(mapvision, receitaMeta, visionControler),
-                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
+                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search).sort(function (a, b) {
+                        if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
+                        if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
+                        return 0;
+                    })}
 
                 rowKey={receitaMeta => receitaMeta.ID}
                 pagination={{ pageSize: 100 }} />

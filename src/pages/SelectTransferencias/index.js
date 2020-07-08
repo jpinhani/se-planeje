@@ -170,7 +170,11 @@ export default () => {
                     visionSerchTransferencia(mapvision, transferencia, visionControler),
                     ['DESCR_TRANSFERENCIA',
                         'CONTA_CREDITO',
-                        'CONTA_DEBITO'], search)}
+                        'CONTA_DEBITO'], search).sort(function (a, b) {
+                            if (a.DATA_TRANSFERENCIA > b.DATA_TRANSFERENCIA) return -1;
+                            if (a.DATA_TRANSFERENCIA < b.DATA_TRANSFERENCIA) return 1;
+                            return 0;
+                        })}
                 rowKey='ID'
                 pagination={{ pageSize: 100 }}
             />

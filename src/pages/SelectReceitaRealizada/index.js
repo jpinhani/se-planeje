@@ -193,7 +193,11 @@ function ReceitaRealizada() {
                 columns={Collumns}
                 dataSource={SearchFilter(
                     visionSerchReceita(mapvision, receitaReal, visionControler),
-                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search)}
+                    ['DESCR_CATEGORIA', 'DESCR_RECEITA'], search).sort(function (a, b) {
+                        if (a.DT_REAL > b.DT_REAL) return -1;
+                        if (a.DT_REAL < b.DT_REAL) return 1;
+                        return 0;
+                    })}
                 rowKey='ID'
                 pagination={{ pageSize: 100 }}
             />
