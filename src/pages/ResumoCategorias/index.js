@@ -92,8 +92,10 @@ export default (props) => {
             })
 
         /*Previsto*/
-        const dados1 = SaldoCategoria(data, visao, cenario, cartao, categorias);
+        const dados1 = SaldoCategoria(data, visao, cenario, cartao, categorias)
         const treeCategoryExpense = hierarquia(dados1, nivel3, nivel4, nivel5)
+
+
 
         const dados2 = SaldoCategoriaReceita(dataRevenue, visao, cenario, categorias);
         const treeCategoryRevenue = hierarquiaReceita(dados2, nivel3, nivel4, nivel5)

@@ -241,7 +241,8 @@ function hierarquiaReceita(dados1, nivel3, nivel4, nivel5) {
 
     const agrupa4 = prepNivel4.map((prep4) => {
         const dadosnivel = prepNivel5.filter(filtro => filtro.IDPAI === prep4.ID)
-        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        const rs = (prep4.children) ? prep4.children : []
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0) + rs.reduce((acum, atual) => acum + atual.Valor, 0)
         if (dadosnivel.length > 0)
             return {
                 ...prep4,
@@ -250,7 +251,7 @@ function hierarquiaReceita(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: [...dadosnivel, prep4.children]
+                children: [...dadosnivel, ...rs]
             }
 
         return { ...prep4 }
@@ -258,7 +259,8 @@ function hierarquiaReceita(dados1, nivel3, nivel4, nivel5) {
 
     const agrupa3 = prepNivel3.map((prep3) => {
         const dadosnivel = agrupa4.filter(filtro => filtro.IDPAI === prep3.ID)
-        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
+        const rs = (prep3.children) ? prep3.children : []
+        const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0) + rs.reduce((acum, atual) => acum + atual.Valor, 0)
         if (dadosnivel.length > 0)
             return {
                 ...prep3,
@@ -267,7 +269,7 @@ function hierarquiaReceita(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: [...dadosnivel, prep3.children]
+                children: [...dadosnivel, ...rs]
             }
 
         return { ...prep3 }
