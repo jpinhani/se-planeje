@@ -97,8 +97,8 @@ function cartaoRealizado(despesas, listagemCartao, visao) {
     let rs =
         visao.length > 0 ?
             despesas.filter((filtroCartao) =>
-                filtroCartao.STATUS === 'Fatura Paga' ||
-                filtroCartao.STATUS === 'Fatura Economizada').reduce((acum, dataCartao, i) => {
+                filtroCartao.STATUS === 'Fatura Paga' /*||
+                filtroCartao.STATUS === 'Fatura Economizada'*/).reduce((acum, dataCartao, i) => {
                     const modelaData = moment(dataCartao.DT_CREDITO)
 
                     const MM = modelaData.get("month")
