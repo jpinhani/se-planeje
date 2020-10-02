@@ -47,6 +47,17 @@ function NovaDespesa(props) {
         setVisible(true);
     };
 
+    // document.addEventListener("keydown", function (e) {
+    //     let { key } = e
+
+    //     console.log(key)
+    //     if (key === 'A') {
+    //         key = undefined;
+    //         showModal()
+    //     }
+
+    // }, false);
+
     function handletipoPagamento(value) {
 
         if (value === true) {

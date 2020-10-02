@@ -256,7 +256,7 @@ export default (props) => {
                                     '100%': '#00BFFF',
                                 }}
                                 percent={
-                                    resumo.L_FORECAST / resumo.L_PREVISTO ?
+                                    (resumo.L_FORECAST / resumo.L_PREVISTO) > 0 ?
                                         parseFloat(resumo.L_FORECAST / resumo.L_PREVISTO * 100).toFixed(3) : 0}
                                 status="active"
                             />
