@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import './style.scss'
 import { Menu, Dropdown, Layout } from 'antd';
 import { UserOutlined, SettingOutlined } from '@ant-design/icons';
-import { logout } from '../../auth/index'
+import { logout } from '../../auth/index';
+import DespesaRealizada from '../../components/Modal/DespesaRealizada';
+import NewRevenue from '../../components/Modal/ReceitaRealizada';
 // import {} from '../../docs/'
 
 const { Header } = Layout;
@@ -37,9 +39,34 @@ function handleclik() {
 function PrincipalHeader() {
     return (
         <Header className='cabecalho'>
-            <div >
-                <h1 className='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
+            <div style={{
+                width: '50%',
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}>
+                <div style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    // background: 'green',
+                    justifyContent: 'space-between'
+                }}>
+                    <h1 className='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
+                    <div style={{
+                        width: '30%',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        alignItems: 'center',
+                        // background: 'green'
+                    }}>
+                        <DespesaRealizada />
+                        <NewRevenue />
+                    </div>
+                </div>
             </div>
+
+
             <div >
                 <Dropdown.Button className="MenuHeader"
                     onClick={handleclik}

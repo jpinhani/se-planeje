@@ -146,9 +146,9 @@ function NovaDespesa(props) {
         <div>
             <Icon
                 type="plus-circle"
-                style={{ fontSize: '36px', color: '#08c' }}
-                title='Adicionar nova Despesa Prevista'
-                theme="twoTone"
+                style={{ fontSize: '36px', color: 'red' }}
+                title='Adicionar nova Despesa'
+                // theme="twoTone"
                 onClick={showModal} />
 
             <form>

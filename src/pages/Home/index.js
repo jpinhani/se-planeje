@@ -212,6 +212,7 @@ export default () => {
     const back = valor => {
         if (valor) {
             requestApi();
+            setItens(true)
         }
     }
 
