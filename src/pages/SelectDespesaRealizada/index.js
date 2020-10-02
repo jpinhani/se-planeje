@@ -186,15 +186,44 @@ export default () => {
                     {visions}
                 </Select>
             </div>
-            <div style={{ padding: '10px' }}>
-                <strong>Total Gasto: </strong>
-                {SearchFilter(
-                    visionSerch(mapvision, expenseReal, visionControler),
-                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                    })}
+
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row'
+            }}>
+
+                <div style={{ padding: '10px' }}>
+                    <strong>Total Gasto: </strong>
+                    {SearchFilter(
+                        visionSerch(mapvision, expenseReal, visionControler),
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
+                </div>
+
+                <div style={{ padding: '10px' }}>
+                    <strong>Crédito: </strong>
+                    {SearchFilter(
+                        visionSerch(mapvision, expenseReal, visionControler),
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
+                </div>
+
+                <div style={{ padding: '10px' }}>
+                    <strong>Débito/Dinheiro:  </strong>
+                    {SearchFilter(
+                        visionSerch(mapvision, expenseReal, visionControler),
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO == undefined).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
+                </div>
             </div>
+
+
             <div>
                 <Table name='Despesa' className='table table-action'
                     columns={columns}

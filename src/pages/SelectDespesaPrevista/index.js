@@ -16,6 +16,7 @@ import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud
 import 'antd/dist/antd.css';
 import './styles.scss'
 
+
 const { Option } = Select;
 class SelectDespesaPrevista extends React.Component {
     constructor(props) {
@@ -148,14 +149,38 @@ class SelectDespesaPrevista extends React.Component {
                         {this.state.visions}
                     </Select>
                 </div>
-                <div style={{ padding: '10px' }}>
-                    <strong>Total Previsto (Meta): </strong>
-                    {SearchFilter(
-                        visionSerchMeta(this.state.mapvision, this.props.expense, this.props.visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL'
-                        })}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}>
+                    <div style={{ padding: '10px' }}>
+                        <strong>Total Previsto (Meta): </strong>
+                        {SearchFilter(
+                            visionSerchMeta(this.state.mapvision, this.props.expense, this.props.visionControler),
+                            ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}
+                    </div>
+
+                    <div style={{ padding: '10px' }}>
+                        <strong>Crédito: </strong>
+                        {SearchFilter(
+                            visionSerchMeta(this.state.mapvision, this.props.expense, this.props.visionControler),
+                            ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}
+                    </div>
+                    <div style={{ padding: '10px' }}>
+                        <strong>Débito/Dinheiro: </strong>
+                        {SearchFilter(
+                            visionSerchMeta(this.state.mapvision, this.props.expense, this.props.visionControler),
+                            ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter).filter(fil => fil.CARTAO == undefined).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}
+                    </div>
                 </div>
                 <div>
                     <Table className='table table-action'

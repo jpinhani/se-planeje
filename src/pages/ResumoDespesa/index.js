@@ -105,7 +105,10 @@ export default (props) => {
 
             <Table name='CDespesa' className='table table-action'
                 // onHeaderRow="Lançamentos no Cartão de Crédito"
-                title={() => `Lançamentos no cartão de Crédito`}
+                title={() => `Lançamentos no cartão de Crédito: ` + tabDespesa.filter(filtro => filtro.CARTAO).reduce((acum, atual) => acum + atual.VL_FORECAST_NUMBER, 0).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                })}
                 columns={columnsCartao}
                 pagination={{ position: ["none", "none"] }}
                 dataSource={tabDespesa.filter(filtro => filtro.CARTAO)}
@@ -113,7 +116,11 @@ export default (props) => {
             />
 
             <Table name='Despesa' className='table table-action'
-                title={() => `Lançamentos no débito ou dinheiro`}
+                title={() => `Lançamentos no débito ou dinheiro:  ` + tabDespesa.filter(filtro => filtro.CARTAO === undefined).reduce((acum, atual) => acum + atual.VL_FORECAST_NUMBER, 0).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                })}
+
                 columns={columnsLancamentos}
                 dataSource={tabDespesa.filter(filtro => filtro.CARTAO === undefined)}
                 pagination={{ pageSize: 100 }}
