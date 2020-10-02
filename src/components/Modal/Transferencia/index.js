@@ -89,9 +89,9 @@ function NewTransferencia(props) {
         <div>
             <Icon
                 type="plus-circle"
-                style={{ fontSize: '36px', color: '#08c' }}
+                style={{ fontSize: '36px', color: 'black' }}
                 title='Adicionar nova Transferência'
-                theme="twoTone" onClick={showModal} />
+                onClick={showModal} />
 
             <Modal
                 title='Nova Transação'

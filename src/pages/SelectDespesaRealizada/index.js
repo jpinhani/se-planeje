@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import DespesaRealizada from '../../components/Modal/DespesaRealizada'
+// import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
@@ -172,7 +172,7 @@ export default () => {
                 Novas Despesas - Imprevistos
                 </div> */}
             <div className='ViewExpense'>
-                <DespesaRealizada />
+                {/* <DespesaRealizada /> */}
                 <Input
                     name='despesa'
                     value={search}

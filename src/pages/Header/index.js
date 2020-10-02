@@ -6,6 +6,7 @@ import { UserOutlined, SettingOutlined } from '@ant-design/icons';
 import { logout } from '../../auth/index';
 import DespesaRealizada from '../../components/Modal/DespesaRealizada';
 import NewRevenue from '../../components/Modal/ReceitaRealizada';
+import TransferenciaNova from '../../components/Modal/Transferencia';
 // import {} from '../../docs/'
 
 const { Header } = Layout;
@@ -38,44 +39,74 @@ function handleclik() {
 
 function PrincipalHeader() {
     return (
-        <Header className='cabecalho'>
-            <div style={{
-                width: '50%',
-                display: 'flex',
-                justifyContent: 'space-between'
-            }}>
+        <div>
+            <Header className='cabecalho'>
                 <div style={{
-                    width: '100%',
+                    width: '50%',
                     display: 'flex',
-                    flexDirection: 'row',
-                    // background: 'green',
                     justifyContent: 'space-between'
                 }}>
-                    <h1 className='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
                     <div style={{
-                        width: '30%',
+                        width: '100%',
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        // background: 'green'
+                        // background: 'green',
+                        justifyContent: 'space-between'
                     }}>
-                        <DespesaRealizada />
-                        <NewRevenue />
+                        <h1 className='logoheader1'><span className='logoheader2'>Se</span>Planeje</h1>
                     </div>
                 </div>
-            </div>
 
 
-            <div >
-                <Dropdown.Button className="MenuHeader"
-                    onClick={handleclik}
-                    overlay={menu}
-                    icon={<UserOutlined />}>
-                    <Link to='/'>Sair</Link>
-                </Dropdown.Button>
+                <div >
+                    <Dropdown.Button className="MenuHeader"
+                        onClick={handleclik}
+                        overlay={menu}
+                        icon={<UserOutlined />}>
+                        <Link to='/'>Sair</Link>
+                    </Dropdown.Button>
+                </div>
+            </Header>
+            <div className='cabecalho2' style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                // background: 'green'
+            }}>
+                <div style={{
+                    width: '20%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-evenly'
+                }}>
+                    <h3>Nova Despesa</h3>
+                    <DespesaRealizada />
+                </div>
+                <div style={{
+                    width: '20%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-evenly'
+                }}>
+                    <h3>Nova Receita</h3>
+                    <NewRevenue />
+                </div>
+                <div style={{
+                    width: '20%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly'
+                }}>
+                    <h3>Nova Transferência</h3>
+                    <TransferenciaNova />
+                </div>
             </div>
-        </Header>
+        </div>
     );
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { GetRequest, DeleteRequest, visionSerchTransferencia } from '../../components/crudSendAxios/crud';
-import NovaTransferencia from '../../components/Modal/Transferencia'
+// import NovaTransferencia from '../../components/Modal/Transferencia'
 
 import { Input, Table, Popconfirm, Icon, Select, notification, Spin } from 'antd';
 import SearchFilter from '../../components/searchFilterTable'
@@ -147,7 +147,7 @@ export default () => {
                 display: 'flex',
                 justifyContent: 'space-between'
             }}>
-                <NovaTransferencia />
+                {/* <NovaTransferencia /> */}
                 {/* <NewRevenue /> */}
                 <Input name='transferencia'
                     style={{ width: '49%' }}

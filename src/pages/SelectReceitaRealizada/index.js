@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { GetRequest, visionSerchReceita, UpdateRequest } from '../../components/crudSendAxios/crud'
 import SearchFilter from '../../components/searchFilterTable/index'
-import NewRevenue from '../../components/Modal/ReceitaRealizada'
+// import NewRevenue from '../../components/Modal/ReceitaRealizada'
 import ReceitaEdit from '../../components/Modal/ReceitaRealizadaEdit'
 
 import { Table, Button, Input, Select, Popconfirm, Icon, notification, Spin } from 'antd';
@@ -164,7 +164,7 @@ function ReceitaRealizada() {
                 Lançamentos de Receita - Não Previstos
             </div> */}
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                <NewRevenue />
+                {/* <NewRevenue /> */}
                 <Input name='receita'
                     style={{ width: '49%' }}
                     value={search}
