@@ -40,7 +40,7 @@ function GeraDespesas(despesas, cartaoListagem, visaoSetada, itens) {
             VL_FORECAST_NUMBER: geraId.CARTAO ? geraId.VL_FORECAST_NUMBER :
                 geraId.VL_REAL ? geraId.VL_REAL : geraId.VL_PREVISTO,
 
-            ROLID: Math.random().toString(10).substr(3, 5)
+            ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
         }
     })
 
