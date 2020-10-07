@@ -115,7 +115,7 @@ function groupByCategoria(ArrayCategoria, tipo) {
 
                 const Saldo = dados.filter((ary) =>
                     ary.Categoria === gaveta.Categoria).reduce((acum, valores) =>
-                        acum + (valores.ValorReal ? valores.ValorReal : valores.ValorPrevisto), 0)
+                        acum + (valores.ValorReal ? valores.ValorReal : valores.ValorReal === 0 ? 0 : valores.ValorPrevisto), 0)
 
                 const idCategoria = gaveta.IdCategoria
                 novoArray[vet] = {

@@ -176,7 +176,7 @@ class SelectDespesaPrevista extends React.Component {
                         <strong>Débito/Dinheiro: </strong>
                         {SearchFilter(
                             visionSerchMeta(this.state.mapvision, this.props.expense, this.props.visionControler),
-                            ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter).filter(fil => fil.CARTAO == undefined).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                            ['DESCR_CATEGORIA', 'DESCR_DESPESA'], this.state.filter).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL'
                             })}

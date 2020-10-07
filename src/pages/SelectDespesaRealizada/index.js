@@ -216,7 +216,7 @@ export default () => {
                     <strong>Débito/Dinheiro:  </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO == undefined).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
                         })}
