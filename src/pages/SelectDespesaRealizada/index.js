@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 // import DespesaRealizada from '../../components/Modal/DespesaRealizada'
+// import DespesaRealizada from '../../components/Modal/DespesaRealizada'
 
 import EditDespesa from '../../components/Modal/DespesaRealizadaEdit'
 import SearchFilter from '../../components/searchFilterTable'
@@ -201,6 +202,7 @@ export default () => {
                             currency: 'BRL'
                         })}
                 </div>
+
 
                 <div style={{ padding: '10px' }}>
                     <strong>Crédito: </strong>
