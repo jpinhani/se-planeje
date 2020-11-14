@@ -1,4 +1,8 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
+
+import { useSelector } from 'react-redux';
+
+
 import Chart from "chart.js";
 import { GetRequest } from '../../components/crudSendAxios/crud';
 import { SaldoConta, groupByConta, SaldoInicial } from '../../components/SaldoConta';
@@ -21,6 +25,8 @@ let newChartInstance = null;
 let newChartInstance2 = null;
 export default () => {
 
+    const homeReducer = useSelector(state => state.home);
+    // const dispatch = useDispatch();
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
@@ -30,6 +36,8 @@ export default () => {
     const chartContainer = useRef(null);
     const chartContainer1 = useRef(null);
     const [grafico, setGrafico] = useState(null);
+
+
 
 
 
@@ -199,25 +207,28 @@ export default () => {
             }
             setSpin(false)
 
+
+            const atu = homeReducer
+            console.log('logica de atualizacao: ', atu)
         } catch (error) {
             console.log(error)
         };
 
-    }, [chartContainer, ChartConfig, ChartConfig1])
+
+
+    }, [chartContainer, ChartConfig, ChartConfig1, homeReducer])
+
+
 
     useEffect(() => {
         requestApi()
     }, [requestApi])
 
-    const back = valor => {
-        if (valor) {
-            requestApi();
-            setItens(true)
-        }
-    }
+
 
     return (
-        <div className='homeLayout'>
+        <div className='homeLayout' >
+
             <Spin size="large" spinning={spin} />
             <div>
                 <ul className='homeLayoutFlex'>
@@ -307,8 +318,8 @@ export default () => {
                                             </div>
 
                                             {novo.Tipo === 'Despesa' ?
-                                                <PagarDespesa back={back.bind(this)} data={novo} /> :
-                                                <PagarReceita back={back.bind(this)} data={novo} />}
+                                                <PagarDespesa data={novo} /> :
+                                                <PagarReceita data={novo} />}
                                         </li>)}
                             </div>
                         </div>

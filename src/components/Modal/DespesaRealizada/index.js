@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Icon, Modal, Input, Select, DatePicker, InputNumber, Switch, Form, notification, Spin } from 'antd'
 import moment from 'moment';
@@ -19,6 +19,7 @@ const dateFormat = 'DD/MM/YYYY';
 function NovaDespesa(props) {
 
     const dispatch = useDispatch();
+    const home = useSelector(state => state.home)
 
     const [spin, setSpin] = useState(false)
     const [visible, setVisible] = useState(false);
@@ -144,6 +145,11 @@ function NovaDespesa(props) {
             dispatch({
                 type: 'LIST_EXPENSEREAL',
                 payload: despesaAjust
+            })
+
+            dispatch({
+                type: 'LIST_HOME',
+                payload: 1 + home
             })
 
             setSpin(false)

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Input, Modal, Form, InputNumber, Select, DatePicker, Switch, Divider, notification, Spin } from 'antd'
 import { LikeTwoTone } from '@ant-design/icons';
@@ -18,6 +18,7 @@ const { TextArea } = Input;
 function ReceitaMeta(props) {
 
     const dispatch = useDispatch();
+    const home = useSelector(state => state.home)
 
     const [spin, setSpin] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -90,7 +91,10 @@ function ReceitaMeta(props) {
                 payload: receitas
             })
 
-            props.back("OK")
+            dispatch({
+                type: 'LIST_HOME',
+                payload: 1 + home
+            })
         }
     }
 

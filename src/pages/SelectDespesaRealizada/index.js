@@ -44,6 +44,10 @@ export default () => {
                 type: 'LIST_EXPENSEREAL',
                 payload: despesa
             })
+            dispatch({
+                type: 'LIST_HOME',
+                payload: 2
+            })
         }
     }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userID } from '../../../services/urlBackEnd'
 
 import { Modal, Icon, Select, InputNumber, DatePicker, Input, Form, notification, Spin } from 'antd';
@@ -15,6 +15,7 @@ const dateFormat = 'DD/MM/YYYY';
 function NewTransferencia(props) {
 
     const dispatch = useDispatch();
+    const home = useSelector(state => state.home)
     const [spin, setSpin] = useState(false);
     const [visible, setVisible] = useState(false);
     const [listDebito, setlistDebito] = useState([]);
@@ -36,6 +37,7 @@ function NewTransferencia(props) {
 
     async function handleSubmitOk() {
         setSpin(true);
+        console.log(dataTransferencia)
         const body = {
             idUser: userID(),
             idContaDebito: contaDebito,
@@ -70,6 +72,10 @@ function NewTransferencia(props) {
             dispatch({
                 type: 'LIST_TRANSFERENCIA',
                 payload: transferencias
+            })
+            dispatch({
+                type: 'LIST_HOME',
+                payload: 1 + home
             })
             setVisible(false)
         }

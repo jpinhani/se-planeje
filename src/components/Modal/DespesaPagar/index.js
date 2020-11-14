@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Modal, Input, Select, DatePicker, InputNumber, Switch, Divider, Form, notification } from 'antd'
 import { DislikeOutlined } from '@ant-design/icons';
@@ -19,6 +19,7 @@ const dateFormat = 'DD/MM/YYYY'
 function DespesaPagar(props) {
 
     const dispatch = useDispatch();
+    const home = useSelector(state => state.home)
 
     const [visible, setVisible] = useState(false);
     const [visibleConta, setVisibleConta] = useState((props.data.ID_CARTAO === 0 | props.data.ID_CARTAO === null) ? false : true);
@@ -164,8 +165,11 @@ function DespesaPagar(props) {
                 payload: despesa
             })
 
-            if (props.back)
-                props.back("Ok")
+            dispatch({
+                type: 'LIST_HOME',
+                payload: 1 + home
+            })
+
         }
     }
 

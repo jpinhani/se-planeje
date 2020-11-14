@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Icon, Modal, Form, Input, InputNumber, DatePicker, Select, notification, Spin } from 'antd';
 import moment from 'moment';
@@ -14,6 +14,7 @@ const dateFormat = 'DD/MM/YYYY'
 const { TextArea } = Input;
 
 function NovaReceita(props) {
+
     const [spin, setSpin] = useState(false);
     const [visibleModal, setVisibleModal] = useState(false);
     const [valorRealInput, setValorRealInput] = useState('');
@@ -25,6 +26,7 @@ function NovaReceita(props) {
     const [descricao, setDescricao] = useState('');
 
     const dispatch = useDispatch();
+    const home = useSelector(state => state.home)
 
     const { getFieldDecorator } = props.form;
 
@@ -93,6 +95,10 @@ function NovaReceita(props) {
             dispatch({
                 type: 'LIST_REVENUE_REAL',
                 payload: receitas
+            })
+            dispatch({
+                type: 'LIST_HOME',
+                payload: 1 + home
             })
         }
 
