@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+
 import moment from 'moment';
 
 import Despesas from '../ResumoDespesa';
@@ -23,6 +25,7 @@ const { RangePicker } = DatePicker;
 
 export default () => {
     const [mode] = useState('top');
+    const home = useSelector(state => state.home);
     const [spin, setSpin] = useState(true);
 
     const [check, setCheck] = useState(false)
@@ -79,7 +82,9 @@ export default () => {
         setListConta(listaconta);
         setSpin(false)
 
-    }, [getcartao, getvision, getconta])
+        const atu = home
+        console.log('logica de atualizacao: ', atu)
+    }, [getcartao, getvision, getconta, home])
 
     useEffect(() => {
         RequestGeneral();
@@ -122,8 +127,10 @@ export default () => {
     const requestApi = useCallback(async () => {
 
         SaldoAtual(listDespesas, listReceitas, listTransferencias)
+        const atu = home
+        console.log('logica de atualizacao: ', atu)
 
-    }, [SaldoAtual, listDespesas, listReceitas, listTransferencias])
+    }, [SaldoAtual, listDespesas, listReceitas, listTransferencias, home])
 
     useEffect(() => {
         requestApi();
