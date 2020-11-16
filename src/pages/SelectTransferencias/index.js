@@ -33,7 +33,7 @@ export default () => {
         const resultStatus = await DeleteRequest(body.ID, 'api/transferencia')
         verifySend(resultStatus.status, 'DELETE', body.DESCR_TRANSFERENCIA)
 
-        if (resultStatus === 200) {
+        if (resultStatus.status === 200) {
 
             const transf = await GetRequest('api/transferencia')
             dispatch({
@@ -77,7 +77,7 @@ export default () => {
             key: 'DESCR_TRANSFERENCIA',
         },
         {
-            title: 'action',
+            title: 'AÇÃO',
             key: 'action',
             render: transferencia => (
                 <div className="DetalhesBotoes">

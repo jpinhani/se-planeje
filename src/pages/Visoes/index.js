@@ -68,7 +68,7 @@ function Vision() {
       key: 'DT_FIM2'
     },
     {
-      title: 'Action',
+      title: 'AÇÃO',
       key: 'action',
 
       render: vision => (

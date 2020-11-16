@@ -56,7 +56,7 @@ export default (props) => {
                 key: 'VL_REAL',
             },
             {
-                title: 'ST',
+                title: 'STATUS',
                 dataIndex: 'STATUS',
                 key: 'STATUS',
             }

@@ -81,7 +81,7 @@ function ReceitaRealizada() {
             key: 'NUM_PARCELA'
         },
         {
-            title: 'Action',
+            title: 'AÇÃO',
             key: 'action',
             render: receitaReal => (
                 <div className="DetalhesBotoes">

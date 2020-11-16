@@ -49,7 +49,7 @@ export default (props) => {
             key: 'NUM_PARCELA'
         },
         {
-            title: 'Action',
+            title: 'AÇÃO',
             key: 'action',
             render: receitaMeta => (
                 <div>
