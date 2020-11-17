@@ -114,7 +114,8 @@ export default (props) => {
 
 
         const unique = new Set(fatura.map((DATA) => DATA.CARTAO))
-        const cardNew = Array.from(unique).map((DATA, i) => <Button value={i}
+
+        const cardNew = Array.from(unique).map((DATA, i) => <Button className="cartoesBT" value={i}
             key={i}
             ghost
             type='primary'
@@ -124,6 +125,7 @@ export default (props) => {
         dispatch({
             type: 'LIST_FATURAREAL',
             payload: cardNew
+
         })
 
         dispatch({
