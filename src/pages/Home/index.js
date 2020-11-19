@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
 
+import { useSelector } from 'react-redux';
 
 import Chart from "chart.js";
 import { GetRequest } from '../../components/crudSendAxios/crud';
@@ -18,6 +19,8 @@ import { Switch, notification, Spin } from 'antd';
 import moment from 'moment';
 import PagarDespesa from '../../components/Modal/DespesaPagar'
 import PagarReceita from '../../components/Modal/ReceitaMeta'
+
+import { GroupOutlined } from '@ant-design/icons';
 
 import './styles.scss'
 
@@ -267,14 +270,21 @@ export default () => {
 
                     <div className='containerDiv1'>
                         <div className='containerDivData'>
-                            <center>
-                                <h1> <Switch
+
+                            <h1 className='headerItens'>
+                                <Switch
                                     checked={itens}
                                     onChange={(valor) => valor === true ?
                                         setItens(true) : setItens(false)} />
-                                    {itens === true ? '  Realizados (5 ultimos Dias)' : '  Metas (Próximos 5 dias)'}
-                                </h1>
-                            </center>
+
+                                {itens === true ? '  Realizados (5 ultimos Dias)' : '  Metas (Próximos 5 dias)'}
+
+                                {/* <Link to='PayGroup'> */}
+                                <GroupOutlined style={{ color: "red" }} />
+                                {/* </Link> */}
+                            </h1>
+
+
                             <div className='containerDivDataCategoria'>
                                 {itens === true ? lastLanc.sort(function (a, b) {
                                     if (a.Data > b.Data) return -1;

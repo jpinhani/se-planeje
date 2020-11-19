@@ -14,6 +14,13 @@
 
 }
 
+.headerItens{
+     display: flex;
+     flex-direction: row;
+     justify-content: space-around;
+     align-items: center;
+}
+
 .homeLayout .containerDiv1{
    width: '100%' !important;
 }

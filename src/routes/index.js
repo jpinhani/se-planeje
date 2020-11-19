@@ -30,6 +30,7 @@ import manualVisual from '../pages/Manual'
 // import NewUser from '../pages/NewDataUser'
 import Alterpsw from '../pages/AlterPsw'
 import DetailsUser from '../pages/DetailsUser'
+import PayGroup from '../pages/Paygroup/index'
 
 const { Content } = Layout;
 
@@ -80,6 +81,7 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/visao' component={Visao} />
                 <PrivateRoute exact path='/SelectReceitaReal' component={SelectReceitaReal} />
                 <PrivateRoute exact path='/SelectTransferencia' component={SelectTransferencia} />
+                <PrivateRoute exact path='/PayGroup' component={PayGroup} />
                 <PrivateRoute component={Home} />
               </Switch>
             </Content>
