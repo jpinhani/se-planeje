@@ -232,6 +232,7 @@ export default () => {
     return (
         <div className='homeLayout' >
 
+
             <Spin size="large" spinning={spin} />
             <div>
                 <ul className='homeLayoutFlex'>
