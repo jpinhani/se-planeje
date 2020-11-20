@@ -279,9 +279,9 @@ export default () => {
 
                                 {itens === true ? '  Realizados (5 ultimos Dias)' : '  Metas (Próximos 5 dias)'}
 
-                                {/* <Link to='PayGroup'> */}
-                                <GroupOutlined style={{ color: "red" }} />
-                                {/* </Link> */}
+                                <Link to='PayGroup'>
+                                    <GroupOutlined style={{ color: "red" }} />
+                                </Link>
                             </h1>
 
 
