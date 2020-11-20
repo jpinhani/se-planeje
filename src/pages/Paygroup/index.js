@@ -14,7 +14,6 @@ const { Option } = Select;
 export default () => {
 
     const dispatch = useDispatch();
-    const expenseReal = useSelector(state => state.expenseReal);
     const visionControler = useSelector(state => state.visionControler)
     const [data, setdata] = useState();
     const [itensLote, setItensLote] = useState([]);
@@ -35,11 +34,16 @@ export default () => {
                 Categoria: data.DESCR_CATEGORIA,
                 Descricao: data.DESCR_DESPESA,
                 DataPrevista: data.DATANOVA,
-                DataReal: new Date(),
+                DataReal: null,
+                DataRealValue: moment(),
                 VlPrevisto: data.VL_PREVISTO,
-                VlReal: data.VL_PREVISTO2,
+                VlReal: " ",
+                VlRealNumber: data.VL_PREVISTO2,
                 PagamentoEm: 0,
-                CartaoConta: data.CARTAO,
+                CartaoConta: " ",
+                CartaoContaValue: data.CARTAO,
+                IsCartaoForm: false,
+                IsCartao: data.CARTAO ? true : false,
                 Status: data.STATUS,
                 DT_VISAO: data.DT_PREVISTO
             }
@@ -53,11 +57,16 @@ export default () => {
                 Categoria: data.DESCR_CATEGORIA,
                 Descricao: data.DESCR_RECEITA,
                 DataPrevista: data.DATANOVA,
-                DataReal: new Date(),
+                DataReal: null,
+                DataRealValue: moment(),
                 VlPrevisto: data.VL_PREVISTO,
-                VlReal: data.VL_PREVISTO,
+                VlReal: " ",
+                VlRealNumber: data.VL_PREVISTO2,
                 PagamentoEm: false,
-                CartaoConta: "",
+                CartaoConta: " ",
+                CartaoContaValue: " ",
+                IsCartaoForm: false,
+                IsCartao: false,
                 Status: data.STATUS,
                 DT_VISAO: data.DT_PREVISTO
             }
@@ -87,18 +96,78 @@ export default () => {
                     Descricao: dados.Descricao,
                     DataPrevista: dados.DataPrevista,
                     DataReal: dados.DataReal,
+                    DataRealValue: dados.DataRealValue,
                     VlPrevisto: dados.VlPrevisto,
                     VlReal: dados.VlReal,
+                    VlRealNumber: dados.vlRealNumber,
                     PagamentoEm: dados.PagamentoEm,
                     CartaoConta: dados.CartaoConta,
-                    Status: dados.Status
+                    CartaoContaValue: dados.CartaoContaValue,
+                    IsCartaoForm: dados.IsCartaoForm,
+                    IsCartao: dados.IsCartao,
+                    Status: dados.Status,
+                    DT_VISAO: dados.DT_VISAO
                 }
             })
+
+            const dataDemais = data.map((dadosMap) => {
+
+                return {
+                    Check: dadosMap.Id === dados.Id ? true : dadosMap.Check,
+                    Id: dadosMap.Id,
+                    Tipo: dadosMap.Tipo,
+                    Categoria: dadosMap.Categoria,
+                    Descricao: dadosMap.Descricao,
+                    DataPrevista: dadosMap.DataPrevista,
+                    DataReal: dadosMap.Id === dados.Id ? dadosMap.DataRealValue : dadosMap.DataReal,
+                    DataRealValue: dadosMap.DataRealValue,
+                    VlPrevisto: dadosMap.VlPrevisto,
+                    VlReal: dadosMap.Id === dados.Id ? dadosMap.VlRealNumber : dadosMap.VlReal,
+                    VlRealNumber: dadosMap.VlRealNumber,
+                    PagamentoEm: dadosMap.PagamentoEm,
+                    CartaoConta: dadosMap.Id === dados.Id ? dadosMap.CartaoContaValue : dadosMap.CartaoConta,
+                    CartaoContaValue: dadosMap.CartaoContaValue,
+                    IsCartaoForm: dadosMap.Id === dados.Id ? dadosMap.IsCartao : dadosMap.IsCartaoForm,
+                    IsCartao: dadosMap.IsCartao,
+                    Status: dadosMap.Status,
+                    DT_VISAO: dadosMap.DT_VISAO
+                }
+            })
+
+            setdata(dataDemais)
         }
-        else (ar = ar.filter(filtro => filtro.Id !== dados.Id))
+        else {
+            (ar = ar.filter(filtro => filtro.Id !== dados.Id))
+
+            const dataDemais = data.map((dadosMap) => {
+
+                return {
+                    Check: dadosMap.Id === dados.Id ? false : dadosMap.Check,
+                    Id: dadosMap.Id,
+                    Tipo: dadosMap.Tipo,
+                    Categoria: dadosMap.Categoria,
+                    Descricao: dadosMap.Descricao,
+                    DataPrevista: dadosMap.DataPrevista,
+                    DataReal: dadosMap.Id === dados.Id ? null : dadosMap.DataReal,
+                    DataRealValue: dadosMap.DataRealValue,
+                    VlPrevisto: dadosMap.VlPrevisto,
+                    VlReal: dadosMap.Id === dados.Id ? " " : dadosMap.VlReal,
+                    VlRealNumber: dadosMap.VlRealNumber,
+                    PagamentoEm: dadosMap.PagamentoEm,
+                    CartaoConta: dadosMap.Id === dados.Id ? " " : dadosMap.CartaoConta,
+                    CartaoContaValue: dadosMap.CartaoContaValue,
+                    IsCartaoForm: dadosMap.Id === dados.Id ? false : dadosMap.IsCartaoForm,
+                    IsCartao: dadosMap.IsCartao,
+                    Status: dadosMap.Status,
+                    DT_VISAO: dadosMap.DT_VISAO
+                }
+            })
+
+            setdata(dataDemais)
+
+        }
 
         setItensLote(ar)
-        console.log(ar)
     }
 
     function inputVlReal(e, Id) {
@@ -106,18 +175,23 @@ export default () => {
         const dataDemais = data.map((dados) => {
 
             return {
-                Check: dados.Id === Id ? true : dados.Check,
+                Check: dados.Check,
                 Id: dados.Id,
                 Tipo: dados.Tipo,
                 Categoria: dados.Categoria,
                 Descricao: dados.Descricao,
                 DataPrevista: dados.DataPrevista,
                 DataReal: dados.DataReal,
+                DataRealValue: dados.DataRealValue,
                 VlPrevisto: dados.VlPrevisto,
                 VlReal: dados.Id === Id ? e.target.value : dados.VlReal,
                 PagamentoEm: dados.PagamentoEm,
                 CartaoConta: dados.CartaoConta,
-                Status: dados.Status
+                CartaoContaValue: dados.CartaoContaValue,
+                IsCartaoForm: dados.IsCartaoForm,
+                IsCartao: dados.IsCartao,
+                Status: dados.Status,
+                DT_VISAO: dados.DT_VISAO
             }
         })
 
@@ -204,29 +278,30 @@ export default () => {
             </div>
             {data ? SearchFilter(
                 visionSerch(mapvision, data, visionControler),
-                ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).sort(function (a, b) {
-                    if (a.DT_REAL > b.DT_REAL) return -1;
-                    if (a.DT_REAL < b.DT_REAL) return 1;
+                ['Decricao', 'Categoria'], search).sort(function (a, b) {
+                    if (a.DataPrevista > b.DataPrevista) return -1;
+                    if (a.DataPrevista < b.DataPrevista) return 1;
                     return 0;
                 }).map((dados) =>
 
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', borderBottom: '1px solid', borderColor: 'white' }}>
+                    <div key={dados.Id} style={{ display: 'flex', alignItems: 'center', width: '100%', borderBottom: '1px solid', borderColor: 'white' }}>
                         {/* <div style={{ display: 'flex', width: '5px', alignItems: 'center' }}>{dados.Id}</div> */}
-                        <div style={{ display: 'flex', width: '30px', justifyContent: 'center', fontSize: '10px' }}><Checkbox onChange={e => itemSelected(e, dados)} />
+                        <div style={{ display: 'flex', width: '30px', justifyContent: 'center', fontSize: '10px' }}><Checkbox checked={dados.Check} onChange={e => itemSelected(e, dados)} />
                         </div>
                         <div style={{ display: 'flex', width: '80px', justifyContent: 'center', fontSize: '10px' }}>{dados.Tipo}</div>
                         <div style={{ display: 'flex', width: '150px', justifyContent: 'left', fontSize: '10px' }}>{dados.Categoria}</div>
                         <div style={{ display: 'flex', width: '180px', justifyContent: 'left', fontSize: '10px' }}>{dados.Descricao}</div>
                         <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}>{dados.DataPrevista}</div>
+
                         <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}> <DatePicker
                             placeholder="Data Real"
-                            defaultValue={moment()}
+                            value={dados.DataReal}
                             format={dateFormat}
                         /></div>
 
                         <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}>{dados.VlPrevisto}</div>
                         <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}><Input value={dados.VlReal} onChange={e => inputVlReal(e, dados.Id)} /></div>
-                        <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}><Checkbox checked={dados.Check} /></div>
+                        <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}><Checkbox checked={dados.IsCartaoForm} /></div>
                         <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}><Checkbox /></div>
                         <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '10px' }}><Input value={dados.CartaoConta} /></div>
 
