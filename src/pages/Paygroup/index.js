@@ -1,28 +1,21 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-
-import { GetRequest, visionSerch } from '../../components/crudSendAxios/crud';
-
+import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud';
 import { loadCartaoReal, loadConta } from '../../components/ListagemCombo';
-
 import SearchFilter from '../../components/searchFilterTable';
-
 import moment from 'moment';
-
-import { Input, DatePicker, Checkbox, Select } from 'antd';
+import { Input, DatePicker, Checkbox, Select, Button } from 'antd';
 
 const dateFormat = 'DD/MM/YYYY'
 const { Option } = Select;
+
 export default () => {
 
     const dispatch = useDispatch();
     const visionControler = useSelector(state => state.visionControler)
     const [data, setdata] = useState();
-    const [itensLote, setItensLote] = useState([]);
-
     const [listCartao, setListCartao] = useState([]);
     const [listConta, setListConta] = useState([]);
-
     const [search, setSearch] = useState('');
     const [visions, setVisions] = useState([]);
     const [mapvision, setMapVision] = useState([]);
@@ -62,7 +55,7 @@ export default () => {
                 IdCartao: data.ID_CARTAO,
 
                 Status: data.STATUS,
-                DT_VISAO: data.DT_PREVISTO
+                DT_PREVISTO: data.DT_PREVISTO
             }
         })
 
@@ -90,13 +83,14 @@ export default () => {
                 IdCartao: [],
 
                 Status: data.STATUS,
-                DT_VISAO: data.DT_PREVISTO
+                DT_PREVISTO: data.DT_PREVISTO
             }
         })
 
         const dadosFinal = [...newExpense, ...newRevenue]
 
         setdata(dadosFinal)
+
     }
 
     useEffect(() => {
@@ -104,35 +98,7 @@ export default () => {
     }, [])
 
     function itemSelected(e, dados) {
-        let ar = [...itensLote]
-
         if (e.target.checked === true) {
-            ar.push(dados)
-            ar.map((dados) => {
-
-                return {
-                    Check: true,
-                    Id: dados.Id,
-                    Tipo: dados.Tipo,
-                    Categoria: dados.Categoria,
-                    Descricao: dados.Descricao,
-                    DataPrevista: dados.DataPrevista,
-                    DataReal: dados.DataReal,
-                    DataRealValue: dados.DataRealValue,
-                    VlPrevisto: dados.VlPrevisto,
-                    VlReal: dados.VlReal,
-                    VlRealNumber: dados.vlRealNumber,
-                    PagamentoEm: dados.PagamentoEm,
-                    CartaoConta: dados.CartaoConta,
-                    CartaoContaValue: dados.CartaoContaValue,
-                    IsCartaoForm: dados.IsCartaoForm,
-                    IsCartao: dados.IsCartao,
-                    IdCartaoForm: dados.IdCartaoForm,
-                    IdCartao: dados.IdCartao,
-                    Status: dados.Status,
-                    DT_VISAO: dados.DT_VISAO
-                }
-            })
 
             const dataDemais = data.map((dadosMap) => {
 
@@ -156,14 +122,13 @@ export default () => {
                     IdCartaoForm: dadosMap.Id === dados.Id ? dadosMap.IdCartao : dadosMap.IdCartaoForm,
                     IdCartao: dadosMap.IdCartao,
                     Status: dadosMap.Status,
-                    DT_VISAO: dadosMap.DT_VISAO
+                    DT_PREVISTO: dadosMap.DT_PREVISTO
                 }
             })
 
             setdata(dataDemais)
         }
         else {
-            (ar = ar.filter(filtro => filtro.Id !== dados.Id))
 
             const dataDemais = data.map((dadosMap) => {
 
@@ -187,7 +152,7 @@ export default () => {
                     IdCartaoForm: dadosMap.Id === dados.Id ? [] : dadosMap.IdCartaoForm,
                     IdCartao: dadosMap.IdCartao,
                     Status: dadosMap.Status,
-                    DT_VISAO: dadosMap.DT_VISAO
+                    DT_PREVISTO: dadosMap.DT_PREVISTO
                 }
             })
 
@@ -195,7 +160,6 @@ export default () => {
 
         }
 
-        setItensLote(ar)
     }
 
     function inputVlReal(e, Id) {
@@ -222,15 +186,12 @@ export default () => {
                 IdCartaoForm: dados.IdCartaoForm,
                 IdCartao: dados.IdCartao,
                 Status: dados.Status,
-                DT_VISAO: dados.DT_VISAO
+                DT_PREVISTO: dados.DT_PREVISTO
             }
         })
 
         setdata(dataDemais)
 
-        let ar = dataDemais.filter(filtro => filtro.Check === true)
-
-        setItensLote(ar)
     }
 
     function inputCredito(e, Id) {
@@ -256,15 +217,12 @@ export default () => {
                 IdCartaoForm: dados.Id === Id ? e.target.checked === true ? dados.IdCartao : [] : dados.IdCartaoForm,
                 IdCartao: dados.Id === Id ? e.target.checked === true ? dados.IdCartao : [] : dados.IdCartao,
                 Status: dados.Status,
-                DT_VISAO: dados.DT_VISAO
+                DT_PREVISTO: dados.DT_PREVISTO
             }
         })
 
         setdata(dataDemais)
 
-        let ar = dataDemais.filter(filtro => filtro.Check === true)
-
-        setItensLote(ar)
     }
 
     function handleCartao(e, Id) {
@@ -290,23 +248,15 @@ export default () => {
                 IdCartaoForm: dados.Id === Id ? e : dados.IdCartaoForm,
                 IdCartao: dados.Id === Id ? e : dados.IdCartao,
                 Status: dados.Status,
-                DT_VISAO: dados.DT_VISAO
+                DT_PREVISTO: dados.DT_PREVISTO
             }
         })
 
         setdata(dataDemais)
 
-        let ar = dataDemais.filter(filtro => filtro.Check === true)
-
-        setItensLote(ar)
     }
 
     function handleDataReal(Id, date) {
-        // setDataRealInput(dateString);
-
-        console.log("date", date)
-        console.log("Id", Id)
-
 
         const dataDemais = data.map((dados) => {
 
@@ -330,15 +280,12 @@ export default () => {
                 IdCartaoForm: dados.IdCartaoForm,
                 IdCartao: dados.IdCartao,
                 Status: dados.Status,
-                DT_VISAO: dados.DT_VISAO
+                DT_PREVISTO: dados.DT_PREVISTO
             }
         })
 
         setdata(dataDemais)
 
-        let ar = dataDemais.filter(filtro => filtro.Check === true)
-
-        setItensLote(ar)
     }
 
 
@@ -360,30 +307,28 @@ export default () => {
         options.push(<Option key='all' value='ALL'>TODAS VISÕES</Option>)
 
         setVisions(options)
-        const despesas = await GetRequest('api/despesas/paga')
-
-        const despesaAjust = despesas.map((dados) => {
-
-            return { ...dados, DT_VISAO: (dados.STATUS === 'Fatura Paga') ? dados.DT_REAL : dados.DT_VISAO }
-        })
-
-        dispatch({
-            type: 'LIST_EXPENSEREAL',
-            payload: despesaAjust
-        })
 
         setMapVision(resultVision)
-    }, [getvision, dispatch])
+    }, [getvision])
 
     useEffect(() => {
         listaVisao();
     }, [listaVisao]);
 
+
+    function submitGroup() {
+
+        const ItensMarcados = data.filter(filtro => filtro.Check === true)
+
+        console.table(ItensMarcados)
+    }
+
+
     return (
         <div style={{ width: '100%' }}>
-
+            <Button type="primary "
+                onClick={() => submitGroup()}> Enviar Pagamentos</Button>
             <div className='ViewExpense'>
-                {/* <DespesaRealizada /> */}
                 <Input
                     name='despesa'
                     value={search}
@@ -399,7 +344,6 @@ export default () => {
             </div>
 
             <div style={{ display: 'flex', width: '100%' }}>
-                {/* <div style={{ width: '5px' }}>Id:</div> */}
                 <div style={{ display: 'flex', width: '30px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Flag</div>
                 <div style={{ display: 'flex', width: '80px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Tipo</div>
                 <div style={{ display: 'flex', width: '150px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Categoria</div>
@@ -411,18 +355,16 @@ export default () => {
                 <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Crédito?</div>
                 <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Amortizar?</div>
                 <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Cartao/Conta</div>
-
             </div>
             {data ? SearchFilter(
-                visionSerch(mapvision, data, visionControler),
+                visionSerchMeta(mapvision, data, visionControler),
                 ['Decricao', 'Categoria'], search).sort(function (a, b) {
-                    if (a.DataPrevista > b.DataPrevista) return -1;
-                    if (a.DataPrevista < b.DataPrevista) return 1;
+                    if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
+                    if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
                     return 0;
                 }).map((dados) =>
 
                     <div key={dados.Id} style={{ display: 'flex', alignItems: 'center', width: '100%', borderBottom: '1px solid', borderColor: 'grey' }}>
-                        {/* <div style={{ display: 'flex', width: '5px', alignItems: 'center' }}>{dados.Id}</div> */}
                         <div
                             style={{
                                 display: 'flex',
