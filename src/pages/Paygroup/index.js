@@ -4,7 +4,14 @@ import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud
 import { loadCartaoReal, loadConta } from '../../components/ListagemCombo';
 import SearchFilter from '../../components/searchFilterTable';
 import moment from 'moment';
-import { Input, DatePicker, Checkbox, Select, Button } from 'antd';
+import { InputNumber, Input, DatePicker, Checkbox, Select, Button } from 'antd';
+
+import {
+    DislikeOutlined,
+    LikeTwoTone
+} from '@ant-design/icons'
+
+import './style.scss'
 
 const dateFormat = 'DD/MM/YYYY'
 const { Option } = Select;
@@ -47,13 +54,10 @@ export default () => {
                 PagamentoEm: 0,
                 CartaoConta: " ",
                 CartaoContaValue: data.CARTAO,
-
                 IsCartaoForm: false,
                 IsCartao: data.CARTAO ? true : false,
-
                 IdCartaoForm: [],
                 IdCartao: data.ID_CARTAO,
-
                 Status: data.STATUS,
                 DT_PREVISTO: data.DT_PREVISTO
             }
@@ -75,13 +79,10 @@ export default () => {
                 PagamentoEm: false,
                 CartaoConta: " ",
                 CartaoContaValue: " ",
-
                 IsCartaoForm: false,
                 IsCartao: false,
-
                 IdCartaoForm: [],
                 IdCartao: [],
-
                 Status: data.STATUS,
                 DT_PREVISTO: data.DT_PREVISTO
             }
@@ -228,6 +229,7 @@ export default () => {
     function handleCartao(e, Id) {
         const dataDemais = data.map((dados) => {
 
+            console.log(e, "Valor de E")
             return {
                 Check: dados.Check,
                 Id: dados.Id,
@@ -344,17 +346,17 @@ export default () => {
             </div>
 
             <div style={{ display: 'flex', width: '100%' }}>
-                <div style={{ display: 'flex', width: '30px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Flag</div>
-                <div style={{ display: 'flex', width: '80px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Tipo</div>
-                <div style={{ display: 'flex', width: '150px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Categoria</div>
-                <div style={{ display: 'flex', width: '180px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Descricao</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>DT Prevista</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>DT Real</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Vl Previsto</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Vl Real</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Crédito?</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Amortizar?</div>
-                <div style={{ display: 'flex', width: '130px', justifyContent: 'center', fontSize: '18px', fontWeight: 'bold' }}>Cartao/Conta</div>
+                {/* <div className="paygroupHeader"></div> */}
+                {/* <div className="paygroupHeader"></div>
+                <div className="paygroupHeader">Categoria</div>
+                <div className="paygroupHeader">Descrição</div>
+                <div className="paygroupHeader">DT Prev</div>
+                <div className="paygroupHeader">DT Real</div>
+                <div className="paygroupHeader">R$ Prev</div>
+                <div className="paygroupHeader">R$ Real</div>
+                <div className="paygroupHeader">Crédito?</div>
+                <div className="paygroupHeader">Amortizar?</div> */}
+                {/* <div className="paygroupHeader">Pagamento</div> */}
             </div>
             {data ? SearchFilter(
                 visionSerchMeta(mapvision, data, visionControler),
@@ -364,62 +366,50 @@ export default () => {
                     return 0;
                 }).map((dados) =>
 
-                    <div key={dados.Id} style={{ display: 'flex', alignItems: 'center', width: '100%', borderBottom: '1px solid', borderColor: 'grey' }}>
+                    <div key={dados.Id}
+                        className="groupPaymentLine">
                         <div
-                            style={{
-                                display: 'flex',
-                                width: '30px',
-                                justifyContent: 'center',
-                                fontSize: '10px'
-                            }}>
+                            className="groupCheck">
                             <Checkbox
                                 checked={dados.Check}
                                 onChange={e => itemSelected(e, dados)} />
                         </div>
 
-                        <div
-                            style={{
-                                display: 'flex',
-                                width: '80px',
-                                justifyContent: 'center',
-                                fontSize: '10px'
-                            }}>
-                            {dados.Tipo}
+                        <div className="paygroupIcon">
+                            <h3 className="optionalHeader">{dados.Tipo}</h3>
+                            {dados.Tipo === "DESPESA" ?
+                                <DislikeOutlined
+                                    title={dados.Tipo}
+                                    style={{
+                                        fontSize: '18px', color: 'red'
+                                    }}
+                                /> :
+                                <LikeTwoTone
+                                    title={dados.Tipo}
+                                    style={{
+                                        fontSize: '18px', color: '#08c'
+                                    }}
+                                />
+                            }
                         </div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '150px',
-                            justifyContent: 'left',
-                            fontSize: '10px'
-                        }}>
+                        <div className="paygroupCategoria">
+                            <h3 className="optionalHeader">CATEGORIA</h3>
                             {dados.Categoria}
                         </div>
-                        <div style={{
-                            display: 'flex',
-                            width: '180px',
-                            justifyContent: 'left',
-                            fontSize: '10px'
-                        }}>
+                        <div className="paygroupCategoria">
+                            <h3 className="optionalHeader">DESCRIÇÃO</h3>
                             {dados.Descricao}
                         </div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '130px',
-                            justifyContent: 'center',
-                            fontSize: '10px'
-                        }}>
+                        <div className="paygroupData">
+                            <h3 className="optionalHeader">DATA PREVISTA</h3>
                             {dados.DataPrevista}
                         </div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '130px',
-                            justifyContent: 'center',
-                            fontSize: '10px'
-                        }}>
+                        <div className="paygroupData">
                             <DatePicker
+                                style={{ width: "100%" }}
                                 placeholder="Data Real"
                                 value={dados.DataReal}
                                 disabled={dados.Check === true ? false : true}
@@ -427,33 +417,26 @@ export default () => {
                                 format={dateFormat}
                             /></div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '130px',
-                            justifyContent: 'center',
-                            fontSize: '10px'
-                        }}>
+                        <div className="paygroupValor">
+                            <h3 className="optionalHeader">R$ PREVISTO</h3>
                             {dados.VlPrevisto}
                         </div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '130px',
-                            justifyContent: 'center',
-                            fontSize: '10px'
-                        }}>
-                            <Input
+                        <div className="paygroupValor">
+                            <InputNumber
+                                style={{ width: "100%" }}
                                 value={dados.VlReal}
                                 disabled={dados.Check === true ? false : true}
-                                onChange={e => inputVlReal(e, dados.Id)} />
+                                onChange={e => inputVlReal(e, dados.Id)}
+                                decimalSeparator=','
+                                precision={2}
+                                min={0}
+                            />
                         </div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '130px',
-                            justifyContent: 'center',
-                            fontSize: '10px'
-                        }}>
+                        <div
+                            className="groupCheckOutros">
+                            <h3 className="optionalHeader">CRÉDITO ?</h3>
                             <Checkbox
                                 disabled={dados.Check === true ? dados.Tipo === "DESPESA" ? false : true : true}
                                 onChange={e => inputCredito(e, dados.Id)}
@@ -461,22 +444,14 @@ export default () => {
                         </div>
 
                         <div
-                            style={{
-                                display: 'flex',
-                                width: '130px',
-                                justifyContent: 'center',
-                                fontSize: '10px'
-                            }}>
+                            className="groupCheckOutros">
+                            <h3 className="optionalHeader">AMORTIZAR ?</h3>
+
                             <Checkbox
                                 disabled={dados.Check === true ? false : true} />
                         </div>
 
-                        <div style={{
-                            display: 'flex',
-                            width: '130px',
-                            justifyContent: 'center',
-                            fontSize: '10px'
-                        }}>
+                        <div className="groupCartao">
                             <Select
                                 showSearch
                                 optionFilterProp="children"
@@ -484,7 +459,7 @@ export default () => {
                                     option.props.children.toLowerCase()
                                         .indexOf(input.toLowerCase()) >= 0
                                 )}
-                                style={{ width: '130px' }}
+                                style={{ width: '100%' }}
                                 placeholder="Informe a Cartão ou Conta"
                                 disabled={dados.Check === true ? false : true}
                                 value={dados.IdCartaoForm}

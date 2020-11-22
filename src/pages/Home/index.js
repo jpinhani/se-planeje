@@ -20,7 +20,7 @@ import moment from 'moment';
 import PagarDespesa from '../../components/Modal/DespesaPagar'
 import PagarReceita from '../../components/Modal/ReceitaMeta'
 
-import { GroupOutlined } from '@ant-design/icons';
+// import { GroupOutlined } from '@ant-design/icons';
 
 import './styles.scss'
 
@@ -280,8 +280,16 @@ export default () => {
 
                                 {itens === true ? '  Realizados (5 ultimos Dias)' : '  Metas (Próximos 5 dias)'}
 
-                                <Link to='PayGroup'>
-                                    <GroupOutlined style={{ color: "red" }} />
+                                <Link to='PayGroup' style={{
+                                    color: 'white',
+                                    border: '1px solid',
+                                    borderColor: "red",
+                                    padding: '0 5px 0 5px',
+                                    borderRadius: '10px',
+                                    background: 'red'
+                                }}>
+                                    Pagar em Grupo!
+                                    {/* <GroupOutlined style={{ color: "red" }} /> */}
                                 </Link>
                             </h1>
 
