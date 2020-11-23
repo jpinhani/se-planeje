@@ -1,15 +1,23 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud';
+import { GetRequest, visionSerchMeta, InsertRequest } from '../../components/crudSendAxios/crud';
 import { loadCartaoReal, loadConta } from '../../components/ListagemCombo';
+
+import { verifySend } from '../../components/verifySendAxios/index';
+
 import SearchFilter from '../../components/searchFilterTable';
 import moment from 'moment';
 import { InputNumber, Input, DatePicker, Checkbox, Select, Button } from 'antd';
 
 import {
     DislikeOutlined,
-    LikeTwoTone
+    LikeTwoTone,
+    ArrowLeftOutlined,
+    ArrowRightOutlined,
+    DollarOutlined
 } from '@ant-design/icons'
+
+
 
 import './style.scss'
 
@@ -20,7 +28,13 @@ export default () => {
 
     const dispatch = useDispatch();
     const visionControler = useSelector(state => state.visionControler)
+
     const [data, setdata] = useState();
+    const [oldData, setOldData] = useState();
+    const [oldVision, setOldVision] = useState();
+
+    const [isEnvio, setIsEnvio] = useState(false);
+
     const [listCartao, setListCartao] = useState([]);
     const [listConta, setListConta] = useState([]);
     const [search, setSearch] = useState('');
@@ -40,6 +54,7 @@ export default () => {
 
         const newExpense = despesas.map((data) => {
             return {
+                idUser: data.ID_USER,
                 Check: false,
                 Id: data.ID,
                 Tipo: "DESPESA",
@@ -65,6 +80,7 @@ export default () => {
 
         const newRevenue = receitas.map((data) => {
             return {
+                idUser: data.ID_USER,
                 Check: false,
                 Id: data.ID,
                 Tipo: "RECEITA",
@@ -104,6 +120,7 @@ export default () => {
             const dataDemais = data.map((dadosMap) => {
 
                 return {
+                    idUser: dadosMap.idUser,
                     Check: dadosMap.Id === dados.Id ? true : dadosMap.Check,
                     Id: dadosMap.Id,
                     Tipo: dadosMap.Tipo,
@@ -134,6 +151,7 @@ export default () => {
             const dataDemais = data.map((dadosMap) => {
 
                 return {
+                    idUser: dadosMap.idUser,
                     Check: dadosMap.Id === dados.Id ? false : dadosMap.Check,
                     Id: dadosMap.Id,
                     Tipo: dadosMap.Tipo,
@@ -168,6 +186,7 @@ export default () => {
         const dataDemais = data.map((dados) => {
 
             return {
+                idUser: dados.idUser,
                 Check: dados.Check,
                 Id: dados.Id,
                 Tipo: dados.Tipo,
@@ -177,7 +196,7 @@ export default () => {
                 DataReal: dados.DataReal,
                 DataRealValue: dados.DataRealValue,
                 VlPrevisto: dados.VlPrevisto,
-                VlReal: dados.Id === Id ? e.target.value : dados.VlReal,
+                VlReal: dados.Id === Id ? e : dados.VlReal,
                 VlRealNumber: dados.VlRealNumber,
                 PagamentoEm: dados.PagamentoEm,
                 CartaoConta: dados.CartaoConta,
@@ -199,6 +218,7 @@ export default () => {
         const dataDemais = data.map((dados) => {
 
             return {
+                idUser: dados.idUser,
                 Check: dados.Check,
                 Id: dados.Id,
                 Tipo: dados.Tipo,
@@ -231,6 +251,7 @@ export default () => {
 
             console.log(e, "Valor de E")
             return {
+                idUser: dados.idUser,
                 Check: dados.Check,
                 Id: dados.Id,
                 Tipo: dados.Tipo,
@@ -263,6 +284,7 @@ export default () => {
         const dataDemais = data.map((dados) => {
 
             return {
+                idUser: dados.idUser,
                 Check: dados.Check,
                 Id: dados.Id,
                 Tipo: dados.Tipo,
@@ -317,19 +339,48 @@ export default () => {
         listaVisao();
     }, [listaVisao]);
 
+    function submitGroupRolback() {
+
+        setOldData([])
+        setdata(oldData)
+
+        setOldVision([])
+        filterVision(oldVision)
+
+        setIsEnvio(false);
+    }
 
     function submitGroup() {
 
         const ItensMarcados = data.filter(filtro => filtro.Check === true)
 
-        console.table(ItensMarcados)
+        setOldData(data)
+        setdata(ItensMarcados)
+
+        setOldVision(visionControler)
+        filterVision('ALL')
+
+        setIsEnvio(true);
+    }
+
+    async function submitGroupFinal() {
+
+
+        const resulStatus = await InsertRequest(data, 'api/paygroup')
+        verifySend(resulStatus, 'INSERT', 'ITENS EM LOTE')
     }
 
 
     return (
         <div style={{ width: '100%' }}>
-            <Button type="primary "
-                onClick={() => submitGroup()}> Enviar Pagamentos</Button>
+            {isEnvio === true ?
+                <Button type="link"
+                    onClick={() => submitGroupRolback()}><ArrowLeftOutlined style={{ paddingRight: '10px' }} />  Voltar  </Button> : ""}
+            {isEnvio === true ?
+                <Button type="danger"
+                    onClick={() => submitGroupFinal()}> <DollarOutlined style={{ paddingRight: '10px' }} /> Enviar Pagamentos </Button> :
+                <Button type="primary "
+                    onClick={() => submitGroup()}> <ArrowRightOutlined style={{ paddingRight: '10px' }} /> Próximo </Button>}
             <div className='ViewExpense'>
                 <Input
                     name='despesa'
@@ -339,6 +390,7 @@ export default () => {
                 <Select style={{ width: '50%' }}
                     placeholder="Filtrar por Visão"
                     value={visionControler}
+                    disabled={isEnvio}
                     onSelect={(visao) => filterVision(visao)}
                 >
                     {visions}

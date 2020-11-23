@@ -27,7 +27,7 @@ async function InsertRequest(body, rota) {
     try {
         const endpointAPI = `${urlBackend}${rota}`
         const ResultStatus = await axios.post(endpointAPI, body, config())
-        return ResultStatus.status
+        return ResultStatus.data.status === 400 ? 400 : ResultStatus.status
     } catch (error) {
         logout();
         redirect();
