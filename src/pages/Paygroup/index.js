@@ -1,4 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
+
+import PayGroupResult from '../PaygroupResult';
+// import { Link } from 'react-router-dom'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { GetRequest, visionSerchMeta, InsertRequest } from '../../components/crudSendAxios/crud';
 import { loadCartaoReal, loadConta } from '../../components/ListagemCombo';
@@ -21,6 +25,8 @@ import {
 
 import './style.scss'
 
+
+
 const dateFormat = 'DD/MM/YYYY'
 const { Option } = Select;
 
@@ -32,6 +38,8 @@ export default () => {
     const [data, setdata] = useState();
     const [oldData, setOldData] = useState();
     const [oldVision, setOldVision] = useState();
+
+    const [rs, setRs] = useState(false)
 
     const [isEnvio, setIsEnvio] = useState(false);
 
@@ -368,38 +376,51 @@ export default () => {
 
         const resulStatus = await InsertRequest(data, 'api/paygroup')
         verifySend(resulStatus, 'INSERT', 'ITENS EM LOTE')
+
+
+        if (resulStatus)
+            setRs(true)
+
     }
 
 
     return (
-        <div style={{ width: '100%' }}>
-            {isEnvio === true ?
-                <Button type="link"
-                    onClick={() => submitGroupRolback()}><ArrowLeftOutlined style={{ paddingRight: '10px' }} />  Voltar  </Button> : ""}
-            {isEnvio === true ?
-                <Button type="danger"
-                    onClick={() => submitGroupFinal()}> <DollarOutlined style={{ paddingRight: '10px' }} /> Enviar Pagamentos </Button> :
-                <Button type="primary "
-                    onClick={() => submitGroup()}> <ArrowRightOutlined style={{ paddingRight: '10px' }} /> Próximo </Button>}
-            <div className='ViewExpense'>
-                <Input
-                    name='despesa'
-                    value={search}
-                    onChange={valor => setSearch(valor.target.value)}
-                    placeholder="Procure aqui a despesa especifica" />
-                <Select style={{ width: '50%' }}
-                    placeholder="Filtrar por Visão"
-                    value={visionControler}
-                    disabled={isEnvio}
-                    onSelect={(visao) => filterVision(visao)}
-                >
-                    {visions}
-                </Select>
-            </div>
+        <div>
 
-            <div style={{ display: 'flex', width: '100%' }}>
-                {/* <div className="paygroupHeader"></div> */}
-                {/* <div className="paygroupHeader"></div>
+            {rs === true ? <PayGroupResult /> :
+
+
+
+
+                <div style={{ width: '100%' }}>
+                    {isEnvio === true ?
+                        <Button type="link"
+                            onClick={() => submitGroupRolback()}><ArrowLeftOutlined style={{ paddingRight: '10px' }} />  Voltar  </Button> : ""}
+                    {isEnvio === true ?
+                        <Button type="danger"
+                            onClick={() => submitGroupFinal()}> <DollarOutlined style={{ paddingRight: '10px' }} /> Enviar Pagamentos </Button> :
+                        <Button type="primary "
+                            onClick={() => submitGroup()}> <ArrowRightOutlined style={{ paddingRight: '10px' }} /> Próximo </Button>
+                    }
+                    <div className='ViewExpense'>
+                        <Input
+                            name='despesa'
+                            value={search}
+                            onChange={valor => setSearch(valor.target.value)}
+                            placeholder="Procure aqui a despesa especifica" />
+                        <Select style={{ width: '50%' }}
+                            placeholder="Filtrar por Visão"
+                            value={visionControler}
+                            disabled={isEnvio}
+                            onSelect={(visao) => filterVision(visao)}
+                        >
+                            {visions}
+                        </Select>
+                    </div>
+
+                    <div style={{ display: 'flex', width: '100%' }}>
+                        {/* <div className="paygroupHeader"></div> */}
+                        {/* <div className="paygroupHeader"></div>
                 <div className="paygroupHeader">Categoria</div>
                 <div className="paygroupHeader">Descrição</div>
                 <div className="paygroupHeader">DT Prev</div>
@@ -408,123 +429,126 @@ export default () => {
                 <div className="paygroupHeader">R$ Real</div>
                 <div className="paygroupHeader">Crédito?</div>
                 <div className="paygroupHeader">Amortizar?</div> */}
-                {/* <div className="paygroupHeader">Pagamento</div> */}
-            </div>
-            {data ? SearchFilter(
-                visionSerchMeta(mapvision, data, visionControler),
-                ['Decricao', 'Categoria'], search).sort(function (a, b) {
-                    if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
-                    if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
-                    return 0;
-                }).map((dados) =>
-
-                    <div key={dados.Id}
-                        className="groupPaymentLine">
-                        <div
-                            className="groupCheck">
-                            <Checkbox
-                                checked={dados.Check}
-                                onChange={e => itemSelected(e, dados)} />
-                        </div>
-
-                        <div className="paygroupIcon">
-                            <h3 className="optionalHeader">{dados.Tipo}</h3>
-                            {dados.Tipo === "DESPESA" ?
-                                <DislikeOutlined
-                                    title={dados.Tipo}
-                                    style={{
-                                        fontSize: '18px', color: 'red'
-                                    }}
-                                /> :
-                                <LikeTwoTone
-                                    title={dados.Tipo}
-                                    style={{
-                                        fontSize: '18px', color: '#08c'
-                                    }}
-                                />
-                            }
-                        </div>
-
-                        <div className="paygroupCategoria">
-                            <h3 className="optionalHeader">CATEGORIA</h3>
-                            {dados.Categoria}
-                        </div>
-                        <div className="paygroupCategoria">
-                            <h3 className="optionalHeader">DESCRIÇÃO</h3>
-                            {dados.Descricao}
-                        </div>
-
-                        <div className="paygroupData">
-                            <h3 className="optionalHeader">DATA PREVISTA</h3>
-                            {dados.DataPrevista}
-                        </div>
-
-                        <div className="paygroupData">
-                            <DatePicker
-                                style={{ width: "100%" }}
-                                placeholder="Data Real"
-                                value={dados.DataReal}
-                                disabled={dados.Check === true ? false : true}
-                                onChange={data => handleDataReal(dados.Id, data)}
-                                format={dateFormat}
-                            /></div>
-
-                        <div className="paygroupValor">
-                            <h3 className="optionalHeader">R$ PREVISTO</h3>
-                            {dados.VlPrevisto}
-                        </div>
-
-                        <div className="paygroupValor">
-                            <InputNumber
-                                style={{ width: "100%" }}
-                                value={dados.VlReal}
-                                disabled={dados.Check === true ? false : true}
-                                onChange={e => inputVlReal(e, dados.Id)}
-                                decimalSeparator=','
-                                precision={2}
-                                min={0}
-                            />
-                        </div>
-
-                        <div
-                            className="groupCheckOutros">
-                            <h3 className="optionalHeader">CRÉDITO ?</h3>
-                            <Checkbox
-                                disabled={dados.Check === true ? dados.Tipo === "DESPESA" ? false : true : true}
-                                onChange={e => inputCredito(e, dados.Id)}
-                                checked={dados.IsCartaoForm} />
-                        </div>
-
-                        <div
-                            className="groupCheckOutros">
-                            <h3 className="optionalHeader">AMORTIZAR ?</h3>
-
-                            <Checkbox
-                                disabled={dados.Check === true ? false : true} />
-                        </div>
-
-                        <div className="groupCartao">
-                            <Select
-                                showSearch
-                                optionFilterProp="children"
-                                filterOption={(input, option) => (
-                                    option.props.children.toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                )}
-                                style={{ width: '100%' }}
-                                placeholder="Informe a Cartão ou Conta"
-                                disabled={dados.Check === true ? false : true}
-                                value={dados.IdCartaoForm}
-                                onSelect={e => handleCartao(e, dados.Id)}
-
-                            >
-                                {dados.IsCartao === true ? listCartao : listConta}
-                            </Select>
-                        </div>
+                        {/* <div className="paygroupHeader">Pagamento</div> */}
                     </div>
-                ) : "Busque por itens para serem transacionados em Grupo"
-            }
+                    {
+                        data ? SearchFilter(
+                            visionSerchMeta(mapvision, data, visionControler),
+                            ['Decricao', 'Categoria'], search).sort(function (a, b) {
+                                if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
+                                if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
+                                return 0;
+                            }).map((dados) =>
 
-        </div >
+                                <div key={dados.Id}
+                                    className="groupPaymentLine">
+                                    <div
+                                        className="groupCheck">
+                                        <Checkbox
+                                            checked={dados.Check}
+                                            onChange={e => itemSelected(e, dados)} />
+                                    </div>
+
+                                    <div className="paygroupIcon">
+                                        <h3 className="optionalHeader">{dados.Tipo}</h3>
+                                        {dados.Tipo === "DESPESA" ?
+                                            <DislikeOutlined
+                                                title={dados.Tipo}
+                                                style={{
+                                                    fontSize: '18px', color: 'red'
+                                                }}
+                                            /> :
+                                            <LikeTwoTone
+                                                title={dados.Tipo}
+                                                style={{
+                                                    fontSize: '18px', color: '#08c'
+                                                }}
+                                            />
+                                        }
+                                    </div>
+
+                                    <div className="paygroupCategoria">
+                                        <h3 className="optionalHeader">CATEGORIA</h3>
+                                        {dados.Categoria}
+                                    </div>
+                                    <div className="paygroupCategoria">
+                                        <h3 className="optionalHeader">DESCRIÇÃO</h3>
+                                        {dados.Descricao}
+                                    </div>
+
+                                    <div className="paygroupData">
+                                        <h3 className="optionalHeader">DATA PREVISTA</h3>
+                                        {dados.DataPrevista}
+                                    </div>
+
+                                    <div className="paygroupData">
+                                        <DatePicker
+                                            style={{ width: "100%" }}
+                                            placeholder="Data Real"
+                                            value={dados.DataReal}
+                                            disabled={dados.Check === true ? false : true}
+                                            onChange={data => handleDataReal(dados.Id, data)}
+                                            format={dateFormat}
+                                        /></div>
+
+                                    <div className="paygroupValor">
+                                        <h3 className="optionalHeader">R$ PREVISTO</h3>
+                                        {dados.VlPrevisto}
+                                    </div>
+
+                                    <div className="paygroupValor">
+                                        <InputNumber
+                                            style={{ width: "100%" }}
+                                            value={dados.VlReal}
+                                            disabled={dados.Check === true ? false : true}
+                                            onChange={e => inputVlReal(e, dados.Id)}
+                                            decimalSeparator=','
+                                            precision={2}
+                                            min={0}
+                                        />
+                                    </div>
+
+                                    <div
+                                        className="groupCheckOutros">
+                                        <h3 className="optionalHeader">CRÉDITO ?</h3>
+                                        <Checkbox
+                                            disabled={dados.Check === true ? dados.Tipo === "DESPESA" ? false : true : true}
+                                            onChange={e => inputCredito(e, dados.Id)}
+                                            checked={dados.IsCartaoForm} />
+                                    </div>
+
+                                    <div
+                                        className="groupCheckOutros">
+                                        <h3 className="optionalHeader">AMORTIZAR ?</h3>
+
+                                        <Checkbox
+                                            disabled={dados.Check === true ? false : true} />
+                                    </div>
+
+                                    <div className="groupCartao">
+                                        <Select
+                                            showSearch
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) => (
+                                                option.props.children.toLowerCase()
+                                                    .indexOf(input.toLowerCase()) >= 0
+                                            )}
+                                            style={{ width: '100%' }}
+                                            placeholder="Informe a Cartão ou Conta"
+                                            disabled={dados.Check === true ? false : true}
+                                            value={dados.IdCartaoForm}
+                                            onSelect={e => handleCartao(e, dados.Id)}
+
+                                        >
+                                            {dados.IsCartao === true ? listCartao : listConta}
+                                        </Select>
+                                    </div>
+                                </div>
+                            ) : "Busque por itens para serem transacionados em Grupo"
+                    }
+
+                </div >
+            }
+        </div>
     )
 }
