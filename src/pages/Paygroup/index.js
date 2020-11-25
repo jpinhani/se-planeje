@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 import PayGroupResult from '../PaygroupResult';
-// import { Link } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { GetRequest, visionSerchMeta, InsertRequest } from '../../components/crudSendAxios/crud';
