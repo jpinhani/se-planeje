@@ -34,8 +34,6 @@ async function InsertRequest(body, rota) {
     }
 }
 
-
-
 async function UpdateRequest(body, rota) {
     try {
         const endpointAPI = `${urlBackend}${rota}/${body.id}`

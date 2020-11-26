@@ -20,11 +20,7 @@ import {
     DollarOutlined
 } from '@ant-design/icons'
 
-
-
 import './style.scss'
-
-
 
 const dateFormat = 'DD/MM/YYYY'
 const { Option } = Select;
@@ -381,7 +377,6 @@ export default () => {
             setRs(true)
 
     }
-
 
     return (
         <div>
