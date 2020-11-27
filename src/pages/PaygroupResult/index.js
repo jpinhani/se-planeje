@@ -3,8 +3,6 @@ import { Result } from 'antd';
 
 export default () => {
 
-
-
     return (
         <div style={{ width: '100%' }}>
             <Result
