@@ -373,7 +373,7 @@ export default () => {
         verifySend(resulStatus, 'INSERT', 'ITENS EM LOTE')
 
 
-        if (resulStatus)
+        if (resulStatus !== 400)
             setRs(true)
 
     }
