@@ -43,10 +43,13 @@ function NewTransferencia(props) {
             idContaDebito: contaDebito,
             idContaCredito: contaCredito,
             descrTransferencia: descricao,
-            dataTransferencia: dataTransferencia,
+            dataTransferencia: moment(dataTransferencia, "DD/MM/YYYY"),
             valor: valor,
             status: 'ATIVO'
         }
+
+        const data = moment(body.dataTransferencia, "DD/MM/YYYY");
+        body.dataTransferencia = data.format("YYYY-MM-DD")
 
         const novaTransf = await InsertRequest(body, 'api/transferencia');
 
@@ -177,7 +180,7 @@ function NewTransferencia(props) {
                     <Form.Item style={{ width: '50%' }}>
                         {getFieldDecorator('datatransf', {
                             rules: [{ required: true, message: 'Informe a Data da Transferência' }],
-                            initialValue: dataTransferencia
+                            initialValue: moment(new Date(), dateFormat)
                         })(
                             <DatePicker
                                 style={{ width: '100%' }}
