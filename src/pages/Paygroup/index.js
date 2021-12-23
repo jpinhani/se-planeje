@@ -141,6 +141,7 @@ export default () => {
                     IsCartaoForm: dadosMap.Id === dados.Id ? dadosMap.IsCartao : dadosMap.IsCartaoForm,
                     IsCartao: dadosMap.IsCartao,
                     IdCartaoForm: dadosMap.Id === dados.Id ? dadosMap.IdCartao : dadosMap.IdCartaoForm,
+                    IsAmortForm: false,
                     IdCartao: dadosMap.IdCartao,
                     Status: dadosMap.Status,
                     DT_PREVISTO: dadosMap.DT_PREVISTO
@@ -172,6 +173,7 @@ export default () => {
                     IsCartaoForm: dadosMap.Id === dados.Id ? false : dadosMap.IsCartaoForm,
                     IsCartao: dadosMap.IsCartao,
                     IdCartaoForm: dadosMap.Id === dados.Id ? [] : dadosMap.IdCartaoForm,
+                    IsAmortForm: false,
                     IdCartao: dadosMap.IdCartao,
                     Status: dadosMap.Status,
                     DT_PREVISTO: dadosMap.DT_PREVISTO
@@ -208,6 +210,7 @@ export default () => {
                 IsCartao: dados.IsCartao,
                 IdCartaoForm: dados.IdCartaoForm,
                 IdCartao: dados.IdCartao,
+                IsAmortForm: dados.IsAmortForm,
                 Status: dados.Status,
                 DT_PREVISTO: dados.DT_PREVISTO
             }
@@ -240,6 +243,41 @@ export default () => {
                 IsCartao: dados.Id === Id ? e.target.checked === true ? true : false : dados.IsCartao,
                 IdCartaoForm: dados.Id === Id ? e.target.checked === true ? dados.IdCartao : [] : dados.IdCartaoForm,
                 IdCartao: dados.Id === Id ? e.target.checked === true ? dados.IdCartao : [] : dados.IdCartao,
+                IsAmortForm: dados.IsAmortForm,
+                Status: dados.Status,
+                DT_PREVISTO: dados.DT_PREVISTO
+            }
+        })
+
+        setdata(dataDemais)
+
+    }
+
+
+    function inputAmort(e, Id) {
+        const dataDemais = data.map((dados) => {
+
+            return {
+                idUser: dados.idUser,
+                Check: dados.Check,
+                Id: dados.Id,
+                Tipo: dados.Tipo,
+                Categoria: dados.Categoria,
+                Descricao: dados.Descricao,
+                DataPrevista: dados.DataPrevista,
+                DataReal: dados.DataReal,
+                DataRealValue: dados.DataRealValue,
+                VlPrevisto: dados.VlPrevisto,
+                VlReal: dados.VlReal,
+                VlRealNumber: dados.VlRealNumber,
+                PagamentoEm: dados.PagamentoEm,
+                CartaoConta: dados.CartaoConta,
+                CartaoContaValue: dados.CartaoContaValue,
+                IsCartaoForm: dados.IsCartaoForm,
+                IsCartao: dados.IsCartao,
+                IdCartaoForm: dados.IdCartaoForm,
+                IdCartao: dados.IdCartao,
+                IsAmortForm: dados.Id === Id ? e.target.checked === true ? true : false : dados.IsAmortForm,
                 Status: dados.Status,
                 DT_PREVISTO: dados.DT_PREVISTO
             }
@@ -273,6 +311,7 @@ export default () => {
                 IsCartao: dados.IsCartao,
                 IdCartaoForm: dados.Id === Id ? e : dados.IdCartaoForm,
                 IdCartao: dados.Id === Id ? e : dados.IdCartao,
+                IsAmortForm: dados.IsAmortForm,
                 Status: dados.Status,
                 DT_PREVISTO: dados.DT_PREVISTO
             }
@@ -306,6 +345,7 @@ export default () => {
                 IsCartao: dados.IsCartao,
                 IdCartaoForm: dados.IdCartaoForm,
                 IdCartao: dados.IdCartao,
+                IsAmortForm: dados.IsAmortForm,
                 Status: dados.Status,
                 DT_PREVISTO: dados.DT_PREVISTO
             }
@@ -516,7 +556,9 @@ export default () => {
                                         <h3 className="optionalHeader">AMORTIZAR ?</h3>
 
                                         <Checkbox
-                                            disabled={dados.Check === true ? false : true} />
+                                            //disabled={dados.Check === true ? dados.Tipo === "DESPESA" ? false : true : true}
+                                            onChange={e => inputAmort(e, dados.Id)}
+                                            checked={dados.IsAmortForm} />
                                     </div>
 
                                     <div className="groupCartao">

@@ -24,6 +24,7 @@ function NewTransferencia(props) {
     const [contaCredito, setContaCredito] = useState([]);
     const [valor, setValor] = useState('');
     const [dataTransferencia, setData] = useState(moment(new Date(), dateFormat));
+    // const [dataTransferencia, setData] = useState(moment(new Date(), "DD/MM/YYYY").format("YYYY-MM-DD"));
     const [descricao, setDescricao] = useState('');
 
     async function showModal() {
@@ -37,17 +38,21 @@ function NewTransferencia(props) {
 
     async function handleSubmitOk() {
         setSpin(true);
-        console.log(dataTransferencia)
+        // console.log(dataTransferencia)
         const body = {
             idUser: userID(),
             idContaDebito: contaDebito,
             idContaCredito: contaCredito,
             descrTransferencia: descricao,
-            dataTransferencia: dataTransferencia,
+            dataTransferencia: moment(dataTransferencia, "DD/MM/YYYY"),
             valor: valor,
             status: 'ATIVO'
         }
 
+        const data = moment(body.dataTransferencia, "DD/MM/YYYY");
+        body.dataTransferencia = data.format("YYYY-MM-DD")
+        // const data = moment(body.dataTransferencia, "DD/MM/YYYY").format("YYYY-MM-DD");
+        console.log(body)
         const novaTransf = await InsertRequest(body, 'api/transferencia');
 
         if (novaTransf.status === 402)
@@ -176,14 +181,14 @@ function NewTransferencia(props) {
                     <Form.Item style={{ width: '50%' }}>
                         {getFieldDecorator('datatransf', {
                             rules: [{ required: true, message: 'Informe a Data da Transferência' }],
-                            initialValue: dataTransferencia
+                            initialValue: moment(new Date(), dateFormat)
                         })(
                             <DatePicker
                                 style={{ width: '100%' }}
                                 // value={dataTransferencia}
                                 onChange={data => setData(moment(data, dateFormat))}
                                 placeholder="Data"
-                                format={dateFormat}
+                                format={"DD/MM/YYYY"}
                             />)}
                     </Form.Item>
                 </div>
