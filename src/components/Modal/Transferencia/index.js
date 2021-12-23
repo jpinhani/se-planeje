@@ -52,6 +52,7 @@ function NewTransferencia(props) {
 
         if (novaTransf.status === 402)
             return notification.open({
+
                 message: 'SePlaneje - Problemas Pagamento',
                 duration: 20,
                 description:
