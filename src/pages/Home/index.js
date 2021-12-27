@@ -34,7 +34,7 @@ export default () => {
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
     const [itens, setItens] = useState(true);
-    const [ver, setVer] = useState(true);
+    const [ver, setVer] = useState(false);
     const [spin, setSpin] = useState(true)
 
     const chartContainer = useRef(null);
