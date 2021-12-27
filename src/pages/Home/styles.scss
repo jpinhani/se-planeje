@@ -29,6 +29,7 @@
    width: 100% !important;
 }
 
+
 .homeLayout .containerDiv1 h1{
  font-size: 16px;
  width: 100%;
@@ -44,15 +45,38 @@
    border-bottom: 10px solid #F0F8FF	;
 }
 
+.containerDivDataTabFalse li {
+   display: grid;
+   background-color: #FFF;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
+};
+
 .containerDivDataTab li div {
    display: grid;
    grid-template-columns: repeat(4,1fr);  
    grid-gap: 10px;
 }
+
+
+.containerDivDataTabFalse li div {
+   display: grid;
+   grid-template-columns: repeat(4,1fr);  
+   grid-gap: 10px;
+   // color: gray;
+};
+
 .containerDivDataTab div strong{
    font-size: 12px;
    padding-left: 10px;
 }
+
+.containerDivDataTabFalse div strong{
+   font-size: 12px;
+   padding-left: 10px;
+   // color: gray;
+};
 
 .containerDivDataTab div p{
    width: max-content;
@@ -60,8 +84,25 @@
    font-style: italic;
 }
 
+.containerDivDataTabFalse div p{
+   width: max-content;
+   font-size: 14px !important;
+   font-style: italic;
+   background-color: LightCyan	;
+   color: LightCyan;
+   border-radius: 10px;
+};
+
 
 .containerDivDataCategoria li{
+   display: grid;
+   background-color: #FFF;
+   grid-template-columns: repeat(2,2fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
+}
+
+.containerDivDataCategoriaFalse li{
    display: grid;
    background-color: #FFF;
    grid-template-columns: repeat(2,2fr);  
@@ -75,7 +116,20 @@
    grid-gap: 5px;
 }
 
+.containerDivDataCategoriaFalse li div{
+   display: grid;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 5px;
+}
+
 .containerDivDataCategoria div strong{
+   font-size: 12px;
+   // display: flex;
+   text-align: center !important;
+   padding-left: 10px;
+}
+
+.containerDivDataCategoriaFalse div strong{
    font-size: 12px;
    // display: flex;
    text-align: center !important;
@@ -92,6 +146,18 @@
    font-style: italic;
 }
 
+.containerDivDataCategoriaFalse div p{
+   display: flex;
+   // text-align: right !important;
+   flex-direction: row;
+   justify-content: space-between;
+   width: max-content;
+   font-size: 12px;
+   font-style: italic;
+      background-color: LightCyan	;
+   color: LightCyan;
+   border-radius: 10px;
+}
 
 .chartjs-render-monitor {
    //  animation: chartjs-render-animation 0.001s;
@@ -112,6 +178,11 @@
         }
  
         .containerDivDataTab li{
+   display: grid;
+   grid-template-columns: repeat(1,1fr);  
+}
+
+        .containerDivDataTabFalse li{
    display: grid;
    grid-template-columns: repeat(1,1fr);  
 }

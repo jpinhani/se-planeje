@@ -33,7 +33,8 @@ export default () => {
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
-    const [itens, setItens] = useState(true)
+    const [itens, setItens] = useState(true);
+    const [ver, setVer] = useState(true);
     const [spin, setSpin] = useState(true)
 
     const chartContainer = useRef(null);
@@ -232,7 +233,11 @@ export default () => {
     return (
         <div className='homeLayout' >
 
-
+            <Switch
+                checked={ver}
+                onChange={(valor) => valor === true ?
+                    setVer(true) : setVer(false)} />
+            {ver === true ? '  Ocultar Valores' : '  Visualizar Valores'}
             <Spin size="large" spinning={spin} />
             <div>
                 <ul className='homeLayoutFlex'>
@@ -240,7 +245,7 @@ export default () => {
                     <div className='containerDiv1'>
                         <div className='containerDivData'>
                             <center><h1>Saldo Atual</h1></center>
-                            <div className='containerDivDataTab'>
+                            <div className={ver === true ? 'containerDivDataTab' : 'containerDivDataTabFalse'}>
                                 {contaSaldoAtual.map((novo, i) => {
                                     return <li key={i}>
                                         <div>
@@ -284,7 +289,7 @@ export default () => {
                             </h1>
 
 
-                            <div className='containerDivDataCategoria'>
+                            <div className={ver === true ? 'containerDivDataCategoria' : 'containerDivDataCategoriaFalse'} >
                                 {itens === true ? lastLanc.sort(function (a, b) {
                                     if (a.Data > b.Data) return -1;
                                     if (a.Data < b.Data) return 1;
