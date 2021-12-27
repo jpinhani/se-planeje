@@ -33,7 +33,7 @@ export default () => {
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
-    const [itens, setItens] = useState(false)
+    const [itens, setItens] = useState(true)
     const [spin, setSpin] = useState(true)
 
     const chartContainer = useRef(null);
@@ -259,16 +259,6 @@ export default () => {
                             </div>
                         </div>
                     </div>
-
-                    <div className='containerDiv1'>
-                        <div>
-                            <canvas
-                                id={grafico}
-                                ref={chartContainer1}
-                            />
-                        </div>
-                    </div>
-
                     <div className='containerDiv1'>
                         <div className='containerDivData'>
 
@@ -341,6 +331,15 @@ export default () => {
                                                 <PagarReceita data={novo} />}
                                         </li>)}
                             </div>
+                        </div>
+                    </div>
+
+                    <div className='containerDiv1'>
+                        <div>
+                            <canvas
+                                id={grafico}
+                                ref={chartContainer1}
+                            />
                         </div>
                     </div>
 

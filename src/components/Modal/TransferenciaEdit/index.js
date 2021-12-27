@@ -46,10 +46,13 @@ function EditarTransferencia(props) {
             idContaDebito: contaDebito,
             idContaCredito: contaCredito,
             descrTransferencia: descricao,
-            dataTransferencia: dataTransferencia,
+            dataTransferencia: moment(dataTransferencia, "DD/MM/YYYY"),
             valor: valor,
             status: 'ATIVO'
         }
+
+        const data = moment(body.dataTransferencia, "DD/MM/YYYY");
+        body.dataTransferencia = data.format("YYYY-MM-DD")
 
         const resultado = await UpdateRequest(body, 'api/transferencia')
         verifySend(resultado, 'UPDATE', body.descrTransferencia)

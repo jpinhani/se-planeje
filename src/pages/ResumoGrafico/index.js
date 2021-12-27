@@ -45,9 +45,9 @@ export default (props) => {
         const labelsGrafico = ["DESPESA", "RECEITA", "LUCRO"]
 
         const rs = {
-            type: 'horizontalBar',
+            // type: 'line',
             // type: 'doughnut',
-            // type: 'bar',
+            type: 'bar',
 
             data: {
                 datasets: [{
