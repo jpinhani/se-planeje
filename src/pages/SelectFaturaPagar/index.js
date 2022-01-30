@@ -145,8 +145,8 @@ export default (props) => {
             <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button key='Met'> Metas</Button></Link>
-                <Link to='selectdespesarealizada'><Button key='Lnc'> Lançamentos</Button></Link>
-                <Link to='SelectFaturaPagar'><Button type='danger' key='rel'> Faturas </Button></Link>
+                <Link to='selectdespesarealizada'><Button key='Lnc'> Pagas </Button></Link>
+                <Link to='SelectFaturaPagar'><Button type='danger' key='rel'> Faturas Cartão </Button></Link>
             </div >
             {/* <div
                 style={{

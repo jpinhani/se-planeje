@@ -5,6 +5,7 @@ import { listExpenses } from '../../store/actions/generalExpenseAction'
 import { listVisionsControler } from '../../store/actions/controlerVisionAction'
 
 import DespesaPrevista from '../../components/Modal/DespesaPrevista'
+import DespesaMeta from '../../components/Modal/DespesaPagar'
 import Menu from '../../components/MenuDespesaPrevista'
 import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
 
@@ -71,6 +72,8 @@ class SelectDespesaPrevista extends React.Component {
                 render: expense => (
                     <div className="DetalhesBotoes">
                         <span className="DetalhesBotoesGrid">
+
+                            <DespesaMeta data={expense} />
                             <EditDespesa data={expense} />
 
                             <Popover

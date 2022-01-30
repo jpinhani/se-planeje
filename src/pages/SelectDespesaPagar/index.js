@@ -4,8 +4,15 @@ import { Link } from 'react-router-dom'
 
 import SearchFilter from '../../components/searchFilterTable/index';
 
-import { Table, Input, Select, Button, notification, Spin } from 'antd'
-import DespesaPagarMeta from '../../components/Modal/DespesaPagar'
+import { Table, Input, Select, Button, notification, Spin, Icon, Popover } from 'antd'
+// import DespesaPagarMeta from '../../components/Modal/DespesaPrevista'
+// import DespesaPrevista from '../../components/Modal/DespesaPrevista'
+
+import DespesaPrevista from '../../components/Modal/DespesaPrevista'
+import DespesaMeta from '../../components/Modal/DespesaPagar'
+import Menu from '../../components/MenuDespesaPrevista'
+import EditDespesa from '../../components/Modal/DespesaPrevistaEdit'
+
 import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud'
 
 import 'antd/dist/antd.css';
@@ -59,9 +66,24 @@ export default () => {
             key: 'ACÃO',
 
             render: expense => (
-                <div>
-                    <span >
-                        <DespesaPagarMeta data={expense} />
+                // <div>
+                //     <span >
+                //         <DespesaPrevista />
+                //         <DespesaPagarMeta data={expense} />
+                //     </span>
+                // </div>
+                <div className="DetalhesBotoes">
+                    <span className="DetalhesBotoesGrid">
+
+                        <DespesaMeta data={expense} />
+                        <EditDespesa data={expense} />
+
+                        <Popover
+                            placement="left"
+                            title='Excluir Despesa'
+                            content={<Menu data={expense} />} trigger="click">
+                            <Icon type="delete" title='Excluir Despesa' style={{ fontSize: '18px', color: '#08c' }} />
+                        </Popover>
                     </span>
                 </div>
             ),
@@ -117,14 +139,12 @@ export default () => {
             <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button type='danger' key='rel'> Metas </Button></Link>
-                <Link to='selectdespesarealizada'><Button key='Lnc'>Lançamentos</Button></Link>
-                <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
+                <Link to='selectdespesarealizada'><Button key='Lnc'> Pagas </Button></Link>
+                <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas Cartão</Button></Link>
             </div >
-            {/* <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
-                Metas Cadastradas - Despesas
-            </div> */}
 
             <div className='ViewExpense'>
+                <DespesaPrevista />
                 <Input name='despesa'
                     style={{ width: '50%' }}
                     value={search}
@@ -139,11 +159,30 @@ export default () => {
                     {visions}
                 </Select>
             </div >
-            <div style={{ padding: '10px' }}>
+            <div style={{ padding: '2px' }}>
                 <strong>Total Previsto (Meta): </strong>
                 {SearchFilter(
                     visionSerchMeta(mapvision, expenseMeta, visionControler),
                     ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })}
+            </div>
+
+            <div style={{ padding: '2px' }}>
+                <strong>Crédito: </strong>
+                {SearchFilter(
+                    visionSerchMeta(mapvision, expenseMeta, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })}
+            </div>
+            <div style={{ padding: '2px' }}>
+                <strong>Débito/Dinheiro: </strong>
+                {SearchFilter(
+                    visionSerchMeta(mapvision, expenseMeta, visionControler),
+                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
                     })}

@@ -6,8 +6,8 @@ import { Menu, Icon, Drawer, Button } from 'antd'
 
 import {
     HomeOutlined,
-    DislikeOutlined,
-    LikeOutlined,
+    // DislikeOutlined,
+    // LikeOutlined,
     CalendarOutlined,
     CreditCardOutlined,
     WalletOutlined,
@@ -115,7 +115,7 @@ class App extends React.Component {
                                 <Link to='/visao' onClick={this.onClose}>   Visões</Link></Menu.Item>
                         </SubMenu>
 
-                        <SubMenu
+                        {/* <SubMenu
                             key="sub2"
                             title={
                                 <span>
@@ -132,13 +132,13 @@ class App extends React.Component {
                             <Menu.Item key="8">
                                 <LikeOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'blue' }} />
                                 <Link to='/selectreceitaprevista' onClick={this.onClose}>  Planejar Receitas</Link></Menu.Item>
-                        </SubMenu>
+                        </SubMenu> */}
                         <SubMenu
                             key="sub3"
                             title={
                                 <span>
-                                    <Icon type="check-square" theme="twoTone" style={{ fontSize: '28px' }} />
-                                    <span style={{ paddingLeft: '10px' }}>Real</span>
+                                    <Icon type="check-square" theme="twoTone" style={{ fontSize: '22px' }} />
+                                    <span style={{ paddingLeft: '10px' }}>Transação</span>
                                 </span>
                             }
                         >

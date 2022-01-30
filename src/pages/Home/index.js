@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState, useRef } from 'react';
 
 import { Link } from 'react-router-dom'
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Chart from "chart.js";
 import { GetRequest } from '../../components/crudSendAxios/crud';
@@ -23,23 +23,28 @@ import PagarReceita from '../../components/Modal/ReceitaMeta'
 // import { GroupOutlined } from '@ant-design/icons';
 
 import './styles.scss'
+// import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 let newChartInstance = null;
 let newChartInstance2 = null;
 export default () => {
-
+    const dispatch = useDispatch();
+    // const visualizar = useSelector(state => state.viewInformation);
+    // console.log(visualizar.length, 'visualizar')
     const homeReducer = useSelector(state => state.home);
     // const dispatch = useDispatch();
     const [contaSaldoAtual, setContaSaldoAtual] = useState([]);
     const [lastLanc, setLastLanc] = useState([]);
     const [nextLanc, setNextLanc] = useState([]);
     const [itens, setItens] = useState(true);
-    const [ver, setVer] = useState(false);
+    // const [ver, setVer] = useState(visualizar.length > 0 ? false : true);
+    const [ver, setVer] = useState(true);
     const [spin, setSpin] = useState(true)
 
     const chartContainer = useRef(null);
     const chartContainer1 = useRef(null);
     const [grafico, setGrafico] = useState(null);
+
 
 
 
@@ -222,6 +227,17 @@ export default () => {
 
     }, [chartContainer, ChartConfig, ChartConfig1, homeReducer])
 
+    const view = (valor) => {
+        console.log(valor)
+        dispatch({
+            type: 'VIEW',
+            payload: valor
+        })
+
+        setVer(valor)
+    }
+
+
 
 
     useEffect(() => {
@@ -230,14 +246,14 @@ export default () => {
 
 
 
+
+
     return (
         <div className='homeLayout' >
 
             <Switch
                 checked={ver}
-                onChange={(valor) => valor === true ?
-                    setVer(true) : setVer(false)} />
-            {ver === true ? '  Ocultar Valores' : '  Visualizar Valores'}
+                onChange={(valor) => view(valor)} />
             <Spin size="large" spinning={spin} />
             <div>
                 <ul className='homeLayoutFlex'>

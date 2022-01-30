@@ -335,7 +335,7 @@ function DespesaPagar(props) {
             </form>
 
             <DislikeOutlined
-                title='Efetura Contabilização'
+                title='Efetuar Contabilização'
                 style={{
                     fontSize: '18px', color: 'red'
                 }}

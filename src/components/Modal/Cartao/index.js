@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import Cards from 'react-credit-cards';
+
 import { Icon, Modal, Input, notification, Spin } from 'antd'
 
 import { listCards } from '../../../store/actions/generalCardAction.js'
@@ -113,6 +115,14 @@ class ModalCard extends React.Component {
                         <Input type='number' value={this.state.dtVencimento} onChange={this.handleDtVencimento} max='31' min='1' name='dtVencimento' placeholder="Informe o dia de Vencimento da Fatura " />
                         <Input type='number' value={this.state.diacompra} onChange={this.handleDiaCompra} max='31' min='1' name='diaCompra' placeholder="Informe o melhor dia de Compra" />
                         <Spin size="large" spinning={this.state.spin} />
+
+                        <Cards
+                            cvc={"000"}
+                            expiry={this.state.dtVencimento}
+                            focused={"focus"}
+                            name={this.state.cartao}
+                            number={"0000 0000 0000 0000"}
+                        />
                     </Modal>
                 </form>
             </div >

@@ -4,9 +4,14 @@ import { Link } from 'react-router-dom'
 
 import { GetRequest, visionSerchMeta } from '../../components/crudSendAxios/crud'
 import ReceitaMetaComponente from '../../components/Modal/ReceitaMeta'
+import ReceitaPrevista from '../../components/Modal/ReceitaPrevista';
 import SearchFilter from '../../components/searchFilterTable/index'
 
-import { Table, Button, Input, Select, notification, Spin } from 'antd'
+import EditReceita from '../../components/Modal/ReceitaPrevistaEdit';
+import Menu from '../../components/MenuReceitaPrevista';
+
+
+import { Table, Button, Input, Select, notification, Spin, Popover, Icon } from 'antd'
 
 const { Option } = Select;
 
@@ -53,7 +58,17 @@ export default (props) => {
             key: 'action',
             render: receitaMeta => (
                 <div>
-                    <ReceitaMetaComponente data={receitaMeta} />
+                    <span className="DetalhesBotoesGrid">
+                        <ReceitaMetaComponente data={receitaMeta} />
+                        <EditReceita data={receitaMeta} />
+
+                        <Popover
+                            placement="left"
+                            title='Excluir Receita'
+                            content={<Menu data={receitaMeta} />} trigger="click">
+                            <Icon type="delete" title='Excluir Receita' style={{ fontSize: '18px', color: '#08c' }} />
+                        </Popover>
+                    </span>
                 </div>
             )
         }
@@ -120,7 +135,9 @@ export default (props) => {
             {/* <div style={{ padding: '15px', fontSize: '16px', background: '#87CEFA' }}>
                 Metas Cadastradas - Receitas
             </div> */}
+
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                <ReceitaPrevista />
                 <Input name='receita'
                     style={{ width: '49%' }}
                     value={search}

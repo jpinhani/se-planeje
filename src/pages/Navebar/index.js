@@ -8,8 +8,8 @@ import { Layout, Menu, Icon, Button } from 'antd'
 
 import {
     HomeOutlined,
-    DislikeOutlined,
-    LikeOutlined,
+    // DislikeOutlined,
+    // LikeOutlined,
     CalendarOutlined,
     CreditCardOutlined,
     WalletOutlined,
@@ -40,7 +40,7 @@ class SiderDemo extends React.Component {
         return (
             <div>
                 <Sider
-                    collapsedWidth='0'
+                    collapsedWidth='0px'
                     collapsible
                     breakpoint='sm'
                 >
@@ -71,9 +71,10 @@ class SiderDemo extends React.Component {
 
                         </div>
                     </Link>
-                    <Menu defaultSelectedKeys={['0']} mode="inline">
+                    <Menu theme="light" defaultSelectedKeys={['0']} mode="inline">
                         <SubMenu
                             key="sub1"
+
                             title={
                                 <span>
                                     <Icon type="tool" theme="twoTone" style={{ fontSize: '28px' }} />
@@ -98,7 +99,7 @@ class SiderDemo extends React.Component {
                                 <Link to='/visao'>   Visões</Link></Menu.Item>
                         </SubMenu>
 
-                        <SubMenu
+                        {/* <SubMenu
                             key="sub2"
                             title={
                                 <span>
@@ -115,13 +116,13 @@ class SiderDemo extends React.Component {
                             <Menu.Item key="8">
                                 <LikeOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'blue' }} />
                                 <Link to='/selectreceitaprevista'>  Planejar Receitas</Link></Menu.Item>
-                        </SubMenu>
+                        </SubMenu> */}
                         <SubMenu
                             key="sub3"
                             title={
                                 <span>
-                                    <Icon type="check-square" theme="twoTone" style={{ fontSize: '28px' }} />
-                                    <span style={{ paddingLeft: '10px' }}>Real</span>
+                                    <Icon type="check-square" theme="twoTone" style={{ fontSize: '22px' }} />
+                                    <span style={{ paddingLeft: '10px' }}>Transação</span>
                                 </span>
                             }
                         >

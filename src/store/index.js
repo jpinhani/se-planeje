@@ -19,6 +19,7 @@ import visionControlerComboReducer from './reducers/controlerListVisionReducer'
 import revenueRealReducer from './reducers/generalRevenuesRealReducer'
 import transferenciaReducer from './reducers/generalTransferenciaReducer'
 import homeReducer from './reducers/generalHomeReducer'
+import viewinformationReducer from './reducers/visionReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -39,6 +40,7 @@ const reducers = combineReducers({
   controlerexpenseMeta: controlerexpenseMetaReducer,
   revenueReal: revenueRealReducer,
   transferencia: transferenciaReducer,
+  viewInformation: viewinformationReducer,
   home: homeReducer
 })
 

@@ -170,8 +170,8 @@ export default () => {
             <Spin size="large" spinning={spin} />
             < div style={{ margin: '16px 0', background: '#DCDCDC' }}>
                 <Link to='selectPagarMeta'><Button key='Met'> Metas </Button></Link>
-                <Link to='selectdespesarealizada'><Button type='danger' key='rel'> Lançamentos </Button></Link>
-                <Link to='SelectFaturaPagar'><Button key='fatu'>Faturas</Button></Link>
+                <Link to='selectdespesarealizada'><Button type='danger' key='rel'> Pagas </Button></Link>
+                <Link to='SelectFaturaPagar'><Button key='fatu'> Faturas Cartão</Button></Link>
             </div >
             {/* <div style={{ padding: '15px', fontSize: '16px', background: '#FF6347' }}>
                 Novas Despesas - Imprevistos
@@ -192,12 +192,14 @@ export default () => {
                 </Select>
             </div>
 
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row'
-            }}>
+            <div
+            // style={{
+            // display: 'flex',
+            // flexDirection: 'col'
+            // }}
+            >
 
-                <div style={{ padding: '10px' }}>
+                <div style={{ padding: '2px' }}>
                     <strong>Total Gasto: </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
@@ -208,7 +210,7 @@ export default () => {
                 </div>
 
 
-                <div style={{ padding: '10px' }}>
+                <div style={{ padding: '2px' }}>
                     <strong>Crédito: </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
@@ -218,7 +220,7 @@ export default () => {
                         })}
                 </div>
 
-                <div style={{ padding: '10px' }}>
+                <div style={{ padding: '2px' }}>
                     <strong>Débito/Dinheiro:  </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
