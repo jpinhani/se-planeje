@@ -1,0 +1,190 @@
+
+.homeLayout {
+   width: 100% !important;
+}
+
+.homeLayout .homeLayoutFlex{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2,3fr);
+    grid-gap: 15px !important;
+
+}
+
+.headerItens{
+     display: flex;
+     flex-direction: row;
+     justify-content: space-around;
+     align-items: center;
+}
+
+.homeLayout .containerDiv1{
+   width: '100%' !important;
+}
+
+.homeLayout .containerDiv1 .containerDivData{
+   width: 100% !important;
+}
+
+
+.homeLayout .containerDiv1 h1{
+ font-size: 16px;
+ width: 100%;
+ font-weight: bold;
+ background: radial-gradient(#81d6f3, #b6bac5);
+}
+
+.containerDivDataTab li {
+   display: grid;
+   background-color: #FFF;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
+}
+
+.containerDivDataTabFalse li {
+   display: grid;
+   background-color: #FFF;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
+};
+
+.containerDivDataTab li div {
+   display: grid;
+   grid-template-columns: repeat(4,1fr);  
+   grid-gap: 10px;
+}
+
+
+.containerDivDataTabFalse li div {
+   display: grid;
+   grid-template-columns: repeat(4,1fr);  
+   grid-gap: 10px;
+   // color: gray;
+};
+
+.containerDivDataTab div strong{
+   font-size: 12px;
+   padding-left: 10px;
+}
+
+.containerDivDataTabFalse div strong{
+   font-size: 12px;
+   padding-left: 10px;
+   // color: gray;
+};
+
+.containerDivDataTab div p{
+   width: max-content;
+   font-size: 12px;
+   font-style: italic;
+}
+
+.containerDivDataTabFalse div p{
+   width: max-content;
+   font-size: 14px !important;
+   font-style: italic;
+   background-color: LightCyan	;
+   color: LightCyan;
+   border-radius: 10px;
+};
+
+
+.containerDivDataCategoria li{
+   display: grid;
+   background-color: #FFF;
+   grid-template-columns: repeat(2,2fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
+}
+
+.containerDivDataCategoriaFalse li{
+   display: grid;
+   background-color: #FFF;
+   grid-template-columns: repeat(2,2fr);  
+   grid-gap: 2px;
+   border-bottom: 10px solid #F0F8FF	;
+}
+
+.containerDivDataCategoria li div{
+   display: grid;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 5px;
+}
+
+.containerDivDataCategoriaFalse li div{
+   display: grid;
+   grid-template-columns: repeat(2,1fr);  
+   grid-gap: 5px;
+}
+
+.containerDivDataCategoria div strong{
+   font-size: 12px;
+   // display: flex;
+   text-align: center !important;
+   padding-left: 10px;
+}
+
+.containerDivDataCategoriaFalse div strong{
+   font-size: 12px;
+   // display: flex;
+   text-align: center !important;
+   padding-left: 10px;
+}
+
+.containerDivDataCategoria div p{
+   display: flex;
+   // text-align: right !important;
+   flex-direction: row;
+   justify-content: space-between;
+   width: max-content;
+   font-size: 12px;
+   font-style: italic;
+}
+
+.containerDivDataCategoriaFalse div p{
+   display: flex;
+   // text-align: right !important;
+   flex-direction: row;
+   justify-content: space-between;
+   width: max-content;
+   font-size: 12px;
+   font-style: italic;
+      background-color: LightCyan	;
+   color: LightCyan;
+   border-radius: 10px;
+}
+
+.chartjs-render-monitor {
+   //  animation: chartjs-render-animation 0.001s;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+  @media (max-width: 900px) { 
+
+         .homeLayout {
+         width: 100% !important;
+         }
+
+        .homeLayout .homeLayoutFlex{
+        display: grid;
+        grid-template-columns: repeat(1,1fr);
+        }
+ 
+        .containerDivDataTab li{
+   display: grid;
+   grid-template-columns: repeat(1,1fr);  
+}
+
+        .containerDivDataTabFalse li{
+   display: grid;
+   grid-template-columns: repeat(1,1fr);  
+}
+  }
+

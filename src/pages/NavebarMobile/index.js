@@ -17,7 +17,8 @@ import {
     DownloadOutlined,
     MenuOutlined,
     PlaySquareOutlined,
-    LineChartOutlined
+    LineChartOutlined,
+    RiseOutlined
 } from '@ant-design/icons'
 
 import 'antd/dist/antd.css';
@@ -172,6 +173,9 @@ class App extends React.Component {
                             <Menu.Item key="13">
                                 <LineChartOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
                                 <Link to='/Resumo' onClick={this.onClose}>Fluxo de Caixa</Link></Menu.Item>
+                            <Menu.Item key="16">
+                                <RiseOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
+                                <Link to='/Indicadores'>Indicadores</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub5"

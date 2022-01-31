@@ -360,7 +360,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: dadosnivel
+                children: dadosnivel,
+                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
             }
 
         return { ...n5, Valor: 0 }
@@ -379,7 +380,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: dadosnivel
+                children: dadosnivel,
+                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
             }
 
         return { ...n4, Valor: 0 }
@@ -397,7 +399,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: dadosnivel
+                children: dadosnivel,
+                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
             }
 
         return { ...n3, Valor: 0 }
@@ -422,7 +425,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: [...dadosnivel, ...child]
+                children: [...dadosnivel, ...child],
+                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
             }
 
         return { ...prep4 }
@@ -446,7 +450,8 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     style: 'currency',
                     currency: 'BRL'
                 }),
-                children: [...dadosnivel, ...child]
+                children: [...dadosnivel, ...child],
+                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
             }
 
         return { ...prep3 }

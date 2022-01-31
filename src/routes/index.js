@@ -32,6 +32,7 @@ import Alterpsw from '../pages/AlterPsw'
 import DetailsUser from '../pages/DetailsUser'
 import PayGroup from '../pages/Paygroup'
 import PayGroupResult from '../pages/PaygroupResult'
+import Indicadores from '../pages/Indicadores'
 
 const { Content } = Layout;
 
@@ -84,6 +85,7 @@ class routesSePlaneje extends React.Component {
                 <PrivateRoute exact path='/SelectTransferencia' component={SelectTransferencia} />
                 <PrivateRoute exact path='/PayGroup' component={PayGroup} />
                 <PrivateRoute exact path='/PayGroupResult' component={PayGroupResult} />
+                <PrivateRoute exact path='/Indicadores' component={Indicadores} />
                 <PrivateRoute component={Home} />
               </Switch>
             </Content>
