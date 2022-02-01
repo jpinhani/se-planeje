@@ -348,9 +348,11 @@ function cartaoForecast(dados, cartoes, dtInicio, dtFim) {
 /* ############################################################################################# */
 
 function hierarquia(dados1, nivel3, nivel4, nivel5) {
+    const somadados1 = dados1.reduce((acum, atual) => acum + atual.Valor, 0)
 
     const prepNivel5 = nivel5.map((n5) => {
         const dadosnivel = dados1.filter(filtro => filtro.Idpai === n5.ID)
+
         const somanivel = dadosnivel.reduce((acum, atual) => acum + atual.Valor, 0)
         if (dadosnivel.length > 0)
             return {
@@ -361,7 +363,11 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     currency: 'BRL'
                 }),
                 children: dadosnivel,
-                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
+                ROLID: Math.random().toString(10).substr(3, 5), //Chave para evitar conflito na tabela do antd
+                percentual: (somanivel / somadados1).toLocaleString('pt-BR', {
+                    style: 'percent',
+                    currency: 'BRL'
+                })
             }
 
         return { ...n5, Valor: 0 }
@@ -381,7 +387,11 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     currency: 'BRL'
                 }),
                 children: dadosnivel,
-                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
+                ROLID: Math.random().toString(10).substr(3, 5), //Chave para evitar conflito na tabela do antd
+                percentual: (somanivel / somadados1).toLocaleString('pt-BR', {
+                    style: 'percent',
+                    currency: 'BRL'
+                })
             }
 
         return { ...n4, Valor: 0 }
@@ -400,7 +410,11 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     currency: 'BRL'
                 }),
                 children: dadosnivel,
-                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
+                ROLID: Math.random().toString(10).substr(3, 5), //Chave para evitar conflito na tabela do antd
+                percentual: (somanivel / somadados1).toLocaleString('pt-BR', {
+                    style: 'percent',
+                    currency: 'BRL'
+                })
             }
 
         return { ...n3, Valor: 0 }
@@ -426,7 +440,11 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     currency: 'BRL'
                 }),
                 children: [...dadosnivel, ...child],
-                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
+                ROLID: Math.random().toString(10).substr(3, 5), //Chave para evitar conflito na tabela do antd
+                percentual: ((somanivel + sn) / somadados1).toLocaleString('pt-BR', {
+                    style: 'percent',
+                    currency: 'BRL'
+                })
             }
 
         return { ...prep4 }
@@ -451,7 +469,11 @@ function hierarquia(dados1, nivel3, nivel4, nivel5) {
                     currency: 'BRL'
                 }),
                 children: [...dadosnivel, ...child],
-                ROLID: Math.random().toString(10).substr(3, 5) //Chave para evitar conflito na tabela do antd
+                ROLID: Math.random().toString(10).substr(3, 5), //Chave para evitar conflito na tabela do antd
+                percentual: ((somanivel + sn) / somadados1).toLocaleString('pt-BR', {
+                    style: 'percent',
+                    currency: 'BRL'
+                })
             }
 
         return { ...prep3 }

@@ -160,6 +160,18 @@ export default () => {
 
 
             const dados1 = SaldoCategoria(despesas, visaoData, 'FORECAST', cartao, categorias);
+            const somadados1 = dados1.reduce((acum, atual) => acum + atual.Valor, 0)
+            const dadosNew = dados1.map((dados => {
+                return {
+                    ...dados, percentual: (dados.Valor / somadados1).toLocaleString('pt-BR', {
+                        style: 'percent',
+                        currency: 'BRL'
+                    })
+                }
+            }))
+
+
+
             const nivel3 = categorias.filter(filtro => filtro.NIVEL === 3 &&
                 filtro.ENTRADA === 1 && filtro.TIPO === 1).map((data) => {
                     return { ...data, Categoria: data.DESCR_CATEGORIA }
@@ -175,10 +187,11 @@ export default () => {
                     return { ...data, Categoria: data.DESCR_CATEGORIA }
                 })
 
-            const dadosGrafico = [...hierarquia(dados1, nivel3, nivel4, nivel5),
+            const dadosGrafico = [...hierarquia(dadosNew, nivel3, nivel4, nivel5),
             ...dados1.filter(filtro => filtro.Idpai === 2)]
 
-            console.log('dadosGrafico', dadosGrafico)
+            console.log("dadosGrafico", dadosGrafico)
+
             setListaDespesa(dadosGrafico)
 
             // const dadosGrafico = SaldoCategoria(despesas)
@@ -219,6 +232,11 @@ export default () => {
             title: 'R$',
             dataIndex: 'ValorPersonalizado',
             key: 'ValorPersonalizado'
+        },
+        {
+            title: '% Frente ao Total',
+            dataIndex: 'percentual',
+            key: 'percentual'
         }
     ]
 
