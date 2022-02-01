@@ -19,7 +19,7 @@ import {
     DownloadOutlined,
     PlaySquareOutlined,
     LineChartOutlined,
-    RiseOutlined
+    AreaChartOutlined
 } from '@ant-design/icons'
 
 const { Sider } = Layout;
@@ -58,7 +58,7 @@ class SiderDemo extends React.Component {
 
                             <HomeOutlined type="tool" theme="twoTone" style={{
                                 paddingLeft: '26px',
-                                fontSize: '28px', color: 'blue'
+                                fontSize: '22px', color: 'black'
                             }} />
                             <p style={{
                                 color: 'white',
@@ -66,9 +66,9 @@ class SiderDemo extends React.Component {
                                 paddingLeft: '15px',
                                 fontSize: '20px'
                             }}><span style={{
-                                color: 'red',
+                                color: 'black',
                                 fontSize: '28px'
-                            }}>Se</span>Planeje</p>
+                            }}>Início</span></p>
 
                         </div>
                     </Link>
@@ -158,7 +158,7 @@ class SiderDemo extends React.Component {
                                 <LineChartOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
                                 <Link to='/Resumo'>Fluxo de Caixa</Link></Menu.Item>
                             <Menu.Item key="16">
-                                <RiseOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
+                                <AreaChartOutlined theme="twoTone" style={{ paddingRight: '20px', fontSize: '22px', color: 'black' }} />
                                 <Link to='/Indicadores'>Indicadores</Link></Menu.Item>
 
                         </SubMenu>

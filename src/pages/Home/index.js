@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState, useRef } from 'react';
 
 import { Link } from 'react-router-dom'
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Chart from "chart.js";
 import { GetRequest } from '../../components/crudSendAxios/crud';
@@ -16,6 +16,10 @@ import { SaldoTransferencia } from '../../components/SaldoTransferencias';
 import { gera_cor } from '../../components/GeraCor'
 
 import { Switch, notification, Spin } from 'antd';
+import {
+    EyeInvisibleOutlined
+} from '@ant-design/icons'
+
 import moment from 'moment';
 import PagarDespesa from '../../components/Modal/DespesaPagar'
 import PagarReceita from '../../components/Modal/ReceitaMeta'
@@ -28,7 +32,7 @@ import './styles.scss'
 let newChartInstance = null;
 let newChartInstance2 = null;
 export default () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     // const visualizar = useSelector(state => state.viewInformation);
     // console.log(visualizar.length, 'visualizar')
     const homeReducer = useSelector(state => state.home);
@@ -227,15 +231,15 @@ export default () => {
 
     }, [chartContainer, ChartConfig, ChartConfig1, homeReducer])
 
-    const view = (valor) => {
-        console.log(valor)
-        dispatch({
-            type: 'VIEW',
-            payload: valor
-        })
+    // const view = (valor) => {
+    //     console.log(valor)
+    //     dispatch({
+    //         type: 'VIEW',
+    //         payload: valor
+    //     })
 
-        setVer(valor)
-    }
+    //     setVer(valor)
+    // }
 
 
 
@@ -250,10 +254,12 @@ export default () => {
 
     return (
         <div className='homeLayout' >
+            <EyeInvisibleOutlined style={{ fontSize: '22px', color: ver === true ? "blue" : "red" }} onClick={valor => setVer(ver === true ? false : true)} />
 
-            <Switch
+            {/* <Switch
                 checked={ver}
-                onChange={(valor) => view(valor)} />
+                
+                onChange={(valor) => view(valor)} /> */}
             <Spin size="large" spinning={spin} />
             <div>
                 <ul className='homeLayoutFlex'>
@@ -280,6 +286,17 @@ export default () => {
                             </div>
                         </div>
                     </div>
+
+
+                    <div className='containerDiv1'>
+                        <div>
+                            <canvas
+                                id={grafico}
+                                ref={chartContainer1}
+                            />
+                        </div>
+                    </div>
+
                     <div className='containerDiv1'>
                         <div className='containerDivData'>
 
@@ -352,15 +369,6 @@ export default () => {
                                                 <PagarReceita data={novo} />}
                                         </li>)}
                             </div>
-                        </div>
-                    </div>
-
-                    <div className='containerDiv1'>
-                        <div>
-                            <canvas
-                                id={grafico}
-                                ref={chartContainer1}
-                            />
                         </div>
                     </div>
 

@@ -9,14 +9,14 @@
     padding: 0;
     width: 100% !important;
     display: grid;
-    grid-template-columns: repeat(2,3fr);
+    grid-template-columns: repeat(1,3fr) !important;
     grid-gap: 15px !important;
 
 }
 
 .headerItens{
      display: flex;
-     flex-direction: row;
+     flex-direction: column;
      justify-content: space-around;
      align-items: center;
 }
