@@ -173,7 +173,7 @@ export default () => {
                 <strong>Crédito: </strong>
                 {SearchFilter(
                     visionSerchMeta(mapvision, expenseMeta, visionControler),
-                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                    ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
                     })}
@@ -182,7 +182,7 @@ export default () => {
                 <strong>Débito/Dinheiro: </strong>
                 {SearchFilter(
                     visionSerchMeta(mapvision, expenseMeta, visionControler),
-                    ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
+                    ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_PREVISTO2, 0).toLocaleString('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
                     })}
@@ -193,7 +193,7 @@ export default () => {
 
                     dataSource={SearchFilter(
                         visionSerchMeta(mapvision, expenseMeta, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).sort(function (a, b) {
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).sort(function (a, b) {
                             if (a.DT_PREVISTO < b.DT_PREVISTO) return -1;
                             if (a.DT_PREVISTO > b.DT_PREVISTO) return 1;
                             return 0;

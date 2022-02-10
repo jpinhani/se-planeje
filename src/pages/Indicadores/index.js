@@ -160,6 +160,10 @@ export default () => {
 
 
             const dados1 = SaldoCategoria(despesas, visaoData, 'FORECAST', cartao, categorias);
+            const dados1Rec = SaldoCategoria(receitas, visaoData, 'FORECAST', cartao, categorias);
+
+            // console.log('dados1Rec', dados1Rec)
+
             const somadados1 = dados1.reduce((acum, atual) => acum + atual.Valor, 0)
             const dadosNew = dados1.map((dados => {
                 return {
@@ -170,7 +174,15 @@ export default () => {
                 }
             }))
 
-
+            const somadados1Rec = dados1Rec.reduce((acum, atual) => acum + atual.Valor, 0)
+            const dadosNewRec = dados1Rec.map((dados => {
+                return {
+                    ...dados, percentual: (dados.Valor / somadados1Rec).toLocaleString('pt-BR', {
+                        style: 'percent',
+                        currency: 'BRL'
+                    })
+                }
+            }))
 
             const nivel3 = categorias.filter(filtro => filtro.NIVEL === 3 &&
                 filtro.ENTRADA === 1 && filtro.TIPO === 1).map((data) => {
@@ -190,7 +202,26 @@ export default () => {
             const dadosGrafico = [...hierarquia(dadosNew, nivel3, nivel4, nivel5),
             ...dados1.filter(filtro => filtro.Idpai === 2)]
 
-            console.log("dadosGrafico", dadosGrafico)
+            const nivel3Rec = categorias.filter(filtro => filtro.NIVEL === 3 &&
+                filtro.ENTRADA === 1 && filtro.TIPO === 2).map((data) => {
+                    return { ...data, Categoria: data.DESCR_CATEGORIA }
+                })
+
+            const nivel4Rec = categorias.filter(filtro => filtro.NIVEL === 4 &&
+                filtro.ENTRADA === 1 && filtro.TIPO === 2).map((data) => {
+                    return { ...data, Categoria: data.DESCR_CATEGORIA }
+                })
+
+            const nivel5Rec = categorias.filter(filtro => filtro.NIVEL === 5 &&
+                filtro.ENTRADA === 1 && filtro.TIPO === 2).map((data) => {
+                    return { ...data, Categoria: data.DESCR_CATEGORIA }
+                })
+
+
+            const dadosGraficoRec = [...hierarquia(dadosNewRec, nivel3Rec, nivel4Rec, nivel5Rec),
+            ...dados1.filter(filtro => filtro.Idpai === 3)]
+
+            console.log("dadosGraficoRec", dadosGraficoRec)
 
             setListaDespesa(dadosGrafico)
 

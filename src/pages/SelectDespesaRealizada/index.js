@@ -203,7 +203,7 @@ export default () => {
                     <strong>Total Gasto: </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
                         })}
@@ -214,7 +214,7 @@ export default () => {
                     <strong>Crédito: </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).filter(fil => fil.CARTAO).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
                         })}
@@ -224,7 +224,7 @@ export default () => {
                     <strong>Débito/Dinheiro:  </strong>
                     {SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).filter(fil => fil.CARTAO === null).reduce((acum, atual) => acum + atual.VL_REAL2, 0).toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
                         })}
@@ -237,7 +237,7 @@ export default () => {
                     columns={columns}
                     dataSource={SearchFilter(
                         visionSerch(mapvision, expenseReal, visionControler),
-                        ['DESCR_CATEGORIA', 'DESCR_DESPESA'], search).sort(function (a, b) {
+                        ['DESCR_CATEGORIA', 'DESCR_DESPESA', 'CARTAO'], search).sort(function (a, b) {
                             if (a.DT_REAL > b.DT_REAL) return -1;
                             if (a.DT_REAL < b.DT_REAL) return 1;
                             return 0;

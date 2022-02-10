@@ -35,7 +35,8 @@ class ModalExpense extends React.Component {
             parcelasInput: 1,
             categoriaInput: [],
             descrDespesaInput: '',
-            spin: false
+            spin: false,
+            provisaoValue: 1
         }
 
         this.showModal = this.showModal.bind(this)
@@ -98,6 +99,13 @@ class ModalExpense extends React.Component {
         }
     };
 
+    handleValueProvisao = e => {
+
+        this.setState({ ...this.state, provisaoValue: e.target.value });
+        console.log('provisao', e.target.value)
+
+    };
+
     handleDayValue(dias) {
         this.setState({ ...this.state, dayValue: dias })
     }
@@ -129,6 +137,7 @@ class ModalExpense extends React.Component {
             tipoParcela: this.state.value,
             dayValue: this.state.dayValue,
             status: "Ativo",
+            provisao: this.state.provisaoValue
         }
 
         if (body.cartao === 'DÉBITO OU DINHEIRO') {
@@ -192,6 +201,8 @@ class ModalExpense extends React.Component {
                             <Radio value={3}>Outro</Radio>
                         </Radio.Group>
 
+
+
                         <InputNumber
                             style={{ width: '25%' }}
                             placeholder="Dias"
@@ -200,6 +211,7 @@ class ModalExpense extends React.Component {
                             value={this.state.dayValue}
                             disabled={this.state.dayVisible}
                         />
+
                         <div style={{ width: '100%', display: 'flex' }}>
                             <Form.Item
                                 style={{ width: '50%' }}
@@ -267,8 +279,39 @@ class ModalExpense extends React.Component {
                                 />)}
                             </Form.Item>
                         </div>
+                        <Radio.Group
+                            style={{ width: '100%' }}
+                            buttonStyle="solid"
+                            // optionType={Button}
+                            onChange={this.handleValueProvisao}
+                            value={this.state.provisaoValue}>
+                            <Radio value={1}>Despesa / Meta</Radio>
+                            <Radio value={2}>Provisão / Reserva</Radio>
+                        </Radio.Group>
+                        {/* <div style={{ width: '100%' }} >
+                            <Form.Item style={{ width: '100%' }}>
+                                {getFieldDecorator('Receita', {
+                                    rules: [{ required: true, message: 'Por Favor, Informe como sera o Recebimento!' }],
+                                    initialValue: 'Sem Provisao'
+                                })(
+                                    <Select
+                                        showSearch
+                                        disabled={this.state.provisaoValue === 2 ? false : true}
+                                        style={{ width: '100%' }}
+                                        placeholder="Informe a Fonte de Receita"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) => (
+                                            option.props.children.toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        )}
+                                        onSelect={this.handleCartao}
+                                    >
+                                        {this.state.cartao}
+                                    </Select>)}
+                            </Form.Item>
+                        </div> */}
 
-                        <Form.Item style={{ width: '100%' }}>
+                        <Form.Item style={{ width: '100%' }}  >
                             {getFieldDecorator('categoria', {
                                 rules: [{ required: true, message: 'Por Favor, Informe a Categoria!' }],
                                 initialValue: this.state.categoriaInput
