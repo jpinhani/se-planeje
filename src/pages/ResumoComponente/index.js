@@ -99,7 +99,7 @@ export default (props) => {
                     <div className='containerDivData'>
                         <center><h1>Saldo até:</h1></center>
                         <div className='containerDivDataTab'>
-                            {contaSaldoAtual.map((novo, i) => {
+                            {contaSaldoAtual.filter(filtro => filtro.Valor > 0).map((novo, i) => {
                                 return <li key={i}>
                                     <div>
                                         <strong>Conta: </strong>
