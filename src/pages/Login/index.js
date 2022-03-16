@@ -21,6 +21,7 @@ function Login() {
     e.preventDefault()
     setSpin(true)
     const endpoint = `${urlBackend}api/authenticate`
+    console.log(endpoint, 'testeendpoint')
 
     const body = {
       email: email,
