@@ -119,6 +119,8 @@ export default (props) => {
 
                 </div>
 
+
+
                 <div className='containerDiv1'>
                     <div className='containerDivData'>
                         <center><h1>Resumo SePlaneje</h1></center>
