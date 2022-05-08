@@ -55,16 +55,16 @@ export default () => {
 
 
     const ChartConfig = useCallback((dadosGrafico) => {
-        const valorTotal = dadosGrafico.filter(filtro => filtro.Valor > 0).reduce((acum, atual) => acum + atual.Valor, 0)
+        const valorTotal = dadosGrafico.filter(filtro => filtro.Valor !== 0).reduce((acum, atual) => acum + atual.Valor, 0)
 
-        const dataGrafico = dadosGrafico.filter(filtro => filtro.Valor > 0).map((valor) => {
+        const dataGrafico = dadosGrafico.filter(filtro => filtro.Valor !== 0).map((valor) => {
             return ((valor.Valor / valorTotal) * 100).toFixed(2)
         });
 
 
 
-        const corGrafico = dadosGrafico.filter(filtro => filtro.Valor > 0).map((valor) => gera_cor())
-        const labelsGrafico = dadosGrafico.filter(filtro => filtro.Valor > 0).map((valor) => valor.Categoria)
+        const corGrafico = dadosGrafico.filter(filtro => filtro.Valor !== 0).map((valor) => gera_cor())
+        const labelsGrafico = dadosGrafico.filter(filtro => filtro.Valor !== 0).map((valor) => valor.Categoria)
 
         const rs = {
             type: 'bar',
@@ -98,9 +98,9 @@ export default () => {
 
     const ChartConfig1 = useCallback((dadosGrafico) => {
 
-        const dataGrafico = dadosGrafico.filter(filtro => filtro.Valor > 0).map((valor) => valor.Valor)
-        const corGrafico = dadosGrafico.filter(filtro => filtro.Valor > 0).map((valor) => gera_cor())
-        const labelsGrafico = dadosGrafico.filter(filtro => filtro.Valor > 0).map((valor) => valor.Conta)
+        const dataGrafico = dadosGrafico.filter(filtro => filtro.Valor !== 0).map((valor) => valor.Valor)
+        const corGrafico = dadosGrafico.filter(filtro => filtro.Valor !== 0).map((valor) => gera_cor())
+        const labelsGrafico = dadosGrafico.filter(filtro => filtro.Valor !== 0).map((valor) => valor.Conta)
         const rs = {
             type: 'pie',
             data: {
@@ -270,7 +270,7 @@ export default () => {
                         <div className='containerDivData'>
                             <center><h1>Saldo Atual</h1></center>
                             <div className={ver === true ? 'containerDivDataTab' : 'containerDivDataTabFalse'}>
-                                {contaSaldoAtual.filter(filtro => filtro.Valor > 0).map((novo, i) => {
+                                {contaSaldoAtual.filter(filtro => filtro.Valor !== 0).map((novo, i) => {
                                     return <li key={i}>
                                         <div>
                                             <strong>Conta: </strong>
