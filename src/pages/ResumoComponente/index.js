@@ -110,12 +110,14 @@ export default (props) => {
                                         <p>{novo.Valor.toLocaleString('pt-BR', {
                                             style: 'currency',
                                             currency: 'BRL'
+
                                         })}</p>
                                     </div>
                                 </li >
                             })}
                         </div>
                     </div>
+
 
                 </div>
 
